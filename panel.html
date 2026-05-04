@@ -1,0 +1,221 @@
+<!--Panel principal donde el laboratorista carga los datos-->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Laboratorio</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        /* Barra superior */
+        .navbar {
+            background-color: #4a90e2;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Contenido principal */
+        .contenido {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Cada sección es una tarjeta */
+        .tarjeta {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #333;
+            margin-top: 0;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn-azul { background-color: #4a90e2; color: white; }
+        .btn-verde { background-color: #27ae60; color: white; }
+        .btn-rojo  { background-color: #e74c3c; color: white; }
+
+        .mensaje {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barra superior con saludo y botón de salir -->
+    <div class="navbar">
+        <span>Sistema de Laboratorio</span>
+        <span>
+            Hola, <strong id="nombreUsuario"></strong>
+            <button class="btn btn-rojo" onclick="salir()" style="margin-left:15px">Salir</button>
+        </span>
+    </div>
+
+    <div class="contenido">
+
+        <!-- Sección 1: Cargar paciente nuevo -->
+        <div class="tarjeta">
+            <h2>Cargar paciente</h2>
+            <input type="text"   id="nombre"    placeholder="Nombre" />
+            <input type="text"   id="apellido"  placeholder="Apellido" />
+            <input type="text"   id="dni"       placeholder="DNI" />
+            <input type="text"   id="fecha"     placeholder="Fecha de nacimiento (ej: 1990-05-20)" />
+            <input type="text"   id="obraSocial" placeholder="Obra social (opcional)" />
+            <input type="text"   id="telefono"  placeholder="Teléfono (opcional)" />
+            <input type="email"  id="emailPaciente" placeholder="Email (opcional)" />
+            <button class="btn btn-azul" onclick="crearPaciente()">Guardar paciente</button>
+            <p class="mensaje" id="msgPaciente"></p>
+        </div>
+
+        <!-- Sección 2: Buscar paciente por DNI -->
+        <div class="tarjeta">
+            <h2>Buscar paciente</h2>
+            <input type="text" id="dniBuscar" placeholder="Ingresá el DNI" />
+            <button class="btn btn-azul" onclick="buscarPaciente()">Buscar</button>
+            <p class="mensaje" id="msgBuscar"></p>
+        </div>
+
+        <!-- Sección 3: Cargar resultado -->
+        <div class="tarjeta">
+            <h2>Cargar resultado</h2>
+            <input type="number" id="pacienteId"   placeholder="ID del paciente" />
+            <select id="tipo">
+                <option value="sangre">Sangre</option>
+                <option value="orina">Orina</option>
+                <option value="otro">Otro</option>
+            </select>
+            <input type="text" id="descripcion"  placeholder="Descripción (ej: Hemograma completo)" />
+            <input type="text" id="valores"      placeholder="Valores (opcional si subís PDF)" />
+            <input type="text" id="fechaMuestra" placeholder="Fecha de muestra (ej: 2026-05-04)" />
+            <button class="btn btn-verde" onclick="cargarResultado()">Guardar resultado</button>
+            <p class="mensaje" id="msgResultado"></p>
+        </div>
+
+    </div>
+
+    <script>
+        const API = "API_URL=https://battle-transfer-uplifting.ngrok-free.dev API_URL=https://battle-transfer-uplifting.ngrok-free.dev "
+        const token = localStorage.getItem("token")
+
+        // Si no hay token redirige al login
+        if (!token) {
+            window.location.href = "login.html"
+        }
+
+        // Muestra el nombre del usuario en la barra
+        document.getElementById("nombreUsuario").textContent = localStorage.getItem("usuario")
+
+        // Cierra sesión y vuelve al inicio
+        function salir() {
+            localStorage.removeItem("token")
+            localStorage.removeItem("usuario")
+            window.location.href = "index.html"
+        }
+
+        // Crea un paciente nuevo
+        async function crearPaciente() {
+            const response = await fetch(`${API}/lab/pacientes`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    nombre:           document.getElementById("nombre").value,
+                    apellido:         document.getElementById("apellido").value,
+                    dni:              document.getElementById("dni").value,
+                    fecha_nacimiento: document.getElementById("fecha").value,
+                    obra_social:      document.getElementById("obraSocial").value || null,
+                    telefono:         document.getElementById("telefono").value || null,
+                    email:            document.getElementById("emailPaciente").value || null
+                })
+            })
+
+            if (response.ok) {
+                const data = await response.json()
+                document.getElementById("msgPaciente").style.color = "green"
+                document.getElementById("msgPaciente").textContent = `Paciente guardado. ID: ${data.id}`
+            } else {
+                document.getElementById("msgPaciente").style.color = "red"
+                document.getElementById("msgPaciente").textContent = "Error al guardar el paciente"
+            }
+        }
+
+        // Busca un paciente por DNI
+        async function buscarPaciente() {
+            const dni = document.getElementById("dniBuscar").value
+            const response = await fetch(`${API}/lab/pacientes/${dni}`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            })
+
+            if (response.ok) {
+                const data = await response.json()
+                document.getElementById("msgBuscar").style.color = "green"
+                document.getElementById("msgBuscar").textContent =
+                    `${data.nombre} ${data.apellido} — ID: ${data.id}`
+            } else {
+                document.getElementById("msgBuscar").style.color = "red"
+                document.getElementById("msgBuscar").textContent = "Paciente no encontrado"
+            }
+        }
+
+        // Carga un resultado de laboratorio
+        async function cargarResultado() {
+            const response = await fetch(`${API}/lab/resultados`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    paciente_id:   parseInt(document.getElementById("pacienteId").value),
+                    tipo:          document.getElementById("tipo").value,
+                    descripcion:   document.getElementById("descripcion").value,
+                    valores:       document.getElementById("valores").value || null,
+                    fecha_muestra: document.getElementById("fechaMuestra").value
+                })
+            })
+
+            if (response.ok) {
+                document.getElementById("msgResultado").style.color = "green"
+                document.getElementById("msgResultado").textContent = "Resultado guardado correctamente"
+            } else {
+                document.getElementById("msgResultado").style.color = "red"
+                document.getElementById("msgResultado").textContent = "Error al guardar el resultado"
+            }
+        }
+    </script>
+
+</body>
+</html>

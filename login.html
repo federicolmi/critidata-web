@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Iniciar sesión</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 300px;
+        }
+        h2 { text-align: center; color: #333; }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .error { color: red; text-align: center; margin-top: 10px; }
+        .volver { text-align: center; margin-top: 15px; }
+        .volver a { color: #4a90e2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Iniciar sesión</h2>
+        <input type="email"    id="email"    placeholder="Email" />
+        <input type="password" id="password" placeholder="Contraseña" />
+        <button class="btn" onclick="login()">Entrar</button>
+        <p class="error" id="error"></p>
+        <div class="volver">
+            <a href="index.html">← Volver</a>
+        </div>
+    </div>
+
+    <script>
+        const API = "API_URL=https://battle-transfer-uplifting.ngrok-free.dev "
+
+        async function login() {
+            const email    = document.getElementById("email").value
+            const password = document.getElementById("password").value
+
+            const body = new URLSearchParams()
+            body.append("username", email)
+            body.append("password", password)
+
+            const response = await fetch(`${API}/auth/login`, {
+                method: "POST",
+                body: body
+            })
+
+            if (response.ok) {
+                const data = await response.json()
+                localStorage.setItem("token", data.token)
+                localStorage.setItem("usuario", data.full_name)
+                window.location.href = "panel.html"
+            } else {
+                document.getElementById("error").textContent = "Email o contraseña incorrectos"
+            }
+        }
+    </script>
+</body>
+</html>
+
