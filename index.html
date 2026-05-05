@@ -422,50 +422,50 @@
 
     <p class="page-footer">© 2026 CritiData · Todos los derechos reservados</p>
 
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script>
-        // ── EmailJS ──────────────────────────────────────────────────────────
-        // Reemplazá estos tres valores con los de tu cuenta en emailjs.com
-        const EMAILJS_PUBLIC_KEY  = 'vZFY3EuNbq6_4H3lc';
-        const EMAILJS_SERVICE_ID  = 'service_a9n3eei';
-        const EMAILJS_TEMPLATE_ID = 'template_v8honlm';
-
-        emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
-
         document.getElementById('contact-form').addEventListener('submit', function(e) {
             e.preventDefault();
 
             const btn      = document.getElementById('ct-submit');
             const feedback = document.getElementById('ct-feedback');
 
-            btn.disabled   = true;
+            btn.disabled    = true;
             btn.textContent = 'Enviando…';
             feedback.style.display = 'none';
 
-            emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, this)
-                .then(function() {
-                    feedback.style.color   = '#2e7d32';
-                    feedback.style.background = '#e8f5e9';
-                    feedback.style.padding = '10px 14px';
-                    feedback.style.borderRadius = '8px';
-                    feedback.textContent   = '✓ Mensaje enviado. Te respondemos en menos de 24 hs.';
-                    feedback.style.display = 'block';
-                    document.getElementById('contact-form').reset();
+            const data = new FormData(this);
+            data.append('access_key', '99420d08-91d0-46c3-8416-7a7774fc9f6d');
+            data.append('subject', 'Nuevo contacto desde critidata.com - ' + document.getElementById('ct-name').value);
+            data.append('from_name', 'CritiData Web');
+
+            fetch('https://api.web3forms.com/submit', { method: 'POST', body: data })
+                .then(r => r.json())
+                .then(function(res) {
+                    if (res.success) {
+                        feedback.style.color      = '#2e7d32';
+                        feedback.style.background = '#e8f5e9';
+                        feedback.style.padding    = '10px 14px';
+                        feedback.style.borderRadius = '8px';
+                        feedback.textContent      = '✓ Mensaje enviado. Te respondemos en menos de 24 hs.';
+                        feedback.style.display    = 'block';
+                        document.getElementById('contact-form').reset();
+                    } else {
+                        throw new Error(res.message);
+                    }
                     btn.disabled    = false;
                     btn.textContent = 'Enviar mensaje';
-                }, function(error) {
-                    feedback.style.color   = '#c62828';
+                })
+                .catch(function() {
+                    feedback.style.color      = '#c62828';
                     feedback.style.background = '#ffebee';
-                    feedback.style.padding = '10px 14px';
+                    feedback.style.padding    = '10px 14px';
                     feedback.style.borderRadius = '8px';
-                    feedback.textContent   = '✗ No se pudo enviar. Intentá nuevamente o escribinos a info@critidata.com';
-                    feedback.style.display = 'block';
+                    feedback.textContent      = '✗ No se pudo enviar. Escribinos a info@critidata.com';
+                    feedback.style.display    = 'block';
                     btn.disabled    = false;
                     btn.textContent = 'Enviar mensaje';
-                    console.error('EmailJS error:', error);
                 });
         });
-        // ─────────────────────────────────────────────────────────────────────
 
         const card = document.querySelector('.card');
 
