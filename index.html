@@ -399,20 +399,21 @@
                     <span class="contact-chip">📧 info@critidata.com</span>
                     <span class="contact-chip">📍 Buenos Aires, ARG</span>
                 </div>
-                <form onsubmit="return false;">
+                <form id="contact-form">
                     <div class="field">
                         <label for="ct-name">Nombre</label>
-                        <input id="ct-name" type="text" placeholder="Tu nombre completo">
+                        <input id="ct-name" name="from_name" type="text" placeholder="Tu nombre completo" required>
                     </div>
                     <div class="field">
                         <label for="ct-email">Correo electrónico</label>
-                        <input id="ct-email" type="email" placeholder="ejemplo@correo.com">
+                        <input id="ct-email" name="reply_to" type="email" placeholder="ejemplo@correo.com" required>
                     </div>
                     <div class="field" style="margin-bottom:22px;">
                         <label for="ct-msg">Mensaje</label>
-                        <textarea id="ct-msg" placeholder="¿En qué podemos ayudarte?"></textarea>
+                        <textarea id="ct-msg" name="message" placeholder="¿En qué podemos ayudarte?" required></textarea>
                     </div>
-                    <button type="submit" class="btn-primary">Enviar mensaje</button>
+                    <button type="submit" class="btn-primary" id="ct-submit">Enviar mensaje</button>
+                    <div id="ct-feedback" style="margin-top:14px;font-size:0.92rem;text-align:center;display:none;"></div>
                 </form>
             </div>
         </div>
@@ -421,7 +422,51 @@
 
     <p class="page-footer">© 2026 CritiData · Todos los derechos reservados</p>
 
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script>
+        // ── EmailJS ──────────────────────────────────────────────────────────
+        // Reemplazá estos tres valores con los de tu cuenta en emailjs.com
+        const EMAILJS_PUBLIC_KEY  = 'TU_PUBLIC_KEY';
+        const EMAILJS_SERVICE_ID  = 'TU_SERVICE_ID';
+        const EMAILJS_TEMPLATE_ID = 'TU_TEMPLATE_ID';
+
+        emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const btn      = document.getElementById('ct-submit');
+            const feedback = document.getElementById('ct-feedback');
+
+            btn.disabled   = true;
+            btn.textContent = 'Enviando…';
+            feedback.style.display = 'none';
+
+            emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, this)
+                .then(function() {
+                    feedback.style.color   = '#2e7d32';
+                    feedback.style.background = '#e8f5e9';
+                    feedback.style.padding = '10px 14px';
+                    feedback.style.borderRadius = '8px';
+                    feedback.textContent   = '✓ Mensaje enviado. Te respondemos en menos de 24 hs.';
+                    feedback.style.display = 'block';
+                    document.getElementById('contact-form').reset();
+                    btn.disabled    = false;
+                    btn.textContent = 'Enviar mensaje';
+                }, function(error) {
+                    feedback.style.color   = '#c62828';
+                    feedback.style.background = '#ffebee';
+                    feedback.style.padding = '10px 14px';
+                    feedback.style.borderRadius = '8px';
+                    feedback.textContent   = '✗ No se pudo enviar. Intentá nuevamente o escribinos a info@critidata.com';
+                    feedback.style.display = 'block';
+                    btn.disabled    = false;
+                    btn.textContent = 'Enviar mensaje';
+                    console.error('EmailJS error:', error);
+                });
+        });
+        // ─────────────────────────────────────────────────────────────────────
+
         const card = document.querySelector('.card');
 
         function closeAll() {
