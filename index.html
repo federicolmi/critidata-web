@@ -311,6 +311,12 @@
             .nav-btn  { padding: 7px 13px; font-size: 12px; }
             .tab-panel-inner { padding: 26px 22px 30px; }
         }
+        .password-wrap { position: relative; }
+        .password-wrap input { padding-right: 42px; }
+        .toggle-pass {
+            position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+            background: none; border: none; cursor: pointer; font-size: 16px; padding: 0;
+        }
     </style>
 </head>
 <body>
@@ -347,7 +353,10 @@
                     </div>
                     <div class="field">
                         <label for="login-password">Contraseña</label>
-                        <input id="login-password" type="password" placeholder="••••••••" autocomplete="current-password">
+                        <div class="password-wrap">
+                            <input id="login-password" type="password" placeholder="••••••••" autocomplete="current-password">
+                            <button type="button" class="toggle-pass" onclick="togglePass('login-password', this)">👁</button>
+                        </div>
                     </div>
                     <a href="#" class="forgot">¿Olvidaste tu contraseña?</a>
                     <button type="submit" class="btn-primary">Iniciar sesión</button>
@@ -375,11 +384,17 @@
                     </div>
                     <div class="field">
                         <label for="reg-password">Contraseña</label>
-                        <input id="reg-password" type="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+                        <div class="password-wrap">
+                            <input id="reg-password" type="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+                            <button type="button" class="toggle-pass" onclick="togglePass('reg-password', this)">👁</button>
+                        </div>
                     </div>
                     <div class="field" style="margin-bottom:22px;">
                         <label for="reg-confirm">Confirmar contraseña</label>
-                        <input id="reg-confirm" type="password" placeholder="Repetí tu contraseña" autocomplete="new-password">
+                        <div class="password-wrap">
+                            <input id="reg-confirm" type="password" placeholder="Repetí tu contraseña" autocomplete="new-password">
+                            <button type="button" class="toggle-pass" onclick="togglePass('reg-confirm', this)">👁</button>
+                        </div>
                     </div>
                     <button type="submit" class="btn-primary">Crear cuenta</button>
                 </form>
@@ -549,6 +564,17 @@
                 btn.classList.add('active');
                 document.getElementById('panel-' + tab).classList.add('active');
                 card.classList.add('visible');
+            }
+        }
+
+        function togglePass(id, btn) {
+            const input = document.getElementById(id)
+            if (input.type === 'password') {
+                input.type = 'text'
+                btn.textContent = '🙈'
+            } else {
+                input.type = 'password'
+                btn.textContent = '👁'
             }
         }
 
