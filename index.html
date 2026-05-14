@@ -436,7 +436,11 @@
             body.append('password', password)
 
             try {
-                const res  = await fetch(`${API}/auth/login`, { method: 'POST', body })
+                const res  = await fetch(`${API}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'ngrok-skip-browser-warning': '1' },
+                    body
+                })
                 const data = await res.json()
                 if (res.ok) {
                     localStorage.setItem('token', data.token)
@@ -466,7 +470,7 @@
             try {
                 const res  = await fetch(`${API}/auth/register`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': '1' },
                     body: JSON.stringify({ full_name, email, password })
                 })
                 const data = await res.json()
