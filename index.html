@@ -438,7 +438,6 @@
             try {
                 const res  = await fetch(`${API}/auth/login`, {
                     method: 'POST',
-                    headers: { 'ngrok-skip-browser-warning': '1' },
                     body
                 })
                 const data = await res.json()
@@ -470,7 +469,7 @@
             try {
                 const res  = await fetch(`${API}/auth/register`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': '1' },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ full_name, email, password })
                 })
                 const data = await res.json()
