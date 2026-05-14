@@ -423,6 +423,64 @@
     <p class="page-footer">© 2026 CritiData · Todos los derechos reservados</p>
 
     <script>
+        const API = "https://flaky-nutcase-dismiss.ngrok-free.app"
+
+        // ── LOGIN ──
+        document.getElementById('panel-login').querySelector('form').addEventListener('submit', async function(e) {
+            e.preventDefault()
+            const email    = document.getElementById('login-email').value
+            const password = document.getElementById('login-password').value
+
+            const body = new URLSearchParams()
+            body.append('username', email)
+            body.append('password', password)
+
+            try {
+                const res  = await fetch(`${API}/auth/login`, { method: 'POST', body })
+                const data = await res.json()
+                if (res.ok) {
+                    localStorage.setItem('token', data.token)
+                    localStorage.setItem('usuario', data.full_name)
+                    window.location.href = 'panel.html'
+                } else {
+                    alert(data.detail || 'Email o contraseña incorrectos')
+                }
+            } catch {
+                alert('No se pudo conectar con el servidor')
+            }
+        })
+
+        // ── REGISTRO ──
+        document.getElementById('panel-register').querySelector('form').addEventListener('submit', async function(e) {
+            e.preventDefault()
+            const full_name = document.getElementById('reg-name').value
+            const email     = document.getElementById('reg-email').value
+            const password  = document.getElementById('reg-password').value
+            const confirm   = document.getElementById('reg-confirm').value
+
+            if (password !== confirm) {
+                alert('Las contraseñas no coinciden')
+                return
+            }
+
+            try {
+                const res  = await fetch(`${API}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ full_name, email, password })
+                })
+                const data = await res.json()
+                if (res.ok) {
+                    alert('Registro exitoso. Revisá tu email para confirmar tu cuenta.')
+                    switchTab('login', document.getElementById('btn-login'))
+                } else {
+                    alert(data.detail || 'Error al registrarse')
+                }
+            } catch {
+                alert('No se pudo conectar con el servidor')
+            }
+        })
+
         document.getElementById('contact-form').addEventListener('submit', function(e) {
             e.preventDefault();
 
