@@ -41,6 +41,11 @@
             transition: border-color 0.2s;
         }
         .add-row input:focus { border-color: #1565c0; }
+        .add-row select {
+            padding: 10px 14px; border: 1.5px solid #e2e8f0;
+            border-radius: 9px; font-size: 14px; outline: none;
+            background: white; cursor: pointer;
+        }
         .btn-add {
             padding: 10px 20px; background: #1565c0; color: white;
             border: none; border-radius: 9px; font-size: 14px;
@@ -87,6 +92,10 @@
         <h3>Autorizar nuevo email</h3>
         <div class="add-row">
             <input type="email" id="nuevo-email" placeholder="usuario@ejemplo.com" />
+            <select id="nuevo-rol">
+                <option value="laboratorio">Laboratorio</option>
+                <option value="admin">Admin</option>
+            </select>
             <button class="btn-add" id="btn-agregar" onclick="agregarEmail()">Autorizar</button>
         </div>
         <p class="msg" id="msg-agregar"></p>
@@ -166,6 +175,7 @@
 
     async function agregarEmail() {
         const email = document.getElementById('nuevo-email').value.trim()
+        const role  = document.getElementById('nuevo-rol').value
         const msg   = document.getElementById('msg-agregar')
         const btn   = document.getElementById('btn-agregar')
         if (!email) return
@@ -181,7 +191,7 @@
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`
                 },
-                body: JSON.stringify({ email })
+                body: JSON.stringify({ email, role })
             })
             const data = await res.json()
             if (res.ok) {
