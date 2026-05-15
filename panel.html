@@ -69,6 +69,28 @@
             margin-top: 10px;
             font-weight: bold;
         }
+
+        /* Modal de sesión */
+        .modal-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.5); z-index: 1000;
+            justify-content: center; align-items: center;
+        }
+        .modal-overlay.activo { display: flex; }
+        .modal-box {
+            background: white; border-radius: 12px; padding: 32px 28px;
+            width: 340px; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        .modal-box h3 { color: #1e293b; margin-bottom: 10px; font-size: 18px; }
+        .modal-box p  { color: #64748b; font-size: 14px; margin-bottom: 24px; }
+        .modal-box .cuenta { font-size: 28px; font-weight: 700; color: #ef4444; margin-bottom: 20px; }
+        .modal-btns { display: flex; gap: 12px; justify-content: center; }
+        .modal-btns button {
+            padding: 10px 22px; border: none; border-radius: 8px;
+            font-size: 14px; font-weight: 600; cursor: pointer;
+        }
+        .btn-continuar { background: #22c55e; color: white; }
+        .btn-salir-modal { background: #e2e8f0; color: #334155; }
     </style>
 </head>
 <body>
@@ -80,6 +102,19 @@
             Hola, <strong id="nombreUsuario"></strong>
             <button class="btn btn-rojo" onclick="salir()" style="margin-left:15px">Salir</button>
         </span>
+    </div>
+
+    <!-- Modal de sesión por expirar -->
+    <div class="modal-overlay" id="modal-sesion">
+        <div class="modal-box">
+            <h3>¿Seguís trabajando?</h3>
+            <p>Tu sesión se cerrará automáticamente en:</p>
+            <div class="cuenta" id="cuenta-regresiva">2:00</div>
+            <div class="modal-btns">
+                <button class="btn-continuar" onclick="continuarSesion()">Sí, continuar</button>
+                <button class="btn-salir-modal" onclick="salir()">Cerrar sesión</button>
+            </div>
+        </div>
     </div>
 
     <div class="contenido">
@@ -140,9 +175,40 @@
             document.getElementById("nombreUsuario").textContent = data.full_name
         }
 
-        // Al cargar la página renueva el token y luego cada 30 minutos
+        // Al cargar la página renueva el token
         renovarToken()
-        setInterval(renovarToken, 30 * 60 * 1000)
+
+        // Cada 30 minutos muestra el aviso de sesión
+        let cuentaInterval = null
+        setInterval(mostrarAviso, 30 * 60 * 1000)
+
+        function mostrarAviso() {
+            const modal = document.getElementById('modal-sesion')
+            modal.classList.add('activo')
+            let segundos = 120
+            actualizarCuenta(segundos)
+            cuentaInterval = setInterval(() => {
+                segundos--
+                actualizarCuenta(segundos)
+                if (segundos <= 0) {
+                    clearInterval(cuentaInterval)
+                    salir()
+                }
+            }, 1000)
+        }
+
+        function actualizarCuenta(s) {
+            const m = Math.floor(s / 60)
+            const seg = s % 60
+            document.getElementById('cuenta-regresiva').textContent =
+                `${m}:${seg.toString().padStart(2, '0')}`
+        }
+
+        async function continuarSesion() {
+            clearInterval(cuentaInterval)
+            document.getElementById('modal-sesion').classList.remove('activo')
+            await renovarToken()
+        }
 
         // Cierra sesión y vuelve al inicio
         function salir() {
