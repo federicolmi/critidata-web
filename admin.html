@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin · CritiData</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #f1f5f9;
+            min-height: 100vh;
+        }
+        .topbar {
+            background: #1e293b;
+            color: white;
+            padding: 14px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .topbar .brand { font-size: 18px; font-weight: 600; letter-spacing: 1px; }
+        .topbar .user  { font-size: 13px; color: #94a3b8; }
+        .topbar button {
+            background: #ef4444; color: white; border: none;
+            padding: 7px 16px; border-radius: 7px; cursor: pointer; font-size: 13px;
+        }
+        .container { max-width: 700px; margin: 40px auto; padding: 0 20px; }
+        h2 { font-size: 22px; color: #1e293b; margin-bottom: 6px; }
+        .subtitle { font-size: 14px; color: #64748b; margin-bottom: 28px; }
+        .card {
+            background: white; border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            padding: 28px; margin-bottom: 24px;
+        }
+        .card h3 { font-size: 16px; color: #1e293b; margin-bottom: 16px; }
+        .add-row { display: flex; gap: 10px; }
+        .add-row input {
+            flex: 1; padding: 10px 14px; border: 1.5px solid #e2e8f0;
+            border-radius: 9px; font-size: 14px; outline: none;
+            transition: border-color 0.2s;
+        }
+        .add-row input:focus { border-color: #1565c0; }
+        .btn-add {
+            padding: 10px 20px; background: #1565c0; color: white;
+            border: none; border-radius: 9px; font-size: 14px;
+            cursor: pointer; white-space: nowrap; font-weight: 600;
+        }
+        .btn-add:disabled { background: #93c5fd; cursor: not-allowed; }
+        .msg { margin-top: 10px; font-size: 13px; min-height: 18px; }
+        .msg.ok  { color: #22c55e; }
+        .msg.err { color: #ef4444; }
+        .email-list { list-style: none; }
+        .email-list li {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 11px 14px; border-radius: 8px; font-size: 14px; color: #334155;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .email-list li:last-child { border-bottom: none; }
+        .email-list li:hover { background: #f8fafc; }
+        .btn-del {
+            background: none; border: none; color: #ef4444;
+            cursor: pointer; font-size: 18px; line-height: 1;
+            padding: 2px 6px; border-radius: 5px;
+        }
+        .btn-del:hover { background: #fee2e2; }
+        .empty { color: #94a3b8; font-size: 14px; text-align: center; padding: 20px 0; }
+        .loading { color: #94a3b8; font-size: 14px; padding: 12px 0; }
+    </style>
+</head>
+<body>
+
+<div class="topbar">
+    <span class="brand">CritiData · Admin</span>
+    <div style="display:flex;align-items:center;gap:16px;">
+        <span class="user" id="admin-name"></span>
+        <button onclick="cerrarSesion()">Cerrar sesión</button>
+    </div>
+</div>
+
+<div class="container">
+    <h2>Panel de administración</h2>
+    <p class="subtitle">Gestioná los emails autorizados para registrarse en CritiData.</p>
+
+    <!-- Agregar email -->
+    <div class="card">
+        <h3>Autorizar nuevo email</h3>
+        <div class="add-row">
+            <input type="email" id="nuevo-email" placeholder="usuario@ejemplo.com" />
+            <button class="btn-add" id="btn-agregar" onclick="agregarEmail()">Autorizar</button>
+        </div>
+        <p class="msg" id="msg-agregar"></p>
+    </div>
+
+    <!-- Lista de emails -->
+    <div class="card">
+        <h3>Emails autorizados</h3>
+        <p class="loading" id="loading-lista">Cargando...</p>
+        <ul class="email-list" id="lista-emails"></ul>
+    </div>
+</div>
+
+<script>
+    const API   = "https://backend-login-api-production.up.railway.app"
+    const token = localStorage.getItem('token')
+
+    async function init() {
+        if (!token) { window.location.href = 'index.html'; return }
+
+        const res  = await fetch(`${API}/auth/check-status`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        if (!res.ok) { window.location.href = 'index.html'; return }
+
+        const data = await res.json()
+        if (!data.roles.includes('admin')) {
+            alert('Acceso denegado. Solo administradores.')
+            window.location.href = 'index.html'
+            return
+        }
+        document.getElementById('admin-name').textContent = data.full_name
+        cargarLista()
+    }
+
+    async function cargarLista() {
+        const lista   = document.getElementById('lista-emails')
+        const loading = document.getElementById('loading-lista')
+        lista.innerHTML = ''
+        loading.style.display = 'block'
+
+        try {
+            const res  = await fetch(`${API}/auth/authorized-emails`, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            loading.style.display = 'none'
+            if (!res.ok) {
+                lista.innerHTML = '<li class="empty">Error al cargar la lista.</li>'
+                return
+            }
+            const emails = await res.json()
+            if (emails.length === 0) {
+                lista.innerHTML = '<li class="empty">No hay emails autorizados aún.</li>'
+                return
+            }
+            emails.forEach(item => {
+                const li = document.createElement('li')
+                li.innerHTML = `
+                    <span>${item.email}</span>
+                    <button class="btn-del" title="Eliminar" onclick="eliminarEmail('${item.email}')">×</button>
+                `
+                lista.appendChild(li)
+            })
+        } catch {
+            loading.style.display = 'none'
+            lista.innerHTML = '<li class="empty">Error de conexión.</li>'
+        }
+    }
+
+    async function agregarEmail() {
+        const email = document.getElementById('nuevo-email').value.trim()
+        const msg   = document.getElementById('msg-agregar')
+        const btn   = document.getElementById('btn-agregar')
+        if (!email) return
+
+        btn.disabled = true
+        msg.className = 'msg'
+        msg.textContent = ''
+
+        try {
+            const res  = await fetch(`${API}/auth/authorize-email`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ email })
+            })
+            const data = await res.json()
+            if (res.ok) {
+                msg.className = 'msg ok'
+                msg.textContent = `✓ ${email} autorizado correctamente.`
+                document.getElementById('nuevo-email').value = ''
+                cargarLista()
+            } else {
+                msg.className = 'msg err'
+                msg.textContent = data.detail || 'Error al autorizar.'
+            }
+        } catch {
+            msg.className = 'msg err'
+            msg.textContent = 'Error de conexión.'
+        }
+        btn.disabled = false
+    }
+
+    async function eliminarEmail(email) {
+        if (!confirm(`¿Eliminar ${email} de la lista?`)) return
+        try {
+            const res = await fetch(`${API}/auth/authorized-emails/${encodeURIComponent(email)}`, {
+                method: 'DELETE',
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            if (res.ok) cargarLista()
+            else alert('Error al eliminar.')
+        } catch {
+            alert('Error de conexión.')
+        }
+    }
+
+    function cerrarSesion() {
+        localStorage.removeItem('token')
+        localStorage.removeItem('usuario')
+        window.location.href = 'index.html'
+    }
+
+    init()
+</script>
+
+</body>
+</html>
