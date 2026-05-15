@@ -126,15 +126,23 @@
 
     <script>
         const API = "https://backend-login-api-production.up.railway.app"
-        const token = localStorage.getItem("token")
 
-        // Si no hay token redirige al login
-        if (!token) {
-            window.location.href = "login.html"
+        // Renueva el token llamando a check-status y guarda el nuevo en localStorage
+        async function renovarToken() {
+            const t = localStorage.getItem("token")
+            if (!t) { window.location.href = "index.html"; return }
+            const res = await fetch(`${API}/auth/check-status`, {
+                headers: { Authorization: `Bearer ${t}` }
+            })
+            if (!res.ok) { window.location.href = "index.html"; return }
+            const data = await res.json()
+            localStorage.setItem("token", data.token)
+            document.getElementById("nombreUsuario").textContent = data.full_name
         }
 
-        // Muestra el nombre del usuario en la barra
-        document.getElementById("nombreUsuario").textContent = localStorage.getItem("usuario")
+        // Al cargar la página renueva el token y luego cada 30 minutos
+        renovarToken()
+        setInterval(renovarToken, 30 * 60 * 1000)
 
         // Cierra sesión y vuelve al inicio
         function salir() {
@@ -149,7 +157,7 @@
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
                 },
                 body: JSON.stringify({
                     nombre:           document.getElementById("nombre").value,
@@ -176,7 +184,7 @@
         async function buscarPaciente() {
             const dni = document.getElementById("dniBuscar").value
             const response = await fetch(`${API}/lab/pacientes/${dni}`, {
-                headers: { "Authorization": `Bearer ${token}` }
+                headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
             })
 
             if (response.ok) {
@@ -196,7 +204,7 @@
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
+                    "Authorization": `Bearer ${localStorage.getItem("token")}`
                 },
                 body: JSON.stringify({
                     paciente_id:   parseInt(document.getElementById("pacienteId").value),
