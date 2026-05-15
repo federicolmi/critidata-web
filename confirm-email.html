@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmar cuenta - CritiData</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f1f5f9;
+            display: flex; justify-content: center; align-items: center; min-height: 100vh;
+        }
+        .card {
+            background: white; border-radius: 14px; padding: 40px 36px;
+            width: 360px; box-shadow: 0 4px 24px rgba(0,0,0,0.1); text-align: center;
+        }
+        .icon { font-size: 48px; margin-bottom: 16px; }
+        h2 { font-size: 22px; color: #1e293b; margin-bottom: 10px; }
+        p  { font-size: 14px; color: #64748b; margin-bottom: 24px; }
+        .btn {
+            display: inline-block; padding: 12px 28px; background: #1565c0;
+            color: white; border-radius: 8px; text-decoration: none;
+            font-size: 15px; font-weight: 600;
+        }
+        .ok  { color: #22c55e; }
+        .err { color: #ef4444; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="icon" id="icon">⏳</div>
+        <h2 id="titulo">Confirmando cuenta...</h2>
+        <p id="mensaje">Espera un momento.</p>
+        <div id="btn-container"></div>
+    </div>
+
+    <script>
+        const API = "https://backend-login-api-production.up.railway.app"
+        const params = new URLSearchParams(window.location.search)
+        const token  = params.get("token")
+
+        async function confirmar() {
+            if (!token) {
+                mostrarError("Link inválido. No se encontró el token.")
+                return
+            }
+            try {
+                const res = await fetch(`${API}/auth/confirm-email?token=${token}`)
+                if (res.ok) {
+                    document.getElementById('icon').textContent = "✅"
+                    document.getElementById('titulo').textContent = "Cuenta confirmada"
+                    document.getElementById('titulo').className = "ok"
+                    document.getElementById('mensaje').textContent = "Tu cuenta fue activada. Ya podés iniciar sesión."
+                    document.getElementById('btn-container').innerHTML =
+                        '<a href="index.html" class="btn">Iniciar sesión</a>'
+                } else {
+                    const data = await res.json()
+                    mostrarError(data.detail || "El link es inválido o ya expiró.")
+                }
+            } catch {
+                mostrarError("Error de conexión. Intentá de nuevo.")
+            }
+        }
+
+        function mostrarError(msg) {
+            document.getElementById('icon').textContent = "❌"
+            document.getElementById('titulo').textContent = "Error"
+            document.getElementById('titulo').className = "err"
+            document.getElementById('mensaje').textContent = msg
+            document.getElementById('btn-container').innerHTML =
+                '<a href="index.html" class="btn" style="background:#64748b;">Volver al inicio</a>'
+        }
+
+        confirmar()
+    </script>
+</body>
+</html>
