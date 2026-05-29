@@ -117,7 +117,12 @@
     <h2>8. Titular</h2>
     <p>A los efectos legales, CRITIDATA es una marca registrada cuyo titular es <strong>Federico Enrique Lami</strong>, CUIT 20-18343943-0, con domicilio en Saladillo, Provincia de Buenos Aires.</p>
 
-    <a class="back" href="/">← Volver a critidata.com</a>
+    <a class="back" id="back-link" href="/">← Volver a critidata.com</a>
+    <script>
+      if (new URLSearchParams(window.location.search).get('from') === 'app') {
+        document.getElementById('back-link').style.display = 'none';
+      }
+    </script>
 </div>
 </body>
 </html>
