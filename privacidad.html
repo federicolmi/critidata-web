@@ -31,6 +31,20 @@
         a { color: #e07b2a; text-decoration: none; }
         a:hover { text-decoration: underline; }
         .back { display: inline-block; margin-top: 36px; color: #888; font-size: 0.9rem; }
+        .back-app {
+            display: none;
+            margin-top: 36px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #1a1a2e;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-family: inherit;
+        }
+        .back-app:hover { background-color: #2e2e4e; }
         .divider {
             border: none;
             border-top: 3px solid #f0f0f0;
@@ -117,10 +131,12 @@
     <h2>8. Titular</h2>
     <p>A los efectos legales, CRITIDATA es una marca registrada cuyo titular es <strong>Federico Enrique Lami</strong>, CUIT 20-18343943-0, con domicilio en Saladillo, Provincia de Buenos Aires.</p>
 
-    <a class="back" id="back-link" href="/">← Volver a critidata.com</a>
+    <a class="back" id="back-web" href="/">← Volver a critidata.com</a>
+    <button class="back-app" id="back-app" onclick="history.back()">← Volver a CritiData</button>
     <script>
       if (new URLSearchParams(window.location.search).get('from') === 'app') {
-        document.getElementById('back-link').style.display = 'none';
+        document.getElementById('back-web').style.display = 'none';
+        document.getElementById('back-app').style.display = 'inline-block';
       }
     </script>
 </div>
