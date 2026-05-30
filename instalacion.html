@@ -321,6 +321,51 @@
         .faq-item h4 { font-size: 0.95rem; color: #0d1b2a; margin-bottom: 4px; }
         .faq-item p { font-size: 0.9rem; color: #555; }
 
+        /* ── Download banner ── */
+        .download-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f0f4f8;
+            border: 1.5px solid #dde3eb;
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 36px;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .download-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .download-icon { font-size: 2.2rem; line-height: 1; }
+        .download-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0d1b2a;
+        }
+        .download-meta {
+            font-size: 0.82rem;
+            color: #888;
+            margin-top: 3px;
+        }
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #0d1b2a;
+            color: white;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 13px 28px;
+            border-radius: 10px;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+        .download-btn:hover { background: #1a3a5c; color: white; }
+
         /* ── Footer ── */
         .page-footer {
             margin-top: 32px;
@@ -352,6 +397,20 @@
     </div>
 
     <div class="card">
+
+        <!-- ════════════════════════════════ DESCARGA ════════════════════════════════ -->
+        <div class="download-banner">
+            <div class="download-info">
+                <div class="download-icon">📦</div>
+                <div>
+                    <div class="download-title">CritiData Importador</div>
+                    <div class="download-meta">Windows &amp; macOS · Última versión</div>
+                </div>
+            </div>
+            <a href="/critidata_app.zip" download class="download-btn">
+                ⬇&nbsp; Descargar
+            </a>
+        </div>
 
         <!-- ════════════════════════════════ WINDOWS ════════════════════════════════ -->
         <div id="tab-windows" class="tab-panel active">
@@ -387,7 +446,7 @@
                 <div class="step-num">2</div>
                 <div class="step-body">
                     <h3>Descargá el Importador</h3>
-                    <p>Tu médico de referencia o el equipo de CritiData te envió un archivo <code>critidata_app.zip</code>. Descomprimilo en una carpeta de tu elección (por ejemplo, <code>Escritorio\CritiData</code>).</p>
+                    <p>Hacé click en el botón <strong>⬇ Descargar</strong> de arriba. Una vez descargado, descomprimí el archivo <code>critidata_app.zip</code> en una carpeta de tu elección (por ejemplo, <code>Escritorio\CritiData</code>).</p>
                 </div>
             </div>
 
@@ -478,7 +537,7 @@
                 <div class="step-num">2</div>
                 <div class="step-body">
                     <h3>Descargá el Importador</h3>
-                    <p>Tu médico de referencia o el equipo de CritiData te envió un archivo <code>critidata_app.zip</code>. Descomprimilo haciendo doble click — se crea la carpeta <code>critidata_app</code>.</p>
+                    <p>Hacé click en el botón <strong>⬇ Descargar</strong> de arriba. Una vez descargado, descomprimí el archivo <code>critidata_app.zip</code> haciendo doble click — se crea la carpeta <code>critidata_app</code>.</p>
                 </div>
             </div>
 
