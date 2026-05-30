@@ -510,9 +510,25 @@
         <div class="tab-panel" id="panel-download">
             <div class="tab-panel-inner">
 
-                <!-- Selección de OS -->
-                <div id="wz-os-select">
+                <!-- Selección de especialidad -->
+                <div id="wz-specialty">
                     <p class="form-title">Descargar Importador</p>
+                    <p class="form-subtitle">Seleccioná tu especialidad</p>
+                    <div class="wz-os-cards">
+                        <div class="wz-os-card" onclick="selectSpecialty('nefrologia')">
+                            <span class="wz-os-icon">🩺</span>
+                            <span class="wz-os-label">Nefrología</span>
+                        </div>
+                        <div class="wz-os-card" style="opacity:.35;cursor:not-allowed;">
+                            <span class="wz-os-icon">🫀</span>
+                            <span class="wz-os-label" style="color:#aaa;">Próximamente</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selección de OS -->
+                <div id="wz-os-select" style="display:none;">
+                    <p class="form-title" id="wz-specialty-title"></p>
                     <p class="form-subtitle">Seleccioná tu sistema operativo</p>
                     <div class="wz-os-cards">
                         <div class="wz-os-card" onclick="startWizard('win')">
@@ -543,7 +559,7 @@
                     </div>
                     <div class="wz-step" id="wz-win-1">
                         <h3>Descargá el Importador</h3>
-                        <a href="/critidata_app.zip" download class="wz-dl-btn">⬇ Descargar critidata_app.zip</a>
+                        <a href="/CritiData_Nefrologia.exe" download class="wz-dl-btn">⬇ Descargar CritiData_Nefrologia.exe</a>
                         <p>Descomprimí el archivo en una carpeta (por ejemplo <span class="wz-code">Escritorio\CritiData</span>).</p>
                         <div class="wz-nav">
                             <button class="wz-btn-back" onclick="wzBack('win')">← Anterior</button>
@@ -589,7 +605,7 @@
                     </div>
                     <div class="wz-step" id="wz-mac-1">
                         <h3>Descargá el Importador</h3>
-                        <a href="/critidata_app.zip" download class="wz-dl-btn">⬇ Descargar critidata_app.zip</a>
+                        <a href="/CritiData_Nefrologia.exe" download class="wz-dl-btn">⬇ Descargar CritiData_Nefrologia.exe</a>
                         <p>Descomprimí el archivo haciendo doble click — se crea la carpeta <span class="wz-code">critidata_app</span>.</p>
                         <div class="wz-nav">
                             <button class="wz-btn-back" onclick="wzBack('mac')">← Anterior</button>
@@ -791,6 +807,16 @@
         const wzStep = { win: 0, mac: 0 }
         let wzOs = null
 
+        const specialtyLabels = {
+            nefrologia: 'Nefrología · Importador',
+        }
+
+        function selectSpecialty(specialty) {
+            document.getElementById('wz-specialty').style.display = 'none'
+            document.getElementById('wz-specialty-title').textContent = specialtyLabels[specialty] || specialty
+            document.getElementById('wz-os-select').style.display = ''
+        }
+
         function startWizard(os) {
             wzOs = os
             wzStep[os] = 0
@@ -830,7 +856,8 @@
         function resetWizard() {
             if (wzOs) document.getElementById('wz-' + wzOs).classList.remove('active')
             document.getElementById('wz-success').classList.remove('active')
-            document.getElementById('wz-os-select').style.display = ''
+            document.getElementById('wz-os-select').style.display = 'none'
+            document.getElementById('wz-specialty').style.display = ''
             wzOs = null
         }
 
