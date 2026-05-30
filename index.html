@@ -305,6 +305,46 @@
             letter-spacing: 0.3px;
         }
 
+        /* ── Wizard Descargar ── */
+        .wz-os-cards { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:20px; }
+        .wz-os-card {
+            flex:1; min-width:110px; max-width:150px;
+            border:2px solid #dde3eb; border-radius:14px;
+            padding:22px 14px; cursor:pointer; text-align:center;
+            background:#fafafa; transition:border-color .2s, background .2s;
+        }
+        .wz-os-card:hover { border-color:#0d1b2a; background:#f0f4f8; }
+        .wz-os-icon { font-size:2rem; display:block; margin-bottom:10px; }
+        .wz-os-label { font-size:.95rem; font-weight:600; color:#0d1b2a; }
+        .wz-steps { display:none; }
+        .wz-steps.active { display:block; }
+        .wz-progress { display:flex; align-items:center; gap:8px; margin-bottom:22px; }
+        .wz-dots { display:flex; gap:6px; }
+        .wz-dot { width:8px; height:8px; border-radius:50%; background:#dde3eb; transition:background .2s; }
+        .wz-dot.done { background:#2e7d32; }
+        .wz-dot.current { background:#0d1b2a; }
+        .wz-step-lbl { font-size:.8rem; color:#aaa; margin-left:auto; }
+        .wz-step { display:none; }
+        .wz-step.active { display:block; }
+        .wz-step h3 { font-size:1.05rem; font-weight:700; color:#0d1b2a; margin-bottom:10px; }
+        .wz-step p { font-size:.92rem; color:#444; margin-bottom:9px; line-height:1.6; }
+        .wz-callout { background:#fff8ec; border-left:4px solid #e07b2a; border-radius:0 8px 8px 0; padding:10px 14px; font-size:.87rem; color:#6b4000; margin-bottom:10px; }
+        .wz-info { background:#eef4ff; border-left:4px solid #4a7fd4; border-radius:0 8px 8px 0; padding:10px 14px; font-size:.87rem; color:#1a3a6b; margin-bottom:10px; }
+        .wz-code { background:#f0f0f0; border-radius:4px; padding:2px 7px; font-size:.87rem; font-family:'Courier New',monospace; color:#c0392b; }
+        .wz-nav { display:flex; align-items:center; justify-content:space-between; margin-top:22px; padding-top:16px; border-top:1.5px solid #f0f0f0; }
+        .wz-btn-next { background:#0d1b2a; color:#fff; border:none; border-radius:10px; padding:11px 26px; font-size:.93rem; font-weight:600; font-family:inherit; cursor:pointer; transition:background .2s; }
+        .wz-btn-next:hover { background:#1a3a5c; }
+        .wz-btn-back { background:none; border:none; color:#aaa; font-size:.88rem; font-family:inherit; cursor:pointer; }
+        .wz-btn-back:hover { color:#0d1b2a; }
+        .wz-dl-btn { display:inline-flex; align-items:center; gap:8px; background:#0d1b2a; color:#fff; text-decoration:none; font-size:.9rem; font-weight:700; padding:10px 20px; border-radius:8px; margin-bottom:10px; }
+        .wz-dl-btn:hover { background:#1a3a5c; color:#fff; }
+        .wz-success { display:none; text-align:center; padding:16px 0 8px; }
+        .wz-success.active { display:block; }
+        .wz-success-icon { font-size:3rem; margin-bottom:14px; }
+        .wz-success h2 { font-size:1.15rem; font-weight:700; color:#0d1b2a; margin-bottom:8px; }
+        .wz-success p { font-size:.92rem; color:#555; line-height:1.6; margin-bottom:20px; }
+        .wz-restart { background:none; border:none; color:#aaa; font-size:.88rem; font-family:inherit; cursor:pointer; text-decoration:underline; }
+
         /* ── Responsive ── */
         @media (max-width: 480px) {
             .top-nav { padding: 10px 14px; gap: 4px; }
@@ -354,6 +394,8 @@
                 onclick="switchTab('register', this)">Registrarse</button>
         <button class="nav-btn" id="btn-contact"
                 onclick="switchTab('contact', this)">Contáctenos</button>
+        <button class="nav-btn" id="btn-download"
+                onclick="switchTab('download', this)">⬇ Descargar App</button>
     </nav>
 
     <!-- Hero -->
@@ -461,6 +503,130 @@
                     <button type="submit" class="btn-primary" id="ct-submit">Enviar mensaje</button>
                     <div id="ct-feedback" style="margin-top:14px;font-size:0.92rem;text-align:center;display:none;"></div>
                 </form>
+            </div>
+        </div>
+
+        <!-- Panel: Descargar App -->
+        <div class="tab-panel" id="panel-download">
+            <div class="tab-panel-inner">
+
+                <!-- Selección de OS -->
+                <div id="wz-os-select">
+                    <p class="form-title">Descargar Importador</p>
+                    <p class="form-subtitle">Seleccioná tu sistema operativo</p>
+                    <div class="wz-os-cards">
+                        <div class="wz-os-card" onclick="startWizard('win')">
+                            <span class="wz-os-icon">🪟</span>
+                            <span class="wz-os-label">Windows</span>
+                        </div>
+                        <div class="wz-os-card" onclick="startWizard('mac')">
+                            <span class="wz-os-icon">🍎</span>
+                            <span class="wz-os-label">macOS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wizard Windows -->
+                <div id="wz-win" class="wz-steps">
+                    <div class="wz-progress">
+                        <div class="wz-dots" id="wz-win-dots"></div>
+                        <span class="wz-step-lbl" id="wz-win-lbl"></span>
+                    </div>
+                    <div class="wz-step" id="wz-win-0">
+                        <h3>Instalá Python</h3>
+                        <p>Bajalo de <strong>python.org/downloads</strong> y ejecutá el instalador.</p>
+                        <div class="wz-callout"><strong>⚠ Paso crítico:</strong> marcá la casilla <strong>"Add Python to PATH"</strong> antes de hacer click en Install Now.</div>
+                        <div class="wz-nav">
+                            <button class="wz-btn-back" onclick="resetWizard()">← Cambiar sistema</button>
+                            <button class="wz-btn-next" onclick="wzNext('win')">Siguiente →</button>
+                        </div>
+                    </div>
+                    <div class="wz-step" id="wz-win-1">
+                        <h3>Descargá el Importador</h3>
+                        <a href="/critidata_app.zip" download class="wz-dl-btn">⬇ Descargar critidata_app.zip</a>
+                        <p>Descomprimí el archivo en una carpeta (por ejemplo <span class="wz-code">Escritorio\CritiData</span>).</p>
+                        <div class="wz-nav">
+                            <button class="wz-btn-back" onclick="wzBack('win')">← Anterior</button>
+                            <button class="wz-btn-next" onclick="wzNext('win')">Siguiente →</button>
+                        </div>
+                    </div>
+                    <div class="wz-step" id="wz-win-2">
+                        <h3>Instalá las dependencias</h3>
+                        <p>Abrí la carpeta descomprimida y hacé <strong>doble click</strong> en <span class="wz-code">instalar.bat</span>.</p>
+                        <div class="wz-info">Se descarga el navegador Chromium (~150 MB). Esperá el mensaje <em>"Instalación completada"</em>.</div>
+                        <div class="wz-nav">
+                            <button class="wz-btn-back" onclick="wzBack('win')">← Anterior</button>
+                            <button class="wz-btn-next" onclick="wzNext('win')">Siguiente →</button>
+                        </div>
+                    </div>
+                    <div class="wz-step" id="wz-win-3">
+                        <h3>Abrí el Importador</h3>
+                        <p>Hacé <strong>doble click</strong> en <span class="wz-code">ejecutar.bat</span>.</p>
+                        <p>La primera vez te va a pedir tus credenciales de Bionefro y de CritiData.</p>
+                        <div class="wz-info">Las credenciales se guardan en <strong>Windows Credential Manager</strong>. Solo las ingresás una vez.</div>
+                        <div class="wz-nav">
+                            <button class="wz-btn-back" onclick="wzBack('win')">← Anterior</button>
+                            <button class="wz-btn-next" onclick="wzFinish()">¡Listo! ✓</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wizard macOS -->
+                <div id="wz-mac" class="wz-steps">
+                    <div class="wz-progress">
+                        <div class="wz-dots" id="wz-mac-dots"></div>
+                        <span class="wz-step-lbl" id="wz-mac-lbl"></span>
+                    </div>
+                    <div class="wz-step" id="wz-mac-0">
+                        <h3>Verificá Python</h3>
+                        <p>Abrí <strong>Terminal</strong> (Aplicaciones → Utilidades) y escribí:</p>
+                        <p><span class="wz-code">python3 --version</span></p>
+                        <p>Si dice <em>"command not found"</em>, bajalo de <strong>python.org/downloads</strong> para macOS.</p>
+                        <div class="wz-nav">
+                            <button class="wz-btn-back" onclick="resetWizard()">← Cambiar sistema</button>
+                            <button class="wz-btn-next" onclick="wzNext('mac')">Siguiente →</button>
+                        </div>
+                    </div>
+                    <div class="wz-step" id="wz-mac-1">
+                        <h3>Descargá el Importador</h3>
+                        <a href="/critidata_app.zip" download class="wz-dl-btn">⬇ Descargar critidata_app.zip</a>
+                        <p>Descomprimí el archivo haciendo doble click — se crea la carpeta <span class="wz-code">critidata_app</span>.</p>
+                        <div class="wz-nav">
+                            <button class="wz-btn-back" onclick="wzBack('mac')">← Anterior</button>
+                            <button class="wz-btn-next" onclick="wzNext('mac')">Siguiente →</button>
+                        </div>
+                    </div>
+                    <div class="wz-step" id="wz-mac-2">
+                        <h3>Instalá las dependencias</h3>
+                        <p>En Terminal, navegá a la carpeta y ejecutá:</p>
+                        <p><span class="wz-code">bash instalar.sh</span></p>
+                        <div class="wz-info">Se descarga Chromium (~150 MB). Esperá el mensaje <em>"Instalación completada"</em>.</div>
+                        <div class="wz-nav">
+                            <button class="wz-btn-back" onclick="wzBack('mac')">← Anterior</button>
+                            <button class="wz-btn-next" onclick="wzNext('mac')">Siguiente →</button>
+                        </div>
+                    </div>
+                    <div class="wz-step" id="wz-mac-3">
+                        <h3>Abrí el Importador</h3>
+                        <p>En Terminal ejecutá:</p>
+                        <p><span class="wz-code">bash ejecutar.sh</span></p>
+                        <p>La primera vez te pedirá tus credenciales de Bionefro y de CritiData.</p>
+                        <div class="wz-info">Las credenciales se guardan en <strong>macOS Keychain</strong>. Solo las ingresás una vez.</div>
+                        <div class="wz-nav">
+                            <button class="wz-btn-back" onclick="wzBack('mac')">← Anterior</button>
+                            <button class="wz-btn-next" onclick="wzFinish()">¡Listo! ✓</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pantalla de éxito -->
+                <div id="wz-success" class="wz-success">
+                    <div class="wz-success-icon">✅</div>
+                    <h2>¡Instalación completada!</h2>
+                    <p>Ya podés sincronizar tus resultados de laboratorio desde tu computadora.<br>Ejecutá el importador una vez al día para mantener los datos actualizados.</p>
+                    <button class="wz-restart" onclick="resetWizard()">← Volver al inicio</button>
+                </div>
+
             </div>
         </div>
 
@@ -618,6 +784,54 @@
                 input.type = 'password'
                 btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
             }
+        }
+
+        // ── WIZARD DESCARGAR ──
+        const WZ_TOTAL = 4
+        const wzStep = { win: 0, mac: 0 }
+        let wzOs = null
+
+        function startWizard(os) {
+            wzOs = os
+            wzStep[os] = 0
+            document.getElementById('wz-os-select').style.display = 'none'
+            document.getElementById('wz-success').classList.remove('active')
+            // Genera dots
+            const dotsEl = document.getElementById('wz-' + os + '-dots')
+            dotsEl.innerHTML = ''
+            for (let i = 0; i < WZ_TOTAL; i++) {
+                const d = document.createElement('div')
+                d.className = 'wz-dot'
+                d.id = 'wz-' + os + '-dot-' + i
+                dotsEl.appendChild(d)
+            }
+            document.getElementById('wz-' + os).classList.add('active')
+            wzShow(os, 0)
+        }
+
+        function wzShow(os, n) {
+            document.querySelectorAll('#wz-' + os + ' .wz-step').forEach(s => s.classList.remove('active'))
+            document.getElementById('wz-' + os + '-' + n).classList.add('active')
+            for (let i = 0; i < WZ_TOTAL; i++) {
+                const d = document.getElementById('wz-' + os + '-dot-' + i)
+                d.className = 'wz-dot' + (i < n ? ' done' : i === n ? ' current' : '')
+            }
+            document.getElementById('wz-' + os + '-lbl').textContent = 'Paso ' + (n + 1) + ' de ' + WZ_TOTAL
+        }
+
+        function wzNext(os) { wzStep[os]++; wzShow(os, wzStep[os]) }
+        function wzBack(os) { wzStep[os]--; wzShow(os, wzStep[os]) }
+
+        function wzFinish() {
+            document.getElementById('wz-' + wzOs).classList.remove('active')
+            document.getElementById('wz-success').classList.add('active')
+        }
+
+        function resetWizard() {
+            if (wzOs) document.getElementById('wz-' + wzOs).classList.remove('active')
+            document.getElementById('wz-success').classList.remove('active')
+            document.getElementById('wz-os-select').style.display = ''
+            wzOs = null
         }
 
         document.addEventListener('click', function(e) {
