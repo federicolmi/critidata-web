@@ -549,41 +549,28 @@
                         <span class="wz-step-lbl" id="wz-win-lbl"></span>
                     </div>
                     <div class="wz-step" id="wz-win-0">
-                        <h3>Instalá Python</h3>
-                        <p>Bajalo de <strong>python.org/downloads</strong> y ejecutá el instalador.</p>
-                        <div class="wz-callout"><strong>⚠ Paso crítico:</strong> marcá la casilla <strong>"Add Python to PATH"</strong> antes de hacer click en Install Now.</div>
+                        <h3>Descargá y abrí el Importador</h3>
+                        <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia.exe" class="wz-dl-btn">⬇ Descargar CritiData_Nefrologia.exe</a>
+                        <p>Una vez descargado, hacé <strong>doble click</strong> en el archivo.</p>
+                        <div class="wz-callout"><strong>⚠ Windows puede mostrar una advertencia.</strong> Hacé click en <strong>"Más información"</strong> y luego en <strong>"Ejecutar de todas formas"</strong>.</div>
                         <div class="wz-nav">
                             <button class="wz-btn-back" onclick="resetWizard()">← Cambiar sistema</button>
                             <button class="wz-btn-next" onclick="wzNext('win')">Siguiente →</button>
                         </div>
                     </div>
                     <div class="wz-step" id="wz-win-1">
-                        <h3>Descargá el Importador</h3>
-                        <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia.exe" class="wz-dl-btn">⬇ Descargar CritiData_Nefrologia.exe</a>
-                        <p>Una vez descargado, hacé doble click para abrirlo.</p>
-                        <div class="wz-callout">
-                            <strong>⚠ Windows puede mostrar una advertencia de seguridad.</strong><br>
-                            Hacé click en <strong>"Más información"</strong> y luego en <strong>"Ejecutar de todas formas"</strong>. Es normal para aplicaciones nuevas sin certificado.
-                        </div>
+                        <h3>Ingresá tus credenciales</h3>
+                        <p>La primera vez la app te va a pedir tu <strong>email y contraseña de CritiData</strong> (los mismos que usás en la app del celular).</p>
+                        <div class="wz-info">Las credenciales se guardan de forma segura en <strong>Windows Credential Manager</strong>. Solo las ingresás una vez.</div>
                         <div class="wz-nav">
                             <button class="wz-btn-back" onclick="wzBack('win')">← Anterior</button>
                             <button class="wz-btn-next" onclick="wzNext('win')">Siguiente →</button>
                         </div>
                     </div>
                     <div class="wz-step" id="wz-win-2">
-                        <h3>Instalá las dependencias</h3>
-                        <p>Abrí la carpeta descomprimida y hacé <strong>doble click</strong> en <span class="wz-code">instalar.bat</span>.</p>
-                        <div class="wz-info">Se descarga el navegador Chromium (~150 MB). Esperá el mensaje <em>"Instalación completada"</em>.</div>
-                        <div class="wz-nav">
-                            <button class="wz-btn-back" onclick="wzBack('win')">← Anterior</button>
-                            <button class="wz-btn-next" onclick="wzNext('win')">Siguiente →</button>
-                        </div>
-                    </div>
-                    <div class="wz-step" id="wz-win-3">
-                        <h3>Abrí el Importador</h3>
-                        <p>Hacé <strong>doble click</strong> en <span class="wz-code">ejecutar.bat</span>.</p>
-                        <p>La primera vez te va a pedir tus credenciales de Bionefro y de CritiData.</p>
-                        <div class="wz-info">Las credenciales se guardan en <strong>Windows Credential Manager</strong>. Solo las ingresás una vez.</div>
+                        <h3>Ejecutá la importación</h3>
+                        <p>Hacé click en el botón <strong>Ejecutar</strong>. La app se conecta a Bionefro, descarga los resultados del día y los envía al servidor.</p>
+                        <div class="wz-info">Ejecutalo una vez al día para tener los resultados actualizados en tu celular.</div>
                         <div class="wz-nav">
                             <button class="wz-btn-back" onclick="wzBack('win')">← Anterior</button>
                             <button class="wz-btn-next" onclick="wzFinish()">¡Listo! ✓</button>
@@ -598,40 +585,28 @@
                         <span class="wz-step-lbl" id="wz-mac-lbl"></span>
                     </div>
                     <div class="wz-step" id="wz-mac-0">
-                        <h3>Verificá Python</h3>
-                        <p>Abrí <strong>Terminal</strong> (Aplicaciones → Utilidades) y escribí:</p>
-                        <p><span class="wz-code">python3 --version</span></p>
-                        <p>Si dice <em>"command not found"</em>, bajalo de <strong>python.org/downloads</strong> para macOS.</p>
+                        <h3>Descargá y abrí el Importador</h3>
+                        <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia.exe" class="wz-dl-btn">⬇ Descargar CritiData_Nefrologia</a>
+                        <p>Una vez descargado, hacé <strong>doble click</strong> para abrirlo.</p>
+                        <div class="wz-callout"><strong>⚠ macOS puede bloquear la app.</strong> Andá a <strong>Ajustes → Privacidad y Seguridad</strong> y hacé click en <strong>"Abrir de todas formas"</strong>.</div>
                         <div class="wz-nav">
                             <button class="wz-btn-back" onclick="resetWizard()">← Cambiar sistema</button>
                             <button class="wz-btn-next" onclick="wzNext('mac')">Siguiente →</button>
                         </div>
                     </div>
                     <div class="wz-step" id="wz-mac-1">
-                        <h3>Descargá el Importador</h3>
-                        <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia.exe" class="wz-dl-btn">⬇ Descargar CritiData_Nefrologia.exe</a>
-                        <p>Descomprimí el archivo haciendo doble click — se crea la carpeta <span class="wz-code">critidata_app</span>.</p>
+                        <h3>Ingresá tus credenciales</h3>
+                        <p>La primera vez la app te va a pedir tu <strong>email y contraseña de CritiData</strong> (los mismos que usás en la app del celular).</p>
+                        <div class="wz-info">Las credenciales se guardan de forma segura en <strong>macOS Keychain</strong>. Solo las ingresás una vez.</div>
                         <div class="wz-nav">
                             <button class="wz-btn-back" onclick="wzBack('mac')">← Anterior</button>
                             <button class="wz-btn-next" onclick="wzNext('mac')">Siguiente →</button>
                         </div>
                     </div>
                     <div class="wz-step" id="wz-mac-2">
-                        <h3>Instalá las dependencias</h3>
-                        <p>En Terminal, navegá a la carpeta y ejecutá:</p>
-                        <p><span class="wz-code">bash instalar.sh</span></p>
-                        <div class="wz-info">Se descarga Chromium (~150 MB). Esperá el mensaje <em>"Instalación completada"</em>.</div>
-                        <div class="wz-nav">
-                            <button class="wz-btn-back" onclick="wzBack('mac')">← Anterior</button>
-                            <button class="wz-btn-next" onclick="wzNext('mac')">Siguiente →</button>
-                        </div>
-                    </div>
-                    <div class="wz-step" id="wz-mac-3">
-                        <h3>Abrí el Importador</h3>
-                        <p>En Terminal ejecutá:</p>
-                        <p><span class="wz-code">bash ejecutar.sh</span></p>
-                        <p>La primera vez te pedirá tus credenciales de Bionefro y de CritiData.</p>
-                        <div class="wz-info">Las credenciales se guardan en <strong>macOS Keychain</strong>. Solo las ingresás una vez.</div>
+                        <h3>Ejecutá la importación</h3>
+                        <p>Hacé click en el botón <strong>Ejecutar</strong>. La app se conecta a Bionefro, descarga los resultados del día y los envía al servidor.</p>
+                        <div class="wz-info">Ejecutalo una vez al día para tener los resultados actualizados en tu celular.</div>
                         <div class="wz-nav">
                             <button class="wz-btn-back" onclick="wzBack('mac')">← Anterior</button>
                             <button class="wz-btn-next" onclick="wzFinish()">¡Listo! ✓</button>
@@ -807,7 +782,7 @@
         }
 
         // ── WIZARD DESCARGAR ──
-        const WZ_TOTAL = 4
+        const WZ_TOTAL = 3
         const wzStep = { win: 0, mac: 0 }
         let wzOs = null
 
