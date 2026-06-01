@@ -404,6 +404,10 @@
         .dl-note p { font-size:.82rem; color:#475569; margin-bottom:8px; line-height:1.5; }
         .dl-note p:last-child { margin-bottom:0; }
         .dl-note code { background:#f0f0f0; padding:1px 5px; border-radius:4px; font-size:.82rem; color:#c0392b; font-family:'Courier New',monospace; }
+        .dl-disabled { opacity:.45; cursor:not-allowed !important; }
+        .dl-disabled:hover { border-color:#e2e8f0 !important; background:#f8fafc !important; transform:none !important; }
+        .dl-back { background:none; border:none; color:#94a3b8; font-size:.88rem; font-family:inherit; cursor:pointer; margin-top:16px; padding:0; display:block; }
+        .dl-back:hover { color:#475569; }
     </style>
 </head>
 <body>
@@ -531,26 +535,82 @@
         <!-- Panel: Descargar App -->
         <div class="tab-panel" id="panel-download">
             <div class="tab-panel-inner">
-                <p class="form-title">Descargar CritiData</p>
-                <p class="form-subtitle">Elegí tu dispositivo</p>
-                <div class="dl-cards">
-                    <div class="dl-card" style="opacity:.6;cursor:default;">
-                        <span class="dl-icon">📱</span>
-                        <span class="dl-name">App para el celular</span>
-                        <span class="dl-sub">Próximamente en Play Store</span>
-                        <span class="dl-btn-label" style="background:#94a3b8;">En breve</span>
+
+                <!-- Paso 1: Especialidad -->
+                <div id="dl-specialty">
+                    <p class="form-title">Descargar CritiData</p>
+                    <p class="form-subtitle">Seleccioná tu especialidad</p>
+                    <div class="dl-cards">
+                        <div class="dl-card" onclick="dlGo('device')">
+                            <span class="dl-icon">🩺</span>
+                            <span class="dl-name">Nefrología</span>
+                        </div>
+                        <div class="dl-card dl-disabled">
+                            <span class="dl-icon">🫁</span>
+                            <span class="dl-name">Otras</span>
+                            <span class="dl-sub">Próximamente</span>
+                        </div>
                     </div>
-                    <a class="dl-card" href="https://github.com/federicolmi/critidata-web/releases/download/v1.0-nefrologia/CritiData_Nefrologia_Windows.zip">
-                        <span class="dl-icon">💻</span>
-                        <span class="dl-name">App para la PC</span>
-                        <span class="dl-sub">Windows · 188 MB</span>
-                        <span class="dl-btn-label">⬇ Descargar</span>
-                    </a>
                 </div>
-                <div class="dl-note">
-                    <p>📱 <strong>Android:</strong> después de descargar, si el celular lo pide, activá "Instalar aplicaciones desconocidas" en Ajustes.</p>
-                    <p>💻 <strong>Windows:</strong> descomprimí el ZIP y ejecutá <code>CritiData_Nefrologia.exe</code>. Si Windows muestra una advertencia, elegí "Más información" → "Ejecutar de todas formas".</p>
+
+                <!-- Paso 2: Dispositivo -->
+                <div id="dl-device" style="display:none;">
+                    <p class="form-title">CritiData Nefrología</p>
+                    <p class="form-subtitle">¿Dónde la querés usar?</p>
+                    <div class="dl-cards">
+                        <div class="dl-card" onclick="dlGo('celular')">
+                            <span class="dl-icon">📱</span>
+                            <span class="dl-name">Celular</span>
+                        </div>
+                        <div class="dl-card" onclick="dlGo('pc')">
+                            <span class="dl-icon">💻</span>
+                            <span class="dl-name">PC / Mac</span>
+                        </div>
+                    </div>
+                    <button class="dl-back" onclick="dlGo('specialty')">← Volver</button>
                 </div>
+
+                <!-- Paso 3a: Celular -->
+                <div id="dl-celular" style="display:none;">
+                    <p class="form-title">CritiData Nefrología</p>
+                    <p class="form-subtitle">Descargala desde la tienda de tu celular</p>
+                    <div class="dl-cards">
+                        <a class="dl-card" href="https://play.google.com/store/search?q=critidata+nefrologia" target="_blank">
+                            <span class="dl-icon">🤖</span>
+                            <span class="dl-name">Android</span>
+                            <span class="dl-btn-label">Google Play</span>
+                        </a>
+                        <div class="dl-card dl-disabled">
+                            <span class="dl-icon">🍎</span>
+                            <span class="dl-name">iPhone</span>
+                            <span class="dl-sub">Próximamente</span>
+                        </div>
+                    </div>
+                    <button class="dl-back" onclick="dlGo('device')">← Volver</button>
+                </div>
+
+                <!-- Paso 3b: PC -->
+                <div id="dl-pc" style="display:none;">
+                    <p class="form-title">CritiData Nefrología</p>
+                    <p class="form-subtitle">Elegí tu sistema operativo</p>
+                    <div class="dl-cards">
+                        <a class="dl-card" href="https://github.com/federicolmi/critidata-web/releases/download/v1.0-nefrologia/CritiData_Nefrologia_Windows.zip">
+                            <span class="dl-icon">🪟</span>
+                            <span class="dl-name">Windows</span>
+                            <span class="dl-btn-label">⬇ Descargar</span>
+                        </a>
+                        <div class="dl-card dl-disabled">
+                            <span class="dl-icon">🍎</span>
+                            <span class="dl-name">macOS</span>
+                            <span class="dl-sub">Próximamente</span>
+                        </div>
+                    </div>
+                    <div class="dl-note" style="margin-top:16px;">
+                        <p>Descargá el archivo, descomprimilo y abrí la aplicación. Si Windows muestra una advertencia, elegí "Más información" → "Ejecutar de todas formas".</p>
+                    </div>
+                    <button class="dl-back" onclick="dlGo('device')">← Volver</button>
+                </div>
+
             </div>
         </div>
 
@@ -679,6 +739,13 @@
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
             card.classList.remove('visible');
+        }
+
+        function dlGo(step) {
+            ['dl-specialty','dl-device','dl-celular','dl-pc'].forEach(id => {
+                document.getElementById(id).style.display = 'none';
+            });
+            document.getElementById('dl-' + step).style.display = 'block';
         }
 
         function switchTab(tab, btn) {
