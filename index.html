@@ -382,6 +382,28 @@
         .pass-hints li.ok { color: #22c55e; }
         .pass-hints li.ok::before { content: "✓ "; }
         .pass-hints li:not(.ok)::before { content: "✗ "; }
+
+        /* ── Descarga simple ── */
+        .dl-cards { display:flex; gap:16px; margin-top:20px; justify-content:center; }
+        .dl-card {
+            flex:1; display:flex; flex-direction:column; align-items:center;
+            padding:24px 16px; border:2px solid #e2e8f0; border-radius:14px;
+            text-decoration:none; background:#f8fafc;
+            transition:border-color .2s, background .2s, transform .15s;
+        }
+        .dl-card:hover { border-color:#1565c0; background:#f0f4ff; transform:translateY(-2px); }
+        .dl-icon { font-size:2.5rem; margin-bottom:10px; }
+        .dl-name { font-size:1rem; font-weight:700; color:#0f172a; margin-bottom:4px; text-align:center; }
+        .dl-sub { font-size:.8rem; color:#94a3b8; margin-bottom:14px; }
+        .dl-btn-label {
+            background:linear-gradient(90deg,#1565c0,#00acc1);
+            color:#fff; padding:8px 18px; border-radius:8px;
+            font-size:.88rem; font-weight:700;
+        }
+        .dl-note { margin-top:20px; padding:14px 16px; background:#f8fafc; border-radius:10px; border:1px solid #e2e8f0; }
+        .dl-note p { font-size:.82rem; color:#475569; margin-bottom:8px; line-height:1.5; }
+        .dl-note p:last-child { margin-bottom:0; }
+        .dl-note code { background:#f0f0f0; padding:1px 5px; border-radius:4px; font-size:.82rem; color:#c0392b; font-family:'Courier New',monospace; }
     </style>
 </head>
 <body>
@@ -509,119 +531,26 @@
         <!-- Panel: Descargar App -->
         <div class="tab-panel" id="panel-download">
             <div class="tab-panel-inner">
-
-                <!-- Selección de especialidad -->
-                <div id="wz-specialty">
-                    <p class="form-title">Descargar Importador</p>
-                    <p class="form-subtitle">Seleccioná tu especialidad</p>
-                    <div class="wz-os-cards">
-                        <div class="wz-os-card" onclick="selectSpecialty('nefrologia')">
-                            <span class="wz-os-icon">🩺</span>
-                            <span class="wz-os-label">Nefrología</span>
-                        </div>
-                        <div class="wz-os-card" style="opacity:.35;cursor:not-allowed;">
-                            <span class="wz-os-icon">🫀</span>
-                            <span class="wz-os-label" style="color:#aaa;">Próximamente</span>
-                        </div>
-                    </div>
+                <p class="form-title">Descargar CritiData</p>
+                <p class="form-subtitle">Elegí tu dispositivo</p>
+                <div class="dl-cards">
+                    <a class="dl-card" href="https://github.com/federicolmi/critidata-web/releases/download/v1.0-nefrologia/CritiData_Nefrologia_Android.apk">
+                        <span class="dl-icon">📱</span>
+                        <span class="dl-name">App para el celular</span>
+                        <span class="dl-sub">Android · 57 MB</span>
+                        <span class="dl-btn-label">⬇ Descargar</span>
+                    </a>
+                    <a class="dl-card" href="https://github.com/federicolmi/critidata-web/releases/download/v1.0-nefrologia/CritiData_Nefrologia_Windows.zip">
+                        <span class="dl-icon">💻</span>
+                        <span class="dl-name">App para la PC</span>
+                        <span class="dl-sub">Windows · 188 MB</span>
+                        <span class="dl-btn-label">⬇ Descargar</span>
+                    </a>
                 </div>
-
-                <!-- Selección de OS -->
-                <div id="wz-os-select" style="display:none;">
-                    <p class="form-title" id="wz-specialty-title"></p>
-                    <p class="form-subtitle">Seleccioná tu sistema operativo</p>
-                    <div class="wz-os-cards">
-                        <div class="wz-os-card" onclick="startWizard('win')">
-                            <span class="wz-os-icon">🪟</span>
-                            <span class="wz-os-label">Windows</span>
-                        </div>
-                        <div class="wz-os-card" onclick="startWizard('mac')">
-                            <span class="wz-os-icon">🍎</span>
-                            <span class="wz-os-label">macOS</span>
-                        </div>
-                    </div>
+                <div class="dl-note">
+                    <p>📱 <strong>Android:</strong> después de descargar, si el celular lo pide, activá "Instalar aplicaciones desconocidas" en Ajustes.</p>
+                    <p>💻 <strong>Windows:</strong> descomprimí el ZIP y ejecutá <code>CritiData_Nefrologia.exe</code>. Si Windows muestra una advertencia, elegí "Más información" → "Ejecutar de todas formas".</p>
                 </div>
-
-                <!-- Wizard Windows -->
-                <div id="wz-win" class="wz-steps">
-                    <div class="wz-progress">
-                        <div class="wz-dots" id="wz-win-dots"></div>
-                        <span class="wz-step-lbl" id="wz-win-lbl"></span>
-                    </div>
-                    <div class="wz-step" id="wz-win-0">
-                        <h3>Descargá CritiData</h3>
-                        <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia_Windows.zip" class="wz-dl-btn">⬇ Descargar CritiData_Nefrologia_Windows.zip</a>
-                        <p>Descomprimí el ZIP y hacé <strong>doble click</strong> en <span class="wz-code">CritiData_Nefrologia.exe</span>.</p>
-                        <div class="wz-callout"><strong>⚠ Windows puede mostrar una advertencia.</strong> Hacé click en <strong>"Más información"</strong> y luego en <strong>"Ejecutar de todas formas"</strong>.</div>
-                        <div class="wz-nav">
-                            <button class="wz-btn-back" onclick="resetWizard()">← Cambiar sistema</button>
-                            <button class="wz-btn-next" onclick="wzNext('win')">Siguiente →</button>
-                        </div>
-                    </div>
-                    <div class="wz-step" id="wz-win-1">
-                        <h3>Ingresá tus credenciales</h3>
-                        <p>La primera vez la app te va a pedir tu <strong>email y contraseña de CritiData</strong> (los mismos que usás en la app del celular).</p>
-                        <div class="wz-info">Las credenciales se guardan de forma segura en <strong>Windows Credential Manager</strong>. Solo las ingresás una vez.</div>
-                        <div class="wz-nav">
-                            <button class="wz-btn-back" onclick="wzBack('win')">← Anterior</button>
-                            <button class="wz-btn-next" onclick="wzNext('win')">Siguiente →</button>
-                        </div>
-                    </div>
-                    <div class="wz-step" id="wz-win-2">
-                        <h3>Ejecutá la importación</h3>
-                        <p>Hacé click en el botón <strong>Ejecutar</strong>. La app se conecta a Bionefro, descarga los resultados del día y los envía al servidor.</p>
-                        <div class="wz-info">Ejecutalo una vez al día para tener los resultados actualizados en tu celular.</div>
-                        <div class="wz-nav">
-                            <button class="wz-btn-back" onclick="wzBack('win')">← Anterior</button>
-                            <button class="wz-btn-next" onclick="wzFinish()">¡Listo! ✓</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Wizard macOS -->
-                <div id="wz-mac" class="wz-steps">
-                    <div class="wz-progress">
-                        <div class="wz-dots" id="wz-mac-dots"></div>
-                        <span class="wz-step-lbl" id="wz-mac-lbl"></span>
-                    </div>
-                    <div class="wz-step" id="wz-mac-0">
-                        <h3>Descargá y abrí el Importador</h3>
-                        <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia.exe" class="wz-dl-btn">⬇ Descargar CritiData_Nefrologia</a>
-                        <p>Una vez descargado, hacé <strong>doble click</strong> para abrirlo.</p>
-                        <div class="wz-callout"><strong>⚠ macOS puede bloquear la app.</strong> Andá a <strong>Ajustes → Privacidad y Seguridad</strong> y hacé click en <strong>"Abrir de todas formas"</strong>.</div>
-                        <div class="wz-nav">
-                            <button class="wz-btn-back" onclick="resetWizard()">← Cambiar sistema</button>
-                            <button class="wz-btn-next" onclick="wzNext('mac')">Siguiente →</button>
-                        </div>
-                    </div>
-                    <div class="wz-step" id="wz-mac-1">
-                        <h3>Ingresá tus credenciales</h3>
-                        <p>La primera vez la app te va a pedir tu <strong>email y contraseña de CritiData</strong> (los mismos que usás en la app del celular).</p>
-                        <div class="wz-info">Las credenciales se guardan de forma segura en <strong>macOS Keychain</strong>. Solo las ingresás una vez.</div>
-                        <div class="wz-nav">
-                            <button class="wz-btn-back" onclick="wzBack('mac')">← Anterior</button>
-                            <button class="wz-btn-next" onclick="wzNext('mac')">Siguiente →</button>
-                        </div>
-                    </div>
-                    <div class="wz-step" id="wz-mac-2">
-                        <h3>Ejecutá la importación</h3>
-                        <p>Hacé click en el botón <strong>Ejecutar</strong>. La app se conecta a Bionefro, descarga los resultados del día y los envía al servidor.</p>
-                        <div class="wz-info">Ejecutalo una vez al día para tener los resultados actualizados en tu celular.</div>
-                        <div class="wz-nav">
-                            <button class="wz-btn-back" onclick="wzBack('mac')">← Anterior</button>
-                            <button class="wz-btn-next" onclick="wzFinish()">¡Listo! ✓</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pantalla de éxito -->
-                <div id="wz-success" class="wz-success">
-                    <div class="wz-success-icon">✅</div>
-                    <h2>¡Instalación completada!</h2>
-                    <p>Ya podés sincronizar tus resultados de laboratorio desde tu computadora.<br>Ejecutá el importador una vez al día para mantener los datos actualizados.</p>
-                    <button class="wz-restart" onclick="resetWizard()">← Volver al inicio</button>
-                </div>
-
             </div>
         </div>
 
