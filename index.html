@@ -565,10 +565,9 @@
                             <span class="dl-icon">🪟</span>
                             <span class="dl-name">Windows</span>
                         </div>
-                        <div class="dl-card dl-disabled">
+                        <div class="dl-card" onclick="dlGo('mac')">
                             <span class="dl-icon">🍎</span>
                             <span class="dl-name">macOS</span>
-                            <span class="dl-sub">Próximamente</span>
                         </div>
                     </div>
                     <button class="dl-back" onclick="dlGo('specialty')">← Volver</button>
@@ -583,7 +582,7 @@
                             <span class="dl-step-num">1</span>
                             <div>
                                 <strong>Descargá la aplicación</strong>
-                                <a href="https://github.com/federicolmi/critidata-web/releases/download/v1.0-nefrologia/CritiData_Nefrologia_Windows.zip" class="dl-btn-label" style="display:inline-flex;margin-top:8px;text-decoration:none;">⬇ Descargar</a>
+                                <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia_Windows.zip" class="dl-btn-label" style="display:inline-flex;margin-top:8px;text-decoration:none;">⬇ Descargar</a>
                             </div>
                         </div>
                         <div class="dl-step-item">
@@ -593,6 +592,30 @@
                         <div class="dl-step-item">
                             <span class="dl-step-num">3</span>
                             <div><strong>Abrí la aplicación</strong><p style="font-size:.85rem;color:#64748b;margin-top:4px;">Si Windows muestra una advertencia, elegí "Más información" → "Ejecutar de todas formas".</p></div>
+                        </div>
+                    </div>
+                    <button class="dl-back" onclick="dlGo('os')">← Volver</button>
+                </div>
+
+                <!-- Paso 3b: macOS -->
+                <div id="dl-mac" style="display:none;">
+                    <p class="form-title">CritiData Nefrología · macOS</p>
+                    <p class="form-subtitle">Seguí estos pasos</p>
+                    <div class="dl-steps-simple">
+                        <div class="dl-step-item">
+                            <span class="dl-step-num">1</span>
+                            <div>
+                                <strong>Descargá la aplicación</strong>
+                                <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia_macOS.zip" class="dl-btn-label" style="display:inline-flex;margin-top:8px;text-decoration:none;">⬇ Descargar</a>
+                            </div>
+                        </div>
+                        <div class="dl-step-item">
+                            <span class="dl-step-num">2</span>
+                            <div><strong>Descomprimí el ZIP</strong><p style="font-size:.85rem;color:#64748b;margin-top:4px;">Hacé doble click en el archivo descargado.</p></div>
+                        </div>
+                        <div class="dl-step-item">
+                            <span class="dl-step-num">3</span>
+                            <div><strong>Abrí la aplicación</strong><p style="font-size:.85rem;color:#64748b;margin-top:4px;">Si macOS la bloquea, andá a Ajustes → Privacidad y Seguridad → "Abrir de todas formas".</p></div>
                         </div>
                     </div>
                     <button class="dl-back" onclick="dlGo('os')">← Volver</button>
@@ -729,7 +752,7 @@
         }
 
         function dlGo(step) {
-            ['dl-specialty','dl-device','dl-celular','dl-pc'].forEach(id => {
+            ['dl-specialty','dl-os','dl-win','dl-mac'].forEach(id => {
                 document.getElementById(id).style.display = 'none';
             });
             document.getElementById('dl-' + step).style.display = 'block';
