@@ -493,7 +493,7 @@
                     <p class="form-title">Acceder a CritiData</p>
                     <p class="form-subtitle">Seleccioná tu especialidad</p>
                     <div class="dl-cards">
-                        <div class="dl-card" onclick="seleccionarEspecialidad('Nefrología')">
+                        <div class="dl-card" onclick="seleccionarEspecialidad('Nefrología')" >
                             <span class="dl-name">Nefrología</span>
                         </div>
                         <div class="dl-card dl-disabled">
@@ -503,7 +503,24 @@
                     </div>
                 </div>
 
-                <!-- Paso B: Laboratorio -->
+                <!-- Paso B: Datos del médico -->
+                <div id="acceso-step-register" style="display:none;">
+                    <p class="form-title">Tus datos</p>
+                    <p class="form-subtitle">Completá para continuar</p>
+                    <div class="field">
+                        <label for="acc-nombre">Nombre completo</label>
+                        <input id="acc-nombre" type="text" placeholder="Dr. Juan García" autocomplete="name">
+                    </div>
+                    <div class="field" style="margin-bottom:22px;">
+                        <label for="acc-phone">Teléfono (WhatsApp)</label>
+                        <input id="acc-phone" type="tel" placeholder="+5491112345678" autocomplete="tel">
+                        <p style="font-size:11px;color:#94a3b8;margin-top:4px;">Para recibir el código de verificación</p>
+                    </div>
+                    <button class="btn-primary" onclick="accesoSiguienteRegistro()">Continuar</button>
+                    <button class="dl-back" onclick="accesoIrA('specialty')">← Volver</button>
+                </div>
+
+                <!-- Paso C: Laboratorio -->
                 <div id="acceso-step-lab" style="display:none;">
                     <p class="form-title" id="acceso-lab-title">Nefrología</p>
                     <p class="form-subtitle">Seleccioná tu laboratorio</p>
@@ -516,10 +533,10 @@
                             <span class="dl-sub">Próximamente</span>
                         </div>
                     </div>
-                    <button class="dl-back" onclick="accesoIrA('specialty')">← Volver</button>
+                    <button class="dl-back" onclick="accesoIrA('register')">← Volver</button>
                 </div>
 
-                <!-- Paso 1: Credenciales -->
+                <!-- Paso 1: Credenciales del laboratorio -->
                 <div id="acceso-step1" style="display:none;">
                     <p class="form-title" id="acceso-cred-title">bionefro</p>
                     <p class="form-subtitle">Ingresá tus credenciales del laboratorio</p>
@@ -528,17 +545,12 @@
                             <label for="acc-usuario">Usuario</label>
                             <input id="acc-usuario" type="text" placeholder="Tu usuario del laboratorio" autocomplete="username">
                         </div>
-                        <div class="field">
+                        <div class="field" style="margin-bottom:22px;">
                             <label for="acc-password">Contraseña</label>
                             <div class="password-wrap">
                                 <input id="acc-password" type="password" placeholder="Tu contraseña del laboratorio" autocomplete="current-password">
                                 <button type="button" class="toggle-pass" onclick="togglePass('acc-password', this, event)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
                             </div>
-                        </div>
-                        <div class="field" style="margin-bottom:22px;">
-                            <label for="acc-phone">Teléfono (WhatsApp)</label>
-                            <input id="acc-phone" type="tel" placeholder="+5491112345678" autocomplete="tel">
-                            <p style="font-size:11px;color:#94a3b8;margin-top:4px;">Para recibir el código de verificación</p>
                         </div>
                         <button type="submit" class="btn-primary" id="btn-acceso-submit">Continuar</button>
                     </form>
@@ -881,7 +893,7 @@
             document.getElementById('acceso-step3').style.display        = 'none'
         }
 
-        const accesoSteps = ['specialty', 'lab', '1', '2', '3']
+        const accesoSteps = ['specialty', 'register', 'lab', '1', '2', '3']
         function accesoIrA(step) {
             accesoSteps.forEach(s => {
                 const el = document.getElementById('acceso-step-' + s) ||
@@ -895,6 +907,13 @@
 
         function seleccionarEspecialidad(esp) {
             document.getElementById('acceso-lab-title').textContent = esp
+            accesoIrA('register')
+        }
+
+        function accesoSiguienteRegistro() {
+            const nombre = document.getElementById('acc-nombre').value.trim()
+            const phone  = document.getElementById('acc-phone').value.trim()
+            if (!nombre || !phone) { alert('Completá nombre y teléfono'); return }
             accesoIrA('lab')
         }
 
@@ -909,9 +928,10 @@
             const usuario  = document.getElementById('acc-usuario').value.trim()
             const password = document.getElementById('acc-password').value
             const phone    = document.getElementById('acc-phone').value.trim()
+            const nombre   = document.getElementById('acc-nombre').value.trim()
 
-            if (!usuario || !password || !phone) {
-                alert('Completá todos los campos')
+            if (!usuario || !password) {
+                alert('Ingresá usuario y contraseña del laboratorio')
                 return
             }
 
@@ -923,7 +943,7 @@
                 const res  = await fetch(`${API}/auth/acceso`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ lab_usuario: usuario, lab_password: password, phone })
+                    body: JSON.stringify({ lab_usuario: usuario, lab_password: password, phone, full_name: nombre })
                 })
                 const data = await res.json()
                 if (res.ok) {
