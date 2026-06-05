@@ -738,157 +738,12 @@
         <!-- Panel: Descargar App -->
         <div class="tab-panel" id="panel-download">
             <div class="tab-panel-inner">
-
-                <!-- Presentación mobile -->
-                <div id="dl-mobile" style="display:none;">
-                    <div class="dl-mobile-msg">
-                        <div class="dl-mobile-icon">📱</div>
-                        <p class="form-title" style="margin-bottom:6px;">Ya estás en CritiData</p>
-                        <p class="form-subtitle" style="margin-bottom:20px;">CritiData funciona directamente desde tu navegador. No necesitás instalar nada.</p>
-                        <button class="btn-primary" onclick="switchTab('acceso', document.getElementById('btn-acceso'))">Acceder</button>
-                        <button class="btn-secondary" onclick="switchTab('login', document.getElementById('btn-login'))">Administrador</button>
-                        <button class="btn-secondary" style="margin-top:6px;" onclick="dlGo('specialty')">⬇ Descargar la app</button>
-                    </div>
+                <div class="dl-mobile-msg" style="text-align:center;">
+                    <div class="dl-mobile-icon">📱</div>
+                    <p class="form-title" style="margin-bottom:6px;">Ya estás en CritiData</p>
+                    <p class="form-subtitle" style="margin-bottom:24px;">Registrate para acceder y descargar la app en tu dispositivo.</p>
+                    <button class="btn-primary" onclick="switchTab('acceso', document.getElementById('btn-acceso'))">Registrarse</button>
                 </div>
-
-                <!-- Paso 1: Especialidad -->
-                <div id="dl-specialty">
-                    <p class="form-title">Descargar CritiData</p>
-                    <p class="form-subtitle">Seleccioná tu especialidad</p>
-                    <div class="dl-cards">
-                        <div class="dl-card" onclick="dlGo('os')">
-                            <span class="dl-name">Nefrología</span>
-                        </div>
-                        <div class="dl-card dl-disabled">
-                            <span class="dl-name">Otras</span>
-                            <span class="dl-sub">Próximamente</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Paso 2: Plataforma -->
-                <div id="dl-os" style="display:none;">
-                    <p class="form-title">CritiData Nefrología</p>
-                    <p class="form-subtitle">Elegí tu sistema operativo</p>
-                    <div class="platform-desktop" style="background:#eef4ff;border-left:3px solid #1565c0;border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:16px;font-size:.83rem;color:#1a3a6b;">
-                        La app de PC sincroniza los resultados del laboratorio y requiere tener la app móvil instalada.
-                    </div>
-                    <div class="platform-mobile" style="background:#eef4ff;border-left:3px solid #1565c0;border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:16px;font-size:.83rem;color:#1a3a6b;">
-                        Descargá la app en tu celular para ver los resultados del laboratorio desde tu cuenta.
-                    </div>
-                    <div class="dl-os-grid">
-                        <div class="dl-card platform-desktop" onclick="dlGo('win')">
-                            <span class="dl-name">Windows</span>
-                            <span class="dl-platform-tag">Escritorio · PC</span>
-                        </div>
-                        <div class="dl-card platform-desktop" onclick="dlGo('mac')">
-                            <span class="dl-name">macOS</span>
-                            <span class="dl-platform-tag">Escritorio · Mac</span>
-                        </div>
-                        <div class="dl-card platform-mobile" onclick="dlGo('android')">
-                            <span class="dl-name">Android</span>
-                            <span class="dl-platform-tag">App móvil</span>
-                        </div>
-                        <div class="dl-card dl-disabled platform-mobile">
-                            <span class="dl-name">iPhone / iPad</span>
-                            <span class="dl-platform-tag">Próximamente</span>
-                        </div>
-                    </div>
-                    <button class="dl-back" onclick="dlGo('specialty')">← Volver</button>
-                </div>
-
-                <!-- Paso 3: Descarga Windows -->
-                <div id="dl-win" style="display:none;">
-                    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
-                        <div>
-                            <p class="form-title" style="margin-bottom:2px;">CritiData · Windows</p>
-                            <p class="form-subtitle" style="margin-bottom:0;">Sincroniza resultados del laboratorio</p>
-                        </div>
-                        <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia_Setup.exe" class="dl-btn-label" style="text-decoration:none;white-space:nowrap;margin-left:12px;">⬇ Descargar</a>
-                    </div>
-                    <div class="dl-context-note">Iniciá sesión con tu cuenta de CritiData — la misma con la que entrás desde el celular. Esta app no tiene registro propio.</div>
-                    <div class="dl-steps-simple">
-                        <div class="dl-step-item">
-                            <span class="dl-step-num">1</span>
-                            <div><strong>Abrí el instalador</strong><p style="font-size:.85rem;color:#64748b;margin-top:4px;">Hacé doble click en el archivo descargado <strong>CritiData_Nefrologia_Setup.exe</strong>. Si Windows muestra una advertencia, elegí <strong>"Más información" → "Ejecutar de todas formas"</strong>.</p></div>
-                        </div>
-                        <div class="dl-step-item">
-                            <span class="dl-step-num">2</span>
-                            <div><strong>Instalá la aplicación</strong><p style="font-size:.85rem;color:#64748b;margin-top:4px;">Seguí los pasos del instalador: <strong>Siguiente → Siguiente → Instalar → Finalizar</strong>.</p></div>
-                        </div>
-                        <div class="dl-step-item">
-                            <span class="dl-step-num">3</span>
-                            <div><strong>¡Listo!</strong><p style="font-size:.85rem;color:#64748b;margin-top:4px;">La app queda instalada y aparece un acceso directo en el <strong>Escritorio</strong>. Hacé doble click para abrirla.</p></div>
-                        </div>
-                    </div>
-                    <button class="dl-back" onclick="dlGo('os')">← Volver</button>
-                </div>
-
-                <!-- Paso 3b: macOS -->
-                <div id="dl-mac" style="display:none;">
-                    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
-                        <div>
-                            <p class="form-title" style="margin-bottom:2px;">CritiData · macOS</p>
-                            <p class="form-subtitle" style="margin-bottom:0;">Sincroniza resultados del laboratorio</p>
-                        </div>
-                        <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia.dmg" class="dl-btn-label" style="text-decoration:none;white-space:nowrap;margin-left:12px;">⬇ Descargar</a>
-                    </div>
-                    <div class="dl-context-note">Iniciá sesión con tu cuenta de CritiData — la misma con la que entrás desde el celular. Esta app no tiene registro propio.</div>
-                    <div class="dl-steps-simple">
-                        <div class="dl-step-item">
-                            <span class="dl-step-num">1</span>
-                            <div><strong>Abrí el DMG</strong><p style="font-size:.85rem;color:#64748b;margin-top:4px;">Hacé doble click en el archivo <strong>CritiData_Nefrologia.dmg</strong> descargado.</p></div>
-                        </div>
-                        <div class="dl-step-item">
-                            <span class="dl-step-num">2</span>
-                            <div><strong>Arrastrá la app a Aplicaciones</strong><p style="font-size:.85rem;color:#64748b;margin-top:4px;">En la ventana que se abre, arrastrá el ícono de CritiData hacia la carpeta <strong>Aplicaciones</strong>.</p></div>
-                        </div>
-                        <div class="dl-step-item">
-                            <span class="dl-step-num">3</span>
-                            <div><strong>¡Listo!</strong><p style="font-size:.85rem;color:#64748b;margin-top:4px;">Abrí CritiData desde la carpeta Aplicaciones o desde el Launchpad. Si macOS la bloquea, andá a <strong>Ajustes → Privacidad y Seguridad → "Abrir de todas formas"</strong>.</p></div>
-                        </div>
-                    </div>
-                    <button class="dl-back" onclick="dlGo('os')">← Volver</button>
-                </div>
-
-                <!-- Paso 3c: Android -->
-                <div id="dl-android" style="display:none;">
-                    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
-                        <div>
-                            <p class="form-title" style="margin-bottom:2px;">CritiData · Android</p>
-                            <p class="form-subtitle" style="margin-bottom:0;">Descargá e instalá en tu celular</p>
-                        </div>
-                        <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia.apk" class="dl-btn-label" style="text-decoration:none;white-space:nowrap;margin-left:12px;">⬇ Descargar</a>
-                    </div>
-                    <div class="dl-context-note">Iniciá sesión con tu cuenta de CritiData. Esta app no tiene registro propio.</div>
-                    <div class="dl-steps-simple">
-                        <div class="dl-step-item">
-                            <span class="dl-step-num">1</span>
-                            <div><strong>Descargá el APK</strong><p style="font-size:.85rem;color:#64748b;margin-top:4px;">Tocá el botón <strong>⬇ Descargar</strong>. El archivo <strong>CritiData_Nefrologia.apk</strong> se guarda en tu carpeta de Descargas.</p></div>
-                        </div>
-                        <div class="dl-step-item">
-                            <span class="dl-step-num">2</span>
-                            <div><strong>Permitir instalación</strong><p style="font-size:.85rem;color:#64748b;margin-top:4px;">Si Android pregunta, habilitá <strong>"Instalar apps de origen desconocido"</strong> para tu navegador.</p></div>
-                        </div>
-                        <div class="dl-step-item">
-                            <span class="dl-step-num">3</span>
-                            <div><strong>¡Listo!</strong><p style="font-size:.85rem;color:#64748b;margin-top:4px;">Abrí CritiData desde tu pantalla de inicio e iniciá sesión.</p></div>
-                        </div>
-                    </div>
-                    <button class="dl-back" onclick="dlGo('os')">← Volver</button>
-                </div>
-
-                <!-- Paso 3d: iOS -->
-                <div id="dl-ios" style="display:none;">
-                    <div style="text-align:center;padding:8px 0 16px;">
-                        <div style="font-size:2.2rem;margin-bottom:12px;">🍎</div>
-                        <p class="form-title" style="margin-bottom:6px;">iPhone / iPad</p>
-                        <p class="form-subtitle" style="margin-bottom:18px;">CritiData funciona directamente en tu navegador — no necesitás instalar nada.</p>
-                        <div class="dl-context-note" style="text-align:left;">Abrí <strong>critidata.com</strong> desde Safari en tu iPhone o iPad. Para tenerlo como app, tocá <strong>Compartir</strong> → <em>"Agregar a pantalla de inicio"</em>.</div>
-                        <button class="dl-back" onclick="dlGo('os')" style="display:inline-block;">← Volver</button>
-                    </div>
-                </div>
-
             </div>
         </div>
 
@@ -1017,7 +872,6 @@
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
             card.classList.remove('visible');
-            if (isMobile) dlGo('mobile'); else dlGo('specialty');
             document.getElementById('register-form-content').style.display = ''
             document.getElementById('register-success').style.display = 'none'
             document.getElementById('acceso-step-specialty').style.display = 'block'
@@ -1185,7 +1039,6 @@
                 btn.classList.add('active');
                 document.getElementById('panel-' + tab).classList.add('active');
                 card.classList.add('visible');
-                if (tab === 'download' && isMobile) dlGo('mobile');
             }
         }
 
