@@ -618,6 +618,18 @@
         <div class="tab-panel" id="panel-download">
             <div class="tab-panel-inner">
 
+                <!-- Presentación mobile -->
+                <div id="dl-mobile" style="display:none;">
+                    <div class="dl-mobile-msg">
+                        <div class="dl-mobile-icon">📱</div>
+                        <p class="form-title" style="margin-bottom:6px;">Ya estás en CritiData</p>
+                        <p class="form-subtitle" style="margin-bottom:20px;">CritiData funciona directamente desde tu navegador. No necesitás instalar nada.</p>
+                        <button class="btn-primary" onclick="switchTab('register', document.getElementById('btn-register'))">Registrarse</button>
+                        <button class="btn-secondary" onclick="switchTab('login', document.getElementById('btn-login'))">Iniciar sesión</button>
+                        <button class="btn-secondary" style="margin-top:6px;" onclick="dlGo('specialty')">⬇ Descargar la app</button>
+                    </div>
+                </div>
+
                 <!-- Paso 1: Especialidad -->
                 <div id="dl-specialty">
                     <p class="form-title">Descargar CritiData</p>
@@ -884,7 +896,7 @@
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
             card.classList.remove('visible');
-            dlGo('specialty');
+            if (isMobile) dlGo('mobile'); else dlGo('specialty');
             document.getElementById('register-form-content').style.display = ''
             document.getElementById('register-success').style.display = 'none'
         }
@@ -895,7 +907,7 @@
         document.querySelectorAll('.platform-mobile').forEach(el  => { if (!isMobile) el.style.display = 'none' })
 
         function dlGo(step) {
-            ['dl-specialty','dl-os','dl-win','dl-mac','dl-android','dl-ios'].forEach(id => {
+            ['dl-mobile','dl-specialty','dl-os','dl-win','dl-mac','dl-android','dl-ios'].forEach(id => {
                 document.getElementById(id).style.display = 'none';
             });
             document.getElementById('dl-' + step).style.display = 'block';
@@ -908,6 +920,7 @@
                 btn.classList.add('active');
                 document.getElementById('panel-' + tab).classList.add('active');
                 card.classList.add('visible');
+                if (tab === 'download' && isMobile) dlGo('mobile');
             }
         }
 
