@@ -462,16 +462,12 @@
 
     <!-- Navegación superior derecha -->
     <nav class="top-nav">
+        <button class="nav-btn" id="btn-acceso"
+                onclick="switchTab('acceso', this)">Acceder</button>
         <button class="nav-btn" id="btn-login"
-                onclick="switchTab('login', this)">Iniciar sesión</button>
-        <button class="nav-btn" id="btn-register"
-                onclick="switchTab('register', this)">Registrarse</button>
+                onclick="switchTab('login', this)">Administrador</button>
         <button class="nav-btn" id="btn-contact"
                 onclick="switchTab('contact', this)">Contáctenos</button>
-        <div class="nav-download-wrap">
-            <button class="nav-btn" id="btn-download"
-                    onclick="switchTab('download', this)">⬇ Descargar App</button>
-        </div>
     </nav>
 
     <!-- Hero -->
@@ -483,6 +479,127 @@
     <!-- Tarjeta central -->
     <div class="card" style="position:relative;">
         <button class="btn-close" onclick="closeAll()" title="Cerrar">✕</button>
+
+        <!-- Panel: Acceder -->
+        <div class="tab-panel" id="panel-acceso">
+            <div class="tab-panel-inner">
+
+                <!-- Paso A: Especialidad -->
+                <div id="acceso-step-specialty">
+                    <p class="form-title">Acceder a CritiData</p>
+                    <p class="form-subtitle">Seleccioná tu especialidad</p>
+                    <div class="dl-cards">
+                        <div class="dl-card" onclick="seleccionarEspecialidad('Nefrología')">
+                            <span class="dl-name">Nefrología</span>
+                        </div>
+                        <div class="dl-card dl-disabled">
+                            <span class="dl-name">Otras</span>
+                            <span class="dl-sub">Próximamente</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paso B: Laboratorio -->
+                <div id="acceso-step-lab" style="display:none;">
+                    <p class="form-title" id="acceso-lab-title">Nefrología</p>
+                    <p class="form-subtitle">Seleccioná tu laboratorio</p>
+                    <div class="dl-cards">
+                        <div class="dl-card" onclick="seleccionarLaboratorio('bionefro')">
+                            <span class="dl-name">bionefro</span>
+                        </div>
+                        <div class="dl-card dl-disabled">
+                            <span class="dl-name">Otros</span>
+                            <span class="dl-sub">Próximamente</span>
+                        </div>
+                    </div>
+                    <button class="dl-back" onclick="accesoIrA('specialty')">← Volver</button>
+                </div>
+
+                <!-- Paso 1: Credenciales -->
+                <div id="acceso-step1" style="display:none;">
+                    <p class="form-title" id="acceso-cred-title">bionefro</p>
+                    <p class="form-subtitle">Ingresá tus credenciales del laboratorio</p>
+                    <form onsubmit="return false;" id="form-acceso">
+                        <div class="field">
+                            <label for="acc-usuario">Usuario</label>
+                            <input id="acc-usuario" type="text" placeholder="Tu usuario del laboratorio" autocomplete="username">
+                        </div>
+                        <div class="field">
+                            <label for="acc-password">Contraseña</label>
+                            <div class="password-wrap">
+                                <input id="acc-password" type="password" placeholder="Tu contraseña del laboratorio" autocomplete="current-password">
+                                <button type="button" class="toggle-pass" onclick="togglePass('acc-password', this, event)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                            </div>
+                        </div>
+                        <div class="field" style="margin-bottom:22px;">
+                            <label for="acc-phone">Teléfono (WhatsApp)</label>
+                            <input id="acc-phone" type="tel" placeholder="+5491112345678" autocomplete="tel">
+                            <p style="font-size:11px;color:#94a3b8;margin-top:4px;">Para recibir el código de verificación</p>
+                        </div>
+                        <button type="submit" class="btn-primary" id="btn-acceso-submit">Continuar</button>
+                    </form>
+                    <button class="dl-back" onclick="accesoIrA('lab')">← Volver</button>
+                </div>
+
+                <!-- Paso 2: OTP -->
+                <div id="acceso-step2" style="display:none;">
+                    <p class="form-title">Verificá tu teléfono</p>
+                    <p class="form-subtitle" id="acceso-otp-subtitle">Ingresá el código que te enviamos</p>
+                    <form onsubmit="return false;" id="form-otp">
+                        <div class="field" style="margin-bottom:22px;">
+                            <label for="acc-otp">Código de verificación</label>
+                            <input id="acc-otp" type="text" placeholder="000000" maxlength="6" inputmode="numeric" style="letter-spacing:6px;font-size:1.3rem;text-align:center;">
+                        </div>
+                        <button type="submit" class="btn-primary" id="btn-otp-submit">Verificar</button>
+                    </form>
+                    <p class="footer-note">
+                        <a onclick="reenviarOtp()" style="cursor:pointer;">Reenviar código</a>
+                    </p>
+                </div>
+
+                <!-- Paso 3: Éxito + descarga -->
+                <div id="acceso-step3" style="display:none;">
+                    <div style="text-align:center;margin-bottom:20px;">
+                        <div style="font-size:2.5rem;margin-bottom:10px;">✅</div>
+                        <p class="form-title">¡Todo listo!</p>
+                        <p class="form-subtitle" style="margin-bottom:0;">Tu cuenta está activa.</p>
+                    </div>
+
+                    <!-- Mobile: Firebase invite por email -->
+                    <div class="platform-mobile">
+                        <div id="firebase-invite-form">
+                            <p style="font-size:.85rem;font-weight:700;color:#0f172a;margin-bottom:6px;">Instalá la app en tu Android</p>
+                            <p style="font-size:.82rem;color:#64748b;margin-bottom:14px;">Ingresá tu email para recibir el link de instalación.</p>
+                            <div class="field" style="margin-bottom:14px;">
+                                <input id="fb-email" type="email" placeholder="tu@email.com" autocomplete="email">
+                            </div>
+                            <button class="btn-primary" id="btn-firebase-invite" onclick="enviarFirebaseInvite()">Recibir link de instalación</button>
+                        </div>
+                        <div id="firebase-invite-ok" style="display:none;text-align:center;padding:12px 0;">
+                            <div style="font-size:1.8rem;margin-bottom:8px;">📧</div>
+                            <p style="font-size:.9rem;color:#2e7d32;font-weight:600;">¡Email enviado!</p>
+                            <p style="font-size:.82rem;color:#64748b;">Revisá tu casilla y seguí las instrucciones para instalar CritiData.</p>
+                        </div>
+                    </div>
+
+                    <!-- Desktop: descarga directa -->
+                    <div class="platform-desktop">
+                        <p style="font-size:.85rem;font-weight:700;color:#0f172a;margin-bottom:12px;">Descargá la app en tu dispositivo:</p>
+                        <div class="dl-os-grid">
+                            <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia_Setup.exe" class="dl-card" style="text-decoration:none;">
+                                <span class="dl-name">Windows</span>
+                                <span class="dl-platform-tag">⬇ Descargar</span>
+                            </a>
+                            <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia.dmg" class="dl-card" style="text-decoration:none;">
+                                <span class="dl-name">macOS</span>
+                                <span class="dl-platform-tag">⬇ Descargar</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
 
         <!-- Panel: Iniciar sesión -->
         <div class="tab-panel" id="panel-login">
@@ -505,8 +622,8 @@
                     <button type="submit" class="btn-primary">Iniciar sesión</button>
                 </form>
                 <p class="footer-note">
-                    ¿No tenés cuenta?
-                    <a onclick="switchTab('register', document.getElementById('btn-register'))">Registrate</a>
+                    ¿Primera vez?
+                    <a onclick="switchTab('acceso', document.getElementById('btn-acceso'))">Acceder con bionefro</a>
                 </p>
             </div>
         </div>
@@ -624,8 +741,8 @@
                         <div class="dl-mobile-icon">📱</div>
                         <p class="form-title" style="margin-bottom:6px;">Ya estás en CritiData</p>
                         <p class="form-subtitle" style="margin-bottom:20px;">CritiData funciona directamente desde tu navegador. No necesitás instalar nada.</p>
-                        <button class="btn-primary" onclick="switchTab('register', document.getElementById('btn-register'))">Registrarse</button>
-                        <button class="btn-secondary" onclick="switchTab('login', document.getElementById('btn-login'))">Iniciar sesión</button>
+                        <button class="btn-primary" onclick="switchTab('acceso', document.getElementById('btn-acceso'))">Acceder</button>
+                        <button class="btn-secondary" onclick="switchTab('login', document.getElementById('btn-login'))">Administrador</button>
                         <button class="btn-secondary" style="margin-top:6px;" onclick="dlGo('specialty')">⬇ Descargar la app</button>
                     </div>
                 </div>
@@ -899,6 +1016,150 @@
             if (isMobile) dlGo('mobile'); else dlGo('specialty');
             document.getElementById('register-form-content').style.display = ''
             document.getElementById('register-success').style.display = 'none'
+            document.getElementById('acceso-step-specialty').style.display = 'block'
+            document.getElementById('acceso-step-lab').style.display     = 'none'
+            document.getElementById('acceso-step1').style.display        = 'none'
+            document.getElementById('acceso-step2').style.display        = 'none'
+            document.getElementById('acceso-step3').style.display        = 'none'
+        }
+
+        const accesoSteps = ['specialty', 'lab', '1', '2', '3']
+        function accesoIrA(step) {
+            accesoSteps.forEach(s => {
+                const el = document.getElementById('acceso-step-' + s) ||
+                           document.getElementById('acceso-step'  + s)
+                if (el) el.style.display = 'none'
+            })
+            const target = document.getElementById('acceso-step-' + step) ||
+                           document.getElementById('acceso-step'  + step)
+            if (target) target.style.display = 'block'
+        }
+
+        function seleccionarEspecialidad(esp) {
+            document.getElementById('acceso-lab-title').textContent = esp
+            accesoIrA('lab')
+        }
+
+        function seleccionarLaboratorio(lab) {
+            document.getElementById('acceso-cred-title').textContent = lab
+            accesoIrA('1')
+        }
+
+        // ── ACCEDER (bionefro + OTP) ──
+        document.getElementById('form-acceso').addEventListener('submit', async function(e) {
+            e.preventDefault()
+            const usuario  = document.getElementById('acc-usuario').value.trim()
+            const password = document.getElementById('acc-password').value
+            const phone    = document.getElementById('acc-phone').value.trim()
+
+            if (!usuario || !password || !phone) {
+                alert('Completá todos los campos')
+                return
+            }
+
+            const btn = document.getElementById('btn-acceso-submit')
+            btn.disabled = true
+            btn.textContent = 'Enviando...'
+
+            try {
+                const res  = await fetch(`${API}/auth/acceso`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ lab_usuario: usuario, lab_password: password, phone })
+                })
+                const data = await res.json()
+                if (res.ok) {
+                    document.getElementById('acceso-otp-subtitle').textContent =
+                        `Ingresá el código que te enviamos al ${phone}`
+                    document.getElementById('acceso-step1').style.display = 'none'
+                    document.getElementById('acceso-step2').style.display = 'block'
+                    document.getElementById('acc-otp').focus()
+                } else {
+                    alert(data.detail || 'Error al enviar el código')
+                }
+            } catch {
+                alert('No se pudo conectar con el servidor')
+            }
+
+            btn.disabled = false
+            btn.textContent = 'Continuar'
+        })
+
+        document.getElementById('form-otp').addEventListener('submit', async function(e) {
+            e.preventDefault()
+            const phone = document.getElementById('acc-phone').value.trim()
+            const code  = document.getElementById('acc-otp').value.trim()
+
+            if (!code) { alert('Ingresá el código'); return }
+
+            const btn = document.getElementById('btn-otp-submit')
+            btn.disabled = true
+            btn.textContent = 'Verificando...'
+
+            try {
+                const res  = await fetch(`${API}/auth/verify-phone`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone, code })
+                })
+                const data = await res.json()
+                if (res.ok) {
+                    if (data.token) localStorage.setItem('token', data.token)
+                    document.getElementById('acceso-step2').style.display = 'none'
+                    document.getElementById('acceso-step3').style.display = 'block'
+                } else {
+                    alert(data.detail || 'Código incorrecto')
+                }
+            } catch {
+                alert('No se pudo conectar con el servidor')
+            }
+
+            btn.disabled = false
+            btn.textContent = 'Verificar'
+        })
+
+        async function enviarFirebaseInvite() {
+            const email = document.getElementById('fb-email').value.trim()
+            if (!email) { alert('Ingresá tu email'); return }
+
+            const btn = document.getElementById('btn-firebase-invite')
+            btn.disabled = true
+            btn.textContent = 'Enviando...'
+
+            try {
+                const token = localStorage.getItem('token')
+                const res   = await fetch(`${API}/auth/firebase-invite?email=${encodeURIComponent(email)}`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
+                const data = await res.json()
+                if (res.ok) {
+                    document.getElementById('firebase-invite-form').style.display = 'none'
+                    document.getElementById('firebase-invite-ok').style.display   = 'block'
+                } else {
+                    alert(data.detail || 'No se pudo enviar el link')
+                    btn.disabled = false
+                    btn.textContent = 'Recibir link de instalación'
+                }
+            } catch {
+                alert('No se pudo conectar con el servidor')
+                btn.disabled = false
+                btn.textContent = 'Recibir link de instalación'
+            }
+        }
+
+        async function reenviarOtp() {
+            const phone = document.getElementById('acc-phone').value.trim()
+            try {
+                await fetch(`${API}/auth/resend-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone })
+                })
+                alert('Nuevo código enviado')
+            } catch {
+                alert('No se pudo reenviar')
+            }
         }
 
         const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
