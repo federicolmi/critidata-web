@@ -618,18 +618,6 @@
         <div class="tab-panel" id="panel-download">
             <div class="tab-panel-inner">
 
-                <!-- Panel: desde celular -->
-                <div id="dl-mobile" style="display:none;">
-                    <div class="dl-mobile-msg">
-                        <div class="dl-mobile-icon">📱</div>
-                        <p class="form-title" style="margin-bottom:6px;">Ya estás en CritiData</p>
-                        <p class="form-subtitle" style="margin-bottom:20px;">CritiData funciona directamente desde tu navegador. No necesitás instalar nada en tu celular.</p>
-                        <button class="btn-primary" onclick="switchTab('register', document.getElementById('btn-register'))">Registrarse</button>
-                        <button class="btn-secondary" onclick="switchTab('login', document.getElementById('btn-login'))">Iniciar sesión</button>
-                        <p style="margin-top:18px;font-size:.79rem;color:#94a3b8;">Para la app de escritorio, abrí este sitio desde tu computadora.</p>
-                    </div>
-                </div>
-
                 <!-- Paso 1: Especialidad -->
                 <div id="dl-specialty">
                     <p class="form-title">Descargar CritiData</p>
@@ -652,11 +640,11 @@
                     <div class="dl-os-grid">
                         <div class="dl-card" onclick="dlGo('win')">
                             <span class="dl-name">Windows</span>
-                            <span class="dl-platform-tag">App de escritorio</span>
+                            <span class="dl-platform-tag">Escritorio · PC</span>
                         </div>
                         <div class="dl-card" onclick="dlGo('mac')">
                             <span class="dl-name">macOS</span>
-                            <span class="dl-platform-tag">App de escritorio</span>
+                            <span class="dl-platform-tag">Escritorio · Mac</span>
                         </div>
                         <div class="dl-card" onclick="dlGo('android')">
                             <span class="dl-name">Android</span>
@@ -898,7 +886,7 @@
         const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
 
         function dlGo(step) {
-            ['dl-mobile','dl-specialty','dl-os','dl-win','dl-mac','dl-android','dl-ios'].forEach(id => {
+            ['dl-specialty','dl-os','dl-win','dl-mac','dl-android','dl-ios'].forEach(id => {
                 document.getElementById(id).style.display = 'none';
             });
             document.getElementById('dl-' + step).style.display = 'block';
@@ -911,7 +899,6 @@
                 btn.classList.add('active');
                 document.getElementById('panel-' + tab).classList.add('active');
                 card.classList.add('visible');
-                if (tab === 'download' && isMobile) dlGo('mobile');
             }
         }
 
