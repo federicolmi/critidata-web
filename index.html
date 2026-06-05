@@ -636,21 +636,27 @@
                 <!-- Paso 2: Plataforma -->
                 <div id="dl-os" style="display:none;">
                     <p class="form-title">CritiData Nefrología</p>
-                    <p class="form-subtitle">Elegí tu plataforma</p>
+                    <p class="form-subtitle">Elegí tu sistema operativo</p>
+                    <div class="platform-desktop" style="background:#eef4ff;border-left:3px solid #1565c0;border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:16px;font-size:.83rem;color:#1a3a6b;">
+                        La app de PC sincroniza los resultados del laboratorio y requiere tener la app móvil instalada.
+                    </div>
+                    <div class="platform-mobile" style="background:#eef4ff;border-left:3px solid #1565c0;border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:16px;font-size:.83rem;color:#1a3a6b;">
+                        Descargá la app en tu celular para ver los resultados del laboratorio desde tu cuenta.
+                    </div>
                     <div class="dl-os-grid">
-                        <div class="dl-card" onclick="dlGo('win')">
+                        <div class="dl-card platform-desktop" onclick="dlGo('win')">
                             <span class="dl-name">Windows</span>
                             <span class="dl-platform-tag">Escritorio · PC</span>
                         </div>
-                        <div class="dl-card" onclick="dlGo('mac')">
+                        <div class="dl-card platform-desktop" onclick="dlGo('mac')">
                             <span class="dl-name">macOS</span>
                             <span class="dl-platform-tag">Escritorio · Mac</span>
                         </div>
-                        <div class="dl-card" onclick="dlGo('android')">
+                        <div class="dl-card platform-mobile" onclick="dlGo('android')">
                             <span class="dl-name">Android</span>
                             <span class="dl-platform-tag">App móvil</span>
                         </div>
-                        <div class="dl-card dl-disabled">
+                        <div class="dl-card dl-disabled platform-mobile">
                             <span class="dl-name">iPhone / iPad</span>
                             <span class="dl-platform-tag">Próximamente</span>
                         </div>
@@ -884,6 +890,9 @@
         }
 
         const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)
+
+        document.querySelectorAll('.platform-desktop').forEach(el => { if (isMobile)  el.style.display = 'none' })
+        document.querySelectorAll('.platform-mobile').forEach(el  => { if (!isMobile) el.style.display = 'none' })
 
         function dlGo(step) {
             ['dl-specialty','dl-os','dl-win','dl-mac','dl-android','dl-ios'].forEach(id => {
