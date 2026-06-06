@@ -750,7 +750,38 @@
         <!-- Panel: Descargar App -->
         <div class="tab-panel" id="panel-download">
             <div class="tab-panel-inner">
-                <div class="dl-mobile-msg" style="text-align:center;">
+                <!-- Desktop: especialidad → sistema operativo → descarga -->
+                <div class="platform-desktop">
+                    <p class="form-title" style="margin-bottom:6px;">Descargar CritiData</p>
+                    <div id="dl-step-specialty">
+                        <p class="form-subtitle" style="margin-bottom:20px;">Seleccioná tu especialidad</p>
+                        <div class="dl-cards">
+                            <div class="dl-card" onclick="dlElegirEspecialidad()">
+                                <span class="dl-name">Nefrología</span>
+                            </div>
+                            <div class="dl-card dl-disabled">
+                                <span class="dl-name">Otras</span>
+                                <span class="dl-platform-tag">Próximamente</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="dl-step-os" style="display:none;">
+                        <p class="form-subtitle" style="margin-bottom:16px;">Seleccioná tu sistema operativo</p>
+                        <div class="dl-cards">
+                            <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia_Setup.exe" class="dl-card" style="text-decoration:none;">
+                                <span class="dl-name">Windows</span>
+                                <span class="dl-platform-tag">⬇ Descargar</span>
+                            </a>
+                            <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia.dmg" class="dl-card" style="text-decoration:none;">
+                                <span class="dl-name">macOS</span>
+                                <span class="dl-platform-tag">⬇ Descargar</span>
+                            </a>
+                        </div>
+                        <button class="dl-back" onclick="dlVolver()" style="margin-top:16px;">← Volver</button>
+                    </div>
+                </div>
+                <!-- Mobile: registrarse para obtener la app -->
+                <div class="platform-mobile dl-mobile-msg" style="text-align:center;">
                     <div class="dl-mobile-icon">📱</div>
                     <p class="form-title" style="margin-bottom:6px;">Ya estás en CritiData</p>
                     <p class="form-subtitle" style="margin-bottom:24px;">Registrate para acceder y descargar la app en tu dispositivo.</p>
@@ -910,6 +941,15 @@
             accesoIrA('register')
         }
 
+        function dlElegirEspecialidad() {
+            document.getElementById('dl-step-specialty').style.display = 'none'
+            document.getElementById('dl-step-os').style.display = 'block'
+        }
+        function dlVolver() {
+            document.getElementById('dl-step-os').style.display = 'none'
+            document.getElementById('dl-step-specialty').style.display = 'block'
+        }
+
         function accesoSiguienteRegistro() {
             const nombre = document.getElementById('acc-nombre').value.trim()
             const phone  = document.getElementById('acc-phone').value.trim()
@@ -1059,6 +1099,10 @@
                 btn.classList.add('active');
                 document.getElementById('panel-' + tab).classList.add('active');
                 card.classList.add('visible');
+                if (tab === 'download') {
+                    document.getElementById('dl-step-specialty').style.display = 'block'
+                    document.getElementById('dl-step-os').style.display = 'none'
+                }
             }
         }
 
