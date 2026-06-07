@@ -55,6 +55,119 @@
         .tab-panel { display: none; }
         .tab-panel.active { display: block; }
 
+        /* ── Progress bar ── */
+        .progress-bar {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 32px;
+        }
+        .pb-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+        }
+        .pb-step::after {
+            content: '';
+            position: absolute;
+            top: 17px;
+            left: 50%;
+            width: 100%;
+            height: 3px;
+            background: #dde3eb;
+            z-index: 0;
+        }
+        .pb-step:last-child::after { display: none; }
+        .pb-step.done::after { background: #0d1b2a; }
+        .pb-dot {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #dde3eb;
+            color: #999;
+            font-weight: 700;
+            font-size: 0.88rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+            transition: background 0.3s, color 0.3s;
+        }
+        .pb-step.active .pb-dot { background: #0d1b2a; color: white; }
+        .pb-step.done .pb-dot { background: #0d1b2a; color: white; }
+        .pb-label {
+            font-size: 0.72rem;
+            color: #aaa;
+            margin-top: 5px;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .pb-step.active .pb-label { color: #0d1b2a; font-weight: 600; }
+        .pb-step.done .pb-label { color: #0d1b2a; }
+
+        /* ── Step panels ── */
+        .wiz-step { display: none; }
+        .wiz-step.active { display: block; }
+
+        .step-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0d1b2a;
+            margin-bottom: 8px;
+        }
+        .step-desc { color: #444; font-size: 0.95rem; margin-bottom: 16px; }
+
+        /* ── Navigation arrows ── */
+        .wiz-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f4f8;
+        }
+        .wiz-nav-left { flex: 1; }
+        .wiz-nav-right { flex: 1; display: flex; justify-content: flex-end; }
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: 1.5px solid #d0d7e0;
+            border-radius: 9px;
+            padding: 10px 20px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #64748b;
+            cursor: pointer;
+            font-family: inherit;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .btn-back:hover { border-color: #0d1b2a; color: #0d1b2a; }
+        .btn-next {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #0d1b2a;
+            border: none;
+            border-radius: 9px;
+            padding: 10px 24px;
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.2s;
+        }
+        .btn-next:hover { background: #1a3a5c; }
+        .btn-finish {
+            background: #2e7d32;
+        }
+        .btn-finish:hover { background: #1b5e20; }
+
         /* ── Download banner ── */
         .download-banner {
             display: flex;
@@ -64,7 +177,7 @@
             border: 1.5px solid #dde3eb;
             border-radius: 12px;
             padding: 18px 22px;
-            margin-bottom: 36px;
+            margin-bottom: 20px;
             gap: 16px;
             flex-wrap: wrap;
         }
@@ -88,30 +201,7 @@
         }
         .download-btn:hover { background: #1a3a5c; }
 
-        /* ── Steps ── */
-        .step {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 36px;
-        }
-        .step-num {
-            flex-shrink: 0;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: #0d1b2a;
-            color: white;
-            font-weight: 700;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 2px;
-        }
-        .step-body h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 6px; color: #0d1b2a; }
-        .step-body p { color: #444; font-size: 0.95rem; margin-bottom: 8px; }
-        .step-body p:last-child { margin-bottom: 0; }
-
+        /* ── Callouts ── */
         .callout {
             background: #fff8ec;
             border-left: 4px solid #e07b2a;
@@ -119,10 +209,9 @@
             padding: 12px 16px;
             font-size: 0.9rem;
             color: #6b4000;
-            margin-top: 10px;
+            margin-top: 12px;
         }
         .callout strong { color: #c05a00; }
-
         .callout-ok {
             background: #edfaf1;
             border-left: 4px solid #2e7d32;
@@ -130,7 +219,7 @@
             padding: 12px 16px;
             font-size: 0.9rem;
             color: #1b4d1e;
-            margin-top: 10px;
+            margin-top: 12px;
         }
 
         /* ── SmartScreen mockup ── */
@@ -141,7 +230,6 @@
             margin-top: 14px;
             max-width: 420px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.12);
-            font-family: 'Segoe UI', sans-serif;
         }
         .ss-titlebar {
             background: #1e1e2e;
@@ -152,55 +240,36 @@
             align-items: center;
             gap: 8px;
         }
-        .ss-titlebar-dots { display:flex; gap:5px; }
+        .ss-dots { display:flex; gap:5px; }
         .ss-dot { width:10px; height:10px; border-radius:50%; background:#555; }
-        .ss-body {
-            background: #f5f5f5;
-            padding: 24px 28px 20px;
-        }
+        .ss-body { background: #f5f5f5; padding: 24px 28px 20px; }
         .ss-shield { font-size: 2.4rem; margin-bottom: 10px; }
         .ss-title { font-size: 1rem; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
-        .ss-subtitle { font-size: 0.83rem; color: #555; margin-bottom: 18px; }
-        .ss-link {
+        .ss-subtitle { font-size: 0.83rem; color: #555; margin-bottom: 14px; }
+        .ss-info-btn {
             font-size: 0.85rem;
             color: #1565c0;
             text-decoration: underline;
-            cursor: pointer;
-            margin-bottom: 14px;
             display: inline-block;
+            margin-bottom: 14px;
         }
-        .ss-btn-row { display: flex; gap: 10px; margin-top: 6px; }
+        .ss-btn-row { display: flex; gap: 10px; }
         .ss-btn-exec {
-            background: #0d1b2a;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 8px 20px;
-            font-size: 0.88rem;
-            font-weight: 700;
-            font-family: inherit;
-            cursor: default;
+            background: #0d1b2a; color: white; border: none;
+            border-radius: 4px; padding: 8px 20px;
+            font-size: 0.88rem; font-weight: 700; font-family: inherit;
         }
         .ss-btn-cancel {
-            background: #e8edf2;
-            color: #444;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 8px 20px;
-            font-size: 0.88rem;
-            font-family: inherit;
-            cursor: default;
+            background: #e8edf2; color: #444; border: 1px solid #ccc;
+            border-radius: 4px; padding: 8px 20px;
+            font-size: 0.88rem; font-family: inherit;
         }
         .ss-step-label {
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            color: #999;
-            margin-bottom: 8px;
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.8px; color: #999; margin-bottom: 8px;
         }
 
-        /* ── Wizard mockup ── */
+        /* ── Wizard installer mockup ── */
         .mockup-wizard {
             border: 1.5px solid #ccc;
             border-radius: 4px;
@@ -210,122 +279,64 @@
             box-shadow: 0 2px 12px rgba(0,0,0,0.10);
         }
         .wz-titlebar {
-            background: #1a3a5c;
-            color: white;
-            font-size: 0.78rem;
-            padding: 7px 14px;
-            font-weight: 600;
+            background: #1a3a5c; color: white;
+            font-size: 0.78rem; padding: 7px 14px; font-weight: 600;
         }
         .wz-header {
-            background: white;
-            padding: 18px 22px 14px;
+            background: white; padding: 18px 22px 14px;
             border-bottom: 1px solid #e5e5e5;
         }
         .wz-header-title { font-size: 0.95rem; font-weight: 700; color: #0d1b2a; }
         .wz-header-sub { font-size: 0.82rem; color: #666; margin-top: 3px; }
-        .wz-body {
-            background: #f5f5f5;
-            padding: 18px 22px;
-            min-height: 80px;
-        }
+        .wz-body { background: #f5f5f5; padding: 18px 22px; min-height: 80px; }
         .wz-body p { font-size: 0.85rem; color: #444; }
         .wz-footer {
-            background: #e8edf2;
-            padding: 10px 22px;
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
+            background: #e8edf2; padding: 10px 22px;
+            display: flex; justify-content: flex-end; gap: 8px;
             border-top: 1px solid #d0d7e0;
         }
-        .wz-btn-next {
-            background: #1a3a5c;
-            color: white;
-            border: none;
-            border-radius: 3px;
-            padding: 6px 20px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            font-family: inherit;
-            cursor: default;
+        .wz-btn {
+            border-radius: 3px; padding: 6px 20px;
+            font-size: 0.85rem; font-family: inherit; cursor: default;
         }
-        .wz-btn-cancel {
-            background: #fff;
-            color: #333;
-            border: 1px solid #bbb;
-            border-radius: 3px;
-            padding: 6px 16px;
-            font-size: 0.85rem;
-            font-family: inherit;
-            cursor: default;
+        .wz-btn-primary { background: #1a3a5c; color: white; border: none; font-weight: 700; }
+        .wz-btn-secondary { background: #fff; color: #333; border: 1px solid #bbb; }
+        .wz-btn-green { background: #2e7d32; color: white; border: none; font-weight: 700; }
+        .wz-bar { height: 6px; background: #dde3eb; border-radius: 3px; margin-top: 12px; }
+        .wz-bar-fill { height: 100%; border-radius: 3px; }
+        .wz-check { color: #2e7d32; margin-right: 6px; }
+
+        /* ── macOS mockup ── */
+        .mockup-mac {
+            border: 1.5px solid #d0d7e0; border-radius: 10px;
+            overflow: hidden; margin-top: 14px; max-width: 380px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
         }
-        .wz-progress {
-            height: 6px;
-            background: #dde3eb;
-            border-radius: 3px;
-            margin-top: 12px;
+        .mac-titlebar {
+            background: #e8edf2; padding: 8px 14px;
+            display: flex; align-items: center; gap: 6px;
+            border-bottom: 1px solid #d0d7e0;
         }
-        .wz-progress-fill {
-            height: 100%;
-            background: #1a3a5c;
-            border-radius: 3px;
-        }
-        .wz-check { color: #2e7d32; font-size: 1.2rem; margin-right: 6px; }
+        .mac-dot { width: 11px; height: 11px; border-radius: 50%; }
+        .mac-body { background: #f9f9f9; padding: 20px 24px; text-align: center; }
+        .mac-body p { font-size: 0.85rem; color: #444; margin-top: 10px; }
 
         /* ── FAQ ── */
         .faq-section { margin-top: 40px; }
         .faq-section h2 {
-            font-size: 1.1rem;
-            color: #0d1b2a;
-            margin-bottom: 16px;
-            padding-bottom: 8px;
+            font-size: 1.05rem; color: #0d1b2a;
+            margin-bottom: 14px; padding-bottom: 8px;
             border-bottom: 2px solid #f0f0f0;
         }
-        .faq-item { margin-bottom: 18px; }
-        .faq-item h4 { font-size: 0.95rem; color: #0d1b2a; margin-bottom: 4px; }
-        .faq-item p { font-size: 0.9rem; color: #555; }
+        .faq-item { margin-bottom: 16px; }
+        .faq-item h4 { font-size: 0.92rem; color: #0d1b2a; margin-bottom: 3px; }
+        .faq-item p { font-size: 0.88rem; color: #555; }
 
         hr.divider { border: none; border-top: 2px solid #f0f0f0; margin: 32px 0; }
 
         .page-footer { margin-top: 32px; text-align: center; font-size: 0.88rem; color: #999; }
         .page-footer a { color: #e07b2a; text-decoration: none; }
         .page-footer a:hover { text-decoration: underline; }
-
-        /* ── macOS mockup ── */
-        .mockup-mac {
-            border: 1.5px solid #d0d7e0;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-top: 14px;
-            max-width: 380px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
-        }
-        .mac-titlebar {
-            background: #e8edf2;
-            padding: 8px 14px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            border-bottom: 1px solid #d0d7e0;
-        }
-        .mac-dot { width: 11px; height: 11px; border-radius: 50%; }
-        .mac-body {
-            background: #f9f9f9;
-            padding: 20px 24px;
-            text-align: center;
-        }
-        .mac-body p { font-size: 0.85rem; color: #444; margin-top: 10px; }
-        .mac-btn {
-            background: #1565c0;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 7px 18px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            font-family: inherit;
-            cursor: default;
-            margin-top: 12px;
-        }
     </style>
 </head>
 <body>
@@ -343,134 +354,172 @@
 
     <div class="card">
 
-        <!-- ══════════════════ WINDOWS ══════════════════ -->
+        <!-- ══════════════════════ WINDOWS ══════════════════════ -->
         <div id="tab-windows" class="tab-panel active">
 
-            <!-- Banner descarga -->
-            <div class="download-banner">
-                <div class="download-info">
-                    <div class="download-icon">📦</div>
-                    <div>
-                        <div class="download-title">CritiData Nefrología · Windows</div>
-                        <div class="download-meta">Instalador · Última versión</div>
-                    </div>
+            <!-- Barra de progreso -->
+            <div class="progress-bar" id="pb-windows">
+                <div class="pb-step active" id="pb-1">
+                    <div class="pb-dot">1</div>
+                    <div class="pb-label">Descargar</div>
                 </div>
-                <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia_Setup.exe"
-                   class="download-btn">⬇&nbsp; Descargar</a>
-            </div>
-
-            <!-- Paso 1 -->
-            <div class="step">
-                <div class="step-num">1</div>
-                <div class="step-body">
-                    <h3>Descargá la aplicación</h3>
-                    <p>Hacé click en el botón <strong>⬇ Descargar</strong> de arriba. El archivo
-                    <strong>CritiData_Nefrologia_Setup.exe</strong> se guarda en tu carpeta
-                    de descargas. Una vez listo, hacé doble click para abrirlo.</p>
+                <div class="pb-step" id="pb-2">
+                    <div class="pb-dot">2</div>
+                    <div class="pb-label">Permitir</div>
+                </div>
+                <div class="pb-step" id="pb-3">
+                    <div class="pb-dot">3</div>
+                    <div class="pb-label">Siguiente</div>
+                </div>
+                <div class="pb-step" id="pb-4">
+                    <div class="pb-dot">4</div>
+                    <div class="pb-label">Finalizar</div>
                 </div>
             </div>
 
-            <!-- Paso 2 -->
-            <div class="step">
-                <div class="step-num">2</div>
-                <div class="step-body">
-                    <h3>Permitir la ejecución (aviso de Windows)</h3>
-                    <p>Windows muestra una pantalla de seguridad porque el archivo fue descargado
-                    de internet. Hacé click en <strong>"Más información"</strong> y luego en
-                    <strong>"Ejecutar de todas formas"</strong>.</p>
+            <!-- ── Paso 1: Descargar ── -->
+            <div class="wiz-step active" id="ws-1">
+                <div class="step-title">Descargá la aplicación</div>
+                <p class="step-desc">Hacé click en el botón <strong>⬇ Descargar</strong>.
+                El archivo <strong>CritiData_Nefrologia_Setup.exe</strong> se guarda en tu
+                carpeta de descargas. Una vez listo, hacé doble click para abrirlo.</p>
 
-                    <div class="ss-step-label" style="margin-top:16px;">Pantalla que vas a ver:</div>
-                    <div class="mockup-smartscreen">
-                        <div class="ss-titlebar">
-                            <div class="ss-titlebar-dots">
-                                <div class="ss-dot"></div>
-                                <div class="ss-dot"></div>
-                                <div class="ss-dot"></div>
-                            </div>
-                            Seguridad de Windows
-                        </div>
-                        <div class="ss-body">
-                            <div class="ss-shield">🛡️</div>
-                            <div class="ss-title">Windows protegió su equipo</div>
-                            <div class="ss-subtitle">
-                                Microsoft Defender SmartScreen impidió que se iniciara una
-                                aplicación no reconocida.
-                            </div>
-                            <div class="ss-link">→ Más información</div>
-                            <div class="ss-btn-row">
-                                <button class="ss-btn-exec">Ejecutar de todas formas</button>
-                                <button class="ss-btn-cancel">No ejecutar</button>
-                            </div>
+                <div class="download-banner">
+                    <div class="download-info">
+                        <div class="download-icon">📦</div>
+                        <div>
+                            <div class="download-title">CritiData Nefrología · Windows</div>
+                            <div class="download-meta">Instalador · Última versión</div>
                         </div>
                     </div>
+                    <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia_Setup.exe"
+                       class="download-btn">⬇&nbsp; Descargar</a>
+                </div>
 
-                    <div class="callout" style="margin-top:14px;">
-                        <strong>¿Es seguro?</strong> Sí. El aviso aparece porque el instalador
-                        aún no tiene firma digital de Microsoft. La aplicación es segura.
+                <div class="wiz-nav">
+                    <div class="wiz-nav-left"></div>
+                    <div class="wiz-nav-right">
+                        <button class="btn-next" onclick="wizIr(2)">Siguiente &nbsp;→</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Paso 3 -->
-            <div class="step">
-                <div class="step-num">3</div>
-                <div class="step-body">
-                    <h3>Instalá la aplicación</h3>
-                    <p>Se abre el asistente de instalación. Hacé click en <strong>Siguiente</strong>
-                    en cada pantalla para avanzar. Podés dejar todas las opciones por defecto.</p>
+            <!-- ── Paso 2: SmartScreen ── -->
+            <div class="wiz-step" id="ws-2">
+                <div class="step-title">Permitir la ejecución</div>
+                <p class="step-desc">Windows muestra un aviso de seguridad porque el archivo
+                fue descargado de internet. Hacé click en <strong>"Más información"</strong>
+                y luego en <strong>"Ejecutar de todas formas"</strong>.</p>
 
-                    <div class="mockup-wizard" style="margin-top:14px;">
-                        <div class="wz-titlebar">Asistente de instalación · CritiData Nefrología</div>
-                        <div class="wz-header">
-                            <div class="wz-header-title">Bienvenido a CritiData Nefrología</div>
-                            <div class="wz-header-sub">Este asistente lo guiará durante la instalación.</div>
+                <div class="ss-step-label">Pantalla que vas a ver:</div>
+                <div class="mockup-smartscreen">
+                    <div class="ss-titlebar">
+                        <div class="ss-dots">
+                            <div class="ss-dot"></div>
+                            <div class="ss-dot"></div>
+                            <div class="ss-dot"></div>
                         </div>
-                        <div class="wz-body">
-                            <p>La aplicación se instalará en:<br>
-                            <strong>C:\Archivos de programa\CritiData</strong></p>
-                            <div class="wz-progress" style="margin-top:14px;">
-                                <div class="wz-progress-fill" style="width:33%"></div>
-                            </div>
+                        Seguridad de Windows
+                    </div>
+                    <div class="ss-body">
+                        <div class="ss-shield">🛡️</div>
+                        <div class="ss-title">Windows protegió su equipo</div>
+                        <div class="ss-subtitle">Microsoft Defender SmartScreen impidió que
+                        se iniciara una aplicación no reconocida.</div>
+                        <div class="ss-info-btn">→ Más información</div><br>
+                        <div class="ss-btn-row">
+                            <button class="ss-btn-exec">Ejecutar de todas formas</button>
+                            <button class="ss-btn-cancel">No ejecutar</button>
                         </div>
-                        <div class="wz-footer">
-                            <button class="wz-btn-cancel">Cancelar</button>
-                            <button class="wz-btn-next">Siguiente &gt;</button>
-                        </div>
+                    </div>
+                </div>
+
+                <div class="callout">
+                    <strong>¿Es seguro?</strong> Sí. El aviso aparece porque el instalador
+                    aún no tiene firma digital de Microsoft. La aplicación es segura.
+                </div>
+
+                <div class="wiz-nav">
+                    <div class="wiz-nav-left">
+                        <button class="btn-back" onclick="wizIr(1)">← &nbsp;Volver</button>
+                    </div>
+                    <div class="wiz-nav-right">
+                        <button class="btn-next" onclick="wizIr(3)">Siguiente &nbsp;→</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Paso 4 -->
-            <div class="step">
-                <div class="step-num">4</div>
-                <div class="step-body">
-                    <h3>Finalizar e iniciar</h3>
-                    <p>Al terminar la instalación hacé click en <strong>Finalizar</strong>.
-                    La aplicación se abre automáticamente. En el escritorio queda el acceso
-                    directo para la próxima vez.</p>
+            <!-- ── Paso 3: Siguiente ── -->
+            <div class="wiz-step" id="ws-3">
+                <div class="step-title">Instalá la aplicación</div>
+                <p class="step-desc">Se abre el asistente de instalación. Hacé click en
+                <strong>Siguiente</strong> en cada pantalla para avanzar. Podés dejar
+                todas las opciones por defecto.</p>
 
-                    <div class="mockup-wizard" style="margin-top:14px;">
-                        <div class="wz-titlebar">Asistente de instalación · CritiData Nefrología</div>
-                        <div class="wz-header">
-                            <div class="wz-header-title">Instalación completada</div>
-                            <div class="wz-header-sub">CritiData Nefrología se instaló correctamente.</div>
-                        </div>
-                        <div class="wz-body">
-                            <p><span class="wz-check">✔</span> Archivos copiados</p>
-                            <p><span class="wz-check">✔</span> Acceso directo creado en el escritorio</p>
-                            <div class="wz-progress" style="margin-top:14px;">
-                                <div class="wz-progress-fill" style="width:100%; background:#2e7d32;"></div>
-                            </div>
-                        </div>
-                        <div class="wz-footer">
-                            <button class="wz-btn-next" style="background:#2e7d32;">Finalizar</button>
+                <div class="ss-step-label">Pantalla que vas a ver:</div>
+                <div class="mockup-wizard">
+                    <div class="wz-titlebar">Asistente de instalación · CritiData Nefrología</div>
+                    <div class="wz-header">
+                        <div class="wz-header-title">Bienvenido a CritiData Nefrología</div>
+                        <div class="wz-header-sub">Este asistente lo guiará durante la instalación.</div>
+                    </div>
+                    <div class="wz-body">
+                        <p>La aplicación se instalará en:<br>
+                        <strong>C:\Archivos de programa\CritiData</strong></p>
+                        <div class="wz-bar"><div class="wz-bar-fill" style="width:33%;background:#1a3a5c;"></div></div>
+                    </div>
+                    <div class="wz-footer">
+                        <button class="wz-btn wz-btn-secondary">Cancelar</button>
+                        <button class="wz-btn wz-btn-primary">Siguiente &gt;</button>
+                    </div>
+                </div>
+
+                <div class="wiz-nav">
+                    <div class="wiz-nav-left">
+                        <button class="btn-back" onclick="wizIr(2)">← &nbsp;Volver</button>
+                    </div>
+                    <div class="wiz-nav-right">
+                        <button class="btn-next" onclick="wizIr(4)">Siguiente &nbsp;→</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Paso 4: Finalizar ── -->
+            <div class="wiz-step" id="ws-4">
+                <div class="step-title">Finalizar e iniciar</div>
+                <p class="step-desc">Al terminar la instalación hacé click en
+                <strong>Finalizar</strong>. La aplicación se abre automáticamente.
+                En el escritorio queda el acceso directo para la próxima vez.</p>
+
+                <div class="ss-step-label">Pantalla que vas a ver:</div>
+                <div class="mockup-wizard">
+                    <div class="wz-titlebar">Asistente de instalación · CritiData Nefrología</div>
+                    <div class="wz-header">
+                        <div class="wz-header-title">Instalación completada</div>
+                        <div class="wz-header-sub">CritiData Nefrología se instaló correctamente.</div>
+                    </div>
+                    <div class="wz-body">
+                        <p><span class="wz-check">✔</span> Archivos copiados</p>
+                        <p><span class="wz-check">✔</span> Acceso directo creado en el escritorio</p>
+                        <div class="wz-bar" style="margin-top:14px;">
+                            <div class="wz-bar-fill" style="width:100%;background:#2e7d32;"></div>
                         </div>
                     </div>
-
-                    <div class="callout-ok" style="margin-top:14px;">
-                        <strong>Listo.</strong> Iniciá sesión con el email y contraseña de tu cuenta CritiData.
-                        Si no tenés cuenta todavía, registrate desde la app del celular.
+                    <div class="wz-footer">
+                        <button class="wz-btn wz-btn-green">Finalizar</button>
                     </div>
+                </div>
+
+                <div class="callout-ok">
+                    <strong>Listo.</strong> Iniciá sesión con el email y contraseña de tu cuenta CritiData.
+                    Si no tenés cuenta, registrate desde la app del celular.
+                </div>
+
+                <div class="wiz-nav">
+                    <div class="wiz-nav-left">
+                        <button class="btn-back" onclick="wizIr(3)">← &nbsp;Volver</button>
+                    </div>
+                    <div class="wiz-nav-right"></div>
                 </div>
             </div>
 
@@ -478,7 +527,6 @@
 
             <div class="faq-section">
                 <h2>Preguntas frecuentes</h2>
-
                 <div class="faq-item">
                     <h4>¿Tengo que desinstalar la versión anterior?</h4>
                     <p>No. El instalador detecta versiones anteriores y las reemplaza automáticamente.</p>
@@ -486,24 +534,22 @@
                 <div class="faq-item">
                     <h4>Windows sigue mostrando el aviso SmartScreen</h4>
                     <p>Es normal en cada nueva versión. Siempre hacé click en
-                    <strong>"Más información"</strong> → <strong>"Ejecutar de todas formas"</strong>.
-                    El aviso desaparece una vez que la app tenga historial de ejecución en tu equipo.</p>
+                    <strong>"Más información"</strong> → <strong>"Ejecutar de todas formas"</strong>.</p>
                 </div>
                 <div class="faq-item">
                     <h4>¿Cómo me registro?</h4>
                     <p>El registro se hace desde la <strong>app del celular</strong> (Android).
-                    La app de escritorio es solo para iniciar sesión con una cuenta ya existente.</p>
+                    La app de escritorio es solo para iniciar sesión.</p>
                 </div>
                 <div class="faq-item">
                     <h4>Necesito ayuda</h4>
-                    <p>Escribinos a <a href="mailto:info@critidata.com" style="color:#e07b2a;">info@critidata.com</a>
-                    y te respondemos a la brevedad.</p>
+                    <p>Escribinos a <a href="mailto:info@critidata.com" style="color:#e07b2a;">info@critidata.com</a>.</p>
                 </div>
             </div>
 
         </div><!-- /tab-windows -->
 
-        <!-- ══════════════════ macOS ══════════════════ -->
+        <!-- ══════════════════════ macOS ══════════════════════ -->
         <div id="tab-mac" class="tab-panel">
 
             <div class="download-banner">
@@ -518,23 +564,22 @@
                    class="download-btn">⬇&nbsp; Descargar</a>
             </div>
 
-            <div class="step">
-                <div class="step-num">1</div>
-                <div class="step-body">
-                    <h3>Descargá la aplicación</h3>
-                    <p>Hacé click en <strong>⬇ Descargar</strong>. Se descarga el archivo
+            <div class="step" style="display:flex;gap:20px;margin-bottom:28px;">
+                <div style="flex-shrink:0;width:34px;height:34px;border-radius:50%;background:#0d1b2a;color:white;font-weight:700;font-size:.88rem;display:flex;align-items:center;justify-content:center;margin-top:2px;">1</div>
+                <div>
+                    <div class="step-title" style="font-size:1rem;">Descargá la aplicación</div>
+                    <p style="font-size:.92rem;color:#444;">Hacé click en <strong>⬇ Descargar</strong>. Se descarga el archivo
                     <strong>CritiData_Nefrologia.dmg</strong>. Abrilo con doble click.</p>
                 </div>
             </div>
 
-            <div class="step">
-                <div class="step-num">2</div>
-                <div class="step-body">
-                    <h3>Instalá arrastrando a Aplicaciones</h3>
-                    <p>Se abre una ventana con el ícono de la app y la carpeta Aplicaciones.
+            <div class="step" style="display:flex;gap:20px;margin-bottom:28px;">
+                <div style="flex-shrink:0;width:34px;height:34px;border-radius:50%;background:#0d1b2a;color:white;font-weight:700;font-size:.88rem;display:flex;align-items:center;justify-content:center;margin-top:2px;">2</div>
+                <div>
+                    <div class="step-title" style="font-size:1rem;">Arrastrá a Aplicaciones</div>
+                    <p style="font-size:.92rem;color:#444;">Se abre una ventana con el ícono de la app y la carpeta Aplicaciones.
                     Arrastrá el ícono de CritiData hacia la carpeta <strong>Aplicaciones</strong>.</p>
-
-                    <div class="mockup-mac" style="margin-top:14px;">
+                    <div class="mockup-mac">
                         <div class="mac-titlebar">
                             <div class="mac-dot" style="background:#ff5f57;"></div>
                             <div class="mac-dot" style="background:#febc2e;"></div>
@@ -548,26 +593,25 @@
                 </div>
             </div>
 
-            <div class="step">
-                <div class="step-num">3</div>
-                <div class="step-body">
-                    <h3>Permitir la apertura (Gatekeeper)</h3>
-                    <p>La primera vez que abras la app, macOS puede mostrar un aviso de seguridad.
+            <div class="step" style="display:flex;gap:20px;margin-bottom:28px;">
+                <div style="flex-shrink:0;width:34px;height:34px;border-radius:50%;background:#0d1b2a;color:white;font-weight:700;font-size:.88rem;display:flex;align-items:center;justify-content:center;margin-top:2px;">3</div>
+                <div>
+                    <div class="step-title" style="font-size:1rem;">Permitir la apertura</div>
+                    <p style="font-size:.92rem;color:#444;">La primera vez macOS puede mostrar un aviso de seguridad.
                     Abrí <strong>Preferencias del Sistema → Privacidad y Seguridad</strong>
                     y hacé click en <strong>"Abrir de todas formas"</strong>.</p>
                     <div class="callout">
-                        <strong>Alternativa rápida:</strong> hacé click derecho sobre el ícono
-                        de la app → <strong>Abrir</strong> → confirmá en el diálogo que aparece.
+                        <strong>Alternativa rápida:</strong> click derecho sobre el ícono → <strong>Abrir</strong>
+                        → confirmá en el diálogo.
                     </div>
                 </div>
             </div>
 
-            <div class="step">
-                <div class="step-num">4</div>
-                <div class="step-body">
-                    <h3>Iniciá sesión</h3>
-                    <p>Ingresá con el email y contraseña de tu cuenta CritiData.
-                    Si no tenés cuenta, registrate desde la app del celular (Android).</p>
+            <div class="step" style="display:flex;gap:20px;margin-bottom:0;">
+                <div style="flex-shrink:0;width:34px;height:34px;border-radius:50%;background:#2e7d32;color:white;font-weight:700;font-size:.88rem;display:flex;align-items:center;justify-content:center;margin-top:2px;">4</div>
+                <div>
+                    <div class="step-title" style="font-size:1rem;">Iniciá sesión</div>
+                    <p style="font-size:.92rem;color:#444;">Ingresá con el email y contraseña de tu cuenta CritiData.</p>
                     <div class="callout-ok">
                         <strong>Listo.</strong> La próxima vez abrís la app directo desde el Launchpad o el Dock.
                     </div>
@@ -605,6 +649,24 @@
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         document.getElementById('tab-' + id).classList.add('active');
         btn.classList.add('active');
+    }
+
+    const TOTAL_STEPS = 4;
+
+    function wizIr(n) {
+        // Ocultar todos los pasos
+        for (let i = 1; i <= TOTAL_STEPS; i++) {
+            document.getElementById('ws-' + i).classList.remove('active');
+            const pb = document.getElementById('pb-' + i);
+            pb.classList.remove('active', 'done');
+            if (i < n) pb.classList.add('done');
+        }
+        // Mostrar paso actual
+        document.getElementById('ws-' + n).classList.add('active');
+        document.getElementById('pb-' + n).classList.add('active');
+
+        // Hacer scroll al inicio del wizard
+        document.getElementById('tab-windows').scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 </script>
 </body>
