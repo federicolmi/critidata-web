@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guía de instalación · CritiData Importador</title>
+    <title>Guía de instalación · CritiData</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -15,29 +15,17 @@
             line-height: 1.7;
         }
 
-        .container {
-            max-width: 760px;
-            margin: 40px auto;
-        }
+        .container { max-width: 760px; margin: 40px auto; }
 
-        /* ── Header ── */
         .page-header {
             background: #0d1b2a;
             border-radius: 16px 16px 0 0;
-            padding: 40px 40px 32px;
+            padding: 36px 40px 28px;
             color: white;
         }
-        .page-header h1 {
-            font-size: 1.7rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-        .page-header p {
-            color: rgba(255,255,255,0.6);
-            font-size: 0.95rem;
-        }
+        .page-header h1 { font-size: 1.7rem; font-weight: 700; margin-bottom: 6px; }
+        .page-header p { color: rgba(255,255,255,0.6); font-size: 0.95rem; }
 
-        /* ── Tabs ── */
         .tabs {
             display: flex;
             background: #132236;
@@ -54,13 +42,9 @@
             border-bottom: 3px solid transparent;
             transition: color 0.2s, border-color 0.2s;
         }
-        .tab-btn.active {
-            color: #fff;
-            border-bottom-color: #e07b2a;
-        }
+        .tab-btn.active { color: #fff; border-bottom-color: #e07b2a; }
         .tab-btn:hover:not(.active) { color: rgba(255,255,255,0.75); }
 
-        /* ── Card body ── */
         .card {
             background: #fff;
             border-radius: 0 0 16px 16px;
@@ -70,6 +54,39 @@
 
         .tab-panel { display: none; }
         .tab-panel.active { display: block; }
+
+        /* ── Download banner ── */
+        .download-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f0f4f8;
+            border: 1.5px solid #dde3eb;
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 36px;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .download-info { display: flex; align-items: center; gap: 14px; }
+        .download-icon { font-size: 2.2rem; line-height: 1; }
+        .download-title { font-size: 1rem; font-weight: 700; color: #0d1b2a; }
+        .download-meta { font-size: 0.82rem; color: #888; margin-top: 3px; }
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #0d1b2a;
+            color: white;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 13px 28px;
+            border-radius: 10px;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+        .download-btn:hover { background: #1a3a5c; }
 
         /* ── Steps ── */
         .step {
@@ -91,16 +108,10 @@
             justify-content: center;
             margin-top: 2px;
         }
-        .step-body h3 {
-            font-size: 1.05rem;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: #0d1b2a;
-        }
+        .step-body h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 6px; color: #0d1b2a; }
         .step-body p { color: #444; font-size: 0.95rem; margin-bottom: 8px; }
         .step-body p:last-child { margin-bottom: 0; }
 
-        /* ── Warning callout ── */
         .callout {
             background: #fff8ec;
             border-left: 4px solid #e07b2a;
@@ -112,201 +123,153 @@
         }
         .callout strong { color: #c05a00; }
 
-        /* ── Info callout ── */
-        .callout-info {
-            background: #eef4ff;
-            border-left: 4px solid #4a7fd4;
+        .callout-ok {
+            background: #edfaf1;
+            border-left: 4px solid #2e7d32;
             border-radius: 0 8px 8px 0;
             padding: 12px 16px;
             font-size: 0.9rem;
-            color: #1a3a6b;
+            color: #1b4d1e;
             margin-top: 10px;
         }
 
-        /* ── Code / command ── */
-        code {
-            background: #f0f0f0;
-            border-radius: 4px;
-            padding: 2px 7px;
-            font-size: 0.88rem;
-            font-family: 'Courier New', monospace;
-            color: #c0392b;
-        }
-
-        /* ── UI mockup ── */
-        .mockup {
-            border: 1.5px solid #dde3eb;
-            border-radius: 12px;
-            overflow: hidden;
-            margin-top: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-            max-width: 420px;
-        }
-        .mockup-bar {
-            background: #0d1b2a;
-            color: white;
-            font-size: 0.85rem;
-            font-weight: 600;
-            padding: 10px 16px;
-            letter-spacing: 0.5px;
-        }
-        .mockup-body {
-            background: #f5f5f5;
-            padding: 20px;
-        }
-        .mockup-status {
-            text-align: center;
-            color: #666;
-            font-size: 0.88rem;
-            margin-bottom: 14px;
-        }
-        .mockup-btns {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 16px;
-        }
-        .mockup-btn-primary {
-            background: #0d1b2a;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 9px 22px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            font-family: inherit;
-        }
-        .mockup-btn-secondary {
-            background: #e8edf2;
-            color: #444;
-            border: none;
-            border-radius: 6px;
-            padding: 9px 14px;
-            font-size: 0.85rem;
-            font-family: inherit;
-        }
-        .mockup-log {
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            padding: 10px 12px;
-            font-size: 0.78rem;
-            font-family: 'Courier New', monospace;
-            color: #555;
-            line-height: 1.6;
-        }
-        .mockup-log .ok { color: #2e7d32; font-weight: 600; }
-
-        /* ── Credential dialog mockup ── */
-        .mockup-dialog {
-            border: 1.5px solid #dde3eb;
-            border-radius: 12px;
-            overflow: hidden;
-            margin-top: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-            max-width: 340px;
-        }
-        .mockup-dialog-body {
-            background: #f5f5f5;
-            padding: 20px;
-        }
-        .mockup-dialog-title {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #0d1b2a;
-            margin-bottom: 14px;
-            text-align: center;
-        }
-        .mockup-field label {
-            display: block;
-            font-size: 0.8rem;
-            color: #555;
-            margin-bottom: 3px;
-        }
-        .mockup-field input {
-            width: 100%;
+        /* ── SmartScreen mockup ── */
+        .mockup-smartscreen {
             border: 1.5px solid #ccc;
-            border-radius: 6px;
-            padding: 7px 10px;
-            font-size: 0.88rem;
-            background: white;
-            margin-bottom: 10px;
-            font-family: inherit;
-        }
-        .mockup-save-btn {
-            display: block;
-            width: 100%;
-            background: #0d1b2a;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 9px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            font-family: inherit;
-            margin-top: 4px;
-            cursor: default;
-        }
-
-        /* ── Python installer mockup ── */
-        .mockup-installer {
-            border: 1.5px solid #dde3eb;
-            border-radius: 8px;
+            border-radius: 4px;
             overflow: hidden;
-            margin-top: 12px;
-            max-width: 400px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            margin-top: 14px;
+            max-width: 420px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+            font-family: 'Segoe UI', sans-serif;
         }
-        .mockup-installer-bar {
-            background: #3c78c8;
+        .ss-titlebar {
+            background: #1e1e2e;
             color: white;
-            font-size: 0.8rem;
-            padding: 7px 14px;
-        }
-        .mockup-installer-body {
-            background: #f9f9f9;
-            padding: 16px 20px;
-        }
-        .mockup-installer-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #222;
-            margin-bottom: 10px;
-        }
-        .mockup-checkbox {
+            font-size: 0.75rem;
+            padding: 6px 14px;
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+        .ss-titlebar-dots { display:flex; gap:5px; }
+        .ss-dot { width:10px; height:10px; border-radius:50%; background:#555; }
+        .ss-body {
+            background: #f5f5f5;
+            padding: 24px 28px 20px;
+        }
+        .ss-shield { font-size: 2.4rem; margin-bottom: 10px; }
+        .ss-title { font-size: 1rem; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+        .ss-subtitle { font-size: 0.83rem; color: #555; margin-bottom: 18px; }
+        .ss-link {
             font-size: 0.85rem;
-            color: #222;
-            margin-bottom: 6px;
+            color: #1565c0;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-bottom: 14px;
+            display: inline-block;
         }
-        .mockup-checkbox .box {
-            width: 14px;
-            height: 14px;
-            border: 2px solid #999;
-            border-radius: 2px;
-            flex-shrink: 0;
-        }
-        .mockup-checkbox .box.checked {
-            background: #3c78c8;
-            border-color: #3c78c8;
-            position: relative;
-        }
-        .mockup-checkbox .box.checked::after {
-            content: '✓';
+        .ss-btn-row { display: flex; gap: 10px; margin-top: 6px; }
+        .ss-btn-exec {
+            background: #0d1b2a;
             color: white;
-            font-size: 10px;
-            position: absolute;
-            top: -1px;
-            left: 1px;
-        }
-        .highlight-row {
-            background: #fff3cd;
+            border: none;
             border-radius: 4px;
-            padding: 3px 6px;
-            margin: -3px -6px;
+            padding: 8px 20px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: default;
         }
+        .ss-btn-cancel {
+            background: #e8edf2;
+            color: #444;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 8px 20px;
+            font-size: 0.88rem;
+            font-family: inherit;
+            cursor: default;
+        }
+        .ss-step-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+
+        /* ── Wizard mockup ── */
+        .mockup-wizard {
+            border: 1.5px solid #ccc;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 14px;
+            max-width: 420px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+        }
+        .wz-titlebar {
+            background: #1a3a5c;
+            color: white;
+            font-size: 0.78rem;
+            padding: 7px 14px;
+            font-weight: 600;
+        }
+        .wz-header {
+            background: white;
+            padding: 18px 22px 14px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        .wz-header-title { font-size: 0.95rem; font-weight: 700; color: #0d1b2a; }
+        .wz-header-sub { font-size: 0.82rem; color: #666; margin-top: 3px; }
+        .wz-body {
+            background: #f5f5f5;
+            padding: 18px 22px;
+            min-height: 80px;
+        }
+        .wz-body p { font-size: 0.85rem; color: #444; }
+        .wz-footer {
+            background: #e8edf2;
+            padding: 10px 22px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            border-top: 1px solid #d0d7e0;
+        }
+        .wz-btn-next {
+            background: #1a3a5c;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 6px 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: default;
+        }
+        .wz-btn-cancel {
+            background: #fff;
+            color: #333;
+            border: 1px solid #bbb;
+            border-radius: 3px;
+            padding: 6px 16px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            cursor: default;
+        }
+        .wz-progress {
+            height: 6px;
+            background: #dde3eb;
+            border-radius: 3px;
+            margin-top: 12px;
+        }
+        .wz-progress-fill {
+            height: 100%;
+            background: #1a3a5c;
+            border-radius: 3px;
+        }
+        .wz-check { color: #2e7d32; font-size: 1.2rem; margin-right: 6px; }
 
         /* ── FAQ ── */
         .faq-section { margin-top: 40px; }
@@ -321,65 +284,47 @@
         .faq-item h4 { font-size: 0.95rem; color: #0d1b2a; margin-bottom: 4px; }
         .faq-item p { font-size: 0.9rem; color: #555; }
 
-        /* ── Download banner ── */
-        .download-banner {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: #f0f4f8;
-            border: 1.5px solid #dde3eb;
-            border-radius: 12px;
-            padding: 18px 22px;
-            margin-bottom: 36px;
-            gap: 16px;
-            flex-wrap: wrap;
-        }
-        .download-info {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-        .download-icon { font-size: 2.2rem; line-height: 1; }
-        .download-title {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #0d1b2a;
-        }
-        .download-meta {
-            font-size: 0.82rem;
-            color: #888;
-            margin-top: 3px;
-        }
-        .download-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #0d1b2a;
-            color: white;
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 700;
-            padding: 13px 28px;
-            border-radius: 10px;
-            white-space: nowrap;
-            transition: background 0.2s;
-        }
-        .download-btn:hover { background: #1a3a5c; color: white; }
+        hr.divider { border: none; border-top: 2px solid #f0f0f0; margin: 32px 0; }
 
-        /* ── Footer ── */
-        .page-footer {
-            margin-top: 32px;
-            text-align: center;
-            font-size: 0.88rem;
-            color: #999;
-        }
+        .page-footer { margin-top: 32px; text-align: center; font-size: 0.88rem; color: #999; }
         .page-footer a { color: #e07b2a; text-decoration: none; }
         .page-footer a:hover { text-decoration: underline; }
 
-        hr.divider {
+        /* ── macOS mockup ── */
+        .mockup-mac {
+            border: 1.5px solid #d0d7e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 14px;
+            max-width: 380px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+        }
+        .mac-titlebar {
+            background: #e8edf2;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 1px solid #d0d7e0;
+        }
+        .mac-dot { width: 11px; height: 11px; border-radius: 50%; }
+        .mac-body {
+            background: #f9f9f9;
+            padding: 20px 24px;
+            text-align: center;
+        }
+        .mac-body p { font-size: 0.85rem; color: #444; margin-top: 10px; }
+        .mac-btn {
+            background: #1565c0;
+            color: white;
             border: none;
-            border-top: 2px solid #f0f0f0;
-            margin: 32px 0;
+            border-radius: 6px;
+            padding: 7px 18px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: default;
+            margin-top: 12px;
         }
     </style>
 </head>
@@ -388,169 +333,231 @@
 
     <div class="page-header">
         <h1>Guía de instalación</h1>
-        <p>CritiData · Importador de laboratorio</p>
+        <p>CritiData · App de escritorio para Windows y macOS</p>
     </div>
 
     <div class="tabs">
         <button class="tab-btn active" onclick="cambiarTab('windows', this)">🪟 Windows</button>
-        <button class="tab-btn" onclick="cambiarTab('mac', this)">🍎 Mac</button>
+        <button class="tab-btn" onclick="cambiarTab('mac', this)">🍎 macOS</button>
     </div>
 
     <div class="card">
 
-        <!-- ════════════════════════════════ DESCARGA ════════════════════════════════ -->
-        <div class="download-banner">
-            <div class="download-info">
-                <div class="download-icon">📦</div>
-                <div>
-                    <div class="download-title">CritiData Importador</div>
-                    <div class="download-meta">Windows &amp; macOS · Última versión</div>
-                </div>
-            </div>
-            <a href="/critidata_app.zip" download class="download-btn">
-                ⬇&nbsp; Descargar
-            </a>
-        </div>
-
-        <!-- ════════════════════════════════ WINDOWS ════════════════════════════════ -->
+        <!-- ══════════════════ WINDOWS ══════════════════ -->
         <div id="tab-windows" class="tab-panel active">
 
+            <!-- Banner descarga -->
+            <div class="download-banner">
+                <div class="download-info">
+                    <div class="download-icon">📦</div>
+                    <div>
+                        <div class="download-title">CritiData Nefrología · Windows</div>
+                        <div class="download-meta">Instalador · Última versión</div>
+                    </div>
+                </div>
+                <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia_Setup.exe"
+                   class="download-btn">⬇&nbsp; Descargar</a>
+            </div>
+
+            <!-- Paso 1 -->
             <div class="step">
                 <div class="step-num">1</div>
                 <div class="step-body">
-                    <h3>Instalá Python</h3>
-                    <p>Entrá a <strong>python.org/downloads</strong> y descargá la última versión para Windows. Ejecutá el instalador.</p>
-                    <div class="callout">
-                        <strong>⚠ Paso crítico:</strong> en la primera pantalla del instalador, marcá la casilla
-                        <strong>"Add Python to PATH"</strong> antes de hacer click en Install Now.
-                        Sin esto el instalador de CritiData no va a funcionar.
-                    </div>
-                    <div class="mockup-installer" style="margin-top:14px;">
-                        <div class="mockup-installer-bar">Python 3.x.x (64-bit) Setup</div>
-                        <div class="mockup-installer-body">
-                            <div class="mockup-installer-title">Install Python 3.x.x (64-bit)</div>
-                            <div class="mockup-checkbox">
-                                <div class="box checked"></div>
-                                Install launcher for all users
-                            </div>
-                            <div class="mockup-checkbox highlight-row">
-                                <div class="box checked"></div>
-                                <strong>Add Python to PATH</strong> ← marcá esta
-                            </div>
-                        </div>
-                    </div>
+                    <h3>Descargá la aplicación</h3>
+                    <p>Hacé click en el botón <strong>⬇ Descargar</strong> de arriba. El archivo
+                    <strong>CritiData_Nefrologia_Setup.exe</strong> se guarda en tu carpeta
+                    de descargas. Una vez listo, hacé doble click para abrirlo.</p>
                 </div>
             </div>
 
+            <!-- Paso 2 -->
             <div class="step">
                 <div class="step-num">2</div>
                 <div class="step-body">
-                    <h3>Descargá el Importador</h3>
-                    <p>Hacé click en el botón <strong>⬇ Descargar</strong> de arriba. Una vez descargado, descomprimí el archivo <code>critidata_app.zip</code> en una carpeta de tu elección (por ejemplo, <code>Escritorio\CritiData</code>).</p>
+                    <h3>Permitir la ejecución (aviso de Windows)</h3>
+                    <p>Windows muestra una pantalla de seguridad porque el archivo fue descargado
+                    de internet. Hacé click en <strong>"Más información"</strong> y luego en
+                    <strong>"Ejecutar de todas formas"</strong>.</p>
+
+                    <div class="ss-step-label" style="margin-top:16px;">Pantalla que vas a ver:</div>
+                    <div class="mockup-smartscreen">
+                        <div class="ss-titlebar">
+                            <div class="ss-titlebar-dots">
+                                <div class="ss-dot"></div>
+                                <div class="ss-dot"></div>
+                                <div class="ss-dot"></div>
+                            </div>
+                            Seguridad de Windows
+                        </div>
+                        <div class="ss-body">
+                            <div class="ss-shield">🛡️</div>
+                            <div class="ss-title">Windows protegió su equipo</div>
+                            <div class="ss-subtitle">
+                                Microsoft Defender SmartScreen impidió que se iniciara una
+                                aplicación no reconocida.
+                            </div>
+                            <div class="ss-link">→ Más información</div>
+                            <div class="ss-btn-row">
+                                <button class="ss-btn-exec">Ejecutar de todas formas</button>
+                                <button class="ss-btn-cancel">No ejecutar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="callout" style="margin-top:14px;">
+                        <strong>¿Es seguro?</strong> Sí. El aviso aparece porque el instalador
+                        aún no tiene firma digital de Microsoft. La aplicación es segura.
+                    </div>
                 </div>
             </div>
 
+            <!-- Paso 3 -->
             <div class="step">
                 <div class="step-num">3</div>
                 <div class="step-body">
-                    <h3>Instalá la aplicación (una sola vez)</h3>
-                    <p>Abrí la carpeta descomprimida y hacé <strong>doble click</strong> en <code>instalar.bat</code>. Se abre una ventana negra que instala todo automáticamente.</p>
-                    <div class="callout-info">
-                        La instalación descarga el navegador Chromium (~150 MB). Puede tardar unos minutos según tu conexión. Al finalizar verás el mensaje <em>"Instalacion completada"</em>.
+                    <h3>Instalá la aplicación</h3>
+                    <p>Se abre el asistente de instalación. Hacé click en <strong>Siguiente</strong>
+                    en cada pantalla para avanzar. Podés dejar todas las opciones por defecto.</p>
+
+                    <div class="mockup-wizard" style="margin-top:14px;">
+                        <div class="wz-titlebar">Asistente de instalación · CritiData Nefrología</div>
+                        <div class="wz-header">
+                            <div class="wz-header-title">Bienvenido a CritiData Nefrología</div>
+                            <div class="wz-header-sub">Este asistente lo guiará durante la instalación.</div>
+                        </div>
+                        <div class="wz-body">
+                            <p>La aplicación se instalará en:<br>
+                            <strong>C:\Archivos de programa\CritiData</strong></p>
+                            <div class="wz-progress" style="margin-top:14px;">
+                                <div class="wz-progress-fill" style="width:33%"></div>
+                            </div>
+                        </div>
+                        <div class="wz-footer">
+                            <button class="wz-btn-cancel">Cancelar</button>
+                            <button class="wz-btn-next">Siguiente &gt;</button>
+                        </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Paso 4 -->
             <div class="step">
                 <div class="step-num">4</div>
                 <div class="step-body">
-                    <h3>Abrí la aplicación</h3>
-                    <p>Hacé <strong>doble click</strong> en <code>ejecutar.bat</code>. Se abre la ventana de CritiData Importador.</p>
-                    <p>La primera vez te va a pedir dos juegos de credenciales:</p>
-                    <div class="mockup-dialog">
-                        <div class="mockup-dialog-body">
-                            <div class="mockup-dialog-title">Credenciales de bionefro</div>
-                            <div class="mockup-field">
-                                <label>Usuario (Nro. de colega)</label>
-                                <input type="text" value="12345" readonly>
+                    <h3>Finalizar e iniciar</h3>
+                    <p>Al terminar la instalación hacé click en <strong>Finalizar</strong>.
+                    La aplicación se abre automáticamente. En el escritorio queda el acceso
+                    directo para la próxima vez.</p>
+
+                    <div class="mockup-wizard" style="margin-top:14px;">
+                        <div class="wz-titlebar">Asistente de instalación · CritiData Nefrología</div>
+                        <div class="wz-header">
+                            <div class="wz-header-title">Instalación completada</div>
+                            <div class="wz-header-sub">CritiData Nefrología se instaló correctamente.</div>
+                        </div>
+                        <div class="wz-body">
+                            <p><span class="wz-check">✔</span> Archivos copiados</p>
+                            <p><span class="wz-check">✔</span> Acceso directo creado en el escritorio</p>
+                            <div class="wz-progress" style="margin-top:14px;">
+                                <div class="wz-progress-fill" style="width:100%; background:#2e7d32;"></div>
                             </div>
-                            <div class="mockup-field">
-                                <label>Contraseña</label>
-                                <input type="password" value="••••••••" readonly>
-                            </div>
-                            <button class="mockup-save-btn">Guardar</button>
+                        </div>
+                        <div class="wz-footer">
+                            <button class="wz-btn-next" style="background:#2e7d32;">Finalizar</button>
                         </div>
                     </div>
-                    <p style="margin-top:10px;">Luego te pedirá tus credenciales de <strong>CritiData</strong> (el email y contraseña con los que entrás a la app del celular).</p>
-                    <div class="callout-info">
-                        Las credenciales se guardan de forma segura en <strong>Windows Credential Manager</strong> — no en ningún archivo de texto. Solo tenés que ingresarlas una vez.
+
+                    <div class="callout-ok" style="margin-top:14px;">
+                        <strong>Listo.</strong> Iniciá sesión con el email y contraseña de tu cuenta CritiData.
+                        Si no tenés cuenta todavía, registrate desde la app del celular.
                     </div>
                 </div>
             </div>
 
-            <div class="step">
-                <div class="step-num">5</div>
-                <div class="step-body">
-                    <h3>Ejecutá la importación</h3>
-                    <p>Hacé click en el botón <strong>Ejecutar</strong>. La app se conecta a bionefro, descarga los resultados del día y los envía al servidor. Al terminar ves el resumen.</p>
-                    <div class="mockup">
-                        <div class="mockup-bar">CritiData  ·  Importador</div>
-                        <div class="mockup-body">
-                            <div class="mockup-status">Completado</div>
-                            <div class="mockup-btns">
-                                <button class="mockup-btn-primary">Ejecutar</button>
-                                <button class="mockup-btn-secondary">Configurar credenciales</button>
-                            </div>
-                            <div class="mockup-log">
-                                ────────────────────────────────────────────────<br>
-                                Conectando a bionefro…<br>
-                                Login OK.<br>
-                                Buscando protocolos del 25/05/2026 al 26/05/2026…<br>
-                                Pedidos en vista inicial: 8<br>
-                                &nbsp;&nbsp;[1/8] LAB280671 &nbsp;(42,310 bytes)<br>
-                                &nbsp;&nbsp;[2/8] LAB280490 &nbsp;(38,920 bytes)<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;…<br>
-                                8 PDF(s) descargados. Enviando al servidor…<br>
-                                <span class="ok">✓  Guardados: 8 de 8  ·  Pacientes nuevos: 0</span>
-                            </div>
-                        </div>
-                    </div>
+            <hr class="divider">
+
+            <div class="faq-section">
+                <h2>Preguntas frecuentes</h2>
+
+                <div class="faq-item">
+                    <h4>¿Tengo que desinstalar la versión anterior?</h4>
+                    <p>No. El instalador detecta versiones anteriores y las reemplaza automáticamente.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Windows sigue mostrando el aviso SmartScreen</h4>
+                    <p>Es normal en cada nueva versión. Siempre hacé click en
+                    <strong>"Más información"</strong> → <strong>"Ejecutar de todas formas"</strong>.
+                    El aviso desaparece una vez que la app tenga historial de ejecución en tu equipo.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>¿Cómo me registro?</h4>
+                    <p>El registro se hace desde la <strong>app del celular</strong> (Android).
+                    La app de escritorio es solo para iniciar sesión con una cuenta ya existente.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Necesito ayuda</h4>
+                    <p>Escribinos a <a href="mailto:info@critidata.com" style="color:#e07b2a;">info@critidata.com</a>
+                    y te respondemos a la brevedad.</p>
                 </div>
             </div>
 
         </div><!-- /tab-windows -->
 
-        <!-- ════════════════════════════════ MAC ════════════════════════════════ -->
+        <!-- ══════════════════ macOS ══════════════════ -->
         <div id="tab-mac" class="tab-panel">
+
+            <div class="download-banner">
+                <div class="download-info">
+                    <div class="download-icon">📦</div>
+                    <div>
+                        <div class="download-title">CritiData Nefrología · macOS</div>
+                        <div class="download-meta">Imagen de disco .dmg · Última versión</div>
+                    </div>
+                </div>
+                <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia.dmg"
+                   class="download-btn">⬇&nbsp; Descargar</a>
+            </div>
 
             <div class="step">
                 <div class="step-num">1</div>
                 <div class="step-body">
-                    <h3>Verificá Python</h3>
-                    <p>Abrí la aplicación <strong>Terminal</strong> (la encontrás en Aplicaciones → Utilidades) y escribí:</p>
-                    <p><code>python3 --version</code></p>
-                    <p>Si aparece <code>Python 3.x.x</code>, ya lo tenés instalado. Si dice <em>"command not found"</em>, entrá a <strong>python.org/downloads</strong> y descargá la versión para macOS.</p>
+                    <h3>Descargá la aplicación</h3>
+                    <p>Hacé click en <strong>⬇ Descargar</strong>. Se descarga el archivo
+                    <strong>CritiData_Nefrologia.dmg</strong>. Abrilo con doble click.</p>
                 </div>
             </div>
 
             <div class="step">
                 <div class="step-num">2</div>
                 <div class="step-body">
-                    <h3>Descargá el Importador</h3>
-                    <p>Hacé click en el botón <strong>⬇ Descargar</strong> de arriba. Una vez descargado, descomprimí el archivo <code>critidata_app.zip</code> haciendo doble click — se crea la carpeta <code>critidata_app</code>.</p>
+                    <h3>Instalá arrastrando a Aplicaciones</h3>
+                    <p>Se abre una ventana con el ícono de la app y la carpeta Aplicaciones.
+                    Arrastrá el ícono de CritiData hacia la carpeta <strong>Aplicaciones</strong>.</p>
+
+                    <div class="mockup-mac" style="margin-top:14px;">
+                        <div class="mac-titlebar">
+                            <div class="mac-dot" style="background:#ff5f57;"></div>
+                            <div class="mac-dot" style="background:#febc2e;"></div>
+                            <div class="mac-dot" style="background:#28c840;"></div>
+                        </div>
+                        <div class="mac-body">
+                            <p style="font-size:2rem;">📱 &nbsp;→&nbsp; 📂</p>
+                            <p>Arrastrá CritiData hacia Aplicaciones</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="step">
                 <div class="step-num">3</div>
                 <div class="step-body">
-                    <h3>Instalá la aplicación (una sola vez)</h3>
-                    <p>En la <strong>Terminal</strong>, navegá hasta la carpeta:</p>
-                    <p><code>cd ~/Desktop/critidata_app</code></p>
-                    <p>Luego ejecutá el instalador:</p>
-                    <p><code>bash instalar.sh</code></p>
-                    <div class="callout-info">
-                        La instalación descarga el navegador Chromium (~150 MB). Puede tardar unos minutos. Al finalizar verás <em>"Instalacion completada"</em>.
+                    <h3>Permitir la apertura (Gatekeeper)</h3>
+                    <p>La primera vez que abras la app, macOS puede mostrar un aviso de seguridad.
+                    Abrí <strong>Preferencias del Sistema → Privacidad y Seguridad</strong>
+                    y hacé click en <strong>"Abrir de todas formas"</strong>.</p>
+                    <div class="callout">
+                        <strong>Alternativa rápida:</strong> hacé click derecho sobre el ícono
+                        de la app → <strong>Abrir</strong> → confirmá en el diálogo que aparece.
                     </div>
                 </div>
             </div>
@@ -558,99 +565,31 @@
             <div class="step">
                 <div class="step-num">4</div>
                 <div class="step-body">
-                    <h3>Abrí la aplicación</h3>
-                    <p>En la misma Terminal, ejecutá:</p>
-                    <p><code>bash ejecutar.sh</code></p>
-                    <p>Se abre la ventana de CritiData Importador. La primera vez te va a pedir dos juegos de credenciales:</p>
-                    <div class="mockup-dialog">
-                        <div class="mockup-dialog-body">
-                            <div class="mockup-dialog-title">Credenciales de bionefro</div>
-                            <div class="mockup-field">
-                                <label>Usuario (Nro. de colega)</label>
-                                <input type="text" value="12345" readonly>
-                            </div>
-                            <div class="mockup-field">
-                                <label>Contraseña</label>
-                                <input type="password" value="••••••••" readonly>
-                            </div>
-                            <button class="mockup-save-btn">Guardar</button>
-                        </div>
-                    </div>
-                    <p style="margin-top:10px;">Luego te pedirá tus credenciales de <strong>CritiData</strong> (el email y contraseña con los que entrás a la app del celular).</p>
-                    <div class="callout-info">
-                        Las credenciales se guardan de forma segura en <strong>macOS Keychain</strong> — no en ningún archivo de texto. Solo tenés que ingresarlas una vez.
+                    <h3>Iniciá sesión</h3>
+                    <p>Ingresá con el email y contraseña de tu cuenta CritiData.
+                    Si no tenés cuenta, registrate desde la app del celular (Android).</p>
+                    <div class="callout-ok">
+                        <strong>Listo.</strong> La próxima vez abrís la app directo desde el Launchpad o el Dock.
                     </div>
                 </div>
             </div>
 
-            <div class="step">
-                <div class="step-num">5</div>
-                <div class="step-body">
-                    <h3>Ejecutá la importación</h3>
-                    <p>Hacé click en el botón <strong>Ejecutar</strong>. La app se conecta a bionefro, descarga los resultados del día y los envía al servidor. Al terminar ves el resumen.</p>
-                    <div class="mockup">
-                        <div class="mockup-bar">CritiData  ·  Importador</div>
-                        <div class="mockup-body">
-                            <div class="mockup-status">Completado</div>
-                            <div class="mockup-btns">
-                                <button class="mockup-btn-primary">Ejecutar</button>
-                                <button class="mockup-btn-secondary">Configurar credenciales</button>
-                            </div>
-                            <div class="mockup-log">
-                                ────────────────────────────────────────────────<br>
-                                Conectando a bionefro…<br>
-                                Login OK.<br>
-                                Buscando protocolos del 25/05/2026 al 26/05/2026…<br>
-                                Pedidos en vista inicial: 8<br>
-                                &nbsp;&nbsp;[1/8] LAB280671 &nbsp;(42,310 bytes)<br>
-                                &nbsp;&nbsp;[2/8] LAB280490 &nbsp;(38,920 bytes)<br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;…<br>
-                                8 PDF(s) descargados. Enviando al servidor…<br>
-                                <span class="ok">✓  Guardados: 8 de 8  ·  Pacientes nuevos: 0</span>
-                            </div>
-                        </div>
-                    </div>
+            <hr class="divider">
+
+            <div class="faq-section">
+                <h2>Preguntas frecuentes</h2>
+                <div class="faq-item">
+                    <h4>¿Cómo me registro?</h4>
+                    <p>El registro se hace desde la <strong>app del celular</strong> (Android).
+                    La app de escritorio es solo para iniciar sesión.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Necesito ayuda</h4>
+                    <p>Escribinos a <a href="mailto:info@critidata.com" style="color:#e07b2a;">info@critidata.com</a>.</p>
                 </div>
             </div>
 
         </div><!-- /tab-mac -->
-
-        <hr class="divider">
-
-        <!-- ════════════════════════════════ FAQ ════════════════════════════════ -->
-        <div class="faq-section">
-            <h2>Preguntas frecuentes</h2>
-
-            <div class="faq-item">
-                <h4>¿Con qué frecuencia tengo que ejecutarlo?</h4>
-                <p>Una vez al día es suficiente, idealmente a la mañana para tener los resultados de la jornada anterior disponibles en la app.</p>
-            </div>
-
-            <div class="faq-item">
-                <h4>¿Qué pasa si cambio mi contraseña de bionefro?</h4>
-                <p>La próxima vez que ejecutes la app te va a avisar que las credenciales son incorrectas y te va a pedir las nuevas automáticamente. También podés actualizarlas desde el botón <em>"Configurar credenciales"</em>.</p>
-            </div>
-
-            <div class="faq-item">
-                <h4>Windows me muestra una advertencia de seguridad al abrir el .bat</h4>
-                <p>Es normal. Hacé click en <strong>"Más información"</strong> y luego en <strong>"Ejecutar de todas formas"</strong>. La advertencia aparece porque el archivo fue descargado de internet.</p>
-            </div>
-
-            <div class="faq-item">
-                <h4>Mac me dice que no puede abrir el archivo porque es de un desarrollador no identificado</h4>
-                <p>Abrí <strong>Preferencias del Sistema → Seguridad y Privacidad</strong> y hacé click en <em>"Abrir de todas formas"</em>. Alternativamente, usá la Terminal con el comando <code>bash instalar.sh</code>.</p>
-            </div>
-
-            <div class="faq-item">
-                <h4>¿Tengo que dejar la computadora encendida mientras corre?</h4>
-                <p>Sí, el importador necesita que la PC esté encendida y con conexión a internet. El proceso completo tarda entre 2 y 10 minutos según la cantidad de pacientes.</p>
-            </div>
-
-            <div class="faq-item">
-                <h4>Necesito ayuda o algo no funciona</h4>
-                <p>Escribinos a <a href="mailto:info@critidata.com">info@critidata.com</a> y te respondemos a la brevedad.</p>
-            </div>
-        </div>
 
     </div><!-- /card -->
 
