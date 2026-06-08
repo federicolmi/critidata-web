@@ -345,10 +345,61 @@
         .wz-success p { font-size:.92rem; color:#555; line-height:1.6; margin-bottom:20px; }
         .wz-restart { background:none; border:none; color:#aaa; font-size:.88rem; font-family:inherit; cursor:pointer; text-decoration:underline; }
 
+        /* ── Hamburguesa (solo mobile) ── */
+        .hamburger {
+            display: none;
+            position: fixed;
+            top: 14px;
+            right: 18px;
+            z-index: 200;
+            background: rgba(255,255,255,0.12);
+            border: 1.5px solid rgba(255,255,255,0.25);
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            backdrop-filter: blur(4px);
+        }
+        .hamburger span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: rgba(255,255,255,0.85);
+            border-radius: 2px;
+            transition: transform 0.25s, opacity 0.2s;
+        }
+        .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 150;
+            background: rgba(5,15,35,0.92);
+            backdrop-filter: blur(8px);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 28px;
+        }
+        .mobile-menu.open { display: flex; }
+        .mobile-menu .nav-btn {
+            font-size: 20px;
+            color: rgba(255,255,255,0.85);
+            letter-spacing: 0.5px;
+        }
+        .mobile-menu .nav-btn:hover { color: #fff; }
+
         /* ── Responsive ── */
         @media (max-width: 480px) {
-            .top-nav { padding: 10px 14px; gap: 4px; }
-            .nav-btn  { padding: 7px 13px; font-size: 12px; }
+            .top-nav { display: none; }
+            .hamburger { display: flex; }
             .tab-panel-inner { padding: 26px 22px 30px; }
         }
         .password-wrap { position: relative; }
@@ -460,12 +511,25 @@
 </head>
 <body>
 
+    <!-- Hamburguesa (mobile) -->
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menú">
+        <span></span><span></span><span></span>
+    </button>
+
+    <!-- Menú mobile overlay -->
+    <div class="mobile-menu" id="mobile-menu">
+        <button class="nav-btn" onclick="switchTabMobile('login')">Iniciar sesión</button>
+        <button class="nav-btn" onclick="switchTabMobile('register')">Registrarse</button>
+        <button class="nav-btn" onclick="switchTabMobile('contact')">Contáctenos</button>
+        <button class="nav-btn" onclick="switchTabMobile('download')">⬇ Descargar App</button>
+    </div>
+
     <!-- Navegación superior derecha -->
     <nav class="top-nav">
-        <button class="nav-btn" id="btn-acceso"
-                onclick="switchTab('acceso', this)">Acceder</button>
         <button class="nav-btn" id="btn-login"
-                onclick="switchTab('login', this)">Administrador</button>
+                onclick="switchTab('login', this)">Iniciar sesión</button>
+        <button class="nav-btn" id="btn-register"
+                onclick="switchTab('register', this)">Registrarse</button>
         <button class="nav-btn" id="btn-contact"
                 onclick="switchTab('contact', this)">Contáctenos</button>
         <div class="nav-download-wrap">
@@ -639,7 +703,7 @@
                 </form>
                 <p class="footer-note">
                     ¿Primera vez?
-                    <a onclick="switchTab('acceso', document.getElementById('btn-acceso'))">Acceder con bionefro</a>
+                    <a onclick="switchTab('register', document.getElementById('btn-register'))">Registrarse</a>
                 </p>
             </div>
         </div>
@@ -918,11 +982,6 @@
             card.classList.remove('visible');
             document.getElementById('register-form-content').style.display = ''
             document.getElementById('register-success').style.display = 'none'
-            document.getElementById('acceso-step-specialty').style.display = 'block'
-            document.getElementById('acceso-step-lab').style.display     = 'none'
-            document.getElementById('acceso-step1').style.display        = 'none'
-            document.getElementById('acceso-step2').style.display        = 'none'
-            document.getElementById('acceso-step3').style.display        = 'none'
         }
 
         const accesoSteps = ['specialty', 'register', 'lab', '1', '2', '3']
@@ -1186,10 +1245,24 @@
         }
 
         document.addEventListener('click', function(e) {
-            if (!card.contains(e.target) && !e.target.closest('.nav-btn')) {
+            if (!card.contains(e.target) && !e.target.closest('.nav-btn') && !e.target.closest('.hamburger') && !e.target.closest('.mobile-menu')) {
                 closeAll();
             }
         });
+
+        function toggleMenu() {
+            const hb = document.getElementById('hamburger')
+            const mm = document.getElementById('mobile-menu')
+            hb.classList.toggle('open')
+            mm.classList.toggle('open')
+        }
+
+        function switchTabMobile(tab) {
+            document.getElementById('hamburger').classList.remove('open')
+            document.getElementById('mobile-menu').classList.remove('open')
+            const btn = document.getElementById('btn-' + tab)
+            switchTab(tab, btn || { classList: { contains: () => false, add: () => {}, remove: () => {} } })
+        }
 
         async function enviarReset() {
             const email = document.getElementById('forgot-email').value
