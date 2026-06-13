@@ -814,43 +814,35 @@
         <!-- Panel: Descargar App -->
         <div class="tab-panel" id="panel-download">
             <div class="tab-panel-inner">
-                <!-- Desktop: especialidad → sistema operativo → descarga -->
-                <div class="platform-desktop">
-                    <p class="form-title" style="margin-bottom:4px;text-align:center;">Descargar CritiData</p>
-                    <p style="font-size:.8rem;color:#94a3b8;text-align:center;margin-bottom:16px;">Esta app solo sincroniza actualizaciones con la app móvil · No incluye registro</p>
-                    <div id="dl-step-specialty">
-                        <p class="form-subtitle" style="margin-bottom:20px;text-align:center;">Seleccioná tu especialidad</p>
-                        <div class="dl-cards">
-                            <div class="dl-card" onclick="dlElegirEspecialidad()">
-                                <span class="dl-name">Nefrología</span>
-                            </div>
-                            <div class="dl-card dl-disabled">
-                                <span class="dl-name">Otras</span>
-                                <span class="dl-platform-tag">Próximamente</span>
-                            </div>
-                        </div>
+                <p class="form-title" style="margin-bottom:4px;text-align:center;">CritiData en tu dispositivo</p>
+                <p style="font-size:.8rem;color:#94a3b8;text-align:center;margin-bottom:20px;">Elegí cómo acceder</p>
+
+                <!-- Web App -->
+                <a href="/app/" target="_blank" style="text-decoration:none;display:flex;align-items:center;gap:14px;background:#0D1B3E;border-radius:12px;padding:14px 18px;margin-bottom:10px;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+                    <span style="font-size:1.8rem;">🌐</span>
+                    <div>
+                        <div style="font-size:.72rem;color:rgba(255,255,255,.55);letter-spacing:.5px;margin-bottom:2px;">ABRIR EN EL NAVEGADOR</div>
+                        <div style="font-size:1rem;font-weight:700;color:#fff;">Web App</div>
                     </div>
-                    <div id="dl-step-os" style="display:none;">
-                        <p class="form-subtitle" style="margin-bottom:16px;text-align:center;">Seleccioná tu sistema operativo</p>
-                        <div class="dl-cards">
-                            <a href="instalacion.html?tab=windows" class="dl-card" style="text-decoration:none;">
-                                <span class="dl-name">Windows</span>
-                                <span class="dl-platform-tag">Descargar e instalar →</span>
-                            </a>
-                            <a href="instalacion.html?tab=mac" class="dl-card" style="text-decoration:none;">
-                                <span class="dl-name">macOS</span>
-                                <span class="dl-platform-tag">Descargar e instalar →</span>
-                            </a>
-                        </div>
-                        <button class="dl-back" onclick="dlVolver()" style="margin-top:16px;">← Volver</button>
+                    <span style="margin-left:auto;color:rgba(255,255,255,.4);font-size:.9rem;">→</span>
+                </a>
+
+                <!-- Android -->
+                <div style="display:flex;align-items:center;gap:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 18px;margin-bottom:10px;opacity:.45;cursor:default;">
+                    <span style="font-size:1.8rem;">🤖</span>
+                    <div>
+                        <div style="font-size:.72rem;color:#94a3b8;letter-spacing:.5px;margin-bottom:2px;">PRÓXIMAMENTE EN</div>
+                        <div style="font-size:1rem;font-weight:700;color:#0f172a;">Android · Play Store</div>
                     </div>
                 </div>
-                <!-- Mobile: registrarse para obtener la app -->
-                <div class="platform-mobile dl-mobile-msg" style="text-align:center;">
-                    <div class="dl-mobile-icon">📱</div>
-                    <p class="form-title" style="margin-bottom:6px;">Ya estás en CritiData</p>
-                    <p class="form-subtitle" style="margin-bottom:24px;">Registrate para acceder y descargar la app en tu dispositivo.</p>
-                    <button class="btn-primary" onclick="switchTab('acceso', document.getElementById('btn-acceso'))">Registrarse</button>
+
+                <!-- iOS -->
+                <div style="display:flex;align-items:center;gap:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 18px;opacity:.45;cursor:default;">
+                    <span style="font-size:1.8rem;"></span>
+                    <div>
+                        <div style="font-size:.72rem;color:#94a3b8;letter-spacing:.5px;margin-bottom:2px;">PRÓXIMAMENTE EN</div>
+                        <div style="font-size:1rem;font-weight:700;color:#0f172a;">iPhone · App Store</div>
+                    </div>
                 </div>
             </div>
         </div>

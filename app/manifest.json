@@ -1,11 +1,11 @@
 {
-    "name": "teslo_shop",
-    "short_name": "teslo_shop",
+    "name": "CritiData Nefrología",
+    "short_name": "CritiData",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#0D1B3E",
+    "theme_color": "#2D5BA8",
+    "description": "Gestión de laboratorio clínico para nefrología",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
