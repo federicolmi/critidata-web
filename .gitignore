@@ -5,6 +5,9 @@ CritiData_Nefrologia.exe
 # Variables de entorno — nunca a git
 app/assets/.env
 
+# CanvasKit — Flutter lo carga desde el CDN de Google, no hace falta en el repo
+app/canvaskit/
+
 # Sistema
 .DS_Store
 Thumbs.db
