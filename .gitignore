@@ -2,8 +2,8 @@
 CritiData_Nefrologia.exe
 *.exe
 
-# Variables de entorno — nunca a git
-app/assets/.env
+# Variables de entorno sensibles — excluir si contienen secrets
+# app/assets/.env  ← la URL del API es pública, se incluye en el repo
 
 # CanvasKit — Flutter lo carga desde el CDN de Google, no hace falta en el repo
 app/canvaskit/
