@@ -518,8 +518,8 @@
 
     <!-- Menú mobile overlay -->
     <div class="mobile-menu" id="mobile-menu">
-        <button class="nav-btn" onclick="switchTabMobile('login')">Iniciar sesión</button>
-        <button class="nav-btn" onclick="switchTabMobile('register')">Registrarse</button>
+        <button class="nav-btn" onclick="window.open('/app/','_blank');toggleMenu()">Iniciar sesión</button>
+        <button class="nav-btn" onclick="window.open('/app/#/register','_blank');toggleMenu()">Registrarse</button>
         <button class="nav-btn" onclick="switchTabMobile('contact')">Contáctenos</button>
         <button class="nav-btn" onclick="switchTabMobile('download')">⬇ Descargar App</button>
     </div>
@@ -527,9 +527,9 @@
     <!-- Navegación superior derecha -->
     <nav class="top-nav">
         <button class="nav-btn" id="btn-login"
-                onclick="switchTab('login', this)">Iniciar sesión</button>
+                onclick="window.open('/app/','_blank')">Iniciar sesión</button>
         <button class="nav-btn" id="btn-register"
-                onclick="switchTab('register', this)">Registrarse</button>
+                onclick="window.open('/app/#/register','_blank')">Registrarse</button>
         <button class="nav-btn" id="btn-contact"
                 onclick="switchTab('contact', this)">Contáctenos</button>
         <div class="nav-download-wrap">

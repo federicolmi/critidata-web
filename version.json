@@ -1,0 +1,9 @@
+{
+  "version": "1.4.0",
+  "build": 1,
+  "exeUrl": "https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia_Setup.exe",
+  "changelog": [
+    "Versión web disponible — entrá desde el navegador sin instalar nada.",
+    "Mejoras de estabilidad en la sincronización de resultados."
+  ],
+  "minSupportedVersion

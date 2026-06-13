@@ -1,0 +1,10 @@
+# Binarios pesados — hostear vía GitHub Releases u otro CDN
+CritiData_Nefrologia.exe
+*.exe
+
+# Variables de entorno — nunca a git
+app/assets/.env
+
+# Sistema
+.DS_Store
+Thumbs.db
