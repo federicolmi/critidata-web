@@ -814,36 +814,66 @@
         <!-- Panel: Descargar App -->
         <div class="tab-panel" id="panel-download">
             <div class="tab-panel-inner">
-                <p class="form-title" style="margin-bottom:4px;text-align:center;">CritiData en tu dispositivo</p>
-                <p style="font-size:.8rem;color:#94a3b8;text-align:center;margin-bottom:20px;">Elegí cómo acceder</p>
 
-                <!-- Web App -->
-                <a href="/app/" target="_blank" style="text-decoration:none;display:flex;align-items:center;gap:14px;background:#0D1B3E;border-radius:12px;padding:14px 18px;margin-bottom:10px;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
-                    <span style="font-size:1.8rem;">🌐</span>
-                    <div>
-                        <div style="font-size:.72rem;color:rgba(255,255,255,.55);letter-spacing:.5px;margin-bottom:2px;">ABRIR EN EL NAVEGADOR</div>
-                        <div style="font-size:1rem;font-weight:700;color:#fff;">Web App</div>
-                    </div>
-                    <span style="margin-left:auto;color:rgba(255,255,255,.4);font-size:.9rem;">→</span>
-                </a>
-
-                <!-- Android -->
-                <div style="display:flex;align-items:center;gap:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 18px;margin-bottom:10px;opacity:.45;cursor:default;">
-                    <span style="font-size:1.8rem;">🤖</span>
-                    <div>
-                        <div style="font-size:.72rem;color:#94a3b8;letter-spacing:.5px;margin-bottom:2px;">PRÓXIMAMENTE EN</div>
-                        <div style="font-size:1rem;font-weight:700;color:#0f172a;">Android · Play Store</div>
-                    </div>
-                </div>
-
-                <!-- iOS -->
-                <div style="display:flex;align-items:center;gap:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 18px;opacity:.45;cursor:default;">
-                    <span style="font-size:1.8rem;"></span>
-                    <div>
-                        <div style="font-size:.72rem;color:#94a3b8;letter-spacing:.5px;margin-bottom:2px;">PRÓXIMAMENTE EN</div>
-                        <div style="font-size:1rem;font-weight:700;color:#0f172a;">iPhone · App Store</div>
+                <!-- Paso 1: Selector de app -->
+                <div id="dl-app-selector">
+                    <p class="form-title" style="text-align:center;margin-bottom:4px;">Seleccioná la app</p>
+                    <p style="font-size:.8rem;color:#94a3b8;text-align:center;margin-bottom:20px;">¿Cuál es tu especialidad?</p>
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                        <div class="dl-card" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;" onclick="dlSeleccionarApp('CritiData Nefrología')">
+                            <span style="font-size:1.5rem;margin-right:14px;">🩺</span>
+                            <div>
+                                <div style="font-size:1rem;font-weight:700;color:#0f172a;">CritiData Nefrología</div>
+                                <div style="font-size:.78rem;color:#94a3b8;margin-top:2px;">Laboratorio · Kt/V · Planilla · Diálisis</div>
+                            </div>
+                            <span style="margin-left:auto;color:#94a3b8;font-size:.9rem;">→</span>
+                        </div>
+                        <div class="dl-card dl-disabled" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;">
+                            <span style="font-size:1.5rem;margin-right:14px;">➕</span>
+                            <div>
+                                <div style="font-size:1rem;font-weight:700;color:#0f172a;">Otras</div>
+                                <div style="font-size:.78rem;color:#94a3b8;margin-top:2px;">Próximamente</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Paso 2: Opciones de plataforma -->
+                <div id="dl-platform-options" style="display:none;">
+                    <p class="form-title" id="dl-selected-app-name" style="text-align:center;margin-bottom:4px;">CritiData Nefrología</p>
+                    <p style="font-size:.8rem;color:#94a3b8;text-align:center;margin-bottom:20px;">Elegí cómo acceder</p>
+
+                    <!-- Web App -->
+                    <a href="/app/" target="_blank" style="text-decoration:none;display:flex;align-items:center;gap:14px;background:#0D1B3E;border-radius:12px;padding:14px 18px;margin-bottom:10px;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+                        <span style="font-size:1.8rem;">🌐</span>
+                        <div>
+                            <div style="font-size:.72rem;color:rgba(255,255,255,.55);letter-spacing:.5px;margin-bottom:2px;">ABRIR EN EL NAVEGADOR</div>
+                            <div style="font-size:1rem;font-weight:700;color:#fff;">Web App</div>
+                        </div>
+                        <span style="margin-left:auto;color:rgba(255,255,255,.4);font-size:.9rem;">→</span>
+                    </a>
+
+                    <!-- Android -->
+                    <div style="display:flex;align-items:center;gap:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 18px;margin-bottom:10px;opacity:.45;cursor:default;">
+                        <span style="font-size:1.8rem;">🤖</span>
+                        <div>
+                            <div style="font-size:.72rem;color:#94a3b8;letter-spacing:.5px;margin-bottom:2px;">PRÓXIMAMENTE EN</div>
+                            <div style="font-size:1rem;font-weight:700;color:#0f172a;">Android · Play Store</div>
+                        </div>
+                    </div>
+
+                    <!-- iOS -->
+                    <div style="display:flex;align-items:center;gap:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 18px;opacity:.45;cursor:default;">
+                        <span style="font-size:1.8rem;"></span>
+                        <div>
+                            <div style="font-size:.72rem;color:#94a3b8;letter-spacing:.5px;margin-bottom:2px;">PRÓXIMAMENTE EN</div>
+                            <div style="font-size:1rem;font-weight:700;color:#0f172a;">iPhone · App Store</div>
+                        </div>
+                    </div>
+
+                    <button class="dl-back" onclick="dlVolver()" style="margin-top:14px;display:block;">← Volver</button>
+                </div>
+
             </div>
         </div>
 
@@ -993,13 +1023,14 @@
             accesoIrA('register')
         }
 
-        function dlElegirEspecialidad() {
-            document.getElementById('dl-step-specialty').style.display = 'none'
-            document.getElementById('dl-step-os').style.display = 'block'
+        function dlSeleccionarApp(nombre) {
+            document.getElementById('dl-selected-app-name').textContent = nombre
+            document.getElementById('dl-app-selector').style.display = 'none'
+            document.getElementById('dl-platform-options').style.display = 'block'
         }
         function dlVolver() {
-            document.getElementById('dl-step-os').style.display = 'none'
-            document.getElementById('dl-step-specialty').style.display = 'block'
+            document.getElementById('dl-platform-options').style.display = 'none'
+            document.getElementById('dl-app-selector').style.display = 'block'
         }
 
         function accesoSiguienteRegistro() {
@@ -1152,8 +1183,8 @@
                 document.getElementById('panel-' + tab).classList.add('active');
                 card.classList.add('visible');
                 if (tab === 'download') {
-                    document.getElementById('dl-step-specialty').style.display = 'block'
-                    document.getElementById('dl-step-os').style.display = 'none'
+                    document.getElementById('dl-app-selector').style.display = 'block'
+                    document.getElementById('dl-platform-options').style.display = 'none'
                 }
             }
         }
