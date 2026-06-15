@@ -519,7 +519,7 @@
     <!-- Menú mobile overlay -->
     <div class="mobile-menu" id="mobile-menu">
         <button class="nav-btn" onclick="switchTabMobile('login')">Iniciar sesión</button>
-        <button class="nav-btn" onclick="window.open('/app/#/register','_blank');toggleMenu()">Registrarse</button>
+        <button class="nav-btn" onclick="switchTabMobile('register')">Registrarse</button>
         <button class="nav-btn" onclick="switchTabMobile('contact')">Contáctenos</button>
         <button class="nav-btn" onclick="switchTabMobile('download')">⬇ Descargar App</button>
     </div>
@@ -529,7 +529,7 @@
         <button class="nav-btn" id="btn-login"
                 onclick="switchTab('login', this)">Iniciar sesión</button>
         <button class="nav-btn" id="btn-register"
-                onclick="window.open('/app/#/register','_blank')">Registrarse</button>
+                onclick="switchTab('register', this)">Registrarse</button>
         <button class="nav-btn" id="btn-contact"
                 onclick="switchTab('contact', this)">Contáctenos</button>
         <div class="nav-download-wrap">
@@ -716,7 +716,40 @@
         <!-- Panel: Registrarse -->
         <div class="tab-panel" id="panel-register">
             <div class="tab-panel-inner">
-                <div id="register-form-content">
+
+                <!-- Paso 1: Selector de app -->
+                <div id="reg-app-selector">
+                    <p class="form-title" style="text-align:center;margin-bottom:4px;">Registrarse</p>
+                    <p style="font-size:.8rem;color:#94a3b8;text-align:center;margin-bottom:20px;">Seleccioná la app</p>
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                        <div class="dl-card" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;" onclick="regSeleccionarApp()">
+                            <span style="font-size:1.5rem;margin-right:14px;">🌐</span>
+                            <div>
+                                <div style="font-size:1rem;font-weight:700;color:#0f172a;">CritiData</div>
+                                <div style="font-size:.78rem;color:#94a3b8;margin-top:2px;">critidata.com · Plataforma web</div>
+                            </div>
+                            <span style="margin-left:auto;color:#94a3b8;font-size:.9rem;">→</span>
+                        </div>
+                        <a href="/app/#/register" target="_blank" class="dl-card" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;text-decoration:none;">
+                            <span style="font-size:1.5rem;margin-right:14px;">🩺</span>
+                            <div>
+                                <div style="font-size:1rem;font-weight:700;color:#0f172a;">Nefrología</div>
+                                <div style="font-size:.78rem;color:#94a3b8;margin-top:2px;">App · Laboratorio · Kt/V · Diálisis</div>
+                            </div>
+                            <span style="margin-left:auto;color:#94a3b8;font-size:.9rem;">→</span>
+                        </a>
+                        <div class="dl-card dl-disabled" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;">
+                            <span style="font-size:1.5rem;margin-right:14px;">➕</span>
+                            <div>
+                                <div style="font-size:1rem;font-weight:700;color:#0f172a;">Otras</div>
+                                <div style="font-size:.78rem;color:#94a3b8;margin-top:2px;">Próximamente</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Paso 2: Formulario CritiData -->
+                <div id="register-form-content" style="display:none;">
                 <p class="form-title">Crear una cuenta</p>
                 <p class="form-subtitle">Completá tus datos para comenzar</p>
                 <form onsubmit="return false;">
@@ -750,10 +783,7 @@
                     </div>
                     <button type="submit" class="btn-primary">Crear cuenta</button>
                 </form>
-                <p class="footer-note">
-                    ¿Ya tenés cuenta?
-                    <a onclick="switchTab('login', document.getElementById('btn-login'))">Iniciá sesión</a>
-                </p>
+                <button class="dl-back" onclick="regVolver()" style="margin-top:4px;display:block;">← Volver</button>
                 </div><!-- /register-form-content -->
 
                 <div id="register-success" style="display:none;">
@@ -992,8 +1022,18 @@
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
             card.classList.remove('visible');
-            document.getElementById('register-form-content').style.display = ''
+            document.getElementById('reg-app-selector').style.display = 'block'
+            document.getElementById('register-form-content').style.display = 'none'
             document.getElementById('register-success').style.display = 'none'
+        }
+
+        function regSeleccionarApp() {
+            document.getElementById('reg-app-selector').style.display = 'none'
+            document.getElementById('register-form-content').style.display = 'block'
+        }
+        function regVolver() {
+            document.getElementById('register-form-content').style.display = 'none'
+            document.getElementById('reg-app-selector').style.display = 'block'
         }
 
         const accesoSteps = ['specialty', 'register', 'lab', '1', '2', '3']
@@ -1175,6 +1215,11 @@
                 if (tab === 'download') {
                     document.getElementById('dl-app-selector').style.display = 'block'
                     document.getElementById('dl-platform-options').style.display = 'none'
+                }
+                if (tab === 'register') {
+                    document.getElementById('reg-app-selector').style.display = 'block'
+                    document.getElementById('register-form-content').style.display = 'none'
+                    document.getElementById('register-success').style.display = 'none'
                 }
             }
         }
