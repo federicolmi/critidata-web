@@ -518,7 +518,7 @@
 
     <!-- Menú mobile overlay -->
     <div class="mobile-menu" id="mobile-menu">
-        <button class="nav-btn" onclick="window.open('/app/','_blank');toggleMenu()">Iniciar sesión</button>
+        <button class="nav-btn" onclick="switchTabMobile('login')">Iniciar sesión</button>
         <button class="nav-btn" onclick="window.open('/app/#/register','_blank');toggleMenu()">Registrarse</button>
         <button class="nav-btn" onclick="switchTabMobile('contact')">Contáctenos</button>
         <button class="nav-btn" onclick="switchTabMobile('download')">⬇ Descargar App</button>
@@ -527,7 +527,7 @@
     <!-- Navegación superior derecha -->
     <nav class="top-nav">
         <button class="nav-btn" id="btn-login"
-                onclick="window.open('/app/','_blank')">Iniciar sesión</button>
+                onclick="switchTab('login', this)">Iniciar sesión</button>
         <button class="nav-btn" id="btn-register"
                 onclick="window.open('/app/#/register','_blank')">Registrarse</button>
         <button class="nav-btn" id="btn-contact"
@@ -684,24 +684,33 @@
         <!-- Panel: Iniciar sesión -->
         <div class="tab-panel" id="panel-login">
             <div class="tab-panel-inner">
-                <p class="form-title">Bienvenido de nuevo</p>
-                <p class="form-subtitle">Ingresá tus credenciales para continuar</p>
-                <form onsubmit="return false;">
-                    <div class="field">
-                        <label for="login-email">Correo electrónico</label>
-                        <input id="login-email" type="email" placeholder="ejemplo@correo.com" autocomplete="email">
-                    </div>
-                    <div class="field">
-                        <label for="login-password">Contraseña</label>
-                        <div class="password-wrap">
-                            <input id="login-password" type="password" placeholder="••••••••" autocomplete="current-password">
-                            <button type="button" class="toggle-pass" onclick="togglePass('login-password', this, event)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                <p class="form-title" style="text-align:center;margin-bottom:4px;">Iniciar sesión</p>
+                <p style="font-size:.8rem;color:#94a3b8;text-align:center;margin-bottom:20px;">Seleccioná la app</p>
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                    <div class="dl-card dl-disabled" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;">
+                        <span style="font-size:1.5rem;margin-right:14px;">🏥</span>
+                        <div>
+                            <div style="font-size:1rem;font-weight:700;color:#0f172a;">CritiData</div>
+                            <div style="font-size:.78rem;color:#94a3b8;margin-top:2px;">Próximamente</div>
                         </div>
                     </div>
-                    <a href="#" class="forgot" onclick="event.preventDefault(); event.stopPropagation(); document.getElementById('modal-forgot').classList.add('open')">¿Olvidaste tu contraseña?</a>
-                    <button type="submit" class="btn-primary">Iniciar sesión</button>
-                </form>
-                <p class="footer-note">
+                    <a href="/app/" target="_blank" class="dl-card" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;text-decoration:none;">
+                        <span style="font-size:1.5rem;margin-right:14px;">🩺</span>
+                        <div>
+                            <div style="font-size:1rem;font-weight:700;color:#0f172a;">Nefrología</div>
+                            <div style="font-size:.78rem;color:#94a3b8;margin-top:2px;">Laboratorio · Kt/V · Planilla · Diálisis</div>
+                        </div>
+                        <span style="margin-left:auto;color:#94a3b8;font-size:.9rem;">→</span>
+                    </a>
+                    <div class="dl-card dl-disabled" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;">
+                        <span style="font-size:1.5rem;margin-right:14px;">➕</span>
+                        <div>
+                            <div style="font-size:1rem;font-weight:700;color:#0f172a;">Otras</div>
+                            <div style="font-size:.78rem;color:#94a3b8;margin-top:2px;">Próximamente</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="footer-note" style="margin-top:18px;">
                     ¿Primera vez?
                     <a onclick="switchTab('register', document.getElementById('btn-register'))">Registrarse</a>
                 </p>
@@ -838,37 +847,73 @@
                     </div>
                 </div>
 
-                <!-- Paso 2: Opciones de plataforma -->
+                <!-- Paso 2: Opciones de plataforma (device-aware) -->
                 <div id="dl-platform-options" style="display:none;">
                     <p class="form-title" id="dl-selected-app-name" style="text-align:center;margin-bottom:4px;">CritiData Nefrología</p>
-                    <p style="font-size:.8rem;color:#94a3b8;text-align:center;margin-bottom:20px;">Elegí cómo acceder</p>
+                    <p style="font-size:.8rem;color:#94a3b8;text-align:center;margin-bottom:20px;">Disponible en</p>
 
-                    <!-- Web App -->
-                    <a href="/app/" target="_blank" style="text-decoration:none;display:flex;align-items:center;gap:14px;background:#0D1B3E;border-radius:12px;padding:14px 18px;margin-bottom:10px;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
-                        <span style="font-size:1.8rem;">🌐</span>
-                        <div>
-                            <div style="font-size:.72rem;color:rgba(255,255,255,.55);letter-spacing:.5px;margin-bottom:2px;">ABRIR EN EL NAVEGADOR</div>
-                            <div style="font-size:1rem;font-weight:700;color:#fff;">Web App</div>
-                        </div>
-                        <span style="margin-left:auto;color:rgba(255,255,255,.4);font-size:.9rem;">→</span>
-                    </a>
-
-                    <!-- Android -->
-                    <div style="display:flex;align-items:center;gap:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 18px;margin-bottom:10px;opacity:.45;cursor:default;">
-                        <span style="font-size:1.8rem;">🤖</span>
-                        <div>
-                            <div style="font-size:.72rem;color:#94a3b8;letter-spacing:.5px;margin-bottom:2px;">PRÓXIMAMENTE EN</div>
-                            <div style="font-size:1rem;font-weight:700;color:#0f172a;">Android · Play Store</div>
-                        </div>
+                    <!-- Desktop: Windows + macOS -->
+                    <div class="platform-desktop" style="display:flex;flex-direction:column;gap:10px;">
+                        <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia_Setup.exe"
+                           style="text-decoration:none;display:flex;align-items:center;gap:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 18px;transition:border-color .2s,background .2s;"
+                           onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'"
+                           onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'">
+                            <span style="font-size:1.8rem;">🪟</span>
+                            <div>
+                                <div style="font-size:.72rem;color:#94a3b8;letter-spacing:.5px;margin-bottom:2px;">INSTALADOR</div>
+                                <div style="font-size:1rem;font-weight:700;color:#0f172a;">Windows</div>
+                            </div>
+                            <span style="margin-left:auto;font-size:.82rem;font-weight:700;color:#1565c0;">⬇ Descargar</span>
+                        </a>
+                        <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia.dmg"
+                           style="text-decoration:none;display:flex;align-items:center;gap:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 18px;transition:border-color .2s,background .2s;"
+                           onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'"
+                           onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'">
+                            <span style="font-size:1.8rem;"></span>
+                            <div>
+                                <div style="font-size:.72rem;color:#94a3b8;letter-spacing:.5px;margin-bottom:2px;">INSTALADOR</div>
+                                <div style="font-size:1rem;font-weight:700;color:#0f172a;">macOS</div>
+                            </div>
+                            <span style="margin-left:auto;font-size:.82rem;font-weight:700;color:#1565c0;">⬇ Descargar</span>
+                        </a>
+                        <a href="/app/" target="_blank"
+                           style="text-decoration:none;display:flex;align-items:center;gap:14px;background:#0D1B3E;border-radius:12px;padding:14px 18px;transition:opacity .2s;"
+                           onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+                            <span style="font-size:1.8rem;">🌐</span>
+                            <div>
+                                <div style="font-size:.72rem;color:rgba(255,255,255,.55);letter-spacing:.5px;margin-bottom:2px;">SIN INSTALAR</div>
+                                <div style="font-size:1rem;font-weight:700;color:#fff;">Web App</div>
+                            </div>
+                            <span style="margin-left:auto;color:rgba(255,255,255,.4);font-size:.9rem;">→</span>
+                        </a>
                     </div>
 
-                    <!-- iOS -->
-                    <div style="display:flex;align-items:center;gap:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 18px;opacity:.45;cursor:default;">
-                        <span style="font-size:1.8rem;"></span>
-                        <div>
-                            <div style="font-size:.72rem;color:#94a3b8;letter-spacing:.5px;margin-bottom:2px;">PRÓXIMAMENTE EN</div>
-                            <div style="font-size:1rem;font-weight:700;color:#0f172a;">iPhone · App Store</div>
+                    <!-- Mobile: Play Store + App Store -->
+                    <div class="platform-mobile" style="display:flex;flex-direction:column;gap:10px;">
+                        <div style="display:flex;align-items:center;gap:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 18px;opacity:.45;cursor:default;">
+                            <span style="font-size:1.8rem;">🤖</span>
+                            <div>
+                                <div style="font-size:.72rem;color:#94a3b8;letter-spacing:.5px;margin-bottom:2px;">PRÓXIMAMENTE EN</div>
+                                <div style="font-size:1rem;font-weight:700;color:#0f172a;">Android · Play Store</div>
+                            </div>
                         </div>
+                        <div style="display:flex;align-items:center;gap:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 18px;opacity:.45;cursor:default;">
+                            <span style="font-size:1.8rem;"></span>
+                            <div>
+                                <div style="font-size:.72rem;color:#94a3b8;letter-spacing:.5px;margin-bottom:2px;">PRÓXIMAMENTE EN</div>
+                                <div style="font-size:1rem;font-weight:700;color:#0f172a;">iPhone · App Store</div>
+                            </div>
+                        </div>
+                        <a href="/app/" target="_blank"
+                           style="text-decoration:none;display:flex;align-items:center;gap:14px;background:#0D1B3E;border-radius:12px;padding:14px 18px;transition:opacity .2s;"
+                           onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+                            <span style="font-size:1.8rem;">🌐</span>
+                            <div>
+                                <div style="font-size:.72rem;color:rgba(255,255,255,.55);letter-spacing:.5px;margin-bottom:2px;">DISPONIBLE AHORA</div>
+                                <div style="font-size:1rem;font-weight:700;color:#fff;">Web App</div>
+                            </div>
+                            <span style="margin-left:auto;color:rgba(255,255,255,.4);font-size:.9rem;">→</span>
+                        </a>
                     </div>
 
                     <button class="dl-back" onclick="dlVolver()" style="margin-top:14px;display:block;">← Volver</button>
@@ -883,37 +928,6 @@
 
     <script>
         const API = "https://backend-login-api-production.up.railway.app"
-
-        // ── LOGIN ──
-        document.getElementById('panel-login').querySelector('form').addEventListener('submit', async function(e) {
-            e.preventDefault()
-            const email    = document.getElementById('login-email').value
-            const password = document.getElementById('login-password').value
-
-            const body = new URLSearchParams()
-            body.append('username', email)
-            body.append('password', password)
-
-            try {
-                const res  = await fetch(`${API}/auth/login`, {
-                    method: 'POST',
-                    body
-                })
-                const data = await res.json()
-                if (res.ok) {
-                    localStorage.setItem('token', data.token)
-                    localStorage.setItem('usuario', data.full_name)
-                    const role = data.roles[0]
-                    if (role === 'admin')       window.location.href = 'admin.html'
-                    else if (role === 'laboratorio') window.location.href = 'panel.html'
-                    else                        window.location.href = 'panel.html'
-                } else {
-                    alert(data.detail || 'Email o contraseña incorrectos')
-                }
-            } catch {
-                alert('No se pudo conectar con el servidor')
-            }
-        })
 
         // ── REGISTRO ──
         document.getElementById('panel-register').querySelector('form').addEventListener('submit', async function(e) {
