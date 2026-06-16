@@ -300,6 +300,9 @@
         const toggleCls = u.is_active ? 'btn-toggle-on' : 'btn-toggle-off'
         let html = `<button class="btn-sm ${toggleCls}" onclick="toggleUser(${u.id})">${toggleTxt}</button>`
         if (u.role !== 'admin') {
+            if (u.subscription_status === 'trial') {
+                html += `<button class="btn-sm" style="background:#fef9c3;color:#854d0e;" onclick="expireTrial(${u.id}, '${u.full_name}')">Vencer trial</button>`
+            }
             html += `<button class="btn-sm btn-del" onclick="deleteUser(${u.id}, '${u.full_name}')">Eliminar</button>`
         }
         return html
@@ -334,6 +337,19 @@
             toast(data.message || 'Usuario actualizado')
             await reload()
         } catch { toast('Error al actualizar') }
+    }
+
+    async function expireTrial(id, nombre) {
+        if (!confirm(`¿Forzar vencimiento del trial de ${nombre}? Se usa para probar el flujo de pago.`)) return
+        const token = localStorage.getItem('cd_token')
+        try {
+            const res = await fetch(`${API}/auth/users/${id}/expire-trial`, {
+                method: 'PATCH', headers: { 'Authorization': `Bearer ${token}` }
+            })
+            if (!res.ok) throw new Error()
+            toast('Trial vencido — el usuario verá la pantalla de pago al hacer login')
+            await reload()
+        } catch { toast('Error al vencer trial') }
     }
 
     async function deleteUser(id, nombre) {
