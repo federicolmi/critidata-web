@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CritiData · Admin</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #f0f4f8;
+            min-height: 100vh;
+        }
+        .topbar {
+            background: #0d1b3e;
+            color: #fff;
+            padding: 16px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .topbar-brand { font-size: 18px; font-weight: 300; letter-spacing: 1.5px; }
+        .topbar-user { font-size: 13px; color: rgba(255,255,255,0.6); }
+        .btn-logout {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.7);
+            padding: 6px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            margin-left: 16px;
+        }
+        .btn-logout:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        .container { max-width: 960px; margin: 40px auto; padding: 0 24px; }
+        .welcome {
+            background: #fff;
+            border-radius: 14px;
+            padding: 32px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        .welcome h1 { font-size: 24px; font-weight: 300; color: #0d1b3e; margin-bottom: 8px; }
+        .welcome p { font-size: 14px; color: #64748b; }
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        .stat-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .stat-label { font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+        .stat-value { font-size: 28px; font-weight: 700; color: #0d1b3e; }
+        .stat-sub { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+        #error-auth { display:none; text-align:center; padding:60px 24px; color:#c62828; font-size:16px; }
+        #content { display:none; }
+    </style>
+</head>
+<body>
+
+<div id="error-auth">
+    <p>Acceso denegado. <a href="/" style="color:#1565c0;">Volver al inicio</a></p>
+</div>
+
+<div id="content">
+    <div class="topbar">
+        <span class="topbar-brand">CritiData · Admin</span>
+        <div style="display:flex;align-items:center;">
+            <span class="topbar-user" id="admin-email"></span>
+            <button class="btn-logout" onclick="logout()">Cerrar sesión</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="welcome">
+            <h1>Panel de administración</h1>
+            <p>Bienvenido al panel interno de CritiData.</p>
+        </div>
+
+        <div class="cards" id="stats-cards">
+            <div class="stat-card">
+                <div class="stat-label">Usuarios totales</div>
+                <div class="stat-value" id="stat-total">—</div>
+                <div class="stat-sub">registrados</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Activos</div>
+                <div class="stat-value" id="stat-activos">—</div>
+                <div class="stat-sub">con cuenta activa</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Inactivos</div>
+                <div class="stat-value" id="stat-inactivos">—</div>
+                <div class="stat-sub">pendientes</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API = 'https://backend-login-api-production.up.railway.app'
+
+    async function init() {
+        const token = localStorage.getItem('cd_token')
+        if (!token) { showError(); return }
+
+        try {
+            const res  = await fetch(`${API}/auth/users`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+            if (!res.ok) { showError(); return }
+
+            const users = await res.json()
+            const activos   = users.filter(u => u.is_active).length
+            const inactivos = users.length - activos
+
+            document.getElementById('admin-email').textContent = localStorage.getItem('cd_email') || 'admin'
+            document.getElementById('stat-total').textContent     = users.length
+            document.getElementById('stat-activos').textContent   = activos
+            document.getElementById('stat-inactivos').textContent = inactivos
+            document.getElementById('content').style.display = 'block'
+        } catch {
+            showError()
+        }
+    }
+
+    function showError() {
+        document.getElementById('error-auth').style.display = 'block'
+    }
+
+    function logout() {
+        localStorage.removeItem('cd_token')
+        localStorage.removeItem('cd_email')
+        window.location.href = '/'
+    }
+
+    init()
+</script>
+</body>
+</html>

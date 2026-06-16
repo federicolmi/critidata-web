@@ -686,13 +686,14 @@
             <div class="tab-panel-inner">
                 <p class="form-title" style="text-align:center;margin-bottom:4px;">Iniciar sesión</p>
                 <p style="font-size:.8rem;color:#94a3b8;text-align:center;margin-bottom:20px;">Seleccioná la app</p>
-                <div style="display:flex;flex-direction:column;gap:10px;">
-                    <div class="dl-card dl-disabled" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;">
+                <div id="login-app-selector" style="display:flex;flex-direction:column;gap:10px;">
+                    <div class="dl-card" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;" onclick="mostrarLoginCritiData()">
                         <span style="font-size:1.5rem;margin-right:14px;">🏥</span>
                         <div>
                             <div style="font-size:1rem;font-weight:700;color:#0f172a;">CritiData</div>
-                            <div style="font-size:.78rem;color:#94a3b8;margin-top:2px;">Próximamente</div>
+                            <div style="font-size:.78rem;color:#94a3b8;margin-top:2px;">Panel de administración</div>
                         </div>
+                        <span style="margin-left:auto;color:#94a3b8;font-size:.9rem;">→</span>
                     </div>
                     <a href="/app/" target="_blank" class="dl-card" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;text-decoration:none;">
                         <span style="font-size:1.5rem;margin-right:14px;">🩺</span>
@@ -711,6 +712,26 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Login CritiData Admin -->
+        <div id="login-critidata-form" style="display:none;padding:34px 38px 38px;">
+            <p class="form-title">CritiData</p>
+            <p class="form-subtitle">Acceso interno</p>
+            <div class="field">
+                <label>Correo</label>
+                <input id="cd-email" type="email" placeholder="info@critidata.com" autocomplete="email">
+            </div>
+            <div class="field" style="margin-bottom:22px;">
+                <label>Contraseña</label>
+                <div class="password-wrap">
+                    <input id="cd-password" type="password" autocomplete="current-password">
+                    <button type="button" class="toggle-pass" onclick="togglePass('cd-password', this, event)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                </div>
+            </div>
+            <div id="cd-error" style="display:none;color:#c62828;font-size:13px;margin-bottom:12px;"></div>
+            <button class="btn-primary" id="cd-btn" onclick="loginCritiData()">Ingresar</button>
+            <button class="dl-back" onclick="volverLoginSelector()" style="margin-top:12px;display:block;">← Volver</button>
         </div>
 
         <!-- Panel: Registrarse -->
@@ -1088,6 +1109,8 @@
             document.getElementById('reg-nefrologia-planes').style.display = 'none'
             document.getElementById('register-form-content').style.display = 'none'
             document.getElementById('register-success').style.display = 'none'
+            document.getElementById('login-critidata-form').style.display = 'none'
+            document.getElementById('login-app-selector').style.display = 'flex'
         }
 
         function regSeleccionarApp() {
@@ -1401,6 +1424,50 @@
             document.getElementById('mobile-menu').classList.remove('open')
             const btn = document.getElementById('btn-' + tab)
             switchTab(tab, btn || { classList: { contains: () => false, add: () => {}, remove: () => {} } })
+        }
+
+        function mostrarLoginCritiData() {
+            document.getElementById('login-app-selector').style.display = 'none'
+            document.getElementById('login-critidata-form').style.display = 'block'
+        }
+
+        function volverLoginSelector() {
+            document.getElementById('login-critidata-form').style.display = 'none'
+            document.getElementById('login-app-selector').style.display = 'flex'
+        }
+
+        async function loginCritiData() {
+            const email    = document.getElementById('cd-email').value.trim()
+            const password = document.getElementById('cd-password').value
+            const errEl    = document.getElementById('cd-error')
+            const btn      = document.getElementById('cd-btn')
+
+            errEl.style.display = 'none'
+            btn.disabled = true
+            btn.textContent = 'Ingresando...'
+
+            try {
+                const res  = await fetch(`${API}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `username=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
+                })
+                const data = await res.json()
+                if (!res.ok) {
+                    errEl.textContent = data.detail || 'Credenciales incorrectas'
+                    errEl.style.display = 'block'
+                } else {
+                    localStorage.setItem('cd_token', data.access_token)
+                    localStorage.setItem('cd_email', email)
+                    window.location.href = '/admin/'
+                }
+            } catch {
+                errEl.textContent = 'No se pudo conectar con el servidor'
+                errEl.style.display = 'block'
+            }
+
+            btn.disabled = false
+            btn.textContent = 'Ingresar'
         }
 
         async function enviarReset() {
