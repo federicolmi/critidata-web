@@ -1457,12 +1457,12 @@
                     errEl.textContent = data.detail || 'Credenciales incorrectas'
                     errEl.style.display = 'block'
                 } else {
-                    localStorage.setItem('cd_token', data.access_token)
+                    localStorage.setItem('cd_token', data.token)
                     localStorage.setItem('cd_email', email)
                     window.location.href = '/admin/'
                 }
-            } catch {
-                errEl.textContent = 'No se pudo conectar con el servidor'
+            } catch(err) {
+                errEl.textContent = 'Error: ' + err.message
                 errEl.style.display = 'block'
             }
 
