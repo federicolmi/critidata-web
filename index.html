@@ -1019,6 +1019,22 @@
     <script>
         const API = "https://backend-login-api-production.up.railway.app"
 
+        // ── MODO MANTENIMIENTO ──
+        ;(async () => {
+            try {
+                const res  = await fetch(`${API}/auth/maintenance`)
+                const data = await res.json()
+                if (data.active) {
+                    document.body.innerHTML = `
+                        <div style="text-align:center;color:#fff;padding:60px 24px;font-family:'Segoe UI',sans-serif;">
+                            <div style="font-size:3rem;margin-bottom:24px;">🔧</div>
+                            <h1 style="font-size:1.8rem;font-weight:300;letter-spacing:1px;margin-bottom:12px;">Sitio en mantenimiento</h1>
+                            <p style="font-size:1rem;color:rgba(255,255,255,0.65);">Estamos realizando mejoras. Volvé en unos minutos.</p>
+                        </div>`
+                }
+            } catch { /* si el backend no responde, carga normal */ }
+        })()
+
         // ── REGISTRO ──
         document.getElementById('panel-register').querySelector('form').addEventListener('submit', async function(e) {
             e.preventDefault()

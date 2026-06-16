@@ -57,6 +57,14 @@
         #error-auth { display:none; text-align:center; padding:60px 24px; color:#c62828; font-size:16px; }
         #content { display:none; }
         .snack { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 22px; border-radius: 8px; font-size: 13px; display: none; z-index: 100; }
+        .btn-maintenance {
+            padding: 6px 16px; border-radius: 6px; font-size: 13px; font-weight: 600;
+            cursor: pointer; border: none; margin-left: 12px; transition: all .2s;
+        }
+        .btn-maintenance.off { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.7); }
+        .btn-maintenance.off:hover { background: rgba(255,255,255,0.2); color: #fff; }
+        .btn-maintenance.on  { background: #ef4444; color: #fff; }
+        .btn-maintenance.on:hover { background: #dc2626; }
     </style>
 </head>
 <body>
@@ -72,6 +80,7 @@
         <span class="topbar-brand">CritiData · Admin</span>
         <div style="display:flex;align-items:center;">
             <span class="topbar-user" id="admin-email"></span>
+            <button class="btn-maintenance off" id="btn-maint" onclick="toggleMaintenance()">⚙ Mantenimiento: OFF</button>
             <button class="btn-logout" onclick="logout()">Cerrar sesión</button>
         </div>
     </div>
@@ -174,19 +183,56 @@
     const API   = 'https://backend-login-api-production.up.railway.app'
     let allUsers = []
 
+    let maintenanceActive = false
+
     async function init() {
         const token = localStorage.getItem('cd_token')
         if (!token) { showError(); return }
 
         try {
-            const res = await fetch(`${API}/auth/users`, { headers: { 'Authorization': `Bearer ${token}` } })
-            if (!res.ok) { showError(); return }
+            const [resUsers, resMaint] = await Promise.all([
+                fetch(`${API}/auth/users`, { headers: { 'Authorization': `Bearer ${token}` } }),
+                fetch(`${API}/auth/maintenance`)
+            ])
+            if (!resUsers.ok) { showError(); return }
 
-            allUsers = await res.json()
+            allUsers = await resUsers.json()
+            const maint = await resMaint.json()
+            maintenanceActive = maint.active
+            updateMaintenanceBtn()
+
             document.getElementById('admin-email').textContent = localStorage.getItem('cd_email') || 'admin'
             document.getElementById('content').style.display = 'block'
             renderAll()
         } catch { showError() }
+    }
+
+    function updateMaintenanceBtn() {
+        const btn = document.getElementById('btn-maint')
+        if (maintenanceActive) {
+            btn.textContent = '🔴 Mantenimiento: ON'
+            btn.className = 'btn-maintenance on'
+        } else {
+            btn.textContent = '⚙ Mantenimiento: OFF'
+            btn.className = 'btn-maintenance off'
+        }
+    }
+
+    async function toggleMaintenance() {
+        const token  = localStorage.getItem('cd_token')
+        const newVal = !maintenanceActive
+        const btn    = document.getElementById('btn-maint')
+        btn.disabled = true
+        try {
+            const res = await fetch(`${API}/auth/maintenance?active=${newVal}`, {
+                method: 'POST', headers: { 'Authorization': `Bearer ${token}` }
+            })
+            if (!res.ok) throw new Error()
+            maintenanceActive = newVal
+            updateMaintenanceBtn()
+            toast(newVal ? 'Sitio en mantenimiento activado' : 'Sitio en mantenimiento desactivado')
+        } catch { toast('Error al cambiar estado') }
+        btn.disabled = false
     }
 
     function renderAll() {
