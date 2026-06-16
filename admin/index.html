@@ -9,7 +9,7 @@
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f0f4f8; min-height: 100vh; }
         .topbar {
             background: #0d1b3e; color: #fff; padding: 16px 32px;
-            display: flex; align-items: center; justify-content: space-between;
+            display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10;
         }
         .topbar-brand { font-size: 18px; font-weight: 300; letter-spacing: 1.5px; }
         .topbar-user { font-size: 13px; color: rgba(255,255,255,0.6); }
@@ -19,40 +19,44 @@
             cursor: pointer; font-size: 13px; margin-left: 16px;
         }
         .btn-logout:hover { background: rgba(255,255,255,0.1); color: #fff; }
-        .container { max-width: 960px; margin: 40px auto; padding: 0 24px; }
-        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
-        .stat-card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-        .stat-label { font-size: 12px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-        .stat-value { font-size: 28px; font-weight: 700; color: #0d1b3e; }
-        .stat-sub { font-size: 12px; color: #94a3b8; margin-top: 4px; }
-        .section {
-            background: #fff; border-radius: 14px; padding: 24px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 24px;
+        .container { max-width: 1100px; margin: 32px auto; padding: 0 24px; }
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 28px; }
+        .stat-card { background: #fff; border-radius: 12px; padding: 20px 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .stat-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .stat-value { font-size: 26px; font-weight: 700; color: #0d1b3e; }
+        .stat-sub { font-size: 11px; color: #94a3b8; margin-top: 3px; }
+        .section { background: #fff; border-radius: 14px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 24px; }
+        .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #f0f4f8; }
+        .section-title { font-size: 15px; font-weight: 600; color: #0d1b3e; }
+        .section-count { font-size: 12px; color: #94a3b8; }
+        .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab { padding: 7px 16px; border-radius: 8px; border: 1.5px solid #e2e8f0; background: #fff; font-size: 13px; font-weight: 500; color: #64748b; cursor: pointer; transition: all .15s; }
+        .tab.active { background: #0d1b3e; color: #fff; border-color: #0d1b3e; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        th { text-align: left; font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.4px; padding: 8px 10px; background: #f8fafc; }
+        td { padding: 11px 10px; border-top: 1px solid #f0f4f8; color: #1e293b; vertical-align: middle; }
+        tr:hover td { background: #fafbfc; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+        .b-active  { background: #dcfce7; color: #166534; }
+        .b-trial   { background: #fef9c3; color: #854d0e; }
+        .b-expired { background: #fee2e2; color: #991b1b; }
+        .b-admin   { background: #e0e7ff; color: #3730a3; }
+        .b-inactive { background: #f1f5f9; color: #64748b; }
+        .btn-sm {
+            padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;
+            cursor: pointer; border: none; margin-right: 4px; transition: opacity .15s;
         }
-        .section-title {
-            font-size: 15px; font-weight: 600; color: #0d1b3e;
-            margin-bottom: 16px; padding-bottom: 12px;
-            border-bottom: 1px solid #f0f4f8;
-        }
-        table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        th {
-            text-align: left; font-size: 11px; font-weight: 700;
-            color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px;
-            padding: 8px 12px; background: #f8fafc;
-        }
-        td { padding: 12px; border-top: 1px solid #f0f4f8; color: #1e293b; }
-        tr:hover td { background: #f8fafc; }
-        .badge {
-            display: inline-block; padding: 2px 8px; border-radius: 20px;
-            font-size: 11px; font-weight: 600;
-        }
-        .badge-active  { background: #dcfce7; color: #166534; }
-        .badge-trial   { background: #fef9c3; color: #854d0e; }
-        .badge-expired { background: #fee2e2; color: #991b1b; }
-        .badge-admin   { background: #e0e7ff; color: #3730a3; }
+        .btn-sm:hover { opacity: .8; }
+        .btn-toggle-on  { background: #fee2e2; color: #991b1b; }
+        .btn-toggle-off { background: #dcfce7; color: #166534; }
+        .btn-del  { background: #fee2e2; color: #991b1b; }
+        .btn-sub  { background: #e0e7ff; color: #3730a3; }
+        .empty { text-align: center; color: #94a3b8; padding: 32px; font-size: 13px; }
         #error-auth { display:none; text-align:center; padding:60px 24px; color:#c62828; font-size:16px; }
         #content { display:none; }
-        .empty { text-align: center; color: #94a3b8; padding: 32px; font-size: 14px; }
+        .snack { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #1e293b; color: #fff; padding: 10px 22px; border-radius: 8px; font-size: 13px; display: none; z-index: 100; }
     </style>
 </head>
 <body>
@@ -60,6 +64,8 @@
 <div id="error-auth">
     <p>Acceso denegado. <a href="/" style="color:#1565c0;">Volver al inicio</a></p>
 </div>
+
+<div class="snack" id="snack"></div>
 
 <div id="content">
     <div class="topbar">
@@ -71,99 +77,254 @@
     </div>
 
     <div class="container">
+
+        <!-- Stats -->
         <div class="cards">
             <div class="stat-card">
-                <div class="stat-label">Usuarios totales</div>
-                <div class="stat-value" id="stat-total">—</div>
-                <div class="stat-sub">registrados</div>
+                <div class="stat-label">Total usuarios</div>
+                <div class="stat-value" id="s-total">—</div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">Activos</div>
-                <div class="stat-value" id="stat-activos">—</div>
-                <div class="stat-sub">con cuenta activa</div>
+                <div class="stat-value" id="s-activos">—</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Inactivos</div>
-                <div class="stat-value" id="stat-inactivos">—</div>
-                <div class="stat-sub">pendientes de activación</div>
+                <div class="stat-label">Trial</div>
+                <div class="stat-value" id="s-trial">—</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Suscriptos</div>
+                <div class="stat-value" id="s-sub">—</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Vencidos</div>
+                <div class="stat-value" id="s-expired">—</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Pendientes</div>
+                <div class="stat-value" id="s-inactivos">—</div>
+                <div class="stat-sub">sin activar</div>
             </div>
         </div>
 
-        <div class="section">
-            <div class="section-title">Usuarios activos</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Email</th>
-                        <th>Rol</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody id="tabla-activos"></tbody>
-            </table>
-            <div id="tabla-empty" class="empty" style="display:none;">No hay usuarios activos.</div>
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('activos', this)">Activos</button>
+            <button class="tab" onclick="switchTab('trial', this)">En trial</button>
+            <button class="tab" onclick="switchTab('todos', this)">Todos</button>
         </div>
+
+        <!-- Panel Activos -->
+        <div class="tab-panel active" id="panel-activos">
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-title">Usuarios activos</span>
+                    <span class="section-count" id="count-activos"></span>
+                </div>
+                <table>
+                    <thead><tr>
+                        <th>Nombre</th><th>Email</th><th>Suscripción</th>
+                        <th>Pacientes</th><th>Teléfono</th><th>Acciones</th>
+                    </tr></thead>
+                    <tbody id="tbody-activos"></tbody>
+                </table>
+                <div id="empty-activos" class="empty" style="display:none;">Sin usuarios activos.</div>
+            </div>
+        </div>
+
+        <!-- Panel Trial -->
+        <div class="tab-panel" id="panel-trial">
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-title">Usuarios en período de prueba</span>
+                    <span class="section-count" id="count-trial"></span>
+                </div>
+                <table>
+                    <thead><tr>
+                        <th>Nombre</th><th>Email</th><th>Vence</th>
+                        <th>Pacientes</th><th>Teléfono</th><th>Acciones</th>
+                    </tr></thead>
+                    <tbody id="tbody-trial"></tbody>
+                </table>
+                <div id="empty-trial" class="empty" style="display:none;">Sin usuarios en trial.</div>
+            </div>
+        </div>
+
+        <!-- Panel Todos -->
+        <div class="tab-panel" id="panel-todos">
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-title">Todos los usuarios</span>
+                    <span class="section-count" id="count-todos"></span>
+                </div>
+                <table>
+                    <thead><tr>
+                        <th>Nombre</th><th>Email</th><th>Rol</th>
+                        <th>Estado</th><th>Suscripción</th><th>Pacientes</th><th>Acciones</th>
+                    </tr></thead>
+                    <tbody id="tbody-todos"></tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 </div>
 
 <script>
-    const API = 'https://backend-login-api-production.up.railway.app'
+    const API   = 'https://backend-login-api-production.up.railway.app'
+    let allUsers = []
 
     async function init() {
         const token = localStorage.getItem('cd_token')
         if (!token) { showError(); return }
 
         try {
-            const res = await fetch(`${API}/auth/users`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            })
+            const res = await fetch(`${API}/auth/users`, { headers: { 'Authorization': `Bearer ${token}` } })
             if (!res.ok) { showError(); return }
 
-            const users   = await res.json()
-            const activos = users.filter(u => u.is_active)
-            const inact   = users.filter(u => !u.is_active)
+            allUsers = await res.json()
+            document.getElementById('admin-email').textContent = localStorage.getItem('cd_email') || 'admin'
+            document.getElementById('content').style.display = 'block'
+            renderAll()
+        } catch { showError() }
+    }
 
-            document.getElementById('admin-email').textContent  = localStorage.getItem('cd_email') || 'admin'
-            document.getElementById('stat-total').textContent   = users.length
-            document.getElementById('stat-activos').textContent = activos.length
-            document.getElementById('stat-inactivos').textContent = inact.length
-            document.getElementById('content').style.display   = 'block'
+    function renderAll() {
+        const activos  = allUsers.filter(u => u.is_active && u.subscription_status === 'active')
+        const trial    = allUsers.filter(u => u.is_active && u.subscription_status === 'trial')
+        const inact    = allUsers.filter(u => !u.is_active)
+        const expired  = allUsers.filter(u => u.subscription_status === 'expired')
+        const sub      = allUsers.filter(u => u.subscription_status === 'active')
 
-            const tbody = document.getElementById('tabla-activos')
-            if (activos.length === 0) {
-                document.getElementById('tabla-empty').style.display = 'block'
-            } else {
-                activos.forEach(u => {
-                    const tr = document.createElement('tr')
-                    tr.innerHTML = `
-                        <td>${u.full_name}</td>
-                        <td style="color:#475569;">${u.email}</td>
-                        <td>${badgeRol(u.role)}</td>
-                        <td>${badgeEstado(u.is_active)}</td>
-                    `
-                    tbody.appendChild(tr)
-                })
-            }
-        } catch {
-            showError()
+        document.getElementById('s-total').textContent    = allUsers.length
+        document.getElementById('s-activos').textContent  = allUsers.filter(u => u.is_active).length
+        document.getElementById('s-trial').textContent    = trial.length
+        document.getElementById('s-sub').textContent      = sub.length
+        document.getElementById('s-expired').textContent  = expired.length
+        document.getElementById('s-inactivos').textContent = inact.length
+
+        renderTabla('tbody-activos', 'empty-activos', 'count-activos', activos, 'activo')
+        renderTabla('tbody-trial',   'empty-trial',   'count-trial',   trial,   'trial')
+        renderTablaAll('tbody-todos', 'count-todos', allUsers)
+    }
+
+    function renderTabla(tbodyId, emptyId, countId, users, tipo) {
+        const tbody = document.getElementById(tbodyId)
+        tbody.innerHTML = ''
+        document.getElementById(countId).textContent = `${users.length} usuario${users.length !== 1 ? 's' : ''}`
+        if (users.length === 0) { document.getElementById(emptyId).style.display = 'block'; return }
+        document.getElementById(emptyId).style.display = 'none'
+        users.forEach(u => {
+            const tr = document.createElement('tr')
+            const vence = tipo === 'trial' && u.trial_expires_at
+                ? fmtDate(u.trial_expires_at) : u.subscription_status === 'active' ? '—' : ''
+            tr.innerHTML = `
+                <td><strong>${u.full_name}</strong></td>
+                <td style="color:#475569">${u.email}</td>
+                <td>${tipo === 'trial' ? `<span style="color:#854d0e;font-size:12px;">Vence ${vence}</span>` : badgeSub(u.subscription_status)}</td>
+                <td><strong>${u.patient_count}</strong></td>
+                <td style="color:#64748b;font-size:12px;">${u.phone || '—'}</td>
+                <td>${acciones(u)}</td>
+            `
+            tbody.appendChild(tr)
+        })
+    }
+
+    function renderTablaAll(tbodyId, countId, users) {
+        const tbody = document.getElementById(tbodyId)
+        tbody.innerHTML = ''
+        document.getElementById(countId).textContent = `${users.length} usuario${users.length !== 1 ? 's' : ''}`
+        users.forEach(u => {
+            const tr = document.createElement('tr')
+            tr.innerHTML = `
+                <td><strong>${u.full_name}</strong></td>
+                <td style="color:#475569">${u.email}</td>
+                <td>${badgeRol(u.role)}</td>
+                <td>${u.is_active ? '<span class="badge b-active">Activo</span>' : '<span class="badge b-inactive">Inactivo</span>'}</td>
+                <td>${badgeSub(u.subscription_status)}</td>
+                <td><strong>${u.patient_count}</strong></td>
+                <td>${acciones(u)}</td>
+            `
+            tbody.appendChild(tr)
+        })
+    }
+
+    function acciones(u) {
+        const toggleTxt = u.is_active ? 'Desactivar' : 'Activar'
+        const toggleCls = u.is_active ? 'btn-toggle-on' : 'btn-toggle-off'
+        let html = `<button class="btn-sm ${toggleCls}" onclick="toggleUser(${u.id})">${toggleTxt}</button>`
+        if (u.role !== 'admin') {
+            html += `<button class="btn-sm btn-del" onclick="deleteUser(${u.id}, '${u.full_name}')">Eliminar</button>`
         }
+        return html
+    }
+
+    function badgeSub(status) {
+        const map = { active: ['b-active','Activo'], trial: ['b-trial','Trial'], expired: ['b-expired','Vencido'] }
+        const [cls, lbl] = map[status] || ['b-inactive', status]
+        return `<span class="badge ${cls}">${lbl}</span>`
     }
 
     function badgeRol(role) {
-        if (role === 'admin') return '<span class="badge badge-admin">Admin</span>'
-        return '<span class="badge badge-active">Usuario</span>'
+        return role === 'admin'
+            ? '<span class="badge b-admin">Admin</span>'
+            : '<span class="badge b-active">Usuario</span>'
     }
 
-    function badgeEstado(activo) {
-        return activo
-            ? '<span class="badge badge-active">Activo</span>'
-            : '<span class="badge badge-expired">Inactivo</span>'
+    function fmtDate(iso) {
+        if (!iso) return '—'
+        const d = new Date(iso)
+        return d.toLocaleDateString('es-AR', { day:'2-digit', month:'2-digit', year:'numeric' })
     }
 
-    function showError() {
-        document.getElementById('error-auth').style.display = 'block'
+    async function toggleUser(id) {
+        const token = localStorage.getItem('cd_token')
+        try {
+            const res = await fetch(`${API}/auth/users/${id}/toggle`, {
+                method: 'PATCH', headers: { 'Authorization': `Bearer ${token}` }
+            })
+            if (!res.ok) throw new Error()
+            const data = await res.json()
+            toast(data.message || 'Usuario actualizado')
+            await reload()
+        } catch { toast('Error al actualizar') }
     }
+
+    async function deleteUser(id, nombre) {
+        if (!confirm(`¿Eliminar a ${nombre} y todos sus datos? Esta acción no se puede deshacer.`)) return
+        const token = localStorage.getItem('cd_token')
+        try {
+            const res = await fetch(`${API}/auth/users/${id}`, {
+                method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` }
+            })
+            if (!res.ok) throw new Error()
+            toast('Usuario eliminado')
+            await reload()
+        } catch { toast('Error al eliminar') }
+    }
+
+    async function reload() {
+        const token = localStorage.getItem('cd_token')
+        const res   = await fetch(`${API}/auth/users`, { headers: { 'Authorization': `Bearer ${token}` } })
+        allUsers    = await res.json()
+        renderAll()
+    }
+
+    function switchTab(name, btn) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'))
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'))
+        btn.classList.add('active')
+        document.getElementById('panel-' + name).classList.add('active')
+    }
+
+    function toast(msg) {
+        const el = document.getElementById('snack')
+        el.textContent = msg
+        el.style.display = 'block'
+        setTimeout(() => el.style.display = 'none', 2500)
+    }
+
+    function showError() { document.getElementById('error-auth').style.display = 'block' }
 
     function logout() {
         localStorage.removeItem('cd_token')
