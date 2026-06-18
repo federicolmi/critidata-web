@@ -50254,12 +50254,12 @@ s=i==null
 r=(s?n:i.d.length!==0)===!0?i.d[0]:""
 if(r==="laboratorio")return"/login"
 q=r==="user"
-if(q){p=s?n:i.w
-p=p!==!0}else p=!1
-if(p)return m==="/setup-lab"?n:"/setup-lab"
 if(q)p=(s?n:i.f)==="expired"
 else p=!1
 if(p)return m==="/expired"?n:"/expired"
+if(q){p=s?n:i.w
+p=p!==!0}else p=!1
+if(p)return m==="/setup-lab"?n:"/setup-lab"
 if(q){i=s?n:i.z
 i=i===!0&&!o.a.e}else i=!1
 if(i)return m==="/upgrade"?n:"/upgrade"
