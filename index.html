@@ -571,11 +571,7 @@
 
                 <!-- Paso A: Especialidad -->
                 <div id="acceso-step-specialty">
-                    <div style="margin:-34px -38px 20px -38px;padding:28px 38px 22px;background:linear-gradient(135deg,#0D1B3E 0%,#1a3a6b 100%);">
-                        <div style="font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:0.6px;margin-bottom:8px;">CritiData</div>
-                        <div style="font-size:22px;font-weight:300;color:#fff;line-height:1.2;margin-bottom:6px;">Iniciar sesión</div>
-                        <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.4;">Seleccioná tu especialidad</div>
-                    </div>
+                    <p class="form-title">Acceder a CritiData</p><p class="form-subtitle">Seleccioná tu especialidad</p>
                     <div class="dl-cards">
                         <div class="dl-card" onclick="seleccionarEspecialidad('Nefrología')" >
                             <span class="dl-name">Nefrología</span>
@@ -589,11 +585,7 @@
 
                 <!-- Paso B: Datos del médico -->
                 <div id="acceso-step-register" style="display:none;">
-                    <div style="margin:-34px -38px 20px -38px;padding:28px 38px 22px;background:linear-gradient(135deg,#0D1B3E 0%,#1a3a6b 100%);">
-                        <div style="font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:0.6px;margin-bottom:8px;">CritiData</div>
-                        <div style="font-size:22px;font-weight:300;color:#fff;line-height:1.2;margin-bottom:6px;">Tus datos</div>
-                        <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.4;">Completá para continuar</div>
-                    </div>
+                    <p class="form-title">Tus datos</p><p class="form-subtitle">Completá para continuar</p>
                     <div class="field">
                         <label for="acc-nombre">Nombre completo</label>
                         <input id="acc-nombre" type="text" placeholder="Dr. Juan García" autocomplete="name">
@@ -609,11 +601,7 @@
 
                 <!-- Paso C: Laboratorio -->
                 <div id="acceso-step-lab" style="display:none;">
-                    <div style="margin:-34px -38px 20px -38px;padding:28px 38px 22px;background:linear-gradient(135deg,#0D1B3E 0%,#1a3a6b 100%);">
-                        <div style="font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:0.6px;margin-bottom:8px;">CritiData</div>
-                        <div id="acceso-lab-title" style="font-size:22px;font-weight:300;color:#fff;line-height:1.2;margin-bottom:6px;">Nefrología</div>
-                        <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.4;">Seleccioná tu laboratorio</div>
-                    </div>
+                    <p class="form-title" id="acceso-lab-title">Nefrología</p><p class="form-subtitle">Seleccioná tu laboratorio</p>
                     <div class="dl-cards">
                         <div class="dl-card" onclick="seleccionarLaboratorio('bionefro')">
                             <span class="dl-name">bionefro</span>
@@ -628,11 +616,7 @@
 
                 <!-- Paso 1: Credenciales del laboratorio -->
                 <div id="acceso-step1" style="display:none;">
-                    <div style="margin:-34px -38px 20px -38px;padding:28px 38px 22px;background:linear-gradient(135deg,#0D1B3E 0%,#1a3a6b 100%);">
-                        <div style="font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:0.6px;margin-bottom:8px;">CritiData</div>
-                        <div id="acceso-cred-title" style="font-size:22px;font-weight:300;color:#fff;line-height:1.2;margin-bottom:6px;">bionefro</div>
-                        <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.4;">Ingresá tus credenciales del laboratorio</div>
-                    </div>
+                    <p class="form-title" id="acceso-cred-title">bionefro</p><p class="form-subtitle">Ingresá tus credenciales del laboratorio</p>
                     <form onsubmit="return false;" id="form-acceso">
                         <div class="field">
                             <label for="acc-usuario">Usuario</label>
@@ -652,11 +636,7 @@
 
                 <!-- Paso 2: OTP -->
                 <div id="acceso-step2" style="display:none;">
-                    <div style="margin:-34px -38px 20px -38px;padding:28px 38px 22px;background:linear-gradient(135deg,#0D1B3E 0%,#1a3a6b 100%);">
-                        <div style="font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:0.6px;margin-bottom:8px;">CritiData</div>
-                        <div style="font-size:22px;font-weight:300;color:#fff;line-height:1.2;margin-bottom:6px;">Verificá tu teléfono</div>
-                        <div id="acceso-otp-subtitle" style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.4;">Ingresá el código que te enviamos</div>
-                    </div>
+                    <p class="form-title">Verificá tu teléfono</p><p class="form-subtitle" id="acceso-otp-subtitle">Ingresá el código que te enviamos</p>
                     <form onsubmit="return false;" id="form-otp">
                         <div class="field" style="margin-bottom:22px;">
                             <label for="acc-otp">Código de verificación</label>
@@ -770,11 +750,7 @@
 
                 <!-- Paso 1: Selector de app -->
                 <div id="reg-app-selector">
-                    <div style="margin:-34px -38px 20px -38px;padding:28px 38px 22px;background:linear-gradient(135deg,#0D1B3E 0%,#1a3a6b 100%);">
-                        <div style="font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:0.6px;margin-bottom:8px;">CritiData</div>
-                        <div style="font-size:22px;font-weight:300;color:#fff;line-height:1.2;margin-bottom:6px;">Registrarse</div>
-                        <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.4;">Seleccioná la app</div>
-                    </div>
+                    <p class="form-title" style="text-align:center;margin-bottom:4px;">Registrarse</p><p style="font-size:.8rem;color:#94a3b8;text-align:center;margin-bottom:20px;">Seleccioná la app</p>
                     <div style="display:flex;flex-direction:column;gap:10px;">
                         <div class="dl-card" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;" onclick="regSeleccionarApp()">
                             <span style="font-size:1.5rem;margin-right:14px;">🌐</span>
@@ -812,11 +788,7 @@
 
                 <!-- Paso 2c: Elegir plan -->
                 <div id="reg-nefrologia-planes" style="display:none;">
-                    <div style="margin:-34px -38px 20px -38px;padding:28px 38px 22px;background:linear-gradient(135deg,#0D1B3E 0%,#1a3a6b 100%);">
-                        <div style="font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:0.6px;margin-bottom:8px;">CritiData Nefrología</div>
-                        <div style="font-size:22px;font-weight:300;color:#fff;line-height:1.2;margin-bottom:6px;">Elegí tu plan</div>
-                        <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.4;">Podés pagar una vez o activar el débito automático.</div>
-                    </div>
+                    <p class="form-title" style="text-align:center;margin-bottom:4px;">Elegí tu plan</p><p class="form-subtitle" style="text-align:center;">Podés pagar una vez o activar el débito automático.</p>
 
                     <p style="font-size:.72rem;font-weight:700;color:#64748b;letter-spacing:.6px;text-transform:uppercase;margin-bottom:8px;">Mensual</p>
                     <a href="/app/#/register" style="text-decoration:none;display:block;margin-bottom:8px;">
@@ -868,11 +840,6 @@
 
                 <!-- Paso 2a: Formulario CritiData -->
                 <div id="register-form-content" style="display:none;">
-                <div style="margin:-34px -38px 20px -38px;padding:28px 38px 22px;background:linear-gradient(135deg,#0D1B3E 0%,#1a3a6b 100%);">
-                    <div style="font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:0.6px;margin-bottom:8px;">CritiData</div>
-                    <div style="font-size:22px;font-weight:300;color:#fff;line-height:1.2;margin-bottom:6px;">Crear una cuenta</div>
-                    <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.4;">Completá tus datos para comenzar</div>
-                </div>
                 <form onsubmit="return false;">
                     <div class="field">
                         <label for="reg-name">Nombre completo</label>
