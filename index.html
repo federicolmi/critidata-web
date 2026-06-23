@@ -700,7 +700,7 @@
 
         <!-- Panel: Iniciar sesión -->
         <div class="tab-panel" id="panel-login">
-            <div style="padding:28px 28px 22px;background:linear-gradient(135deg,#0D1B3E 0%,#1a3a6b 100%);">
+            <div id="panel-login-header" style="padding:28px 28px 22px;background:linear-gradient(135deg,#0D1B3E 0%,#1a3a6b 100%);">
                 <div style="font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:0.6px;margin-bottom:8px;">CritiData</div>
                 <div style="font-size:22px;font-weight:300;color:#fff;line-height:1.2;margin-bottom:6px;">Iniciar sesión</div>
                 <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.4;">Seleccioná tu especialidad</div>
@@ -731,8 +731,13 @@
                 </div>
             </div>
             <!-- Login CritiData Admin (dentro de panel-login, reutiliza el header navy) -->
-            <div id="login-critidata-form" style="display:none;padding:20px 28px 28px;">
-                <p style="font-size:.8rem;color:#94a3b8;margin-bottom:18px;">Acceso interno</p>
+            <div id="login-critidata-form" style="display:none;">
+                <div style="padding:28px 28px 22px;background:linear-gradient(135deg,#0D1B3E 0%,#1a3a6b 100%);">
+                    <div style="font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:0.6px;margin-bottom:8px;">CritiData</div>
+                    <div style="font-size:22px;font-weight:300;color:#fff;line-height:1.2;margin-bottom:6px;">Ingresar</div>
+                    <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.4;">Acceso interno</div>
+                </div>
+                <div style="padding:20px 28px 28px;">
                 <div class="field">
                     <label>Correo</label>
                     <input id="cd-email" type="email" placeholder="info@critidata.com" autocomplete="email">
@@ -747,6 +752,7 @@
                 <div id="cd-error" style="display:none;color:#c62828;font-size:13px;margin-bottom:12px;"></div>
                 <button class="btn-primary" id="cd-btn" onclick="loginCritiData()">Ingresar</button>
                 <button class="dl-back" onclick="volverLoginSelector()" style="margin-top:12px;display:block;">← Volver</button>
+                </div><!-- /padding wrapper -->
             </div>
         </div>
 
@@ -790,11 +796,8 @@
 
                 <!-- Paso 2b: Suscribirse -->
                 <div id="reg-nefrologia-sub" style="display:none;">
-                    <div style="margin:-34px -38px 20px -38px;padding:28px 38px 22px;background:linear-gradient(135deg,#0D1B3E 0%,#1a3a6b 100%);">
-                        <div style="font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:0.6px;margin-bottom:8px;">CritiData Nefrología</div>
-                        <div style="font-size:22px;font-weight:300;color:#fff;line-height:1.2;margin-bottom:6px;">Suscribirse</div>
-                        <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.4;">Laboratorio · Kt/V · Planilla · Diálisis</div>
-                    </div>
+                    <p class="form-title" style="text-align:center;margin-bottom:4px;">CritiData Nefrología</p>
+                    <p style="font-size:.8rem;color:#94a3b8;text-align:center;margin-bottom:28px;">Laboratorio · Kt/V · Planilla · Diálisis</p>
                     <button class="btn-primary" onclick="regMostrarPlanes()">Ver planes</button>
                     <button class="dl-back" onclick="regVolverSub()" style="margin-top:14px;display:block;">← Volver</button>
                 </div>
@@ -1155,6 +1158,7 @@
             document.getElementById('register-success').style.display = 'none'
             document.getElementById('login-critidata-form').style.display = 'none'
             document.getElementById('login-app-selector').style.display = 'flex'
+            document.getElementById('panel-login-header').style.display = 'block'
         }
 
         function regSeleccionarApp() {
@@ -1471,6 +1475,7 @@
         }
 
         function mostrarLoginCritiData() {
+            document.getElementById('panel-login-header').style.display = 'none'
             document.getElementById('login-app-selector').style.display = 'none'
             document.getElementById('login-critidata-form').style.display = 'block'
         }
@@ -1478,6 +1483,7 @@
         function volverLoginSelector() {
             document.getElementById('login-critidata-form').style.display = 'none'
             document.getElementById('login-app-selector').style.display = 'flex'
+            document.getElementById('panel-login-header').style.display = 'block'
         }
 
         async function loginCritiData() {
