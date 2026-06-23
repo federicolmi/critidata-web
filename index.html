@@ -993,13 +993,17 @@
 
                     <!-- Mobile: Play Store + App Store -->
                     <div class="platform-mobile" style="display:flex;flex-direction:column;gap:10px;">
-                        <div style="display:flex;align-items:center;gap:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 18px;opacity:.45;cursor:default;">
+                        <a href="https://play.google.com/store/apps/details?id=com.critidata.nephrology"
+                           style="text-decoration:none;display:flex;align-items:center;gap:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 18px;transition:border-color .2s,background .2s;"
+                           onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'"
+                           onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'">
                             <span style="font-size:1.8rem;">🤖</span>
                             <div>
-                                <div style="font-size:.72rem;color:#94a3b8;letter-spacing:.5px;margin-bottom:2px;">PRÓXIMAMENTE EN</div>
+                                <div style="font-size:.72rem;color:#94a3b8;letter-spacing:.5px;margin-bottom:2px;">DISPONIBLE EN</div>
                                 <div style="font-size:1rem;font-weight:700;color:#0f172a;">Android · Play Store</div>
                             </div>
-                        </div>
+                            <span style="margin-left:auto;font-size:.82rem;font-weight:700;color:#1565c0;">Instalar →</span>
+                        </a>
                         <div style="display:flex;align-items:center;gap:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 18px;opacity:.45;cursor:default;">
                             <span style="font-size:1.8rem;"></span>
                             <div>
@@ -1177,6 +1181,17 @@
         }
 
         function dlSeleccionarApp(nombre) {
+            const ua = navigator.userAgent
+            if (/Android/i.test(ua)) {
+                window.location.href = 'https://play.google.com/store/apps/details?id=com.critidata.nephrology'
+                return
+            }
+            if (/iPhone|iPad|iPod/i.test(ua)) {
+                document.getElementById('dl-selected-app-name').textContent = nombre
+                document.getElementById('dl-app-selector').style.display = 'none'
+                document.getElementById('dl-platform-options').style.display = 'block'
+                return
+            }
             document.getElementById('dl-selected-app-name').textContent = nombre
             document.getElementById('dl-app-selector').style.display = 'none'
             document.getElementById('dl-platform-options').style.display = 'block'
