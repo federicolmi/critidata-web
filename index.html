@@ -685,31 +685,33 @@
 
         <!-- Panel: Iniciar sesión -->
         <div class="tab-panel" id="panel-login">
-            <div class="tab-panel-inner">
-                <p class="form-title" style="text-align:center;margin-bottom:20px;">Iniciar sesión</p>
-                <div id="login-app-selector" style="display:flex;flex-direction:column;gap:10px;">
-                    <div class="dl-card" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;" onclick="mostrarLoginCritiData()">
-                        <span style="font-size:1.5rem;margin-right:14px;">🏥</span>
-                        <div>
-                            <div style="font-size:1rem;font-weight:700;color:#0f172a;">CritiData</div>
-                            <div style="font-size:.78rem;color:#94a3b8;margin-top:2px;">Panel de administración</div>
-                        </div>
-                        <span style="margin-left:auto;color:#94a3b8;font-size:.9rem;">→</span>
+            <div style="padding:28px 28px 22px;background:linear-gradient(135deg,#0D1B3E 0%,#1a3a6b 100%);">
+                <div style="font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:0.6px;margin-bottom:8px;">CritiData</div>
+                <div style="font-size:22px;font-weight:300;color:#fff;line-height:1.2;margin-bottom:6px;">Iniciar sesión</div>
+                <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.4;">Seleccioná tu especialidad</div>
+            </div>
+            <div id="login-app-selector" style="padding:20px 24px 24px;display:flex;flex-direction:column;gap:10px;">
+                <div class="dl-card" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;" onclick="mostrarLoginCritiData()">
+                    <span style="font-size:1.5rem;margin-right:14px;">🏥</span>
+                    <div>
+                        <div style="font-size:1rem;font-weight:700;color:#0f172a;">CritiData</div>
+                        <div style="font-size:.78rem;color:#94a3b8;margin-top:2px;">Panel de administración</div>
                     </div>
-                    <a href="/app/" class="dl-card" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;text-decoration:none;">
-                        <span style="font-size:1.5rem;margin-right:14px;">🩺</span>
-                        <div>
-                            <div style="font-size:1rem;font-weight:700;color:#0f172a;">Nefrología</div>
-                            <div style="font-size:.78rem;color:#94a3b8;margin-top:2px;">Laboratorio · Kt/V · Planilla · Diálisis</div>
-                        </div>
-                        <span style="margin-left:auto;color:#94a3b8;font-size:.9rem;">→</span>
-                    </a>
-                    <div class="dl-card dl-disabled" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;">
-                        <span style="font-size:1.5rem;margin-right:14px;">➕</span>
-                        <div>
-                            <div style="font-size:1rem;font-weight:700;color:#0f172a;">Otras</div>
-                            <div style="font-size:.78rem;color:#94a3b8;margin-top:2px;">Próximamente</div>
-                        </div>
+                    <span style="margin-left:auto;color:#94a3b8;font-size:.9rem;">→</span>
+                </div>
+                <a href="/app/" class="dl-card" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;text-decoration:none;">
+                    <span style="font-size:1.5rem;margin-right:14px;">🩺</span>
+                    <div>
+                        <div style="font-size:1rem;font-weight:700;color:#0f172a;">Nefrología</div>
+                        <div style="font-size:.78rem;color:#94a3b8;margin-top:2px;">Laboratorio · Kt/V · Planilla · Diálisis</div>
+                    </div>
+                    <span style="margin-left:auto;color:#94a3b8;font-size:.9rem;">→</span>
+                </a>
+                <div class="dl-card dl-disabled" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;">
+                    <span style="font-size:1.5rem;margin-right:14px;">➕</span>
+                    <div>
+                        <div style="font-size:1rem;font-weight:700;color:#0f172a;">Otras</div>
+                        <div style="font-size:.78rem;color:#94a3b8;margin-top:2px;">Próximamente</div>
                     </div>
                 </div>
             </div>
@@ -780,8 +782,11 @@
 
                 <!-- Paso 2c: Elegir plan -->
                 <div id="reg-nefrologia-planes" style="display:none;">
-                    <p class="form-title" style="margin-bottom:2px;">Elegí tu plan</p>
-                    <p style="font-size:.8rem;color:#94a3b8;margin-bottom:18px;">Podés pagar una vez o activar el débito automático.</p>
+                    <div style="margin:-34px -38px 20px -38px;padding:28px 38px 22px;background:linear-gradient(135deg,#0D1B3E 0%,#1a3a6b 100%);">
+                        <div style="font-size:11px;color:rgba(255,255,255,0.55);letter-spacing:0.6px;margin-bottom:8px;">CritiData Nefrología</div>
+                        <div style="font-size:22px;font-weight:300;color:#fff;line-height:1.2;margin-bottom:6px;">Elegí tu plan</div>
+                        <div style="font-size:13px;color:rgba(255,255,255,0.7);line-height:1.4;">Podés pagar una vez o activar el débito automático.</div>
+                    </div>
 
                     <p style="font-size:.72rem;font-weight:700;color:#64748b;letter-spacing:.6px;text-transform:uppercase;margin-bottom:8px;">Mensual</p>
                     <a href="/app/#/register" style="text-decoration:none;display:block;margin-bottom:8px;">
@@ -829,7 +834,7 @@
 
                     <p style="font-size:.72rem;color:#94a3b8;text-align:center;margin-top:14px;margin-bottom:0;">Los precios se actualizan cada 6 meses por IPC.</p>
                     <button class="dl-back" onclick="regVolverPlanes()" style="margin-top:10px;display:block;">← Volver</button>
-                </div>
+                </div><!-- /reg-nefrologia-planes -->
 
                 <!-- Paso 2a: Formulario CritiData -->
                 <div id="register-form-content" style="display:none;">
