@@ -249,13 +249,24 @@
                 const estado = u.is_active
                     ? '<span style="color:#22c55e;font-size:12px;">● Activo</span>'
                     : '<span style="color:#ef4444;font-size:12px;">● Inactivo</span>'
+                const subColor = u.subscription_status === 'active' ? '#22c55e'
+                               : u.subscription_status === 'trial'  ? '#f59e0b'
+                               : '#ef4444'
+                const subLabel = u.subscription_status === 'active' ? 'Activo'
+                               : u.subscription_status === 'trial'  ? 'Trial'
+                               : 'Vencido'
+                const btnRenovar = u.subscription_status === 'expired'
+                    ? `<button class="btn-del" style="color:#22c55e;font-weight:700;" title="Renovar suscripción" onclick="renovarSuscripcion(${u.id})">✓</button>`
+                    : ''
                 li.innerHTML = `
                     <div>
                         <div style="font-weight:600;">${u.full_name}</div>
                         <div style="font-size:12px;color:#64748b;">${u.email} · ${u.role}</div>
+                        <div style="font-size:11px;margin-top:2px;color:${subColor};">Suscripción: ${subLabel} · ${u.patient_count} pacientes</div>
                     </div>
                     <div style="display:flex;align-items:center;gap:8px;">
                         ${estado}
+                        ${btnRenovar}
                         <button class="btn-del" style="color:#f59e0b;" title="${u.is_active ? 'Desactivar' : 'Activar'}" onclick="toggleUsuario(${u.id}, this)">⏸</button>
                         <button class="btn-del" title="Eliminar" onclick="eliminarUsuario(${u.id}, '${u.email}')">×</button>
                     </div>
@@ -276,6 +287,18 @@
             })
             if (res.ok) cargarUsuarios()
             else alert('Error al cambiar estado.')
+        } catch { alert('Error de conexión.') }
+    }
+
+    async function renovarSuscripcion(id) {
+        if (!confirm('¿Activar suscripción para este usuario?')) return
+        try {
+            const res = await fetch(`${API}/auth/users/${id}/renovar-suscripcion`, {
+                method: 'PATCH',
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            if (res.ok) cargarUsuarios()
+            else alert('Error al renovar suscripción.')
         } catch { alert('Error de conexión.') }
     }
 
