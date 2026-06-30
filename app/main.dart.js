@@ -53366,7 +53366,7 @@ k=0
 j=0
 s=!m?7:9
 break
-case 7:n.sbJ(0,n.f.axe("Importando historial completo\u2026\nEste proceso tarda aprox. 10 min por cada 10 pacientes."))
+case 7:n.sbJ(0,n.f.axe('Importando historial completo\u2026\nEste proceso puede tardar varias horas.\nPod\xe9s cerrar la app \u2014 la importaci\xf3n sigue\nen segundo plano. Al volver, presion\xe1\n"Actualizar resultados" para ver el progreso.'))
 p=11
 s=14
 return A.q(J.Da(l,"/lab/ping",b9),$async$kU)
