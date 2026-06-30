@@ -53364,7 +53364,7 @@ k=0
 j=0
 s=!m?7:9
 break
-case 7:n.sbJ(0,n.f.axf("Importando historial de 12 meses\u2026"))
+case 7:n.sbJ(0,n.f.axf("Importando historial completo\u2026\nEste proceso tarda aprox. 10 min por cada 10 pacientes."))
 p=11
 s=14
 return A.q(J.Qq(l,"/lab/ping",b6),$async$kU)
@@ -53436,7 +53436,7 @@ a0=J.bx(a9.a(a.a))
 if(a0>d){n.sbJ(0,n.f.MU(a0))
 d=a0
 c=0}else if(a0>f){++c
-if(c>=3){s=28
+if(c>=20){s=28
 break}}p=4
 s=33
 break
@@ -54235,28 +54235,24 @@ p=p.ax.b
 s=t.p
 return A.nu(A.iK(!1,A.by(14),!0,new A.aM(B.V0,A.d8(A.b([A.ae_(p.dW(0.12),A.f2(r.c,p,q,22),24),B.h4,A.bC(A.b([A.a8(r.d,q,q,q,q,B.j_,q,q),A.a8(r.e,q,q,q,q,A.bj(q,q,B.cs,q,q,q,q,q,q,q,q,12,q,q,B.bc,q,q,!0,q,1,q,q,q,q,q,q),q,q)],s),B.aE,B.Q,B.X),B.rp,A.f2(B.hR,B.cr,q,14)],s),B.a8,B.Q,B.X,0),q),q,!0,q,q,q,q,q,q,q,q,r.f,q,q,q,q,q,q,q),B.fn,2,q,q,new A.cd(o,B.N),B.bE)}}
 A.a7S.prototype={
-H(a){var s,r,q,p,o,n,m,l,k,j=null,i=this.c,h=i.b
-if(h)s=i.c?B.hB:B.jD
-else s=i.d>0?B.hB:B.o7
+H(a){var s,r,q,p,o,n,m,l,k=null,j=this.c,i=j.b
+if(i)s=j.c?B.hB:B.jD
+else s=j.d>0?B.hB:B.o7
 r=A.by(14)
 q=t.p
 p=A.b([],q)
-o=i.a
+o=j.a
 if(o)p.push(A.RX(B.OO,B.XT,B.d6))
-n=i.d
-m=n>0
-if(m)n=""+n
-else n=h?"0":"\u2014"
-n=A.a8(n,j,j,j,j,A.bj(j,j,s,j,j,j,j,j,j,j,j,52,j,j,B.aQ,j,j,!0,j,j,j,j,j,j,j,j),j,j)
-if(h)m=i.f
-else m=m?"pacientes importados":i.f
-m=A.b([n,B.cY,A.a8(m,j,j,j,j,B.rL,B.b1,j)],q)
-if(o){i=i.e
-l=B.z.dl(i,60)
-k=B.z.bl(i,60)
-B.l.J(m,A.b([B.bq,A.a8("\u23f1 "+(B.n.fl(B.z.j(l),2,"0")+":"+B.n.fl(B.z.j(k),2,"0")),j,j,j,j,B.N_,j,j)],q))}if(h)B.l.J(m,A.b([B.cw,A.dA(B.aUv,this.d,j)],q))
-p.push(new A.aM(B.V4,A.bC(m,B.a8,B.Q,B.X),j))
-return A.nu(A.bC(p,B.a8,B.Q,B.X),B.dO,4,j,j,new A.cd(r,B.N),j)}}
+n=j.d
+if(n>0)n=""+n
+else n=i?"0":"\u2014"
+n=A.b([A.a8(n,k,k,k,k,A.bj(k,k,s,k,k,k,k,k,k,k,k,52,k,k,B.aQ,k,k,!0,k,k,k,k,k,k,k,k),k,k),B.cY,A.a8(j.f,k,k,k,k,B.rL,B.b1,k)],q)
+if(o){j=j.e
+m=B.z.dl(j,60)
+l=B.z.bl(j,60)
+B.l.J(n,A.b([B.bq,A.a8("\u23f1 "+(B.n.fl(B.z.j(m),2,"0")+":"+B.n.fl(B.z.j(l),2,"0")),k,k,k,k,B.N_,k,k)],q))}if(i)B.l.J(n,A.b([B.cw,A.dA(B.aUv,this.d,k)],q))
+p.push(new A.aM(B.V4,A.bC(n,B.a8,B.Q,B.X),k))
+return A.nu(A.bC(p,B.a8,B.Q,B.X),B.dO,4,k,k,new A.cd(r,B.N),k)}}
 A.zk.prototype={
 fY(a,b){var s=this,r=null,q=b.dz($.iv().$1(s.e),t.Ex)
 return A.fI(A.hU(r,!0,r,r,r,r,A.a8(A.hT(s.r+" "+s.f),r,r,r,r,r,r,r)),r,A.ace(q,new A.aqL(s),new A.aqM(),new A.aqN(),t.dN,t.jK),r,!1,r)}}
