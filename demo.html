@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo — CritiData Nefrología</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --navy:#0D1B3E;--navy2:#1a3a6b;--blue:#1565c0;--cyan:#00acc1;
+  --bg:#f0f4f8;--surface:#fff;--border:#e2e8f0;
+  --text:#0f172a;--muted:#64748b;
+  --green:#15803d;--red:#b91c1c;--orange:#854d0e;--yellow:#d97706;
+}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+
+/* ── Banner ── */
+.banner{
+  background:linear-gradient(90deg,var(--navy),var(--navy2));
+  color:#fff;padding:11px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 12px rgba(0,0,0,.25);
+  flex-shrink:0;
+}
+.brand{font-size:17px;font-weight:300;letter-spacing:1.5px;display:flex;align-items:center;gap:10px;}
+.demo-badge{background:rgba(252,211,77,.15);color:#fcd34d;border:1px solid rgba(252,211,77,.3);
+  padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:1px;}
+.banner-right{display:flex;align-items:center;gap:14px;}
+.banner-back{color:rgba(255,255,255,.55);font-size:13px;text-decoration:none;}
+.banner-back:hover{color:#fff;}
+.banner-cta{
+  background:linear-gradient(90deg,var(--blue),var(--cyan));
+  color:#fff;border:none;padding:8px 18px;border-radius:8px;
+  font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;
+  display:inline-block;transition:opacity .2s;
+}
+.banner-cta:hover{opacity:.85;}
+
+/* ── Shell ── */
+.shell{display:flex;flex:1;overflow:hidden;height:calc(100vh - 46px);}
+
+/* ── Sidebar ── */
+.sidebar{
+  width:210px;background:var(--navy);
+  display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;
+}
+.sidebar-hdr{
+  padding:14px 16px;font-size:10px;font-weight:700;letter-spacing:1px;
+  color:rgba(255,255,255,.35);text-transform:uppercase;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.sidebar-list{overflow-y:auto;flex:1;}
+.p-item{
+  padding:11px 14px;cursor:pointer;
+  border-left:3px solid transparent;
+  transition:background .15s,border-color .15s;
+}
+.p-item:hover{background:rgba(255,255,255,.07);}
+.p-item.active{background:rgba(255,255,255,.12);border-left-color:var(--cyan);}
+.p-name{font-size:13.5px;font-weight:600;color:#fff;display:flex;align-items:center;gap:6px;}
+.p-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;flex-shrink:0;}
+.p-dot.warn{background:#f97316;}.p-dot.danger{background:#ef4444;}
+.p-sub{font-size:11px;color:rgba(255,255,255,.4);margin-top:2px;padding-left:13px;}
+
+/* ── Main ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+
+/* ── Tabs ── */
+.tabs{
+  display:flex;background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:0 16px;overflow-x:auto;flex-shrink:0;
+}
+.tab-btn{
+  padding:13px 16px;border:none;background:transparent;
+  color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;
+  border-bottom:2.5px solid transparent;margin-bottom:-1px;
+  white-space:nowrap;transition:color .2s,border-color .2s;font-family:inherit;
+}
+.tab-btn:hover{color:var(--text);}
+.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue);}
+
+/* ── Content ── */
+.content{flex:1;overflow-y:auto;padding:20px;}
+.sec{display:none;}.sec.active{display:block;}
+
+/* ── Patient overview bar ── */
+.p-bar{
+  background:linear-gradient(135deg,var(--navy),var(--navy2));
+  border-radius:12px;padding:14px 18px;color:#fff;
+  display:flex;align-items:center;gap:14px;margin-bottom:18px;
+}
+.p-avatar{
+  width:44px;height:44px;border-radius:50%;
+  background:rgba(255,255,255,.15);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;font-weight:700;flex-shrink:0;color:#fff;
+}
+.p-bar-name{font-size:17px;font-weight:700;}
+.p-bar-meta{font-size:12px;color:rgba(255,255,255,.55);margin-top:2px;}
+.p-chips{display:flex;gap:7px;margin-top:6px;flex-wrap:wrap;}
+.p-chip{font-size:11px;background:rgba(255,255,255,.12);padding:3px 10px;border-radius:20px;color:rgba(255,255,255,.85);}
+
+/* ── Cards ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:14px;}
+.card-title{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:14px;}
+
+/* ── Patient grid ── */
+.p-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;}
+.p-card{
+  background:var(--surface);border:1.5px solid var(--border);border-radius:12px;
+  padding:16px;cursor:pointer;transition:border-color .2s,box-shadow .2s;
+}
+.p-card:hover{border-color:var(--blue);box-shadow:0 4px 16px rgba(21,101,192,.1);}
+.p-card.active{border-color:var(--blue);background:#f0f4ff;}
+.pc-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.pc-av{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--navy),var(--blue));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:13px;font-weight:700;flex-shrink:0;
+}
+.pc-nm{font-size:14px;font-weight:700;}
+.pc-sb{font-size:11px;color:var(--muted);margin-top:1px;}
+.pc-stats{display:flex;gap:8px;}
+.pc-st{flex:1;background:var(--bg);border-radius:8px;padding:8px;text-align:center;}
+.pc-st-lbl{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;}
+.pc-st-val{font-size:15px;font-weight:800;margin-top:2px;}
+.ok{color:#15803d;}.warn{color:#854d0e;}.danger{color:#b91c1c;}.info{color:#1d4ed8;}
+
+/* ── Lab table ── */
+.lab-tbl{width:100%;border-collapse:collapse;font-size:13.5px;}
+.lab-tbl th{
+  text-align:left;padding:8px 12px;font-size:10px;font-weight:700;
+  color:var(--muted);letter-spacing:.5px;text-transform:uppercase;
+  border-bottom:2px solid var(--border);background:#f8fafc;
+}
+.lab-tbl td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle;}
+.lab-tbl tr:last-child td{border-bottom:none;}
+.lab-tbl tr:hover td{background:#f8fafc;}
+.lab-name{font-weight:600;}
+.lab-val{font-size:15px;font-weight:700;}
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;}
+.badge-ok{background:#dcfce7;color:#15803d;}
+.badge-warn{background:#fef9c3;color:#854d0e;}
+.badge-danger{background:#fee2e2;color:#b91c1c;}
+.badge-info{background:#dbeafe;color:#1d4ed8;}
+
+/* ── Kt/V ── */
+.ktv-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px;}
+.ktv-form{display:flex;flex-direction:column;gap:12px;}
+.fg{display:flex;flex-direction:column;gap:4px;}
+.fg label{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.4px;text-transform:uppercase;}
+.fg input{
+  padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;
+  font-size:15px;font-family:inherit;color:var(--text);background:#f8fafc;outline:none;
+  transition:border-color .2s;
+}
+.fg input:focus{border-color:var(--blue);background:#fff;}
+.btn-calc{
+  padding:11px;background:linear-gradient(90deg,var(--blue),var(--cyan));
+  color:#fff;border:none;border-radius:9px;font-size:14px;font-weight:700;
+  cursor:pointer;font-family:inherit;transition:opacity .2s;
+}
+.btn-calc:hover{opacity:.88;}
+.ktv-result{
+  background:var(--bg);border-radius:12px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:28px 20px;text-align:center;min-height:200px;
+}
+.ktv-num{font-size:60px;font-weight:800;line-height:1;}
+.ktv-lbl{font-size:15px;font-weight:700;margin:6px 0 2px;}
+.ktv-sub{font-size:12px;color:var(--muted);}
+.ktv-bar-wrap{width:100%;margin-top:18px;}
+.ktv-bar-bg{background:#e2e8f0;border-radius:999px;height:10px;position:relative;}
+.ktv-bar-fill{height:100%;border-radius:999px;transition:width .6s cubic-bezier(.22,1,.36,1);}
+.ktv-bar-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:4px;}
+.ktv-refs{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;}
+.ktv-ref{flex:1;min-width:90px;padding:10px;border-radius:8px;text-align:center;}
+.ktv-ref-lbl{font-size:10px;font-weight:700;text-transform:uppercase;}
+.ktv-ref-val{font-size:18px;font-weight:800;margin-top:2px;}
+
+/* ── Charts ── */
+.chart-wrap{overflow-x:auto;}
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+/* ── Planilla ── */
+.plan-tbl{width:100%;border-collapse:collapse;font-size:12.5px;}
+.plan-tbl th{
+  text-align:center;padding:8px 10px;font-size:10px;font-weight:700;
+  color:var(--muted);letter-spacing:.4px;text-transform:uppercase;
+  border-bottom:2px solid var(--border);background:#f8fafc;white-space:nowrap;
+}
+.plan-tbl th:first-child{text-align:left;}
+.plan-tbl td{padding:8px 10px;border-bottom:1px solid var(--border);text-align:center;vertical-align:middle;}
+.plan-tbl td:first-child{text-align:left;font-weight:700;}
+.plan-tbl td:last-child{text-align:left;font-size:11px;color:var(--muted);}
+.plan-tbl tr:last-child td{border-bottom:none;}
+.plan-tbl tr:hover td{background:#f8fafc;}
+.rx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;}
+.rx-item{background:var(--bg);border-radius:8px;padding:11px;}
+.rx-lbl{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;}
+.rx-val{font-size:13.5px;font-weight:600;}
+
+/* ── Responsive ── */
+@media(max-width:700px){
+  .sidebar{display:none;}
+  .ktv-layout{grid-template-columns:1fr;}
+  .chart-grid{grid-template-columns:1fr;}
+}
+@media(max-width:480px){
+  .p-grid{grid-template-columns:1fr;}
+  .content{padding:14px;}
+}
+</style>
+</head>
+<body>
+
+<!-- Banner -->
+<header class="banner">
+  <div class="brand">
+    CritiData Nefrología
+    <span class="demo-badge">DEMO</span>
+  </div>
+  <div class="banner-right">
+    <a href="/" class="banner-back">← Inicio</a>
+    <a href="/#" class="banner-cta" onclick="sessionStorage.setItem('openTab','register')">Empezar gratis →</a>
+  </div>
+</header>
+
+<!-- Shell -->
+<div class="shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-hdr">Pacientes (5)</div>
+    <div class="sidebar-list" id="sidebar"></div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <!-- Tabs -->
+    <nav class="tabs">
+      <button class="tab-btn active"  onclick="goSec('pacientes',this)">Pacientes</button>
+      <button class="tab-btn"         onclick="goSec('laboratorio',this)">Laboratorio</button>
+      <button class="tab-btn"         onclick="goSec('ktv',this)">Kt/V</button>
+      <button class="tab-btn"         onclick="goSec('evolucion',this)">Evolución</button>
+      <button class="tab-btn"         onclick="goSec('planilla',this)">Planilla</button>
+    </nav>
+
+    <!-- Content -->
+    <div class="content">
+
+      <!-- PACIENTES -->
+      <div class="sec active" id="sec-pacientes">
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Seleccioná un paciente para ver sus datos</p>
+        <div class="p-grid" id="p-grid"></div>
+      </div>
+
+      <!-- LABORATORIO -->
+      <div class="sec" id="sec-laboratorio">
+        <div id="hdr-lab"></div>
+        <div class="card">
+          <div class="card-title">Resultados · <span id="lab-date"></span></div>
+          <div style="overflow-x:auto;">
+            <table class="lab-tbl">
+              <thead><tr><th>Parámetro</th><th>Valor</th><th>Referencia</th><th>Estado</th></tr></thead>
+              <tbody id="lab-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- KT/V -->
+      <div class="sec" id="sec-ktv">
+        <div id="hdr-ktv"></div>
+        <div class="ktv-layout">
+          <div class="card" style="margin-bottom:0;">
+            <div class="card-title">Datos de la sesión</div>
+            <div class="ktv-form">
+              <div class="fg"><label>BUN pre-diálisis (mg/dL)</label><input type="number" id="k-pre" step="0.1"></div>
+              <div class="fg"><label>BUN post-diálisis (mg/dL)</label><input type="number" id="k-post" step="0.1"></div>
+              <div class="fg"><label>Peso post-diálisis (kg)</label><input type="number" id="k-w" step="0.1"></div>
+              <div class="fg"><label>Ultrafiltrado (L)</label><input type="number" id="k-uf" step="0.1"></div>
+              <div class="fg"><label>Duración sesión (horas)</label><input type="number" id="k-dur" step="0.25"></div>
+              <button class="btn-calc" onclick="calcKtV()">Calcular Kt/V</button>
+            </div>
+          </div>
+          <div class="ktv-result" id="ktv-panel">
+            <div style="color:var(--muted);font-size:13px;">Completá los datos y presioná Calcular</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Referencia KDOQI</div>
+          <div class="ktv-refs">
+            <div class="ktv-ref" style="background:#fee2e2;"><div class="ktv-ref-lbl" style="color:#b91c1c;">Insuficiente</div><div class="ktv-ref-val" style="color:#b91c1c;">&lt; 1.2</div></div>
+            <div class="ktv-ref" style="background:#dbeafe;"><div class="ktv-ref-lbl" style="color:#1d4ed8;">Adecuado</div><div class="ktv-ref-val" style="color:#1d4ed8;">≥ 1.2</div></div>
+            <div class="ktv-ref" style="background:#dcfce7;"><div class="ktv-ref-lbl" style="color:#15803d;">Excelente</div><div class="ktv-ref-val" style="color:#15803d;">≥ 1.4</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EVOLUCIÓN -->
+      <div class="sec" id="sec-evolucion">
+        <div id="hdr-evol"></div>
+        <div class="card"><div class="card-title">Kt/V — últimos 6 meses</div><div class="chart-wrap" id="ch-ktv"></div></div>
+        <div class="chart-grid">
+          <div class="card"><div class="card-title">Hemoglobina (g/dL)</div><div class="chart-wrap" id="ch-hb"></div></div>
+          <div class="card"><div class="card-title">Fósforo (mg/dL)</div><div class="chart-wrap" id="ch-ph"></div></div>
+        </div>
+        <div class="card"><div class="card-title">Potasio (mEq/L)</div><div class="chart-wrap" id="ch-k"></div></div>
+      </div>
+
+      <!-- PLANILLA -->
+      <div class="sec" id="sec-planilla">
+        <div id="hdr-plan"></div>
+        <div class="card">
+          <div class="card-title">Registro de sesiones · Julio 2026</div>
+          <div style="overflow-x:auto;">
+            <table class="plan-tbl">
+              <thead><tr><th>Fecha</th><th>Peso pre</th><th>Peso post</th><th>UF (L)</th><th>TAS</th><th>TAD</th><th>Pulso</th><th>Duración</th><th>Incidencias</th></tr></thead>
+              <tbody id="plan-body"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Prescripción actual</div>
+          <div class="rx-grid" id="rx-grid"></div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /shell -->
+
+<script>
+// ── DATA ──────────────────────────────────────────────
+const P = [
+  {
+    id:1, ini:"GR", name:"García, Roberto", age:68,
+    access:"FAV Braquiocefálica", freq:"Lun · Miér · Vie", dw:72.5, st:"estable", stT:"ok",
+    labs:{ date:"28/06/2026", rows:[
+      {n:"Creatinina",       v:9.8,  u:"mg/dL", r:"> 5 (diálisis)",   s:"ok"},
+      {n:"Urea",             v:142,  u:"mg/dL", r:"—",                s:"info"},
+      {n:"BUN pre-diálisis", v:68,   u:"mg/dL", r:"—",                s:"info"},
+      {n:"BUN post-diálisis",v:18,   u:"mg/dL", r:"—",                s:"info"},
+      {n:"Potasio",          v:5.2,  u:"mEq/L", r:"3.5 – 5.5",        s:"ok"},
+      {n:"Fósforo",          v:5.8,  u:"mg/dL", r:"3.5 – 5.5",        s:"warn"},
+      {n:"Hemoglobina",      v:10.4, u:"g/dL",  r:"10 – 12",          s:"ok"},
+      {n:"Albúmina",         v:3.8,  u:"g/dL",  r:"3.5 – 5.0",        s:"ok"},
+      {n:"Calcio",           v:9.2,  u:"mg/dL", r:"8.5 – 10.5",       s:"ok"},
+      {n:"PTH",              v:320,  u:"pg/mL", r:"150 – 600",        s:"ok"},
+      {n:"PCR",              v:1.2,  u:"mg/L",  r:"< 5.0",            s:"ok"},
+      {n:"Sat. Transferrina",v:28,   u:"%",     r:"20 – 50",          s:"ok"},
+      {n:"Ferritina",        v:380,  u:"ng/mL", r:"200 – 800",        s:"ok"},
+    ]},
+    ktv:{pre:68,post:18,w:72.5,uf:2.1,dur:4},
+    tr:{m:["Ene","Feb","Mar","Abr","May","Jun"],
+      ktv:[1.28,1.31,1.35,1.29,1.38,1.41],
+      hb:[9.8,10.1,10.4,10.2,10.6,10.4],
+      ph:[6.2,5.9,6.1,5.8,5.6,5.8],
+      k:[5.4,5.1,5.3,5.0,5.2,5.2]},
+    ses:[
+      {d:"02/07",pre:74.6,post:72.5,uf:2.1,tas:140,tad:80,p:72,dur:"4h00",inc:"Sin novedades"},
+      {d:"30/06",pre:74.2,post:72.5,uf:1.7,tas:138,tad:78,p:70,dur:"4h00",inc:"Calambres leves al final"},
+      {d:"27/06",pre:74.8,post:72.5,uf:2.3,tas:145,tad:82,p:74,dur:"4h00",inc:"Sin novedades"},
+      {d:"25/06",pre:74.1,post:72.5,uf:1.6,tas:136,tad:76,p:68,dur:"4h00",inc:"Sin novedades"},
+      {d:"23/06",pre:74.5,post:72.5,uf:2.0,tas:142,tad:80,p:71,dur:"4h00",inc:"Hipotensión leve"},
+      {d:"20/06",pre:74.3,post:72.5,uf:1.8,tas:139,tad:79,p:70,dur:"4h00",inc:"Sin novedades"},
+    ],
+    rx:{Dializador:"Fresenius FX80","Flujo sangre (QB)":"300 mL/min","Flujo dializante (QD)":"500 mL/min",
+      Duración:"4 horas",Anticoagulante:"Heparina 2000 UI",Bicarbonato:"35 mEq/L"}
+  },
+  {
+    id:2, ini:"LM", name:"López, María", age:54,
+    access:"Catéter tunelizado", freq:"Mar · Jue · Sáb", dw:58.0, st:"alerta", stT:"warn",
+    labs:{ date:"01/07/2026", rows:[
+      {n:"Creatinina",       v:8.4, u:"mg/dL", r:"> 5 (diálisis)",  s:"ok"},
+      {n:"Urea",             v:168, u:"mg/dL", r:"—",               s:"info"},
+      {n:"BUN pre-diálisis", v:78,  u:"mg/dL", r:"—",               s:"info"},
+      {n:"BUN post-diálisis",v:24,  u:"mg/dL", r:"—",               s:"info"},
+      {n:"Potasio",          v:6.1, u:"mEq/L", r:"3.5 – 5.5",       s:"warn"},
+      {n:"Fósforo",          v:6.8, u:"mg/dL", r:"3.5 – 5.5",       s:"danger"},
+      {n:"Hemoglobina",      v:9.2, u:"g/dL",  r:"10 – 12",         s:"warn"},
+      {n:"Albúmina",         v:3.4, u:"g/dL",  r:"3.5 – 5.0",       s:"warn"},
+      {n:"Calcio",           v:8.3, u:"mg/dL", r:"8.5 – 10.5",      s:"warn"},
+      {n:"PTH",              v:680, u:"pg/mL", r:"150 – 600",       s:"danger"},
+      {n:"PCR",              v:4.8, u:"mg/L",  r:"< 5.0",           s:"warn"},
+      {n:"Sat. Transferrina",v:18,  u:"%",     r:"20 – 50",         s:"warn"},
+      {n:"Ferritina",        v:140, u:"ng/mL", r:"200 – 800",       s:"warn"},
+    ]},
+    ktv:{pre:78,post:24,w:58.0,uf:1.4,dur:3.5},
+    tr:{m:["Ene","Feb","Mar","Abr","May","Jun"],
+      ktv:[1.18,1.12,1.15,1.09,1.13,1.08],
+      hb:[10.2,9.8,9.6,9.4,9.5,9.2],
+      ph:[5.9,6.2,6.5,6.8,6.6,6.8],
+      k:[5.8,6.0,5.9,6.2,6.0,6.1]},
+    ses:[
+      {d:"03/07",pre:59.4,post:58.0,uf:1.4,tas:148,tad:88,p:80,dur:"3h30",inc:"Hipertensión al inicio"},
+      {d:"01/07",pre:59.6,post:58.0,uf:1.6,tas:152,tad:90,p:82,dur:"3h30",inc:"Sin novedades"},
+      {d:"28/06",pre:59.2,post:58.0,uf:1.2,tas:144,tad:86,p:78,dur:"3h30",inc:"Se solicitó ajuste EPO"},
+      {d:"26/06",pre:59.5,post:58.0,uf:1.5,tas:150,tad:89,p:81,dur:"3h30",inc:"Hipertensión al inicio"},
+      {d:"24/06",pre:59.3,post:58.0,uf:1.3,tas:146,tad:87,p:79,dur:"3h30",inc:"Sin novedades"},
+      {d:"21/06",pre:59.7,post:58.0,uf:1.7,tas:155,tad:92,p:84,dur:"3h30",inc:"Hipertensión - ajuste"},
+    ],
+    rx:{Dializador:"Baxter CT190G","Flujo sangre (QB)":"280 mL/min","Flujo dializante (QD)":"500 mL/min",
+      Duración:"3.5 horas",Anticoagulante:"Heparina 1500 UI",Bicarbonato:"35 mEq/L"}
+  },
+  {
+    id:3, ini:"FC", name:"Fernández, Carlos", age:72,
+    access:"FAV Radiocefálica", freq:"Lun · Miér · Vie", dw:80.0, st:"estable", stT:"ok",
+    labs:{ date:"28/06/2026", rows:[
+      {n:"Creatinina",       v:11.2,u:"mg/dL", r:"> 5 (diálisis)",  s:"ok"},
+      {n:"Urea",             v:156, u:"mg/dL", r:"—",               s:"info"},
+      {n:"BUN pre-diálisis", v:73,  u:"mg/dL", r:"—",               s:"info"},
+      {n:"BUN post-diálisis",v:20,  u:"mg/dL", r:"—",               s:"info"},
+      {n:"Potasio",          v:4.8, u:"mEq/L", r:"3.5 – 5.5",       s:"ok"},
+      {n:"Fósforo",          v:4.9, u:"mg/dL", r:"3.5 – 5.5",       s:"warn"},
+      {n:"Hemoglobina",      v:11.2,u:"g/dL",  r:"10 – 12",         s:"ok"},
+      {n:"Albúmina",         v:4.1, u:"g/dL",  r:"3.5 – 5.0",       s:"ok"},
+      {n:"Calcio",           v:9.8, u:"mg/dL", r:"8.5 – 10.5",      s:"ok"},
+      {n:"PTH",              v:280, u:"pg/mL", r:"150 – 600",       s:"ok"},
+      {n:"PCR",              v:0.8, u:"mg/L",  r:"< 5.0",           s:"ok"},
+      {n:"Sat. Transferrina",v:35,  u:"%",     r:"20 – 50",         s:"ok"},
+      {n:"Ferritina",        v:520, u:"ng/mL", r:"200 – 800",       s:"ok"},
+    ]},
+    ktv:{pre:73,post:20,w:80.0,uf:2.8,dur:4.5},
+    tr:{m:["Ene","Feb","Mar","Abr","May","Jun"],
+      ktv:[1.42,1.45,1.48,1.50,1.47,1.52],
+      hb:[10.8,11.0,11.2,11.1,11.4,11.2],
+      ph:[5.2,5.0,4.8,5.1,4.9,4.9],
+      k:[5.0,4.8,4.9,4.7,4.8,4.8]},
+    ses:[
+      {d:"02/07",pre:82.8,post:80.0,uf:2.8,tas:132,tad:75,p:65,dur:"4h30",inc:"Sin novedades"},
+      {d:"30/06",pre:82.5,post:80.0,uf:2.5,tas:134,tad:76,p:66,dur:"4h30",inc:"Sin novedades"},
+      {d:"27/06",pre:83.1,post:80.0,uf:3.1,tas:138,tad:78,p:68,dur:"4h30",inc:"Ligero edema maleolar"},
+      {d:"25/06",pre:82.6,post:80.0,uf:2.6,tas:130,tad:74,p:64,dur:"4h30",inc:"Sin novedades"},
+      {d:"23/06",pre:82.9,post:80.0,uf:2.9,tas:133,tad:76,p:65,dur:"4h30",inc:"Sin novedades"},
+      {d:"20/06",pre:82.4,post:80.0,uf:2.4,tas:131,tad:75,p:64,dur:"4h30",inc:"Sin novedades"},
+    ],
+    rx:{Dializador:"Nipro ELISIO-21H","Flujo sangre (QB)":"320 mL/min","Flujo dializante (QD)":"500 mL/min",
+      Duración:"4.5 horas",Anticoagulante:"Heparina 2500 UI",Bicarbonato:"34 mEq/L"}
+  },
+  {
+    id:4, ini:"MA", name:"Martínez, Ana", age:61,
+    access:"FAV Braquiocefálica", freq:"Lun · Miér · Vie", dw:64.0, st:"estable", stT:"ok",
+    labs:{ date:"30/06/2026", rows:[
+      {n:"Creatinina",       v:7.9, u:"mg/dL", r:"> 5 (diálisis)",  s:"ok"},
+      {n:"Urea",             v:138, u:"mg/dL", r:"—",               s:"info"},
+      {n:"BUN pre-diálisis", v:64,  u:"mg/dL", r:"—",               s:"info"},
+      {n:"BUN post-diálisis",v:16,  u:"mg/dL", r:"—",               s:"info"},
+      {n:"Potasio",          v:4.6, u:"mEq/L", r:"3.5 – 5.5",       s:"ok"},
+      {n:"Fósforo",          v:4.2, u:"mg/dL", r:"3.5 – 5.5",       s:"ok"},
+      {n:"Hemoglobina",      v:11.8,u:"g/dL",  r:"10 – 12",         s:"ok"},
+      {n:"Albúmina",         v:4.3, u:"g/dL",  r:"3.5 – 5.0",       s:"ok"},
+      {n:"Calcio",           v:9.5, u:"mg/dL", r:"8.5 – 10.5",      s:"ok"},
+      {n:"PTH",              v:195, u:"pg/mL", r:"150 – 600",       s:"ok"},
+      {n:"PCR",              v:0.5, u:"mg/L",  r:"< 5.0",           s:"ok"},
+      {n:"Sat. Transferrina",v:32,  u:"%",     r:"20 – 50",         s:"ok"},
+      {n:"Ferritina",        v:450, u:"ng/mL", r:"200 – 800",       s:"ok"},
+    ]},
+    ktv:{pre:64,post:16,w:64.0,uf:1.8,dur:4},
+    tr:{m:["Ene","Feb","Mar","Abr","May","Jun"],
+      ktv:[1.38,1.42,1.44,1.48,1.46,1.52],
+      hb:[11.0,11.2,11.5,11.8,11.6,11.8],
+      ph:[4.8,4.5,4.3,4.2,4.4,4.2],
+      k:[4.8,4.7,4.6,4.5,4.7,4.6]},
+    ses:[
+      {d:"02/07",pre:65.8,post:64.0,uf:1.8,tas:128,tad:72,p:68,dur:"4h00",inc:"Sin novedades"},
+      {d:"30/06",pre:65.6,post:64.0,uf:1.6,tas:126,tad:70,p:66,dur:"4h00",inc:"Sin novedades"},
+      {d:"27/06",pre:65.9,post:64.0,uf:1.9,tas:130,tad:74,p:69,dur:"4h00",inc:"Sin novedades"},
+      {d:"25/06",pre:65.7,post:64.0,uf:1.7,tas:127,tad:71,p:67,dur:"4h00",inc:"Sin novedades"},
+      {d:"23/06",pre:65.8,post:64.0,uf:1.8,tas:129,tad:73,p:68,dur:"4h00",inc:"Sin novedades"},
+      {d:"20/06",pre:65.5,post:64.0,uf:1.5,tas:125,tad:70,p:65,dur:"4h00",inc:"Sin novedades"},
+    ],
+    rx:{Dializador:"Fresenius FX60","Flujo sangre (QB)":"300 mL/min","Flujo dializante (QD)":"500 mL/min",
+      Duración:"4 horas",Anticoagulante:"Heparina 1800 UI",Bicarbonato:"35 mEq/L"}
+  },
+  {
+    id:5, ini:"RJ", name:"Rodríguez, Jorge", age:57,
+    access:"FAV Radiocefálica", freq:"Mar · Jue · Sáb", dw:76.0, st:"crítico", stT:"danger",
+    labs:{ date:"01/07/2026", rows:[
+      {n:"Creatinina",       v:10.1,u:"mg/dL", r:"> 5 (diálisis)",  s:"ok"},
+      {n:"Urea",             v:198, u:"mg/dL", r:"—",               s:"info"},
+      {n:"BUN pre-diálisis", v:92,  u:"mg/dL", r:"—",               s:"info"},
+      {n:"BUN post-diálisis",v:32,  u:"mg/dL", r:"—",               s:"info"},
+      {n:"Potasio",          v:6.4, u:"mEq/L", r:"3.5 – 5.5",       s:"danger"},
+      {n:"Fósforo",          v:7.2, u:"mg/dL", r:"3.5 – 5.5",       s:"danger"},
+      {n:"Hemoglobina",      v:8.8, u:"g/dL",  r:"10 – 12",         s:"danger"},
+      {n:"Albúmina",         v:3.1, u:"g/dL",  r:"3.5 – 5.0",       s:"danger"},
+      {n:"Calcio",           v:7.8, u:"mg/dL", r:"8.5 – 10.5",      s:"danger"},
+      {n:"PTH",              v:890, u:"pg/mL", r:"150 – 600",       s:"danger"},
+      {n:"PCR",              v:12.4,u:"mg/L",  r:"< 5.0",           s:"danger"},
+      {n:"Sat. Transferrina",v:14,  u:"%",     r:"20 – 50",         s:"danger"},
+      {n:"Ferritina",        v:82,  u:"ng/mL", r:"200 – 800",       s:"danger"},
+    ]},
+    ktv:{pre:92,post:32,w:76.0,uf:1.2,dur:3.5},
+    tr:{m:["Ene","Feb","Mar","Abr","May","Jun"],
+      ktv:[1.15,1.10,1.08,1.05,1.02,0.98],
+      hb:[10.5,10.0,9.5,9.2,9.0,8.8],
+      ph:[5.8,6.2,6.5,6.9,7.0,7.2],
+      k:[5.6,5.9,6.1,6.3,6.2,6.4]},
+    ses:[
+      {d:"03/07",pre:77.2,post:76.0,uf:1.2,tas:168,tad:98, p:88,dur:"3h30",inc:"Hipertensión severa - UF suspendida"},
+      {d:"01/07",pre:77.5,post:76.0,uf:1.5,tas:172,tad:100,p:90,dur:"3h30",inc:"Hipertensión - medicación ajustada"},
+      {d:"28/06",pre:77.3,post:76.0,uf:1.3,tas:165,tad:96, p:86,dur:"3h30",inc:"Paciente incumpliente con dieta"},
+      {d:"26/06",pre:77.6,post:76.0,uf:1.6,tas:170,tad:98, p:89,dur:"3h30",inc:"Hipertensión"},
+      {d:"24/06",pre:77.4,post:76.0,uf:1.4,tas:162,tad:94, p:85,dur:"3h30",inc:"Sin novedades"},
+      {d:"21/06",pre:77.8,post:76.0,uf:1.8,tas:175,tad:102,p:92,dur:"3h30",inc:"Hipertensión severa - evaluación médica"},
+    ],
+    rx:{Dializador:"Baxter CT190G","Flujo sangre (QB)":"280 mL/min","Flujo dializante (QD)":"500 mL/min",
+      Duración:"3.5 horas",Anticoagulante:"Heparina 1500 UI",Bicarbonato:"35 mEq/L"}
+  }
+];
+
+// ── STATE ──
+let cur = P[0];
+let curSec = 'pacientes';
+
+// ── HELPERS ──
+function daugirdas(pre,post,w,uf,dur){
+  const R = post/pre;
+  return -Math.log(R - 0.008*dur) + (4 - 3.5*R)*(uf/w);
+}
+
+function stClass(s){ return {ok:'ok',warn:'warn',danger:'danger',info:'info'}[s]||''; }
+function badge(s){
+  if(s==='ok')     return '<span class="badge badge-ok">Normal</span>';
+  if(s==='warn')   return '<span class="badge badge-warn">Elevado</span>';
+  if(s==='danger') return '<span class="badge badge-danger">Alto</span>';
+  return '—';
+}
+
+function pBar(hdrId){
+  const p = cur;
+  const stColors = {ok:'rgba(34,197,94,.2)',warn:'rgba(249,115,22,.2)',danger:'rgba(239,68,68,.2)'};
+  const stText = {ok:'rgba(34,197,94,1)',warn:'rgba(249,115,22,1)',danger:'rgba(239,68,68,1)'};
+  document.getElementById(hdrId).innerHTML = `
+    <div class="p-bar">
+      <div class="p-avatar">${p.ini}</div>
+      <div>
+        <div class="p-bar-name">${p.name}</div>
+        <div class="p-bar-meta">${p.age} años · ${p.access} · Peso seco: ${p.dw} kg</div>
+        <div class="p-chips">
+          <span class="p-chip">📅 ${p.freq}</span>
+          <span class="p-chip" style="background:${stColors[p.stT]};color:${stText[p.stT]};">
+            ${p.stT==='ok'?'🟢':p.stT==='warn'?'🟡':'🔴'} ${p.st}
+          </span>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ── SIDEBAR ──
+function renderSidebar(){
+  document.getElementById('sidebar').innerHTML = P.map(p=>`
+    <div class="p-item ${p.id===cur.id?'active':''}" onclick="selectP(${p.id})">
+      <div class="p-name">
+        <span class="p-dot ${p.stT==='warn'?'warn':p.stT==='danger'?'danger':''}"></span>
+        ${p.name}
+      </div>
+      <div class="p-sub">${p.age} a · ${p.access.split(' ')[0]}</div>
+    </div>`).join('');
+}
+
+// ── PATIENT GRID ──
+function renderGrid(){
+  document.getElementById('p-grid').innerHTML = P.map(p=>{
+    const lastKtV = p.tr.ktv[p.tr.ktv.length-1];
+    const kClass = lastKtV>=1.4?'ok':lastKtV>=1.2?'warn':'danger';
+    const lastHb = p.tr.hb[p.tr.hb.length-1];
+    const hClass = lastHb>=10?'ok':'danger';
+    const stClass = {ok:'ok',warn:'warn',danger:'danger'}[p.stT];
+    return `
+    <div class="p-card ${p.id===cur.id?'active':''}" onclick="selectP(${p.id},true)">
+      <div class="pc-top">
+        <div class="pc-av">${p.ini}</div>
+        <div>
+          <div class="pc-nm">${p.name}</div>
+          <div class="pc-sb">${p.age} años · ${p.freq}</div>
+        </div>
+      </div>
+      <div class="pc-stats">
+        <div class="pc-st"><div class="pc-st-lbl">Kt/V</div><div class="pc-st-val ${kClass}">${lastKtV.toFixed(2)}</div></div>
+        <div class="pc-st"><div class="pc-st-lbl">Hb</div><div class="pc-st-val ${hClass}">${lastHb.toFixed(1)}</div></div>
+        <div class="pc-st"><div class="pc-st-lbl">Estado</div><div class="pc-st-val ${stClass}">${p.st.charAt(0).toUpperCase()+p.st.slice(1)}</div></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── LAB ──
+function renderLab(){
+  pBar('hdr-lab');
+  document.getElementById('lab-date').textContent = cur.labs.date;
+  document.getElementById('lab-body').innerHTML = cur.labs.rows.map(r=>`
+    <tr>
+      <td class="lab-name">${r.n}</td>
+      <td class="lab-val ${stClass(r.s)}">${r.v} <span style="font-size:11px;font-weight:400;color:var(--muted);">${r.u}</span></td>
+      <td style="color:var(--muted);font-size:12px;">${r.r}</td>
+      <td>${badge(r.s)}</td>
+    </tr>`).join('');
+}
+
+// ── KT/V ──
+function renderKtV(){
+  pBar('hdr-ktv');
+  const k = cur.ktv;
+  document.getElementById('k-pre').value  = k.pre;
+  document.getElementById('k-post').value = k.post;
+  document.getElementById('k-w').value    = k.w;
+  document.getElementById('k-uf').value   = k.uf;
+  document.getElementById('k-dur').value  = k.dur;
+  calcKtV();
+}
+
+function calcKtV(){
+  const pre=+document.getElementById('k-pre').value;
+  const post=+document.getElementById('k-post').value;
+  const w=+document.getElementById('k-w').value;
+  const uf=+document.getElementById('k-uf').value;
+  const dur=+document.getElementById('k-dur').value;
+  if([pre,post,w,uf,dur].some(isNaN)||pre<=0||post<=0) return;
+  const v = daugirdas(pre,post,w,uf,dur);
+  const cls = v>=1.4?'ok':v>=1.2?'info':'danger';
+  const color = v>=1.4?'#15803d':v>=1.2?'#1d4ed8':'#b91c1c';
+  const lbl = v>=1.4?'Excelente':v>=1.2?'Adecuado':'Insuficiente';
+  const sub = v>=1.4?'Por encima del objetivo KDOQI':v>=1.2?'Cumple objetivo mínimo (≥ 1.2)':'Por debajo del objetivo — revisar prescripción';
+  const pct = Math.min(v/2.0*100,100).toFixed(0);
+  document.getElementById('ktv-panel').innerHTML = `
+    <div class="ktv-num ${cls}" style="color:${color};">${v.toFixed(2)}</div>
+    <div class="ktv-lbl">${lbl}</div>
+    <div class="ktv-sub">${sub}</div>
+    <div class="ktv-bar-wrap">
+      <div class="ktv-bar-bg">
+        <div class="ktv-bar-fill" style="width:${pct}%;background:${color};"></div>
+        <div style="position:absolute;top:-1px;left:60%;width:2px;height:12px;background:#f97316;opacity:.7;"></div>
+        <div style="position:absolute;top:-1px;left:70%;width:2px;height:12px;background:#15803d;opacity:.7;"></div>
+      </div>
+      <div class="ktv-bar-labels"><span>0</span><span style="margin-left:58%;">1.2</span><span style="margin-left:auto;">2.0</span></div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:8px;">Fórmula Daugirdas 2ª generación</div>`;
+}
+
+// ── CHARTS ──
+function lineChart(id, months, data, color, mn, mx, refs){
+  const W=400, H=120;
+  const pad={t:18,r:16,b:22,l:34};
+  const w=W-pad.l-pad.r, h=H-pad.t-pad.b;
+  const n=data.length;
+  const xs=i=>pad.l+(i/(n-1))*w;
+  const ys=v=>pad.t+h-((v-mn)/(mx-mn))*h;
+
+  let grid='', ylbls='';
+  [0,.25,.5,.75,1].forEach(t=>{
+    const v=mn+t*(mx-mn), y=ys(v);
+    grid+=`<line x1="${pad.l}" y1="${y}" x2="${pad.l+w}" y2="${y}" stroke="#f1f5f9" stroke-width="1"/>`;
+    ylbls+=`<text x="${pad.l-4}" y="${y+3.5}" text-anchor="end" font-size="9" fill="#94a3b8">${v.toFixed(1)}</text>`;
+  });
+
+  let refSVG='';
+  (refs||[]).forEach(({v,c,l})=>{
+    if(v>=mn&&v<=mx){
+      const y=ys(v);
+      refSVG+=`<line x1="${pad.l}" y1="${y}" x2="${pad.l+w}" y2="${y}" stroke="${c}" stroke-width="1" stroke-dasharray="4,3"/>`;
+    }
+  });
+
+  let xlbls='';
+  months.forEach((m,i)=>{ xlbls+=`<text x="${xs(i)}" y="${H-4}" text-anchor="middle" font-size="9" fill="#94a3b8">${m}</text>`; });
+
+  const pts=data.map((v,i)=>`${xs(i)},${ys(v)}`);
+  const path=`M ${pts.join(' L ')}`;
+  const area=`M ${xs(0)},${pad.t+h} L ${pts.join(' L ')} L ${xs(n-1)},${pad.t+h} Z`;
+
+  let dots='';
+  data.forEach((v,i)=>{
+    dots+=`<circle cx="${xs(i)}" cy="${ys(v)}" r="3.5" fill="${color}" stroke="#fff" stroke-width="1.5"/>`;
+    if(i===0||i===n-1) dots+=`<text x="${xs(i)}" y="${ys(v)-8}" text-anchor="middle" font-size="9" fill="${color}" font-weight="700">${v.toFixed(2)}</text>`;
+  });
+
+  const uid=id+Math.random().toString(36).slice(2);
+  document.getElementById(id).innerHTML=`
+    <svg width="100%" viewBox="0 0 ${W} ${H}">
+      <defs>
+        <linearGradient id="g${uid}" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${color}" stop-opacity=".18"/>
+          <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      ${grid}${refSVG}${ylbls}${xlbls}
+      <path d="${area}" fill="url(#g${uid})"/>
+      <path d="${path}" stroke="${color}" stroke-width="2.5" fill="none" stroke-linejoin="round" stroke-linecap="round"/>
+      ${dots}
+    </svg>`;
+}
+
+function renderEvol(){
+  pBar('hdr-evol');
+  const t=cur.tr;
+  lineChart('ch-ktv', t.m, t.ktv, '#1565c0', 0.7, 2.0, [{v:1.2,c:'#f97316'},{v:1.4,c:'#22c55e'}]);
+  lineChart('ch-hb',  t.m, t.hb,  '#7c3aed', 7.0,14.0, [{v:10,c:'#f97316'},{v:12,c:'#22c55e'}]);
+  lineChart('ch-ph',  t.m, t.ph,  '#e11d48', 2.0, 9.0, [{v:3.5,c:'#22c55e'},{v:5.5,c:'#f97316'}]);
+  lineChart('ch-k',   t.m, t.k,   '#d97706', 3.0, 7.5, [{v:3.5,c:'#22c55e'},{v:5.5,c:'#f97316'}]);
+}
+
+// ── PLANILLA ──
+function renderPlan(){
+  pBar('hdr-plan');
+  document.getElementById('plan-body').innerHTML = cur.ses.map(s=>{
+    const ufC = s.uf>3?'color:#b91c1c;font-weight:700':s.uf>2.5?'color:#854d0e':'';
+    const tasC = s.tas>160?'color:#b91c1c;font-weight:700':s.tas>140?'color:#854d0e':'';
+    return `<tr>
+      <td>${s.d}</td>
+      <td>${s.pre} kg</td><td>${s.post} kg</td>
+      <td style="${ufC}">${s.uf}</td>
+      <td style="${tasC}">${s.tas}</td><td>${s.tad}</td><td>${s.p}</td>
+      <td>${s.dur}</td><td>${s.inc}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('rx-grid').innerHTML = Object.entries(cur.rx).map(([k,v])=>`
+    <div class="rx-item"><div class="rx-lbl">${k}</div><div class="rx-val">${v}</div></div>`).join('');
+}
+
+// ── NAVIGATION ──
+function goSec(name, btn){
+  curSec=name;
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sec-'+name).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderSection();
+}
+
+function renderSection(){
+  if(curSec==='laboratorio') renderLab();
+  else if(curSec==='ktv')    renderKtV();
+  else if(curSec==='evolucion') renderEvol();
+  else if(curSec==='planilla')  renderPlan();
+}
+
+function selectP(id, switchTab){
+  cur = P.find(p=>p.id===id);
+  renderSidebar();
+  renderGrid();
+  if(switchTab){
+    const btns = document.querySelectorAll('.tab-btn');
+    goSec('laboratorio', btns[1]);
+  } else {
+    renderSection();
+  }
+}
+
+// ── INIT ──
+renderSidebar();
+renderGrid();
+</script>
+</body>
+</html>
