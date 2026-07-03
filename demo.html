@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Demo — CritiData Nefrología</title>
+<title>Demo — CritiData</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -12,40 +12,44 @@
   --text:#1a1a1a;--muted:#9e9e9e;--icon-bg:#eeeeee;
 }
 body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#e0e0e0;min-height:100vh;}
-
-/* ── Top banner ── */
 .banner{background:#0D1B3E;color:#fff;padding:9px 16px;display:flex;align-items:center;justify-content:space-between;}
 .brand{font-size:14px;font-weight:300;letter-spacing:1px;display:flex;align-items:center;gap:8px;}
 .badge{background:rgba(252,211,77,.15);color:#fcd34d;border:1px solid rgba(252,211,77,.3);padding:1px 8px;border-radius:12px;font-size:10px;font-weight:700;}
 .cta{background:#1565c0;color:#fff;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;text-decoration:none;}
-
-/* ── Phone shell ── */
 .shell{max-width:440px;margin:0 auto;min-height:calc(100vh - 38px);background:var(--bg);position:relative;overflow:hidden;}
-
-/* ── Screens ── */
 .scr{display:none;flex-direction:column;min-height:calc(100vh - 38px);}
 .scr.on{display:flex;}
-
-/* ── App header ── */
 .hdr{background:var(--surface);padding:14px 16px;display:flex;align-items:center;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;flex-shrink:0;}
 .hdr-back{width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:50%;color:var(--text);flex-shrink:0;}
 .hdr-back:hover{background:#f0f0f0;}
 .hdr-title{flex:1;font-size:17px;font-weight:600;text-align:center;color:var(--text);}
-.hdr-icon{width:30px;height:30px;display:flex;align-items:center;justify-content:center;color:var(--muted);flex-shrink:0;}
-
-/* ── Scrollable body ── */
+.hdr-icon{width:30px;height:30px;flex-shrink:0;}
 .body{flex:1;overflow-y:auto;padding:10px 0;}
+
+/* ── SELECTOR ── */
+.sel-hdr{padding:28px 20px 16px;text-align:center;}
+.sel-hdr-title{font-size:24px;font-weight:800;color:var(--text);letter-spacing:-.5px;}
+.sel-hdr-sub{font-size:14px;color:var(--muted);margin-top:5px;}
+.sel-card{background:var(--surface);margin:0 14px 10px;border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;border:1.5px solid transparent;transition:box-shadow .15s;}
+.sel-card:hover:not(.coming){box-shadow:0 2px 14px rgba(0,0,0,.12);}
+.sel-card.coming{opacity:.5;cursor:default;}
+.sel-ico{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sel-name{font-size:16px;font-weight:700;color:var(--text);}
+.sel-sub{font-size:12px;color:var(--muted);margin-top:3px;}
+.sel-right{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;}
+.sbadge{font-size:9px;font-weight:800;padding:3px 9px;border-radius:20px;white-space:nowrap;text-transform:uppercase;letter-spacing:.5px;}
+.sbadge-demo{background:#e8f5e9;color:#2e7d32;}
+.sbadge-prox{background:#f5f5f5;color:#9e9e9e;}
 
 /* ── HOME menu cards ── */
 .menu-card{background:var(--surface);margin:0 12px 8px;border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:background .12s;}
 .menu-card:hover{background:#f8f8f8;}
 .mi-icon{width:46px;height:46px;border-radius:50%;background:var(--icon-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.mi-text{flex:1;}
 .mi-title{font-size:15px;font-weight:600;color:var(--text);}
 .mi-sub{font-size:12px;color:var(--muted);margin-top:2px;}
-.mi-arr{color:#c8c8c8;}
+.mi-arr{color:#c8c8c8;margin-left:auto;}
 
-/* ── Patient list items ── */
+/* ── Patient list ── */
 .pli{background:var(--surface);margin:0 12px 8px;border-radius:14px;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background .12s;}
 .pli:hover{background:#f8f8f8;}
 .pli-l{display:flex;align-items:center;gap:12px;}
@@ -56,10 +60,14 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#e0e0e
 .pli-tag{font-size:10px;color:var(--muted);}
 .ktv-badge{font-size:16px;font-weight:800;}
 .kn{color:var(--green);}.ko{color:#1d4ed8;}.kl{color:var(--red);}
+.risk-badge{font-size:12px;font-weight:800;padding:3px 10px;border-radius:20px;}
+.rb-low{background:#e8f5e9;color:#2e7d32;}
+.rb-mod{background:#fff3e0;color:#e65100;}
+.rb-hi{background:#ffebee;color:#c62828;}
+.rb-crit{background:#c62828;color:#fff;}
 
 /* ── Lab detail ── */
 .pt-hdr{background:var(--surface);padding:6px 16px 12px;border-bottom:1px solid var(--border);text-align:center;margin-bottom:4px;}
-.pt-hdr-name{font-size:16px;font-weight:700;}
 .pt-hdr-date{font-size:12px;color:var(--muted);margin-top:2px;}
 .dr-info{background:var(--surface);padding:10px 16px;border-bottom:1px solid var(--border);margin-bottom:4px;display:flex;gap:16px;font-size:12px;}
 .dr-l{color:var(--muted);line-height:1.9;}
@@ -72,14 +80,12 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#e0e0e
 .lab-vl.obs{color:var(--orange);}.lab-vl.crit{color:var(--red);}
 .lab-ut{font-size:11px;color:var(--muted);margin-left:3px;}
 
-/* ── Estadística tabs ── */
+/* ── Estadística ── */
 .seg{display:flex;background:var(--surface);padding:6px 12px;gap:6px;border-bottom:1px solid var(--border);flex-shrink:0;}
 .seg-btn{flex:1;padding:8px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;background:transparent;color:var(--muted);transition:background .15s,color .15s;}
 .seg-btn.on{background:#e8f0fe;color:#1565c0;}
 .legend{display:flex;gap:12px;padding:8px 16px;font-size:11px;color:var(--muted);align-items:center;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;}
 .ldot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:3px;}
-
-/* ── Stats cards (vista rápida) ── */
 .stat-card{background:var(--surface);margin:0 12px 10px;border-radius:14px;padding:14px;}
 .sc-name{font-size:15px;font-weight:700;margin-bottom:10px;color:var(--text);}
 .sc-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-bottom:6px;}
@@ -91,8 +97,6 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#e0e0e
 .sc-ktv{margin-top:6px;padding-top:6px;border-top:1px solid #f0f0f0;display:flex;align-items:center;gap:8px;}
 .sc-ktv-lbl{font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase;}
 .sc-ktv-val{font-size:13px;font-weight:800;}
-
-/* ── Curvas ── */
 .curvas-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px;}
 .curva-card{background:var(--surface);border-radius:10px;overflow:hidden;}
 .curva-lbl{text-align:center;font-size:11px;color:var(--muted);padding:4px 0 8px;}
@@ -115,7 +119,17 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#e0e0e
 .gc-tags{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;}
 .gc-tag{background:#f0f0f0;border-radius:20px;padding:3px 10px;font-size:11px;color:#555;}
 
-/* ── Bottom sheet (Kt/V) ── */
+/* ── Riesgo CV ── */
+.risk-info{background:var(--surface);margin:0 12px 10px;border-radius:14px;padding:14px 16px;}
+.ri-bar{height:8px;border-radius:4px;margin:8px 0;background:#eee;overflow:hidden;}
+.ri-fill{height:100%;border-radius:4px;}
+
+/* ── Próximamente ── */
+.coming-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;gap:12px;}
+.coming-ico{width:72px;height:72px;border-radius:20px;display:flex;align-items:center;justify-content:center;margin-bottom:4px;}
+.coming-tag{background:#f0f0f0;color:#9e9e9e;padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+
+/* ── Bottom sheet ── */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:50;display:none;align-items:flex-end;justify-content:center;}
 .overlay.on{display:flex;}
 .bsheet{background:#fff;border-radius:20px 20px 0 0;padding:16px 20px 28px;width:100%;max-width:440px;}
@@ -126,398 +140,568 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#e0e0e
 .bsh-input:focus{border-color:#1565c0;}
 .bsh-btn{background:#1a1a1a;color:#fff;border:none;border-radius:12px;padding:15px;width:100%;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:4px;}
 .bsh-btn:hover{background:#333;}
-
-/* ── disabled card ── */
-.menu-card.off{opacity:.45;cursor:default;}
-.menu-card.off:hover{background:var(--surface);}
 </style>
 </head>
 <body>
 
 <div class="banner">
-  <div class="brand">CritiData Nefrología <span class="badge">DEMO</span></div>
+  <div class="brand">CritiData <span class="badge">DEMO</span></div>
   <div style="display:flex;align-items:center;gap:12px;">
     <a href="/" style="color:rgba(255,255,255,.5);font-size:12px;text-decoration:none;">← Inicio</a>
-    <a href="/#" class="cta">Empezar gratis →</a>
+    <a href="/#contacto" class="cta">Empezar gratis →</a>
   </div>
 </div>
 
 <div class="shell">
 
-  <!-- HOME -->
-  <div class="scr on" id="s-home">
-    <div class="hdr">
-      <div class="hdr-back" style="visibility:hidden;"></div>
-      <div class="hdr-title">Inicio Laboratorio</div>
-      <div class="hdr-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div>
-    </div>
-    <div class="body">
-      <div class="menu-card" onclick="go('resultados')">
-        <div class="mi-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
-        <div class="mi-text"><div class="mi-title">Resultados</div><div class="mi-sub">Pacientes y análisis</div></div>
-        <div class="mi-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+<!-- ═══ SELECTOR ═══ -->
+<div class="scr on" id="s-selector">
+  <div class="sel-hdr">
+    <div class="sel-hdr-title">CritiData</div>
+    <div class="sel-hdr-sub">Seleccioná una especialidad</div>
+  </div>
+  <div>
+    <div class="sel-card" onclick="selectSpe('nef')">
+      <div class="sel-ico" style="background:#e3f2fd;">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1565c0" stroke-width="1.8"><path d="M12 2C8 2 5 5.5 5 9c0 3 1.5 5 3 7l1 5h6l1-5c1.5-2 3-4 3-7 0-3.5-3-7-7-7z"/><path d="M9 12c0 1.7 1.3 3 3 3s3-1.3 3-3"/></svg>
       </div>
-      <div class="menu-card" onclick="go('ktv')">
-        <div class="mi-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8"><path d="M8 3v4l-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9l-2-2V3"/><path d="M8 3h8"/><path d="M12 12v4"/><path d="M10 14h4"/></svg></div>
-        <div class="mi-text"><div class="mi-title">Cálculo de Kt/V</div><div class="mi-sub">Parámetros de diálisis</div></div>
-        <div class="mi-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+      <div>
+        <div class="sel-name">Nefrología</div>
+        <div class="sel-sub">5 pacientes · Laboratorio · Kt/V · Estadística</div>
       </div>
-      <div class="menu-card" onclick="go('estadistica')">
-        <div class="mi-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-        <div class="mi-text"><div class="mi-title">Estadística</div><div class="mi-sub">Vista rápida y curvas</div></div>
-        <div class="mi-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
-      </div>
-      <div class="menu-card" onclick="go('planilla')">
-        <div class="mi-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/></svg></div>
-        <div class="mi-text"><div class="mi-title">Planilla</div><div class="mi-sub">Resumen mensual</div></div>
-        <div class="mi-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
-      </div>
-      <div class="menu-card" onclick="go('gestion')">
-        <div class="mi-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-        <div class="mi-text"><div class="mi-title">Gestión</div><div class="mi-sub">Alta y baja · 5 pacientes</div></div>
-        <div class="mi-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
-      </div>
-      <div class="menu-card off">
-        <div class="mi-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
-        <div class="mi-text"><div class="mi-title">Actualizar resultados</div><div class="mi-sub">Importar desde Bionefro</div></div>
-        <div class="mi-arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>
+      <div class="sel-right">
+        <span class="sbadge sbadge-demo">Demo</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8c8c8" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
     </div>
-  </div>
 
-  <!-- RESULTADOS — lista -->
-  <div class="scr" id="s-resultados">
-    <div class="hdr">
-      <div class="hdr-back" onclick="go('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
-      <div class="hdr-title">Resultados</div>
-      <div class="hdr-icon"></div>
+    <div class="sel-card" onclick="selectSpe('car')">
+      <div class="sel-ico" style="background:#ffebee;">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="#c62828" stroke="#c62828" stroke-width="1.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </div>
+      <div>
+        <div class="sel-name">Cardiología</div>
+        <div class="sel-sub">4 pacientes · Riesgo CV · Troponina · BNP</div>
+      </div>
+      <div class="sel-right">
+        <span class="sbadge sbadge-demo">Demo</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8c8c8" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
     </div>
-    <div class="body" id="res-list"></div>
-  </div>
 
-  <!-- RESULTADOS — detalle -->
-  <div class="scr" id="s-lab">
-    <div class="hdr">
-      <div class="hdr-back" onclick="go('resultados')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
-      <div class="hdr-title" id="lab-title">—</div>
-      <div class="hdr-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></div>
+    <div class="sel-card coming">
+      <div class="sel-ico" style="background:#f3e5f5;">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7b1fa2" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><line x1="7" y1="8" x2="7" y2="8.01"/><line x1="12" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="12" y2="12"/><line x1="14" y1="12" x2="17" y2="12"/></svg>
+      </div>
+      <div>
+        <div class="sel-name">UTI</div>
+        <div class="sel-sub">SOFA · APACHE II · Presores · Ventilación</div>
+      </div>
+      <div class="sel-right"><span class="sbadge sbadge-prox">Próximamente</span></div>
     </div>
-    <div class="body" id="lab-body"></div>
-  </div>
 
-  <!-- KT/V -->
-  <div class="scr" id="s-ktv">
-    <div class="hdr">
-      <div class="hdr-back" onclick="go('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
-      <div class="hdr-title">Cálculo de Kt/V</div>
-      <div class="hdr-icon"></div>
+    <div class="sel-card coming">
+      <div class="sel-ico" style="background:#e8f5e9;">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.24h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </div>
+      <div>
+        <div class="sel-name">Clínica Médica</div>
+        <div class="sel-sub">Historia clínica · Laboratorio · Internación</div>
+      </div>
+      <div class="sel-right"><span class="sbadge sbadge-prox">Próximamente</span></div>
     </div>
-    <div class="body" id="ktv-list"></div>
-  </div>
 
-  <!-- ESTADÍSTICA -->
-  <div class="scr" id="s-estadistica">
-    <div class="hdr">
-      <div class="hdr-back" onclick="go('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
-      <div class="hdr-title">Valores y Curvas</div>
-      <div class="hdr-icon"></div>
+    <div style="padding:16px 20px 4px;text-align:center;font-size:12px;color:var(--muted);">
+      Datos de ejemplo · No contiene información real de pacientes
     </div>
-    <div class="seg">
-      <button class="seg-btn on" id="tb-vista" onclick="eTab('vista')">Vista rápida</button>
-      <button class="seg-btn" id="tb-curvas" onclick="eTab('curvas')">Curvas</button>
-    </div>
-    <div class="legend">
-      <span><span class="ldot" style="background:#2e7d32;"></span>Normal</span>
-      <span><span class="ldot" style="background:#e65100;"></span>Observar</span>
-      <span><span class="ldot" style="background:#c62828;"></span>Crítico</span>
-    </div>
-    <div class="body" id="estat-body"></div>
   </div>
+</div>
 
-  <!-- PLANILLA -->
-  <div class="scr" id="s-planilla">
-    <div class="hdr">
-      <div class="hdr-back" onclick="go('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
-      <div class="hdr-title">Planilla</div>
-      <div class="hdr-icon"></div>
-    </div>
-    <div class="body" id="plan-body"></div>
+<!-- ═══ HOME ═══ -->
+<div class="scr" id="s-home">
+  <div class="hdr">
+    <div class="hdr-back" onclick="go('selector')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-title" id="home-title">—</div>
+    <div class="hdr-icon"></div>
   </div>
+  <div class="body" id="home-body"></div>
+</div>
 
-  <!-- GESTIÓN -->
-  <div class="scr" id="s-gestion">
-    <div class="hdr">
-      <div class="hdr-back" onclick="go('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
-      <div class="hdr-title">Gestión</div>
-      <div class="hdr-icon"></div>
-    </div>
-    <div class="body" id="gest-body"></div>
+<!-- ═══ RESULTADOS — lista ═══ -->
+<div class="scr" id="s-resultados">
+  <div class="hdr">
+    <div class="hdr-back" onclick="go('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-title">Resultados</div>
+    <div class="hdr-icon"></div>
   </div>
+  <div class="body" id="res-list"></div>
+</div>
+
+<!-- ═══ LAB DETAIL ═══ -->
+<div class="scr" id="s-lab">
+  <div class="hdr">
+    <div class="hdr-back" onclick="go('resultados')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-title" id="lab-title">—</div>
+    <div class="hdr-icon"></div>
+  </div>
+  <div class="body" id="lab-body"></div>
+</div>
+
+<!-- ═══ KT/V o RIESGO CV ═══ -->
+<div class="scr" id="s-ktv">
+  <div class="hdr">
+    <div class="hdr-back" onclick="go('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-title" id="ktv-title">—</div>
+    <div class="hdr-icon"></div>
+  </div>
+  <div class="body" id="ktv-list"></div>
+</div>
+
+<!-- ═══ ESTADÍSTICA ═══ -->
+<div class="scr" id="s-estadistica">
+  <div class="hdr">
+    <div class="hdr-back" onclick="go('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-title">Valores y Curvas</div>
+    <div class="hdr-icon"></div>
+  </div>
+  <div class="seg">
+    <button class="seg-btn on" id="tb-vista" onclick="eTab('vista')">Vista rápida</button>
+    <button class="seg-btn" id="tb-curvas" onclick="eTab('curvas')">Curvas</button>
+  </div>
+  <div class="legend">
+    <span><span class="ldot" style="background:#2e7d32;"></span>Normal</span>
+    <span><span class="ldot" style="background:#e65100;"></span>Observar</span>
+    <span><span class="ldot" style="background:#c62828;"></span>Crítico</span>
+  </div>
+  <div class="body" id="estat-body"></div>
+</div>
+
+<!-- ═══ PLANILLA ═══ -->
+<div class="scr" id="s-planilla">
+  <div class="hdr">
+    <div class="hdr-back" onclick="go('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-title">Planilla</div>
+    <div class="hdr-icon"></div>
+  </div>
+  <div class="body" id="plan-body"></div>
+</div>
+
+<!-- ═══ GESTIÓN ═══ -->
+<div class="scr" id="s-gestion">
+  <div class="hdr">
+    <div class="hdr-back" onclick="go('home')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-title">Gestión</div>
+    <div class="hdr-icon"></div>
+  </div>
+  <div class="body" id="gest-body"></div>
+</div>
+
+<!-- ═══ PRÓXIMAMENTE ═══ -->
+<div class="scr" id="s-coming">
+  <div class="hdr">
+    <div class="hdr-back" onclick="go('selector')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></div>
+    <div class="hdr-title" id="coming-title">—</div>
+    <div class="hdr-icon"></div>
+  </div>
+  <div class="coming-body">
+    <div class="coming-ico" id="coming-ico" style="background:#f5f5f5;"></div>
+    <div style="font-size:20px;font-weight:800;color:var(--text);">Próximamente</div>
+    <div style="font-size:14px;color:var(--muted);text-align:center;line-height:1.6;" id="coming-sub">Esta especialidad estará disponible en la próxima versión del demo.</div>
+    <div class="coming-tag">En desarrollo</div>
+  </div>
+</div>
 
 </div><!-- /shell -->
 
-<!-- Bottom sheet Kt/V -->
+<!-- BOTTOM SHEET Kt/V -->
 <div class="overlay" id="ov" onclick="closeOv(event)">
   <div class="bsheet">
     <div class="bsh-handle"></div>
     <div class="bsh-title">Parámetros de diálisis</div>
     <div class="bsh-sub" id="bs-name">—</div>
-    <input class="bsh-input" type="number" id="bs-t" placeholder="Tiempo de sesión (horas)" step="0.25">
-    <input class="bsh-input" type="number" id="bs-uf" placeholder="Ultrafiltración (litros)" step="0.1">
-    <input class="bsh-input" type="number" id="bs-w" placeholder="Peso post-diálisis (kg)" step="0.1">
-    <input class="bsh-input" type="text"   id="bs-f" placeholder="Fecha del laboratorio">
+    <input class="bsh-input" type="number" id="bs-t"  placeholder="Tiempo de sesión (horas)" step="0.25">
+    <input class="bsh-input" type="number" id="bs-uf" placeholder="Ultrafiltración (litros)"  step="0.1">
+    <input class="bsh-input" type="number" id="bs-w"  placeholder="Peso post-diálisis (kg)"   step="0.1">
+    <input class="bsh-input" type="text"   id="bs-f"  placeholder="Fecha del laboratorio">
     <button class="bsh-btn" onclick="saveKtv()">Guardar</button>
   </div>
 </div>
 
 <script>
-// ── DATA ─────────────────────────────────────────────────────────────────
-const P = [
-  {
-    id:1, name:"García, Roberto", fn:"Roberto", age:68, date:"28/06/2026",
-    lab:{
-      rows:[
-        {n:"HEMOGLOBINA",          v:"10.4", u:"g/dL",   s:""},
-        {n:"LEUCOCITOS",           v:"7.2",  u:"mil/mm³",s:""},
-        {n:"PLAQUETAS",            v:"198",  u:"mil/mm³",s:""},
-        {n:"FOSFATEMIA",           v:"5.8",  u:"mg/dL",  s:"obs"},
-        {n:"CALCEMIA",             v:"9.2",  u:"mg/dL",  s:""},
-        {n:"POTASIO",              v:"5.2",  u:"mEq/L",  s:""},
-        {n:"SODIO",                v:"138",  u:"mEq/L",  s:""},
-        {n:"CREATININA EN SANGRE", v:"9.8",  u:"mg/dL",  s:""},
-        {n:"UREA PRE DIÁLISIS",    v:"142",  u:"mg/dL",  s:""},
-        {n:"UREA POST DIÁLISIS",   v:"36",   u:"mg/dL",  s:""},
-        {n:"ALBÚMINA",             v:"3.8",  u:"g/dL",   s:""},
-        {n:"FERRITINA",            v:"380",  u:"ng/mL",  s:""},
-        {n:"SAT. TRANSFERRINA",    v:"28",   u:"%",      s:""},
-        {n:"PTH INTACTA",          v:"320",  u:"pg/mL",  s:""},
-        {n:"PCR",                  v:"1.2",  u:"mg/L",   s:""},
-        {n:"GLUCOSA",              v:"92",   u:"mg/dL",  s:""},
-        {n:"COLESTEROL TOTAL",     v:"168",  u:"mg/dL",  s:""},
-        {n:"TRIGLICÉRIDOS",        v:"142",  u:"mg/dL",  s:""},
-        {n:"FAL",                  v:"155",  u:"U/L",    s:""},
-        {n:"GOT",                  v:"18",   u:"U/L",    s:""},
-        {n:"GPT",                  v:"16",   u:"U/L",    s:""},
-      ]
-    },
-    sr:[
-      [{a:"HB",  v:"10.4",d:"28/06",s:"norm"},{a:"Leuc",v:"7.2", d:"28/06",s:"norm"},{a:"Plaq",v:"198",d:"28/06",s:"norm"},{a:"K",v:"5.2",d:"28/06",s:"norm"},{a:"Ca",v:"9.2",d:"28/06",s:"norm"}],
-      [{a:"P",   v:"5.8", d:"28/06",s:"obs"}, {a:"Sat.T",v:"28", d:"28/06",s:"norm"},{a:"Ferrit",v:"380",d:"28/06",s:"norm"},{a:"PTH",v:"320",d:"28/06",s:"norm"},{a:"URR",v:"73.5",d:"28/06",s:"norm"}],
-    ],
-    ktv:{pre:68,post:18,w:72.5,uf:2.1,dur:4,v:1.41},
-    tr:{m:["Ene","Feb","Mar","Abr","May","Jun"],
-      hb: [9.8,10.1,10.4,10.2,10.6,10.4],
-      leuc:[6.8,7.0,7.2,6.9,7.4,7.2],
-      plaq:[185,192,198,190,205,198],
-      k:  [5.4,5.1,5.3,5.0,5.2,5.2],
-      ca: [9.0,9.1,9.2,9.0,9.3,9.2],
-      p:  [6.2,5.9,6.1,5.8,5.6,5.8],
-    },
+// ─── NEFROLOGÍA ──────────────────────────────────────────────────────────────
+const NEF_P = [
+  {id:1,name:"García, Roberto",fn:"Roberto",age:68,date:"28/06/2026",
+   lab:{rows:[
+    {n:"HEMOGLOBINA",v:"10.4",u:"g/dL",s:""},
+    {n:"LEUCOCITOS",v:"7.2",u:"mil/mm³",s:""},
+    {n:"PLAQUETAS",v:"198",u:"mil/mm³",s:""},
+    {n:"FOSFATEMIA",v:"5.8",u:"mg/dL",s:"obs"},
+    {n:"CALCEMIA",v:"9.2",u:"mg/dL",s:""},
+    {n:"POTASIO",v:"5.2",u:"mEq/L",s:""},
+    {n:"SODIO",v:"138",u:"mEq/L",s:""},
+    {n:"CREATININA",v:"9.8",u:"mg/dL",s:""},
+    {n:"UREA PRE DIÁLISIS",v:"142",u:"mg/dL",s:""},
+    {n:"UREA POST DIÁLISIS",v:"36",u:"mg/dL",s:""},
+    {n:"ALBÚMINA",v:"3.8",u:"g/dL",s:""},
+    {n:"FERRITINA",v:"380",u:"ng/mL",s:""},
+    {n:"SAT. TRANSFERRINA",v:"28",u:"%",s:""},
+    {n:"PTH INTACTA",v:"320",u:"pg/mL",s:""},
+    {n:"PCR",v:"1.2",u:"mg/L",s:""},
+    {n:"GLUCOSA",v:"92",u:"mg/dL",s:""},
+    {n:"COLESTEROL",v:"168",u:"mg/dL",s:""},
+    {n:"TRIGLICÉRIDOS",v:"142",u:"mg/dL",s:""},
+   ]},
+   sr:[
+    [{a:"HB",v:"10.4",d:"28/06",s:"norm"},{a:"Leuc",v:"7.2",d:"28/06",s:"norm"},{a:"Plaq",v:"198",d:"28/06",s:"norm"},{a:"K",v:"5.2",d:"28/06",s:"norm"},{a:"Ca",v:"9.2",d:"28/06",s:"norm"}],
+    [{a:"P",v:"5.8",d:"28/06",s:"obs"},{a:"Sat.T",v:"28",d:"28/06",s:"norm"},{a:"Ferrit",v:"380",d:"28/06",s:"norm"},{a:"PTH",v:"320",d:"28/06",s:"norm"},{a:"URR",v:"73.5",d:"28/06",s:"norm"}],
+   ],
+   ktv:{pre:142,post:36,w:72.5,uf:2.1,dur:4,v:1.41},
+   tr:{m:["Ene","Feb","Mar","Abr","May","Jun"],hb:[9.8,10.1,10.4,10.2,10.6,10.4],leuc:[6.8,7.0,7.2,6.9,7.4,7.2],plaq:[185,192,198,190,205,198],k:[5.4,5.1,5.3,5.0,5.2,5.2],ca:[9.0,9.1,9.2,9.0,9.3,9.2],p:[6.2,5.9,6.1,5.8,5.6,5.8]},
   },
-  {
-    id:2, name:"López, María", fn:"María", age:54, date:"01/07/2026",
-    lab:{
-      rows:[
-        {n:"HEMOGLOBINA",          v:"9.2",  u:"g/dL",   s:"obs"},
-        {n:"LEUCOCITOS",           v:"8.1",  u:"mil/mm³",s:""},
-        {n:"PLAQUETAS",            v:"210",  u:"mil/mm³",s:""},
-        {n:"FOSFATEMIA",           v:"6.8",  u:"mg/dL",  s:"crit"},
-        {n:"CALCEMIA",             v:"8.3",  u:"mg/dL",  s:"obs"},
-        {n:"POTASIO",              v:"6.1",  u:"mEq/L",  s:"obs"},
-        {n:"SODIO",                v:"130",  u:"mEq/L",  s:"obs"},
-        {n:"CREATININA EN SANGRE", v:"8.4",  u:"mg/dL",  s:""},
-        {n:"UREA PRE DIÁLISIS",    v:"168",  u:"mg/dL",  s:""},
-        {n:"UREA POST DIÁLISIS",   v:"48",   u:"mg/dL",  s:""},
-        {n:"ALBÚMINA",             v:"3.4",  u:"g/dL",   s:"obs"},
-        {n:"FERRITINA",            v:"140",  u:"ng/mL",  s:"obs"},
-        {n:"SAT. TRANSFERRINA",    v:"18",   u:"%",      s:"obs"},
-        {n:"PTH INTACTA",          v:"680",  u:"pg/mL",  s:"crit"},
-        {n:"PCR",                  v:"4.8",  u:"mg/L",   s:"obs"},
-        {n:"GLUCOSA",              v:"105",  u:"mg/dL",  s:""},
-        {n:"COLESTEROL TOTAL",     v:"195",  u:"mg/dL",  s:""},
-        {n:"TRIGLICÉRIDOS",        v:"210",  u:"mg/dL",  s:"obs"},
-        {n:"FAL",                  v:"78",   u:"U/L",    s:""},
-        {n:"GOT",                  v:"22",   u:"U/L",    s:""},
-        {n:"GPT",                  v:"18",   u:"U/L",    s:""},
-      ]
-    },
-    sr:[
-      [{a:"HB",  v:"9.2", d:"01/07",s:"obs"}, {a:"Leuc",v:"8.1", d:"01/07",s:"norm"},{a:"Plaq",v:"210",d:"01/07",s:"norm"},{a:"K",v:"6.1",d:"01/07",s:"obs"}, {a:"Ca",v:"8.3",d:"01/07",s:"obs"}],
-      [{a:"P",   v:"6.8", d:"01/07",s:"crit"},{a:"Sat.T",v:"18", d:"01/07",s:"obs"}, {a:"Ferrit",v:"140",d:"01/07",s:"obs"}, {a:"PTH",v:"680",d:"01/07",s:"crit"},{a:"URR",v:"69.2",d:"01/07",s:"obs"}],
-    ],
-    ktv:{pre:78,post:24,w:58.0,uf:1.4,dur:3.5,v:1.08},
-    tr:{m:["Ene","Feb","Mar","Abr","May","Jun"],
-      hb: [10.2,9.8,9.6,9.4,9.5,9.2],
-      leuc:[7.5,7.8,8.0,8.2,8.0,8.1],
-      plaq:[215,208,212,210,208,210],
-      k:  [5.8,6.0,5.9,6.2,6.0,6.1],
-      ca: [8.8,8.5,8.4,8.3,8.4,8.3],
-      p:  [5.9,6.2,6.5,6.8,6.6,6.8],
-    },
+  {id:2,name:"López, María",fn:"María",age:54,date:"01/07/2026",
+   lab:{rows:[
+    {n:"HEMOGLOBINA",v:"9.2",u:"g/dL",s:"obs"},
+    {n:"LEUCOCITOS",v:"8.1",u:"mil/mm³",s:""},
+    {n:"PLAQUETAS",v:"210",u:"mil/mm³",s:""},
+    {n:"FOSFATEMIA",v:"6.8",u:"mg/dL",s:"crit"},
+    {n:"CALCEMIA",v:"8.3",u:"mg/dL",s:"obs"},
+    {n:"POTASIO",v:"6.1",u:"mEq/L",s:"obs"},
+    {n:"SODIO",v:"130",u:"mEq/L",s:"obs"},
+    {n:"CREATININA",v:"8.4",u:"mg/dL",s:""},
+    {n:"UREA PRE DIÁLISIS",v:"168",u:"mg/dL",s:""},
+    {n:"UREA POST DIÁLISIS",v:"48",u:"mg/dL",s:""},
+    {n:"ALBÚMINA",v:"3.4",u:"g/dL",s:"obs"},
+    {n:"FERRITINA",v:"140",u:"ng/mL",s:"obs"},
+    {n:"SAT. TRANSFERRINA",v:"18",u:"%",s:"obs"},
+    {n:"PTH INTACTA",v:"680",u:"pg/mL",s:"crit"},
+    {n:"PCR",v:"4.8",u:"mg/L",s:"obs"},
+    {n:"GLUCOSA",v:"105",u:"mg/dL",s:""},
+    {n:"COLESTEROL",v:"195",u:"mg/dL",s:""},
+    {n:"TRIGLICÉRIDOS",v:"210",u:"mg/dL",s:"obs"},
+   ]},
+   sr:[
+    [{a:"HB",v:"9.2",d:"01/07",s:"obs"},{a:"Leuc",v:"8.1",d:"01/07",s:"norm"},{a:"Plaq",v:"210",d:"01/07",s:"norm"},{a:"K",v:"6.1",d:"01/07",s:"obs"},{a:"Ca",v:"8.3",d:"01/07",s:"obs"}],
+    [{a:"P",v:"6.8",d:"01/07",s:"crit"},{a:"Sat.T",v:"18",d:"01/07",s:"obs"},{a:"Ferrit",v:"140",d:"01/07",s:"obs"},{a:"PTH",v:"680",d:"01/07",s:"crit"},{a:"URR",v:"69.2",d:"01/07",s:"obs"}],
+   ],
+   ktv:{pre:168,post:48,w:58.0,uf:1.4,dur:3.5,v:1.08},
+   tr:{m:["Ene","Feb","Mar","Abr","May","Jun"],hb:[10.2,9.8,9.6,9.4,9.5,9.2],leuc:[7.5,7.8,8.0,8.2,8.0,8.1],plaq:[215,208,212,210,208,210],k:[5.8,6.0,5.9,6.2,6.0,6.1],ca:[8.8,8.5,8.4,8.3,8.4,8.3],p:[5.9,6.2,6.5,6.8,6.6,6.8]},
   },
-  {
-    id:3, name:"Fernández, Carlos", fn:"Carlos", age:72, date:"28/06/2026",
-    lab:{
-      rows:[
-        {n:"HEMOGLOBINA",          v:"11.2", u:"g/dL",   s:""},
-        {n:"LEUCOCITOS",           v:"6.5",  u:"mil/mm³",s:""},
-        {n:"PLAQUETAS",            v:"220",  u:"mil/mm³",s:""},
-        {n:"FOSFATEMIA",           v:"4.9",  u:"mg/dL",  s:"obs"},
-        {n:"CALCEMIA",             v:"9.8",  u:"mg/dL",  s:""},
-        {n:"POTASIO",              v:"4.8",  u:"mEq/L",  s:""},
-        {n:"SODIO",                v:"140",  u:"mEq/L",  s:""},
-        {n:"CREATININA EN SANGRE", v:"11.2", u:"mg/dL",  s:""},
-        {n:"UREA PRE DIÁLISIS",    v:"156",  u:"mg/dL",  s:""},
-        {n:"UREA POST DIÁLISIS",   v:"32",   u:"mg/dL",  s:""},
-        {n:"ALBÚMINA",             v:"4.1",  u:"g/dL",   s:""},
-        {n:"FERRITINA",            v:"520",  u:"ng/mL",  s:""},
-        {n:"SAT. TRANSFERRINA",    v:"35",   u:"%",      s:""},
-        {n:"PTH INTACTA",          v:"280",  u:"pg/mL",  s:""},
-        {n:"PCR",                  v:"0.8",  u:"mg/L",   s:""},
-        {n:"GLUCOSA",              v:"98",   u:"mg/dL",  s:""},
-        {n:"COLESTEROL TOTAL",     v:"155",  u:"mg/dL",  s:""},
-        {n:"TRIGLICÉRIDOS",        v:"120",  u:"mg/dL",  s:""},
-        {n:"FAL",                  v:"83",   u:"U/L",    s:""},
-        {n:"GOT",                  v:"20",   u:"U/L",    s:""},
-        {n:"GPT",                  v:"14",   u:"U/L",    s:""},
-      ]
-    },
-    sr:[
-      [{a:"HB",  v:"11.2",d:"28/06",s:"norm"},{a:"Leuc",v:"6.5", d:"28/06",s:"norm"},{a:"Plaq",v:"220",d:"28/06",s:"norm"},{a:"K",v:"4.8",d:"28/06",s:"norm"},{a:"Ca",v:"9.8",d:"28/06",s:"norm"}],
-      [{a:"P",   v:"4.9", d:"28/06",s:"obs"}, {a:"Sat.T",v:"35", d:"28/06",s:"norm"},{a:"Ferrit",v:"520",d:"28/06",s:"norm"},{a:"PTH",v:"280",d:"28/06",s:"norm"},{a:"URR",v:"72.6",d:"28/06",s:"norm"}],
-    ],
-    ktv:{pre:73,post:20,w:80.0,uf:2.8,dur:4.5,v:1.52},
-    tr:{m:["Ene","Feb","Mar","Abr","May","Jun"],
-      hb: [10.8,11.0,11.2,11.1,11.4,11.2],
-      leuc:[6.2,6.4,6.5,6.3,6.6,6.5],
-      plaq:[210,215,220,218,222,220],
-      k:  [5.0,4.8,4.9,4.7,4.8,4.8],
-      ca: [9.5,9.6,9.8,9.7,9.9,9.8],
-      p:  [5.2,5.0,4.8,5.1,4.9,4.9],
-    },
+  {id:3,name:"Fernández, Carlos",fn:"Carlos",age:72,date:"28/06/2026",
+   lab:{rows:[
+    {n:"HEMOGLOBINA",v:"11.2",u:"g/dL",s:""},
+    {n:"LEUCOCITOS",v:"6.5",u:"mil/mm³",s:""},
+    {n:"PLAQUETAS",v:"220",u:"mil/mm³",s:""},
+    {n:"FOSFATEMIA",v:"4.9",u:"mg/dL",s:"obs"},
+    {n:"CALCEMIA",v:"9.8",u:"mg/dL",s:""},
+    {n:"POTASIO",v:"4.8",u:"mEq/L",s:""},
+    {n:"SODIO",v:"140",u:"mEq/L",s:""},
+    {n:"CREATININA",v:"11.2",u:"mg/dL",s:""},
+    {n:"UREA PRE DIÁLISIS",v:"156",u:"mg/dL",s:""},
+    {n:"UREA POST DIÁLISIS",v:"32",u:"mg/dL",s:""},
+    {n:"ALBÚMINA",v:"4.1",u:"g/dL",s:""},
+    {n:"FERRITINA",v:"520",u:"ng/mL",s:""},
+    {n:"SAT. TRANSFERRINA",v:"35",u:"%",s:""},
+    {n:"PTH INTACTA",v:"280",u:"pg/mL",s:""},
+    {n:"PCR",v:"0.8",u:"mg/L",s:""},
+    {n:"GLUCOSA",v:"98",u:"mg/dL",s:""},
+    {n:"COLESTEROL",v:"155",u:"mg/dL",s:""},
+    {n:"TRIGLICÉRIDOS",v:"120",u:"mg/dL",s:""},
+   ]},
+   sr:[
+    [{a:"HB",v:"11.2",d:"28/06",s:"norm"},{a:"Leuc",v:"6.5",d:"28/06",s:"norm"},{a:"Plaq",v:"220",d:"28/06",s:"norm"},{a:"K",v:"4.8",d:"28/06",s:"norm"},{a:"Ca",v:"9.8",d:"28/06",s:"norm"}],
+    [{a:"P",v:"4.9",d:"28/06",s:"obs"},{a:"Sat.T",v:"35",d:"28/06",s:"norm"},{a:"Ferrit",v:"520",d:"28/06",s:"norm"},{a:"PTH",v:"280",d:"28/06",s:"norm"},{a:"URR",v:"72.6",d:"28/06",s:"norm"}],
+   ],
+   ktv:{pre:156,post:32,w:80.0,uf:2.8,dur:4.5,v:1.52},
+   tr:{m:["Ene","Feb","Mar","Abr","May","Jun"],hb:[10.8,11.0,11.2,11.1,11.4,11.2],leuc:[6.2,6.4,6.5,6.3,6.6,6.5],plaq:[210,215,220,218,222,220],k:[5.0,4.8,4.9,4.7,4.8,4.8],ca:[9.5,9.6,9.8,9.7,9.9,9.8],p:[5.2,5.0,4.8,5.1,4.9,4.9]},
   },
-  {
-    id:4, name:"Martínez, Ana", fn:"Ana", age:61, date:"30/06/2026",
-    lab:{
-      rows:[
-        {n:"HEMOGLOBINA",          v:"11.8", u:"g/dL",   s:""},
-        {n:"LEUCOCITOS",           v:"6.8",  u:"mil/mm³",s:""},
-        {n:"PLAQUETAS",            v:"245",  u:"mil/mm³",s:""},
-        {n:"FOSFATEMIA",           v:"4.2",  u:"mg/dL",  s:""},
-        {n:"CALCEMIA",             v:"9.5",  u:"mg/dL",  s:""},
-        {n:"POTASIO",              v:"4.6",  u:"mEq/L",  s:""},
-        {n:"SODIO",                v:"139",  u:"mEq/L",  s:""},
-        {n:"CREATININA EN SANGRE", v:"7.9",  u:"mg/dL",  s:""},
-        {n:"UREA PRE DIÁLISIS",    v:"138",  u:"mg/dL",  s:""},
-        {n:"UREA POST DIÁLISIS",   v:"28",   u:"mg/dL",  s:""},
-        {n:"ALBÚMINA",             v:"4.3",  u:"g/dL",   s:""},
-        {n:"FERRITINA",            v:"450",  u:"ng/mL",  s:""},
-        {n:"SAT. TRANSFERRINA",    v:"32",   u:"%",      s:""},
-        {n:"PTH INTACTA",          v:"195",  u:"pg/mL",  s:""},
-        {n:"PCR",                  v:"0.5",  u:"mg/L",   s:""},
-        {n:"GLUCOSA",              v:"88",   u:"mg/dL",  s:""},
-        {n:"COLESTEROL TOTAL",     v:"145",  u:"mg/dL",  s:""},
-        {n:"TRIGLICÉRIDOS",        v:"98",   u:"mg/dL",  s:""},
-        {n:"FAL",                  v:"76",   u:"U/L",    s:""},
-        {n:"GOT",                  v:"15",   u:"U/L",    s:""},
-        {n:"GPT",                  v:"12",   u:"U/L",    s:""},
-      ]
-    },
-    sr:[
-      [{a:"HB",  v:"11.8",d:"30/06",s:"norm"},{a:"Leuc",v:"6.8", d:"30/06",s:"norm"},{a:"Plaq",v:"245",d:"30/06",s:"norm"},{a:"K",v:"4.6",d:"30/06",s:"norm"},{a:"Ca",v:"9.5",d:"30/06",s:"norm"}],
-      [{a:"P",   v:"4.2", d:"30/06",s:"norm"},{a:"Sat.T",v:"32", d:"30/06",s:"norm"},{a:"Ferrit",v:"450",d:"30/06",s:"norm"},{a:"PTH",v:"195",d:"30/06",s:"norm"},{a:"URR",v:"79.7",d:"30/06",s:"norm"}],
-    ],
-    ktv:{pre:64,post:16,w:64.0,uf:1.8,dur:4,v:1.52},
-    tr:{m:["Ene","Feb","Mar","Abr","May","Jun"],
-      hb: [11.0,11.2,11.5,11.8,11.6,11.8],
-      leuc:[6.5,6.7,6.8,6.6,6.9,6.8],
-      plaq:[238,240,245,242,248,245],
-      k:  [4.8,4.7,4.6,4.5,4.7,4.6],
-      ca: [9.2,9.3,9.5,9.4,9.6,9.5],
-      p:  [4.8,4.5,4.3,4.2,4.4,4.2],
-    },
+  {id:4,name:"Martínez, Ana",fn:"Ana",age:61,date:"30/06/2026",
+   lab:{rows:[
+    {n:"HEMOGLOBINA",v:"11.8",u:"g/dL",s:""},
+    {n:"LEUCOCITOS",v:"6.8",u:"mil/mm³",s:""},
+    {n:"PLAQUETAS",v:"245",u:"mil/mm³",s:""},
+    {n:"FOSFATEMIA",v:"4.2",u:"mg/dL",s:""},
+    {n:"CALCEMIA",v:"9.5",u:"mg/dL",s:""},
+    {n:"POTASIO",v:"4.6",u:"mEq/L",s:""},
+    {n:"SODIO",v:"139",u:"mEq/L",s:""},
+    {n:"CREATININA",v:"7.9",u:"mg/dL",s:""},
+    {n:"UREA PRE DIÁLISIS",v:"138",u:"mg/dL",s:""},
+    {n:"UREA POST DIÁLISIS",v:"28",u:"mg/dL",s:""},
+    {n:"ALBÚMINA",v:"4.3",u:"g/dL",s:""},
+    {n:"FERRITINA",v:"450",u:"ng/mL",s:""},
+    {n:"SAT. TRANSFERRINA",v:"32",u:"%",s:""},
+    {n:"PTH INTACTA",v:"195",u:"pg/mL",s:""},
+    {n:"PCR",v:"0.5",u:"mg/L",s:""},
+    {n:"GLUCOSA",v:"88",u:"mg/dL",s:""},
+    {n:"COLESTEROL",v:"145",u:"mg/dL",s:""},
+    {n:"TRIGLICÉRIDOS",v:"98",u:"mg/dL",s:""},
+   ]},
+   sr:[
+    [{a:"HB",v:"11.8",d:"30/06",s:"norm"},{a:"Leuc",v:"6.8",d:"30/06",s:"norm"},{a:"Plaq",v:"245",d:"30/06",s:"norm"},{a:"K",v:"4.6",d:"30/06",s:"norm"},{a:"Ca",v:"9.5",d:"30/06",s:"norm"}],
+    [{a:"P",v:"4.2",d:"30/06",s:"norm"},{a:"Sat.T",v:"32",d:"30/06",s:"norm"},{a:"Ferrit",v:"450",d:"30/06",s:"norm"},{a:"PTH",v:"195",d:"30/06",s:"norm"},{a:"URR",v:"79.7",d:"30/06",s:"norm"}],
+   ],
+   ktv:{pre:138,post:28,w:64.0,uf:1.8,dur:4,v:1.52},
+   tr:{m:["Ene","Feb","Mar","Abr","May","Jun"],hb:[11.0,11.2,11.5,11.8,11.6,11.8],leuc:[6.5,6.7,6.8,6.6,6.9,6.8],plaq:[238,240,245,242,248,245],k:[4.8,4.7,4.6,4.5,4.7,4.6],ca:[9.2,9.3,9.5,9.4,9.6,9.5],p:[4.8,4.5,4.3,4.2,4.4,4.2]},
   },
-  {
-    id:5, name:"Rodríguez, Jorge", fn:"Jorge", age:57, date:"01/07/2026",
-    lab:{
-      rows:[
-        {n:"HEMOGLOBINA",          v:"8.8",  u:"g/dL",   s:"crit"},
-        {n:"LEUCOCITOS",           v:"9.2",  u:"mil/mm³",s:""},
-        {n:"PLAQUETAS",            v:"175",  u:"mil/mm³",s:""},
-        {n:"FOSFATEMIA",           v:"7.2",  u:"mg/dL",  s:"crit"},
-        {n:"CALCEMIA",             v:"7.8",  u:"mg/dL",  s:"crit"},
-        {n:"POTASIO",              v:"6.4",  u:"mEq/L",  s:"crit"},
-        {n:"SODIO",                v:"132",  u:"mEq/L",  s:"obs"},
-        {n:"CREATININA EN SANGRE", v:"10.1", u:"mg/dL",  s:""},
-        {n:"UREA PRE DIÁLISIS",    v:"198",  u:"mg/dL",  s:""},
-        {n:"UREA POST DIÁLISIS",   v:"64",   u:"mg/dL",  s:""},
-        {n:"ALBÚMINA",             v:"3.1",  u:"g/dL",   s:"crit"},
-        {n:"FERRITINA",            v:"82",   u:"ng/mL",  s:"crit"},
-        {n:"SAT. TRANSFERRINA",    v:"14",   u:"%",      s:"crit"},
-        {n:"PTH INTACTA",          v:"890",  u:"pg/mL",  s:"crit"},
-        {n:"PCR",                  v:"12.4", u:"mg/L",   s:"crit"},
-        {n:"GLUCOSA",              v:"115",  u:"mg/dL",  s:""},
-        {n:"COLESTEROL TOTAL",     v:"182",  u:"mg/dL",  s:""},
-        {n:"TRIGLICÉRIDOS",        v:"248",  u:"mg/dL",  s:"crit"},
-        {n:"FAL",                  v:"120",  u:"U/L",    s:""},
-        {n:"GOT",                  v:"28",   u:"U/L",    s:""},
-        {n:"GPT",                  v:"22",   u:"U/L",    s:""},
-      ]
-    },
-    sr:[
-      [{a:"HB",  v:"8.8", d:"01/07",s:"crit"},{a:"Leuc",v:"9.2", d:"01/07",s:"norm"},{a:"Plaq",v:"175",d:"01/07",s:"norm"},{a:"K",v:"6.4",d:"01/07",s:"crit"},{a:"Ca",v:"7.8",d:"01/07",s:"crit"}],
-      [{a:"P",   v:"7.2", d:"01/07",s:"crit"},{a:"Sat.T",v:"14", d:"01/07",s:"crit"},{a:"Ferrit",v:"82", d:"01/07",s:"crit"},{a:"PTH",v:"890",d:"01/07",s:"crit"},{a:"URR",v:"67.7",d:"01/07",s:"obs"}],
-    ],
-    ktv:{pre:92,post:32,w:76.0,uf:1.2,dur:3.5,v:0.98},
-    tr:{m:["Ene","Feb","Mar","Abr","May","Jun"],
-      hb: [10.5,10.0,9.5,9.2,9.0,8.8],
-      leuc:[8.5,8.8,9.0,9.2,9.0,9.2],
-      plaq:[185,180,178,176,175,175],
-      k:  [5.6,5.9,6.1,6.3,6.2,6.4],
-      ca: [8.5,8.2,8.0,7.9,7.8,7.8],
-      p:  [5.8,6.2,6.5,6.9,7.0,7.2],
-    },
+  {id:5,name:"Rodríguez, Jorge",fn:"Jorge",age:57,date:"01/07/2026",
+   lab:{rows:[
+    {n:"HEMOGLOBINA",v:"8.8",u:"g/dL",s:"crit"},
+    {n:"LEUCOCITOS",v:"9.2",u:"mil/mm³",s:""},
+    {n:"PLAQUETAS",v:"175",u:"mil/mm³",s:""},
+    {n:"FOSFATEMIA",v:"7.2",u:"mg/dL",s:"crit"},
+    {n:"CALCEMIA",v:"7.8",u:"mg/dL",s:"crit"},
+    {n:"POTASIO",v:"6.4",u:"mEq/L",s:"crit"},
+    {n:"SODIO",v:"132",u:"mEq/L",s:"obs"},
+    {n:"CREATININA",v:"10.1",u:"mg/dL",s:""},
+    {n:"UREA PRE DIÁLISIS",v:"198",u:"mg/dL",s:""},
+    {n:"UREA POST DIÁLISIS",v:"64",u:"mg/dL",s:""},
+    {n:"ALBÚMINA",v:"3.1",u:"g/dL",s:"crit"},
+    {n:"FERRITINA",v:"82",u:"ng/mL",s:"crit"},
+    {n:"SAT. TRANSFERRINA",v:"14",u:"%",s:"crit"},
+    {n:"PTH INTACTA",v:"890",u:"pg/mL",s:"crit"},
+    {n:"PCR",v:"12.4",u:"mg/L",s:"crit"},
+    {n:"GLUCOSA",v:"115",u:"mg/dL",s:""},
+    {n:"COLESTEROL",v:"182",u:"mg/dL",s:""},
+    {n:"TRIGLICÉRIDOS",v:"248",u:"mg/dL",s:"crit"},
+   ]},
+   sr:[
+    [{a:"HB",v:"8.8",d:"01/07",s:"crit"},{a:"Leuc",v:"9.2",d:"01/07",s:"norm"},{a:"Plaq",v:"175",d:"01/07",s:"norm"},{a:"K",v:"6.4",d:"01/07",s:"crit"},{a:"Ca",v:"7.8",d:"01/07",s:"crit"}],
+    [{a:"P",v:"7.2",d:"01/07",s:"crit"},{a:"Sat.T",v:"14",d:"01/07",s:"crit"},{a:"Ferrit",v:"82",d:"01/07",s:"crit"},{a:"PTH",v:"890",d:"01/07",s:"crit"},{a:"URR",v:"67.7",d:"01/07",s:"obs"}],
+   ],
+   ktv:{pre:198,post:64,w:76.0,uf:1.2,dur:3.5,v:0.98},
+   tr:{m:["Ene","Feb","Mar","Abr","May","Jun"],hb:[10.5,10.0,9.5,9.2,9.0,8.8],leuc:[8.5,8.8,9.0,9.2,9.0,9.2],plaq:[185,180,178,176,175,175],k:[5.6,5.9,6.1,6.3,6.2,6.4],ca:[8.5,8.2,8.0,7.9,7.8,7.8],p:[5.8,6.2,6.5,6.9,7.0,7.2]},
   },
 ];
 
-// ── STATE ────────────────────────────────────────────────────────────────
-let cur = null;
-let eTabVal = 'vista';
-let ktvP = null;
+// ─── CARDIOLOGÍA ─────────────────────────────────────────────────────────────
+const CAR_P = [
+  {id:1,name:"Suárez, Ricardo",fn:"Ricardo",age:65,date:"01/07/2026",
+   lab:{rows:[
+    {n:"TROPONINA I",v:"0.03",u:"ng/mL",s:""},
+    {n:"CK-MB",v:"22",u:"U/L",s:""},
+    {n:"BNP",v:"380",u:"pg/mL",s:"obs"},
+    {n:"CREATININA",v:"1.1",u:"mg/dL",s:""},
+    {n:"HEMOGLOBINA",v:"13.2",u:"g/dL",s:""},
+    {n:"LEUCOCITOS",v:"7.8",u:"mil/mm³",s:""},
+    {n:"POTASIO",v:"4.3",u:"mEq/L",s:""},
+    {n:"SODIO",v:"138",u:"mEq/L",s:""},
+    {n:"COLESTEROL TOTAL",v:"208",u:"mg/dL",s:"obs"},
+    {n:"LDL",v:"138",u:"mg/dL",s:"obs"},
+    {n:"HDL",v:"42",u:"mg/dL",s:""},
+    {n:"TRIGLICÉRIDOS",v:"175",u:"mg/dL",s:"obs"},
+    {n:"GLUCOSA",v:"102",u:"mg/dL",s:""},
+    {n:"HbA1c",v:"5.9",u:"%",s:""},
+    {n:"PCR ULTRASENSIBLE",v:"1.8",u:"mg/L",s:""},
+   ]},
+   sr:[
+    [{a:"Trop",v:"0.03",d:"01/07",s:"norm"},{a:"CK-MB",v:"22",d:"01/07",s:"norm"},{a:"BNP",v:"380",d:"01/07",s:"obs"},{a:"HB",v:"13.2",d:"01/07",s:"norm"},{a:"LDL",v:"138",d:"01/07",s:"obs"}],
+    [{a:"HDL",v:"42",d:"01/07",s:"norm"},{a:"TG",v:"175",d:"01/07",s:"obs"},{a:"Gluc",v:"102",d:"01/07",s:"norm"},{a:"HbA1c",v:"5.9",d:"01/07",s:"norm"},{a:"PCR",v:"1.8",d:"01/07",s:""}],
+   ],
+   ktv:{v:0},
+   tr:{m:["Ene","Feb","Mar","Abr","May","Jun"],hb:[155,150,145,140,138,138],leuc:[42,40,41,42,41,42],plaq:[200,190,185,180,178,175],k:[450,420,400,390,385,380],ca:[110,108,105,103,102,102],p:[0.02,0.02,0.03,0.03,0.03,0.03]},
+   risk:{val:8.2,cat:"Moderado"},
+  },
+  {id:2,name:"Vega, Claudia",fn:"Claudia",age:58,date:"30/06/2026",
+   lab:{rows:[
+    {n:"TROPONINA I",v:"0.05",u:"ng/mL",s:"obs"},
+    {n:"CK-MB",v:"31",u:"U/L",s:"obs"},
+    {n:"BNP",v:"620",u:"pg/mL",s:"crit"},
+    {n:"CREATININA",v:"1.4",u:"mg/dL",s:"obs"},
+    {n:"HEMOGLOBINA",v:"11.8",u:"g/dL",s:"obs"},
+    {n:"LEUCOCITOS",v:"9.5",u:"mil/mm³",s:""},
+    {n:"POTASIO",v:"4.8",u:"mEq/L",s:""},
+    {n:"SODIO",v:"135",u:"mEq/L",s:""},
+    {n:"COLESTEROL TOTAL",v:"235",u:"mg/dL",s:"crit"},
+    {n:"LDL",v:"168",u:"mg/dL",s:"crit"},
+    {n:"HDL",v:"32",u:"mg/dL",s:"crit"},
+    {n:"TRIGLICÉRIDOS",v:"298",u:"mg/dL",s:"crit"},
+    {n:"GLUCOSA",v:"168",u:"mg/dL",s:"crit"},
+    {n:"HbA1c",v:"8.1",u:"%",s:"crit"},
+    {n:"PCR ULTRASENSIBLE",v:"5.2",u:"mg/L",s:"obs"},
+   ]},
+   sr:[
+    [{a:"Trop",v:"0.05",d:"30/06",s:"obs"},{a:"CK-MB",v:"31",d:"30/06",s:"obs"},{a:"BNP",v:"620",d:"30/06",s:"crit"},{a:"HB",v:"11.8",d:"30/06",s:"obs"},{a:"LDL",v:"168",d:"30/06",s:"crit"}],
+    [{a:"HDL",v:"32",d:"30/06",s:"crit"},{a:"TG",v:"298",d:"30/06",s:"crit"},{a:"Gluc",v:"168",d:"30/06",s:"crit"},{a:"HbA1c",v:"8.1",d:"30/06",s:"crit"},{a:"PCR",v:"5.2",d:"30/06",s:"obs"}],
+   ],
+   ktv:{v:0},
+   tr:{m:["Ene","Feb","Mar","Abr","May","Jun"],hb:[185,180,175,172,170,168],leuc:[30,31,31,32,32,32],plaq:[320,310,305,300,295,298],k:[580,600,610,615,618,620],ca:[175,170,168,165,168,168],p:[0.04,0.04,0.05,0.05,0.05,0.05]},
+   risk:{val:18.5,cat:"Alto"},
+  },
+  {id:3,name:"Romero, Alberto",fn:"Alberto",age:71,date:"01/07/2026",
+   lab:{rows:[
+    {n:"TROPONINA I",v:"0.28",u:"ng/mL",s:"crit"},
+    {n:"CK-MB",v:"68",u:"U/L",s:"crit"},
+    {n:"BNP",v:"1240",u:"pg/mL",s:"crit"},
+    {n:"CREATININA",v:"1.8",u:"mg/dL",s:"crit"},
+    {n:"HEMOGLOBINA",v:"10.5",u:"g/dL",s:"obs"},
+    {n:"LEUCOCITOS",v:"11.2",u:"mil/mm³",s:"obs"},
+    {n:"POTASIO",v:"5.2",u:"mEq/L",s:"obs"},
+    {n:"SODIO",v:"132",u:"mEq/L",s:"obs"},
+    {n:"COLESTEROL TOTAL",v:"188",u:"mg/dL",s:""},
+    {n:"LDL",v:"115",u:"mg/dL",s:"obs"},
+    {n:"HDL",v:"38",u:"mg/dL",s:"obs"},
+    {n:"TRIGLICÉRIDOS",v:"195",u:"mg/dL",s:"obs"},
+    {n:"GLUCOSA",v:"128",u:"mg/dL",s:"obs"},
+    {n:"HbA1c",v:"7.2",u:"%",s:"obs"},
+    {n:"PCR ULTRASENSIBLE",v:"18.5",u:"mg/L",s:"crit"},
+   ]},
+   sr:[
+    [{a:"Trop",v:"0.28",d:"01/07",s:"crit"},{a:"CK-MB",v:"68",d:"01/07",s:"crit"},{a:"BNP",v:"1240",d:"01/07",s:"crit"},{a:"HB",v:"10.5",d:"01/07",s:"obs"},{a:"LDL",v:"115",d:"01/07",s:"obs"}],
+    [{a:"HDL",v:"38",d:"01/07",s:"obs"},{a:"TG",v:"195",d:"01/07",s:"obs"},{a:"Gluc",v:"128",d:"01/07",s:"obs"},{a:"HbA1c",v:"7.2",d:"01/07",s:"obs"},{a:"PCR",v:"18.5",d:"01/07",s:"crit"}],
+   ],
+   ktv:{v:0},
+   tr:{m:["Ene","Feb","Mar","Abr","May","Jun"],hb:[130,125,122,120,118,115],leuc:[36,37,37,38,37,38],plaq:[220,210,205,200,198,195],k:[900,1000,1080,1150,1200,1240],ca:[140,135,132,130,128,128],p:[0.08,0.12,0.18,0.22,0.25,0.28]},
+   risk:{val:32.1,cat:"Crítico"},
+  },
+  {id:4,name:"Díaz, Luisa",fn:"Luisa",age:55,date:"30/06/2026",
+   lab:{rows:[
+    {n:"TROPONINA I",v:"0.01",u:"ng/mL",s:""},
+    {n:"CK-MB",v:"14",u:"U/L",s:""},
+    {n:"BNP",v:"85",u:"pg/mL",s:""},
+    {n:"CREATININA",v:"0.9",u:"mg/dL",s:""},
+    {n:"HEMOGLOBINA",v:"13.8",u:"g/dL",s:""},
+    {n:"LEUCOCITOS",v:"6.8",u:"mil/mm³",s:""},
+    {n:"POTASIO",v:"4.0",u:"mEq/L",s:""},
+    {n:"SODIO",v:"140",u:"mEq/L",s:""},
+    {n:"COLESTEROL TOTAL",v:"175",u:"mg/dL",s:""},
+    {n:"LDL",v:"88",u:"mg/dL",s:""},
+    {n:"HDL",v:"58",u:"mg/dL",s:""},
+    {n:"TRIGLICÉRIDOS",v:"115",u:"mg/dL",s:""},
+    {n:"GLUCOSA",v:"92",u:"mg/dL",s:""},
+    {n:"HbA1c",v:"5.4",u:"%",s:""},
+    {n:"PCR ULTRASENSIBLE",v:"0.4",u:"mg/L",s:""},
+   ]},
+   sr:[
+    [{a:"Trop",v:"0.01",d:"30/06",s:"norm"},{a:"CK-MB",v:"14",d:"30/06",s:"norm"},{a:"BNP",v:"85",d:"30/06",s:"norm"},{a:"HB",v:"13.8",d:"30/06",s:"norm"},{a:"LDL",v:"88",d:"30/06",s:"norm"}],
+    [{a:"HDL",v:"58",d:"30/06",s:"norm"},{a:"TG",v:"115",d:"30/06",s:"norm"},{a:"Gluc",v:"92",d:"30/06",s:"norm"},{a:"HbA1c",v:"5.4",d:"30/06",s:"norm"},{a:"PCR",v:"0.4",d:"30/06",s:"norm"}],
+   ],
+   ktv:{v:0},
+   tr:{m:["Ene","Feb","Mar","Abr","May","Jun"],hb:[105,100,95,92,90,88],leuc:[52,54,55,56,57,58],plaq:[140,132,128,122,118,115],k:[110,105,100,95,90,85],ca:[98,96,94,93,92,92],p:[0.01,0.01,0.01,0.01,0.01,0.01]},
+   risk:{val:3.8,cat:"Bajo"},
+  },
+];
 
-// ── NAVIGATION ───────────────────────────────────────────────────────────
+// ─── SPECIALTY CONFIGS ───────────────────────────────────────────────────────
+const ICONS = {
+  doc:  '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+  dial: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8"><path d="M8 3v4l-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9l-2-2V3"/><path d="M8 3h8"/><path d="M12 12v4"/><path d="M10 14h4"/></svg>',
+  heart:'<svg width="22" height="22" viewBox="0 0 24 24" fill="#c62828" stroke="#c62828" stroke-width="1.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+  chart:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
+  table:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="9" x2="9" y2="21"/></svg>',
+  users:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+  upd:  '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.8"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>',
+  pli:  '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+  arr:  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8c8c8" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>',
+};
+
+const SPECS = {
+  nef:{
+    id:'nef', name:'Inicio Laboratorio',
+    patients:NEF_P,
+    menu:[
+      {lb:'Resultados',     sub:'Pacientes y análisis',     scr:'resultados',icon:'doc'},
+      {lb:'Cálculo de Kt/V',sub:'Parámetros de diálisis',  scr:'ktv',       icon:'dial'},
+      {lb:'Estadística',    sub:'Vista rápida y curvas',    scr:'estadistica',icon:'chart'},
+      {lb:'Planilla',       sub:'Resumen mensual',          scr:'planilla',  icon:'table'},
+      {lb:'Gestión',        sub:'Alta y baja · 5 pacientes',scr:'gestion',   icon:'users'},
+    ],
+    ktvTitle:'Cálculo de Kt/V',
+    charts:[
+      {k:'hb',  lb:'Hemoglobina', mn:7,  mx:14,  hi:12,  lo:10},
+      {k:'leuc',lb:'Leucocitos',  mn:3,  mx:14,  hi:11,  lo:4},
+      {k:'plaq',lb:'Plaquetas',   mn:100,mx:400, hi:400, lo:150},
+      {k:'k',   lb:'Potasio',     mn:3,  mx:7,   hi:5.5, lo:3.5},
+      {k:'ca',  lb:'Calcio',      mn:7,  mx:12,  hi:10.5,lo:8.5},
+      {k:'p',   lb:'Fósforo',     mn:2,  mx:9,   hi:5.5, lo:3.5},
+    ],
+    planParams:[
+      {lb:'Hemoglobina',k:'hb',  lo:10, hi:12},
+      {lb:'Leucocitos', k:'leuc',lo:4,  hi:11},
+      {lb:'Plaquetas',  k:'plaq',lo:150,hi:400},
+      {lb:'Potasio',    k:'k',   lo:3.5,hi:5.5},
+      {lb:'Calcio',     k:'ca',  lo:8.5,hi:10.5},
+      {lb:'Fósforo',    k:'p',   lo:3.5,hi:5.5},
+      {lb:'Kt/V',       k:'_ktv',lo:1.2,hi:1.4},
+    ],
+  },
+  car:{
+    id:'car', name:'Inicio Cardiología',
+    patients:CAR_P,
+    menu:[
+      {lb:'Resultados',  sub:'Pacientes y análisis',       scr:'resultados', icon:'doc'},
+      {lb:'Riesgo CV',   sub:'SCORE2 · Estratificación',   scr:'ktv',        icon:'heart'},
+      {lb:'Estadística', sub:'Vista rápida y curvas',      scr:'estadistica',icon:'chart'},
+      {lb:'Planilla',    sub:'Resumen mensual',            scr:'planilla',   icon:'table'},
+      {lb:'Gestión',     sub:'Alta y baja · 4 pacientes',  scr:'gestion',    icon:'users'},
+    ],
+    ktvTitle:'Riesgo Cardiovascular',
+    charts:[
+      {k:'hb',  lb:'LDL',           mn:50, mx:200, hi:160,lo:100},
+      {k:'leuc',lb:'HDL',           mn:25, mx:80,  hi:80, lo:40},
+      {k:'plaq',lb:'Triglicéridos', mn:80, mx:350, hi:200,lo:150},
+      {k:'k',   lb:'BNP',           mn:0,  mx:1400,hi:400,lo:100},
+      {k:'ca',  lb:'Glucosa',       mn:70, mx:200, hi:140,lo:70},
+      {k:'p',   lb:'Troponina I',   mn:0,  mx:0.35,hi:0.04,lo:0},
+    ],
+    planParams:[
+      {lb:'LDL',          k:'hb',  lo:0,  hi:160},
+      {lb:'HDL',          k:'leuc',lo:40, hi:200,inv:true},
+      {lb:'Triglicéridos',k:'plaq',lo:0,  hi:200},
+      {lb:'BNP',          k:'k',   lo:0,  hi:400},
+      {lb:'Glucosa',      k:'ca',  lo:70, hi:140},
+      {lb:'Troponina I',  k:'p',   lo:0,  hi:0.04},
+    ],
+  },
+};
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+let SPE = null, cur = null, eTabVal = 'vista', ktvP = null;
+
+// ─── NAV ─────────────────────────────────────────────────────────────────────
 function go(scr, pid) {
-  if (pid !== undefined) cur = P.find(p => p.id === pid);
+  if (pid !== undefined) cur = SPE.patients.find(p => p.id === pid);
   document.querySelectorAll('.scr').forEach(s => s.classList.remove('on'));
   document.getElementById('s-' + scr).classList.add('on');
-  // reset scroll
-  const b = document.getElementById('s-' + scr).querySelector('.body');
+  const b = document.querySelector('#s-' + scr + ' .body');
   if (b) b.scrollTop = 0;
-  render(scr);
+  if (scr==='home')        renderHome();
+  if (scr==='resultados')  renderRes();
+  if (scr==='lab')         renderLab();
+  if (scr==='ktv')         renderKtv();
+  if (scr==='estadistica') renderEstat();
+  if (scr==='planilla')    renderPlan();
+  if (scr==='gestion')     renderGest();
 }
 
-function render(scr) {
-  if (scr === 'resultados')  renderRes();
-  if (scr === 'lab')         renderLab();
-  if (scr === 'ktv')         renderKtv();
-  if (scr === 'estadistica') renderEstat();
-  if (scr === 'planilla')    renderPlan();
-  if (scr === 'gestion')     renderGest();
+function selectSpe(id) { SPE = SPECS[id]; go('home'); }
+
+// ─── HOME ────────────────────────────────────────────────────────────────────
+function renderHome() {
+  document.getElementById('home-title').textContent = SPE.name;
+  document.getElementById('home-body').innerHTML =
+    SPE.menu.map(m =>
+      `<div class="menu-card" onclick="go('${m.scr}')">
+         <div class="mi-icon">${ICONS[m.icon]}</div>
+         <div><div class="mi-title">${m.lb}</div><div class="mi-sub">${m.sub}</div></div>
+         <div class="mi-arr">${ICONS.arr}</div>
+       </div>`
+    ).join('') +
+    `<div class="menu-card" style="opacity:.45;cursor:default;">
+       <div class="mi-icon">${ICONS.upd}</div>
+       <div><div class="mi-title">Actualizar resultados</div><div class="mi-sub">Importar desde laboratorio</div></div>
+       <div class="mi-arr">${ICONS.arr}</div>
+     </div>`;
 }
 
-// ── RESULTADOS ───────────────────────────────────────────────────────────
+// ─── RESULTADOS ──────────────────────────────────────────────────────────────
 function renderRes() {
-  document.getElementById('res-list').innerHTML = P.map(p => `
-    <div class="pli" onclick="go('lab',${p.id})">
-      <div class="pli-l">
-        <div class="pli-av"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <div>
-          <div class="pli-name">${p.name}</div>
-          <div class="pli-sub">${p.age} años · ${p.date}</div>
-        </div>
-      </div>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8c8c8" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-    </div>`).join('');
+  document.getElementById('res-list').innerHTML = SPE.patients.map(p =>
+    `<div class="pli" onclick="go('lab',${p.id})">
+       <div class="pli-l">
+         <div class="pli-av">${ICONS.pli}</div>
+         <div><div class="pli-name">${p.name}</div><div class="pli-sub">${p.age} años · ${p.date}</div></div>
+       </div>
+       ${ICONS.arr}
+     </div>`).join('');
 }
 
 function renderLab() {
@@ -526,8 +710,8 @@ function renderLab() {
   document.getElementById('lab-body').innerHTML =
     `<div class="pt-hdr"><div class="pt-hdr-date">${p.date}</div></div>
      <div class="dr-info">
-       <div class="dr-l">DRA.<br>LIDIA J.<br>RODANOB<br>IOQUIMIC<br>AM.N.776</div>
-       <div class="dr-r">&nbsp;<br>&nbsp;<br>Dr. Carlos Colodner<br>BIOQUIMICO<br>M.N.1448</div>
+       <div class="dr-l">DRA. LIDIA J.<br>BIOQUÍMICA<br>M.N.776</div>
+       <div class="dr-r">&nbsp;<br>Dr. C. Colodner<br>M.N.1448</div>
      </div>
      <div class="lab-list">` +
     p.lab.rows.map(r =>
@@ -538,33 +722,50 @@ function renderLab() {
     `</div>`;
 }
 
-// ── KT/V ─────────────────────────────────────────────────────────────────
-function daugirdas(pre, post, w, uf, dur) {
-  const R = post / pre;
-  return -Math.log(R - 0.008 * dur) + (4 - 3.5 * R) * (uf / w);
-}
-
-function ktvCls(v) { return v >= 1.4 ? 'kn' : v >= 1.2 ? 'ko' : 'kl'; }
+// ─── KT/V / RIESGO CV ────────────────────────────────────────────────────────
+function daugirdas(pre,post,w,uf,dur){const R=post/pre;return -Math.log(R-0.008*dur)+(4-3.5*R)*(uf/w);}
+function ktvCls(v){return v>=1.4?'kn':v>=1.2?'ko':'kl';}
+function riskCls(v){return v<5?'rb-low':v<10?'rb-mod':v<20?'rb-hi':'rb-crit';}
 
 function renderKtv() {
-  document.getElementById('ktv-list').innerHTML = P.map(p =>
-    `<div class="pli" onclick="openSheet(${p.id})">
-       <div class="pli-l">
-         <div class="pli-av"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-         <div>
-           <div class="pli-name">${p.name}</div>
-           <div class="pli-sub">${p.date}</div>
+  document.getElementById('ktv-title').textContent = SPE.ktvTitle;
+  if (SPE.id==='nef') {
+    document.getElementById('ktv-list').innerHTML = SPE.patients.map(p =>
+      `<div class="pli" onclick="openSheet(${p.id})">
+         <div class="pli-l">
+           <div class="pli-av">${ICONS.pli}</div>
+           <div><div class="pli-name">${p.name}</div><div class="pli-sub">${p.date}</div></div>
          </div>
-       </div>
-       <div class="pli-r">
-         <div class="pli-tag">Kt/V</div>
-         <div class="ktv-badge ${ktvCls(p.ktv.v)}" id="kv-${p.id}">${p.ktv.v.toFixed(2)}</div>
-       </div>
-     </div>`).join('');
+         <div class="pli-r">
+           <div class="pli-tag">Kt/V</div>
+           <div class="ktv-badge ${ktvCls(p.ktv.v)}" id="kv-${p.id}">${p.ktv.v.toFixed(2)}</div>
+         </div>
+       </div>`).join('');
+  } else {
+    document.getElementById('ktv-list').innerHTML =
+      `<div style="padding:8px 12px 2px;font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;">SCORE2 · Riesgo a 10 años</div>` +
+      SPE.patients.map(p => {
+        const r = p.risk;
+        const fill = r.val<5?'#2e7d32':r.val<10?'#e65100':'#c62828';
+        return `<div class="risk-info">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <div>
+              <div style="font-size:14px;font-weight:700;">${p.name}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:2px;">${p.age} años · ${p.date}</div>
+            </div>
+            <div class="risk-badge ${riskCls(r.val)}">${r.val}% · ${r.cat}</div>
+          </div>
+          <div class="ri-bar"><div class="ri-fill" style="width:${Math.min(r.val,100)}%;background:${fill};"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:3px;">
+            <span>Bajo &lt;5%</span><span>Moderado 5–10%</span><span>Alto &gt;10%</span>
+          </div>
+        </div>`;
+      }).join('');
+  }
 }
 
 function openSheet(id) {
-  ktvP = P.find(p => p.id === id);
+  ktvP = SPE.patients.find(p=>p.id===id);
   document.getElementById('bs-name').textContent = ktvP.name;
   document.getElementById('bs-t').value  = ktvP.ktv.dur;
   document.getElementById('bs-uf').value = ktvP.ktv.uf;
@@ -572,159 +773,115 @@ function openSheet(id) {
   document.getElementById('bs-f').value  = ktvP.date;
   document.getElementById('ov').classList.add('on');
 }
-
-function closeOv(e) {
-  if (e.target === document.getElementById('ov'))
-    document.getElementById('ov').classList.remove('on');
-}
-
-function saveKtv() {
-  if (!ktvP) return;
-  const t  = parseFloat(document.getElementById('bs-t').value);
-  const uf = parseFloat(document.getElementById('bs-uf').value);
-  const w  = parseFloat(document.getElementById('bs-w').value);
-  const v  = daugirdas(ktvP.ktv.pre, ktvP.ktv.post, w, uf, t);
-  ktvP.ktv.v = v;
+function closeOv(e){if(e.target===document.getElementById('ov'))document.getElementById('ov').classList.remove('on');}
+function saveKtv(){
+  if(!ktvP)return;
+  const t=parseFloat(document.getElementById('bs-t').value);
+  const uf=parseFloat(document.getElementById('bs-uf').value);
+  const w=parseFloat(document.getElementById('bs-w').value);
+  const v=daugirdas(ktvP.ktv.pre,ktvP.ktv.post,w,uf,t);
+  ktvP.ktv.v=v;
   document.getElementById('ov').classList.remove('on');
-  const el = document.getElementById('kv-' + ktvP.id);
-  if (el) { el.textContent = v.toFixed(2); el.className = 'ktv-badge ' + ktvCls(v); }
-  toast(`Kt/V ${v.toFixed(2)} — ${v >= 1.4 ? 'Excelente' : v >= 1.2 ? 'Adecuado' : 'Insuficiente'}`);
+  const el=document.getElementById('kv-'+ktvP.id);
+  if(el){el.textContent=v.toFixed(2);el.className='ktv-badge '+ktvCls(v);}
+  toast(`Kt/V ${v.toFixed(2)} — ${v>=1.4?'Excelente':v>=1.2?'Adecuado':'Insuficiente'}`);
 }
 
-function toast(msg) {
-  const d = document.createElement('div');
-  d.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;z-index:999;white-space:nowrap;';
-  d.textContent = msg;
-  document.body.appendChild(d);
-  setTimeout(() => d.remove(), 2500);
-}
-
-// ── ESTADÍSTICA ───────────────────────────────────────────────────────────
-function eTab(t) {
-  eTabVal = t;
-  document.getElementById('tb-vista').classList.toggle('on', t === 'vista');
-  document.getElementById('tb-curvas').classList.toggle('on', t === 'curvas');
+// ─── ESTADÍSTICA ─────────────────────────────────────────────────────────────
+function eTab(t){
+  eTabVal=t;
+  document.getElementById('tb-vista').classList.toggle('on',t==='vista');
+  document.getElementById('tb-curvas').classList.toggle('on',t==='curvas');
   renderEstat();
 }
-
-function renderEstat() {
-  const el = document.getElementById('estat-body');
-  if (eTabVal === 'vista') {
-    el.innerHTML = P.map(p => {
-      const kv = p.ktv.v;
-      const kc = kv >= 1.4 ? 'norm' : kv >= 1.2 ? 'obs' : 'crit';
-      const mkRow = row => row.map(c =>
-        `<div class="sc-cell">
-           <div class="sc-abbr">${c.a}</div>
-           <div class="sc-val ${c.s}">${c.v}</div>
-           <div class="sc-date">${c.d}</div>
-         </div>`).join('');
+function renderEstat(){
+  const el=document.getElementById('estat-body');
+  if(eTabVal==='vista'){
+    el.innerHTML=SPE.patients.map(p=>{
+      const kKey=SPE.id==='nef'?'Kt/V':'Riesgo CV';
+      const kVal=SPE.id==='nef'?p.ktv.v.toFixed(2):p.risk.val+'%';
+      const kCls=SPE.id==='nef'?(p.ktv.v>=1.4?'norm':p.ktv.v>=1.2?'obs':'crit'):(p.risk.val<5?'norm':p.risk.val<10?'obs':'crit');
+      const mkR=r=>r.map(c=>`<div class="sc-cell"><div class="sc-abbr">${c.a}</div><div class="sc-val ${c.s}">${c.v}</div><div class="sc-date">${c.d}</div></div>`).join('');
       return `<div class="stat-card">
         <div class="sc-name">${p.name}</div>
-        <div class="sc-grid">${mkRow(p.sr[0])}</div>
-        <div class="sc-grid">${mkRow(p.sr[1])}</div>
-        <div class="sc-ktv">
-          <div class="sc-ktv-lbl">Kt/V</div>
-          <div class="sc-ktv-val ${kc}">${kv.toFixed(2)}</div>
-        </div>
+        <div class="sc-grid">${mkR(p.sr[0])}</div>
+        <div class="sc-grid">${mkR(p.sr[1])}</div>
+        <div class="sc-ktv"><div class="sc-ktv-lbl">${kKey}</div><div class="sc-ktv-val ${kCls}">${kVal}</div></div>
       </div>`;
     }).join('');
   } else {
-    const charts = [
-      {k:'hb',  lb:'Hemoglobina', mn:7,  mx:14,  hi:12,  lo:10 },
-      {k:'leuc',lb:'Leucocitos',  mn:3,  mx:14,  hi:11,  lo:4  },
-      {k:'plaq',lb:'Plaquetas',   mn:100,mx:400, hi:400, lo:150},
-      {k:'k',   lb:'Potasio',     mn:3,  mx:7,   hi:5.5, lo:3.5},
-      {k:'ca',  lb:'Calcio',      mn:7,  mx:12,  hi:10.5,lo:8.5},
-      {k:'p',   lb:'Fósforo',     mn:2,  mx:9,   hi:5.5, lo:3.5},
-    ];
-    const p = P[0];
-    el.innerHTML = '<div class="curvas-grid">' +
-      charts.map(ch => {
-        const svg = spark(p.tr[ch.k], ch.mn, ch.mx, ch.hi, ch.lo);
-        return `<div class="curva-card">${svg}<div class="curva-lbl">${ch.lb}</div></div>`;
-      }).join('') +
-      '</div>';
+    const p=SPE.patients[0];
+    el.innerHTML='<div class="curvas-grid">'+
+      SPE.charts.map(ch=>`<div class="curva-card">${spark(p.tr[ch.k],ch.mn,ch.mx,ch.hi,ch.lo)}<div class="curva-lbl">${ch.lb}</div></div>`).join('')+
+    '</div>';
   }
 }
-
-function spark(data, mn, mx, hi, lo) {
-  const W = 160, H = 90, pl = 6, pr = 6, pt = 10, pb = 8;
-  const w = W - pl - pr, h = H - pt - pb;
-  const xs = i => pl + (i / (data.length - 1)) * w;
-  const ys = v => pt + h - ((v - mn) / (mx - mn)) * h;
-  const hyH = ys(hi), hyL = ys(lo);
-  const pts = data.map((v, i) => `${xs(i)},${ys(v)}`).join(' L ');
-  const dots = data.map((v, i) => {
-    const c = (v <= hi && v >= lo) ? '#2e7d32' : '#e65100';
-    return `<circle cx="${xs(i)}" cy="${ys(v)}" r="3.5" fill="${c}"/>`;
-  }).join('');
+function spark(data,mn,mx,hi,lo){
+  const W=160,H=90,pl=6,pr=6,pt=10,pb=8,w=W-pl-pr,h=H-pt-pb;
+  const xs=i=>pl+(i/(data.length-1))*w;
+  const ys=v=>pt+h-((v-mn)/(mx-mn))*h;
+  const pts=data.map((v,i)=>`${xs(i)},${ys(v)}`).join(' L ');
+  const dots=data.map((v,i)=>`<circle cx="${xs(i)}" cy="${ys(v)}" r="3.5" fill="${(v<=hi&&v>=lo)?'#2e7d32':'#e65100'}"/>`).join('');
   return `<svg viewBox="0 0 ${W} ${H}" width="100%" style="background:#f5f5f5;display:block;">
-    <line x1="${pl}" y1="${hyH}" x2="${pl+w}" y2="${hyH}" stroke="#e65100" stroke-width="1.5"/>
-    <line x1="${pl}" y1="${hyL}" x2="${pl+w}" y2="${hyL}" stroke="#2e7d32" stroke-width="1.5"/>
+    <line x1="${pl}" y1="${ys(hi)}" x2="${pl+w}" y2="${ys(hi)}" stroke="#e65100" stroke-width="1.5"/>
+    <line x1="${pl}" y1="${ys(lo)}" x2="${pl+w}" y2="${ys(lo)}" stroke="#2e7d32" stroke-width="1.5"/>
     <path d="M ${pts}" stroke="#c8c8c8" stroke-width="1.5" fill="none"/>
     ${dots}
   </svg>`;
 }
 
-// ── PLANILLA ─────────────────────────────────────────────────────────────
-function renderPlan() {
-  const params = [
-    {lb:"Hemoglobina", k:"hb",  refs:[10,12]},
-    {lb:"Leucocitos",  k:"leuc",refs:[4,11]},
-    {lb:"Plaquetas",   k:"plaq",refs:[150,400]},
-    {lb:"Potasio",     k:"k",   refs:[3.5,5.5]},
-    {lb:"Calcio",      k:"ca",  refs:[8.5,10.5]},
-    {lb:"Fósforo",     k:"p",   refs:[3.5,5.5]},
-    {lb:"Kt/V",        k:"ktv", refs:[1.2,1.4]},
-  ];
-  const heads = P.map(p => `<th>${p.name.split(',')[0]}<br><small style="font-weight:400;">${(p.name.split(',')[1]||'').trim()}</small></th>`).join('');
-  const rows = params.map(pm => {
-    const cells = P.map(p => {
-      let v, c;
-      if (pm.k === 'ktv') {
-        v = p.ktv.v.toFixed(2);
-        c = p.ktv.v >= pm.refs[1] ? 'tn' : p.ktv.v >= pm.refs[0] ? '' : 'tc';
+// ─── PLANILLA ────────────────────────────────────────────────────────────────
+function renderPlan(){
+  const pts=SPE.patients;
+  const heads=pts.map(p=>`<th>${p.name.split(',')[0]}<br><small style="font-weight:400;">${(p.name.split(',')[1]||'').trim()}</small></th>`).join('');
+  const rows=SPE.planParams.map(pm=>{
+    const cells=pts.map(p=>{
+      let v,c;
+      if(pm.k==='_ktv'){
+        v=p.ktv.v.toFixed(2);
+        c=p.ktv.v>=pm.hi?'tn':p.ktv.v>=pm.lo?'to':'tc';
       } else {
-        const last = p.tr[pm.k][p.tr[pm.k].length - 1];
-        v = Number.isInteger(last) ? last : last.toFixed(1);
-        c = last > pm.refs[1] ? 'to' : last < pm.refs[0] ? 'tc' : 'tn';
+        const last=p.tr[pm.k][p.tr[pm.k].length-1];
+        v=Number.isInteger(last)?last:last.toFixed(last<1?2:1);
+        if(pm.inv) c=last<pm.lo?'tc':'tn';
+        else c=last>pm.hi?'to':last<pm.lo?'tc':'tn';
       }
       return `<td class="${c}">${v}</td>`;
     }).join('');
     return `<tr><td class="pn">${pm.lb}</td>${cells}</tr>`;
   }).join('');
-
-  document.getElementById('plan-body').innerHTML = `
-    <div class="plan-wrap">
-      <div class="plan-title">Planilla de Laboratorio · Junio 2026</div>
-      <div class="plan-sub">Generada 03/07/2026</div>
-      <div class="plan-scroll">
-        <table class="plan-tbl">
-          <thead><tr><th style="text-align:left;">Parámetro</th>${heads}</tr></thead>
-          <tbody>${rows}</tbody>
-        </table>
-      </div>
-    </div>`;
+  document.getElementById('plan-body').innerHTML=
+    `<div class="plan-wrap">
+       <div class="plan-title">Planilla · Junio 2026</div>
+       <div class="plan-sub">Generada 03/07/2026</div>
+       <div class="plan-scroll">
+         <table class="plan-tbl">
+           <thead><tr><th style="text-align:left;">Parámetro</th>${heads}</tr></thead>
+           <tbody>${rows}</tbody>
+         </table>
+       </div>
+     </div>`;
 }
 
-// ── GESTIÓN ───────────────────────────────────────────────────────────────
-function renderGest() {
-  document.getElementById('gest-body').innerHTML =
-    `<div style="padding:0 12px 8px;">
-       <div style="background:#fff;border-radius:12px;padding:11px 14px;font-size:13px;color:#9e9e9e;">
-         <strong style="color:#1a1a1a;">${P.length} pacientes</strong> activos en el sistema
-       </div>
-     </div>` +
-    P.map(p => `
-    <div class="gest-card">
-      <div class="gc-nm">${p.name}</div>
-      <div class="gc-mt">${p.age} años · Alta 03/2024</div>
-      <div class="gc-tags">
-        <span class="gc-tag">Activo</span>
-        <span class="gc-tag">${p.date}</span>
-      </div>
-    </div>`).join('');
+// ─── GESTIÓN ─────────────────────────────────────────────────────────────────
+function renderGest(){
+  document.getElementById('gest-body').innerHTML=
+    `<div style="padding:0 12px 8px;"><div style="background:#fff;border-radius:12px;padding:11px 14px;font-size:13px;color:var(--muted);"><strong style="color:var(--text);">${SPE.patients.length} pacientes</strong> activos en el sistema</div></div>`+
+    SPE.patients.map(p=>
+      `<div class="gest-card">
+         <div class="gc-nm">${p.name}</div>
+         <div class="gc-mt">${p.age} años · Alta 03/2024</div>
+         <div class="gc-tags"><span class="gc-tag">Activo</span><span class="gc-tag">${p.date}</span></div>
+       </div>`).join('');
+}
+
+// ─── UTILS ───────────────────────────────────────────────────────────────────
+function toast(msg){
+  const d=document.createElement('div');
+  d.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;z-index:999;white-space:nowrap;';
+  d.textContent=msg;
+  document.body.appendChild(d);
+  setTimeout(()=>d.remove(),2500);
 }
 </script>
 </body>
