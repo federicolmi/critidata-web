@@ -175,18 +175,15 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#e0e0e
       </div>
     </div>
 
-    <div class="sel-card" onclick="selectSpe('car')">
+    <div class="sel-card coming">
       <div class="sel-ico" style="background:#ffebee;">
         <svg width="26" height="26" viewBox="0 0 24 24" fill="#c62828" stroke="#c62828" stroke-width="1.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
       </div>
       <div>
         <div class="sel-name">Cardiología</div>
-        <div class="sel-sub">4 pacientes · Riesgo CV · Troponina · BNP</div>
+        <div class="sel-sub">Riesgo CV · Troponina · BNP · LDL</div>
       </div>
-      <div class="sel-right">
-        <span class="sbadge sbadge-demo">Demo</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8c8c8" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-      </div>
+      <div class="sel-right"><span class="sbadge sbadge-prox">Próximamente</span></div>
     </div>
 
     <div class="sel-card coming">
@@ -472,8 +469,8 @@ const NEF_P = [
   },
 ];
 
-// ─── CARDIOLOGÍA ─────────────────────────────────────────────────────────────
-const CAR_P = [
+// ─── CARDIOLOGÍA (próximamente) ──────────────────────────────────────────────
+const _CAR_PLACEHOLDER = [
   {id:1,name:"Suárez, Ricardo",fn:"Ricardo",age:65,date:"01/07/2026",
    lab:{rows:[
     {n:"TROPONINA I",v:"0.03",u:"ng/mL",s:""},
@@ -593,68 +590,37 @@ const ICONS = {
   arr:  '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#c8c8c8" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>',
 };
 
-const SPECS = {
-  nef:{
-    id:'nef', name:'Inicio Laboratorio',
-    patients:NEF_P,
-    menu:[
-      {lb:'Resultados',     sub:'Pacientes y análisis',     scr:'resultados',icon:'doc'},
-      {lb:'Cálculo de Kt/V',sub:'Parámetros de diálisis',  scr:'ktv',       icon:'dial'},
-      {lb:'Estadística',    sub:'Vista rápida y curvas',    scr:'estadistica',icon:'chart'},
-      {lb:'Planilla',       sub:'Resumen mensual',          scr:'planilla',  icon:'table'},
-      {lb:'Gestión',        sub:'Alta y baja · 5 pacientes',scr:'gestion',   icon:'users'},
-    ],
-    ktvTitle:'Cálculo de Kt/V',
-    charts:[
-      {k:'hb',  lb:'Hemoglobina', mn:7,  mx:14,  hi:12,  lo:10},
-      {k:'leuc',lb:'Leucocitos',  mn:3,  mx:14,  hi:11,  lo:4},
-      {k:'plaq',lb:'Plaquetas',   mn:100,mx:400, hi:400, lo:150},
-      {k:'k',   lb:'Potasio',     mn:3,  mx:7,   hi:5.5, lo:3.5},
-      {k:'ca',  lb:'Calcio',      mn:7,  mx:12,  hi:10.5,lo:8.5},
-      {k:'p',   lb:'Fósforo',     mn:2,  mx:9,   hi:5.5, lo:3.5},
-    ],
-    planParams:[
-      {lb:'Hemoglobina',k:'hb',  lo:10, hi:12},
-      {lb:'Leucocitos', k:'leuc',lo:4,  hi:11},
-      {lb:'Plaquetas',  k:'plaq',lo:150,hi:400},
-      {lb:'Potasio',    k:'k',   lo:3.5,hi:5.5},
-      {lb:'Calcio',     k:'ca',  lo:8.5,hi:10.5},
-      {lb:'Fósforo',    k:'p',   lo:3.5,hi:5.5},
-      {lb:'Kt/V',       k:'_ktv',lo:1.2,hi:1.4},
-    ],
-  },
-  car:{
-    id:'car', name:'Inicio Cardiología',
-    patients:CAR_P,
-    menu:[
-      {lb:'Resultados',  sub:'Pacientes y análisis',       scr:'resultados', icon:'doc'},
-      {lb:'Riesgo CV',   sub:'SCORE2 · Estratificación',   scr:'ktv',        icon:'heart'},
-      {lb:'Estadística', sub:'Vista rápida y curvas',      scr:'estadistica',icon:'chart'},
-      {lb:'Planilla',    sub:'Resumen mensual',            scr:'planilla',   icon:'table'},
-      {lb:'Gestión',     sub:'Alta y baja · 4 pacientes',  scr:'gestion',    icon:'users'},
-    ],
-    ktvTitle:'Riesgo Cardiovascular',
-    charts:[
-      {k:'hb',  lb:'LDL',           mn:50, mx:200, hi:160,lo:100},
-      {k:'leuc',lb:'HDL',           mn:25, mx:80,  hi:80, lo:40},
-      {k:'plaq',lb:'Triglicéridos', mn:80, mx:350, hi:200,lo:150},
-      {k:'k',   lb:'BNP',           mn:0,  mx:1400,hi:400,lo:100},
-      {k:'ca',  lb:'Glucosa',       mn:70, mx:200, hi:140,lo:70},
-      {k:'p',   lb:'Troponina I',   mn:0,  mx:0.35,hi:0.04,lo:0},
-    ],
-    planParams:[
-      {lb:'LDL',          k:'hb',  lo:0,  hi:160},
-      {lb:'HDL',          k:'leuc',lo:40, hi:200,inv:true},
-      {lb:'Triglicéridos',k:'plaq',lo:0,  hi:200},
-      {lb:'BNP',          k:'k',   lo:0,  hi:400},
-      {lb:'Glucosa',      k:'ca',  lo:70, hi:140},
-      {lb:'Troponina I',  k:'p',   lo:0,  hi:0.04},
-    ],
-  },
+const SPE = {
+  name:'Inicio Laboratorio',
+  patients:NEF_P,
+  menu:[
+    {lb:'Resultados',     sub:'Pacientes y análisis',     scr:'resultados', icon:'doc'},
+    {lb:'Cálculo de Kt/V',sub:'Parámetros de diálisis',  scr:'ktv',        icon:'dial'},
+    {lb:'Estadística',    sub:'Vista rápida y curvas',    scr:'estadistica',icon:'chart'},
+    {lb:'Planilla',       sub:'Resumen mensual',          scr:'planilla',   icon:'table'},
+    {lb:'Gestión',        sub:'Alta y baja · 5 pacientes',scr:'gestion',    icon:'users'},
+  ],
+  charts:[
+    {k:'hb',  lb:'Hemoglobina', mn:7,  mx:14,  hi:12,  lo:10},
+    {k:'leuc',lb:'Leucocitos',  mn:3,  mx:14,  hi:11,  lo:4},
+    {k:'plaq',lb:'Plaquetas',   mn:100,mx:400, hi:400, lo:150},
+    {k:'k',   lb:'Potasio',     mn:3,  mx:7,   hi:5.5, lo:3.5},
+    {k:'ca',  lb:'Calcio',      mn:7,  mx:12,  hi:10.5,lo:8.5},
+    {k:'p',   lb:'Fósforo',     mn:2,  mx:9,   hi:5.5, lo:3.5},
+  ],
+  planParams:[
+    {lb:'Hemoglobina',k:'hb',  lo:10, hi:12},
+    {lb:'Leucocitos', k:'leuc',lo:4,  hi:11},
+    {lb:'Plaquetas',  k:'plaq',lo:150,hi:400},
+    {lb:'Potasio',    k:'k',   lo:3.5,hi:5.5},
+    {lb:'Calcio',     k:'ca',  lo:8.5,hi:10.5},
+    {lb:'Fósforo',    k:'p',   lo:3.5,hi:5.5},
+    {lb:'Kt/V',       k:'_ktv',lo:1.2,hi:1.4},
+  ],
 };
 
 // ─── STATE ───────────────────────────────────────────────────────────────────
-let SPE = null, cur = null, eTabVal = 'vista', ktvP = null;
+let cur = null, eTabVal = 'vista', ktvP = null;
 
 // ─── NAV ─────────────────────────────────────────────────────────────────────
 function go(scr, pid) {
@@ -672,7 +638,7 @@ function go(scr, pid) {
   if (scr==='gestion')     renderGest();
 }
 
-function selectSpe(id) { SPE = SPECS[id]; go('home'); }
+function selectSpe(id) { if (id === 'nef') go('home'); }
 
 // ─── HOME ────────────────────────────────────────────────────────────────────
 function renderHome() {
@@ -725,43 +691,20 @@ function renderLab() {
 // ─── KT/V / RIESGO CV ────────────────────────────────────────────────────────
 function daugirdas(pre,post,w,uf,dur){const R=post/pre;return -Math.log(R-0.008*dur)+(4-3.5*R)*(uf/w);}
 function ktvCls(v){return v>=1.4?'kn':v>=1.2?'ko':'kl';}
-function riskCls(v){return v<5?'rb-low':v<10?'rb-mod':v<20?'rb-hi':'rb-crit';}
 
 function renderKtv() {
-  document.getElementById('ktv-title').textContent = SPE.ktvTitle;
-  if (SPE.id==='nef') {
-    document.getElementById('ktv-list').innerHTML = SPE.patients.map(p =>
-      `<div class="pli" onclick="openSheet(${p.id})">
-         <div class="pli-l">
-           <div class="pli-av">${ICONS.pli}</div>
-           <div><div class="pli-name">${p.name}</div><div class="pli-sub">${p.date}</div></div>
-         </div>
-         <div class="pli-r">
-           <div class="pli-tag">Kt/V</div>
-           <div class="ktv-badge ${ktvCls(p.ktv.v)}" id="kv-${p.id}">${p.ktv.v.toFixed(2)}</div>
-         </div>
-       </div>`).join('');
-  } else {
-    document.getElementById('ktv-list').innerHTML =
-      `<div style="padding:8px 12px 2px;font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;">SCORE2 · Riesgo a 10 años</div>` +
-      SPE.patients.map(p => {
-        const r = p.risk;
-        const fill = r.val<5?'#2e7d32':r.val<10?'#e65100':'#c62828';
-        return `<div class="risk-info">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-            <div>
-              <div style="font-size:14px;font-weight:700;">${p.name}</div>
-              <div style="font-size:12px;color:var(--muted);margin-top:2px;">${p.age} años · ${p.date}</div>
-            </div>
-            <div class="risk-badge ${riskCls(r.val)}">${r.val}% · ${r.cat}</div>
-          </div>
-          <div class="ri-bar"><div class="ri-fill" style="width:${Math.min(r.val,100)}%;background:${fill};"></div></div>
-          <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:3px;">
-            <span>Bajo &lt;5%</span><span>Moderado 5–10%</span><span>Alto &gt;10%</span>
-          </div>
-        </div>`;
-      }).join('');
-  }
+  document.getElementById('ktv-title').textContent = 'Cálculo de Kt/V';
+  document.getElementById('ktv-list').innerHTML = SPE.patients.map(p =>
+    `<div class="pli" onclick="openSheet(${p.id})">
+       <div class="pli-l">
+         <div class="pli-av">${ICONS.pli}</div>
+         <div><div class="pli-name">${p.name}</div><div class="pli-sub">${p.date}</div></div>
+       </div>
+       <div class="pli-r">
+         <div class="pli-tag">Kt/V</div>
+         <div class="ktv-badge ${ktvCls(p.ktv.v)}" id="kv-${p.id}">${p.ktv.v.toFixed(2)}</div>
+       </div>
+     </div>`).join('');
 }
 
 function openSheet(id) {
@@ -798,15 +741,14 @@ function renderEstat(){
   const el=document.getElementById('estat-body');
   if(eTabVal==='vista'){
     el.innerHTML=SPE.patients.map(p=>{
-      const kKey=SPE.id==='nef'?'Kt/V':'Riesgo CV';
-      const kVal=SPE.id==='nef'?p.ktv.v.toFixed(2):p.risk.val+'%';
-      const kCls=SPE.id==='nef'?(p.ktv.v>=1.4?'norm':p.ktv.v>=1.2?'obs':'crit'):(p.risk.val<5?'norm':p.risk.val<10?'obs':'crit');
+      const kv=p.ktv.v;
+      const kCls=kv>=1.4?'norm':kv>=1.2?'obs':'crit';
       const mkR=r=>r.map(c=>`<div class="sc-cell"><div class="sc-abbr">${c.a}</div><div class="sc-val ${c.s}">${c.v}</div><div class="sc-date">${c.d}</div></div>`).join('');
       return `<div class="stat-card">
         <div class="sc-name">${p.name}</div>
         <div class="sc-grid">${mkR(p.sr[0])}</div>
         <div class="sc-grid">${mkR(p.sr[1])}</div>
-        <div class="sc-ktv"><div class="sc-ktv-lbl">${kKey}</div><div class="sc-ktv-val ${kCls}">${kVal}</div></div>
+        <div class="sc-ktv"><div class="sc-ktv-lbl">Kt/V</div><div class="sc-ktv-val ${kCls}">${kv.toFixed(2)}</div></div>
       </div>`;
     }).join('');
   } else {
