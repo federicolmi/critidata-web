@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CritiData Gastro — Panel</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f7f7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: #0D1B3E;
+            color: #fff;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        header .marca { font-weight: 700; font-size: 1.05rem; line-height: 1.2; }
+        header .salir {
+            background: none;
+            border: 1px solid rgba(255,255,255,.35);
+            color: #fff;
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: .85rem;
+            cursor: pointer;
+        }
+        header .salir:hover { background: rgba(255,255,255,.1); }
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+            padding: 24px;
+        }
+        .card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 36px 32px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(15, 23, 42, .06);
+        }
+        .card .icono { font-size: 2.4rem; margin-bottom: 12px; }
+        .card h2 { color: #0f172a; font-size: 1.25rem; margin-bottom: 8px; }
+        .card p { color: #64748b; font-size: .95rem; line-height: 1.55; }
+        .proximamente {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            text-align: left;
+        }
+        .item {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px 14px;
+            color: #475569;
+            font-size: .9rem;
+        }
+        /* ===== Mi equipo ===== */
+        .card h3 { color: #0f172a; font-size: 1.05rem; margin-bottom: 4px; text-align: left; }
+        .card .sub { color: #94a3b8; font-size: .8rem; text-align: left; margin-bottom: 14px; }
+        .equipo-form { display: flex; gap: 8px; margin-bottom: 6px; }
+        .equipo-form input {
+            flex: 1;
+            padding: 10px 13px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 9px;
+            font-size: 14px;
+            outline: none;
+        }
+        .equipo-form input:focus { border-color: #0D1B3E; }
+        .btn-navy {
+            border: none;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #0D1B3E, #1a3a6b);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 10px 18px;
+            cursor: pointer;
+        }
+        .btn-navy:hover { opacity: .88; }
+        .btn-navy:disabled { opacity: .5; cursor: default; }
+        .equipo-msg { font-size: .8rem; text-align: left; margin: 4px 0 10px; min-height: 1em; }
+        .miembro {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #eef2f6;
+            padding: 10px 2px;
+            text-align: left;
+        }
+        .miembro:last-child { border-bottom: none; }
+        .miembro .datos { flex: 1; min-width: 0; }
+        .miembro .nombre { font-size: .9rem; font-weight: 700; color: #0f172a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .miembro .mail { font-size: .78rem; color: #94a3b8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .chip { font-size: .7rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+        .chip.activa { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+        .chip.pendiente { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+        .btn-baja {
+            background: none;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: .75rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-baja:hover { background: #fef2f2; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="marca">CritiData<br>Gastro</div>
+        <button class="salir" onclick="salir()">Cerrar sesión</button>
+    </header>
+    <main>
+        <div class="card">
+            <div class="icono">🩺</div>
+            <h2 id="saludo">Hola 👋</h2>
+            <p>Tu sesión está iniciada. El panel de Gastroenterología está en preparación — muy pronto vas a poder usar acá:</p>
+            <div class="proximamente">
+                <div class="item">📅 Agenda de turnos (consultas y estudios)</div>
+                <div class="item">🖼️ Estudios con las imágenes de la endoscopía</div>
+                <div class="item">📄 Informes y biopsias</div>
+                <div class="item">🖨️ Impresión del estudio</div>
+            </div>
+        </div>
+
+        <!-- Mi equipo: solo se muestra si el backend responde (rol médico) -->
+        <div class="card" id="equipo-card" style="display:none;">
+            <h3>👥 Mi equipo</h3>
+            <p class="sub">Invitá a tu secretaria/o por email: le llega un link para crear su contraseña y entra solo a Pacientes, Agenda, Indicaciones, Biopsias e Informes.</p>
+            <div class="equipo-form">
+                <input id="eq-email" type="email" placeholder="email@de-tu-secretaria.com" autocomplete="off">
+                <button class="btn-navy" id="eq-btn" onclick="invitar()">Invitar</button>
+            </div>
+            <p class="equipo-msg" id="eq-msg"></p>
+            <div id="eq-lista"></div>
+        </div>
+    </main>
+    <script>
+        const API     = 'https://backend-login-api-production.up.railway.app'
+        const token   = localStorage.getItem('gastro_token')
+        const usuario = localStorage.getItem('gastro_usuario')
+        // Sin sesión no hay panel: de vuelta a la puerta de entrada.
+        if (!token) window.location.href = 'index.html'
+        if (usuario) document.getElementById('saludo').textContent = `Hola, ${usuario} 👋`
+
+        function salir() {
+            localStorage.removeItem('gastro_token')
+            localStorage.removeItem('gastro_usuario')
+            window.location.href = 'index.html'
+        }
+
+        // ===== Mi equipo =====
+        // Los datos del backend se insertan SIEMPRE escapados (nada de meter
+        // texto ajeno crudo en innerHTML).
+        function esc(t) {
+            const d = document.createElement('div')
+            d.textContent = t ?? ''
+            return d.innerHTML
+        }
+
+        function msj(texto, esError) {
+            const el = document.getElementById('eq-msg')
+            el.textContent = texto
+            el.style.color = esError ? '#dc2626' : '#15803d'
+        }
+
+        async function cargarEquipo() {
+            try {
+                const res = await fetch(`${API}/equipo`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
+                // 401/403: no es médico (o venció la sesión) -> la tarjeta no se muestra.
+                if (!res.ok) return
+                const data = await res.json()
+                document.getElementById('equipo-card').style.display = 'block'
+
+                let html = ''
+                for (const s of (data.secretarias || [])) {
+                    html += `
+                    <div class="miembro">
+                        <div class="datos">
+                            <div class="nombre">${esc(s.full_name)}</div>
+                            <div class="mail">${esc(s.email)}</div>
+                        </div>
+                        <span class="chip ${s.activa ? 'activa' : 'pendiente'}">${s.activa ? 'Activa' : 'De baja'}</span>
+                        ${s.activa ? `<button class="btn-baja" onclick="darBaja(${Number(s.id)})">Dar de baja</button>` : ''}
+                    </div>`
+                }
+                for (const i of (data.invitaciones_pendientes || [])) {
+                    html += `
+                    <div class="miembro">
+                        <div class="datos">
+                            <div class="nombre">${esc(i.email)}</div>
+                            <div class="mail">Invitación enviada — esperando que cree su contraseña</div>
+                        </div>
+                        <span class="chip pendiente">Pendiente</span>
+                        <button class="btn-baja" onclick="cancelarInv(${Number(i.id)})">Cancelar</button>
+                    </div>`
+                }
+                if (!html) html = '<p class="sub" style="margin:6px 0 0;">Todavía no invitaste a nadie.</p>'
+                document.getElementById('eq-lista').innerHTML = html
+            } catch { /* sin red: la tarjeta simplemente no aparece */ }
+        }
+
+        async function invitar() {
+            const email = document.getElementById('eq-email').value.trim()
+            if (!email) { msj('Escribí el email de tu secretaria/o', true); return }
+            const btn = document.getElementById('eq-btn')
+            btn.disabled = true
+            btn.textContent = 'Enviando…'
+            try {
+                const res = await fetch(`${API}/equipo/invitar`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ email })
+                })
+                const data = await res.json()
+                if (res.ok) {
+                    msj(`✓ Invitación enviada a ${email}`, false)
+                    document.getElementById('eq-email').value = ''
+                    cargarEquipo()
+                } else {
+                    msj(data.detail || 'No se pudo enviar la invitación', true)
+                }
+            } catch {
+                msj('No se pudo conectar con el servidor', true)
+            }
+            btn.disabled = false
+            btn.textContent = 'Invitar'
+        }
+
+        async function darBaja(id) {
+            if (!confirm('¿Dar de baja a esta secretaria/o? Deja de poder ingresar al consultorio.')) return
+            try {
+                const res = await fetch(`${API}/equipo/secretaria/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
+                if (res.ok) { msj('✓ Dada de baja', false); cargarEquipo() }
+                else { const d = await res.json(); msj(d.detail || 'No se pudo dar de baja', true) }
+            } catch { msj('No se pudo conectar con el servidor', true) }
+        }
+
+        async function cancelarInv(id) {
+            try {
+                const res = await fetch(`${API}/equipo/invitacion/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                })
+                if (res.ok) { msj('✓ Invitación cancelada', false); cargarEquipo() }
+                else { const d = await res.json(); msj(d.detail || 'No se pudo cancelar', true) }
+            } catch { msj('No se pudo conectar con el servidor', true) }
+        }
+
+        cargarEquipo()
+    </script>
+</body>
+</html>

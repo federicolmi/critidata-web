@@ -578,11 +578,145 @@
                         <div class="dl-card" onclick="seleccionarEspecialidad('Nefrología')" >
                             <span class="dl-name">Nefrología</span>
                         </div>
+                        <div class="dl-card" onclick="seleccionarEspecialidad('Gastroenterología')" >
+                            <span class="dl-name">Gastroenterología</span>
+                        </div>
                         <div class="dl-card dl-disabled">
                             <span class="dl-name">Otras</span>
                             <span class="dl-sub">Próximamente</span>
                         </div>
                     </div>
+                </div>
+
+                <!-- Paso Gastro: entrada CritiData Gastroenterología (en preparación) -->
+                <div id="acceso-step-gastro" style="display:none;">
+                    <div style="text-align:center;margin-bottom:6px;">
+                        <div style="font-size:2.2rem;margin-bottom:8px;">🩺</div>
+                        <p class="form-title">CritiData Gastroenterología</p>
+                        <p class="form-subtitle" style="margin-bottom:0;">Endoscopía: imágenes, informes y agenda</p>
+                    </div>
+                    <div class="dl-cards">
+                        <div class="dl-card" onclick="accesoIrA('gastro-login')">
+                            <span class="dl-name">Iniciar sesión</span>
+                            <span class="dl-sub">Ya tengo cuenta</span>
+                        </div>
+                        <div class="dl-card" onclick="accesoIrA('gastro-planes')">
+                            <span class="dl-name">Registrarme</span>
+                            <span class="dl-sub">Crear cuenta nueva</span>
+                        </div>
+                    </div>
+                    <button class="dl-back" onclick="accesoIrA('specialty')">← Volver</button>
+                </div>
+
+                <!-- Paso Gastro-Planes: elegir plan (idéntico a nefro, mismo Mercado Pago) -->
+                <div id="acceso-step-gastro-planes" style="display:none;">
+                    <p class="form-title" style="text-align:center;margin-bottom:4px;">Elegí tu plan</p>
+                    <p class="form-subtitle" style="text-align:center;">CritiData Gastroenterología · Podés pagar una vez o activar el débito automático.</p>
+                    <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px 14px;text-align:center;margin-bottom:16px;">
+                        <span style="font-size:.85rem;font-weight:700;color:#15803d;">✓ 15 días de prueba gratuita</span><br>
+                        <span style="font-size:.75rem;color:#166534;">Sin tarjeta requerida · Cancelás cuando quieras</span>
+                    </div>
+
+                    <p style="font-size:.72rem;font-weight:700;color:#64748b;letter-spacing:.6px;text-transform:uppercase;margin-bottom:8px;">Mensual</p>
+                    <div style="border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s,background .2s;margin-bottom:8px;" onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'" onclick="gastroElegirPlan('mensual_unico')">
+                        <div style="flex:1;">
+                            <div style="font-size:.85rem;font-weight:700;color:#0f172a;">Pago único</div>
+                            <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;">$50.000</div>
+                            <div style="font-size:.75rem;color:#94a3b8;margin-top:1px;">Hasta 60 pacientes · Renovás el próximo mes.</div>
+                        </div>
+                        <span style="color:#94a3b8;font-size:.9rem;">→</span>
+                    </div>
+                    <div style="border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s,background .2s;margin-bottom:18px;" onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'" onclick="gastroElegirPlan('mensual_debito')">
+                        <div style="flex:1;">
+                            <div style="font-size:.85rem;font-weight:700;color:#0f172a;">Débito automático</div>
+                            <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;">$50.000 <span style="font-size:.8rem;font-weight:400;">/mes</span></div>
+                            <div style="font-size:.75rem;color:#94a3b8;margin-top:1px;">Hasta 60 pacientes · Se cobra automáticamente.</div>
+                        </div>
+                        <span style="color:#94a3b8;font-size:.9rem;">→</span>
+                    </div>
+
+                    <p style="font-size:.72rem;font-weight:700;color:#64748b;letter-spacing:.6px;text-transform:uppercase;margin-bottom:8px;">Anual</p>
+                    <div style="border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s,background .2s;margin-bottom:8px;" onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'" onclick="gastroElegirPlan('anual_unico')">
+                        <div style="flex:1;">
+                            <div style="font-size:.85rem;font-weight:700;color:#0f172a;">Pago único</div>
+                            <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;">$500.000</div>
+                            <div style="font-size:.75rem;color:#94a3b8;margin-top:1px;">Hasta 60 pacientes · Equivale a $41.666/mes.</div>
+                        </div>
+                        <span style="color:#94a3b8;font-size:.9rem;">→</span>
+                    </div>
+                    <div style="border:1.5px solid transparent;border-radius:12px;padding:14px 16px;background:#0f172a;display:flex;align-items:center;gap:12px;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'" onclick="gastroElegirPlan('anual_debito')">
+                        <div style="flex:1;">
+                            <div style="font-size:.85rem;font-weight:700;color:#fff;">Débito automático <span style="font-size:.72rem;background:rgba(255,255,255,.15);padding:2px 7px;border-radius:6px;margin-left:4px;">Mejor valor</span></div>
+                            <div style="font-size:1.1rem;font-weight:700;color:#fff;margin-top:2px;">$500.000 <span style="font-size:.8rem;font-weight:400;">/año</span></div>
+                            <div style="font-size:.75rem;color:rgba(255,255,255,.55);margin-top:1px;">Hasta 60 pacientes · Equivale a $41.666/mes.</div>
+                        </div>
+                        <span style="color:rgba(255,255,255,.4);font-size:.9rem;">→</span>
+                    </div>
+
+                    <p style="font-size:.72rem;color:#94a3b8;text-align:center;margin-top:14px;margin-bottom:0;">Los precios se actualizan cada 6 meses por IPC.</p>
+                    <p style="font-size:.72rem;color:#94a3b8;text-align:center;margin-top:8px;margin-bottom:0;">¿Sos secretaria/o? No necesitás plan ni registrarte: el médico te invita desde su app.</p>
+                    <button class="dl-back" onclick="accesoIrA('gastro')">← Volver</button>
+                </div>
+
+                <!-- Paso Gastro-Login: iniciar sesión (mismo backend que nefro) -->
+                <div id="acceso-step-gastro-login" style="display:none;">
+                    <p class="form-title">Iniciar sesión</p><p class="form-subtitle">CritiData Gastroenterología</p>
+                    <form onsubmit="gastroLogin(); return false;">
+                        <div class="field">
+                            <label for="g-login-email">Email</label>
+                            <input id="g-login-email" type="email" placeholder="tu@email.com" autocomplete="email">
+                        </div>
+                        <div class="field" style="margin-bottom:22px;">
+                            <label for="g-login-pass">Contraseña</label>
+                            <div class="password-wrap">
+                                <input id="g-login-pass" type="password" placeholder="Tu contraseña" autocomplete="current-password">
+                                <button type="button" class="toggle-pass" onclick="togglePass('g-login-pass', this, event)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-navy" id="btn-gastro-login">Entrar</button>
+                        <p id="g-login-error" style="display:none;color:#dc2626;font-size:13px;text-align:center;margin-top:10px;"></p>
+                    </form>
+                    <button class="dl-back" onclick="accesoIrA('gastro')">← Volver</button>
+                </div>
+
+                <!-- Paso Gastro-Registro: crear cuenta con rol médico/secretaria -->
+                <div id="acceso-step-gastro-register" style="display:none;">
+                    <div id="g-reg-form">
+                        <p class="form-title">Crear cuenta</p><p class="form-subtitle">CritiData Gastroenterología · Cuenta de médico/a</p>
+                        <div class="field">
+                            <label for="g-reg-nombre">Nombre completo</label>
+                            <input id="g-reg-nombre" type="text" placeholder="Dr. Juan García" autocomplete="name">
+                        </div>
+                        <div class="field">
+                            <label for="g-reg-email">Email</label>
+                            <input id="g-reg-email" type="email" placeholder="tu@email.com" autocomplete="email">
+                        </div>
+                        <div class="field">
+                            <label for="g-reg-pass">Contraseña</label>
+                            <div class="password-wrap">
+                                <input id="g-reg-pass" type="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+                                <button type="button" class="toggle-pass" onclick="togglePass('g-reg-pass', this, event)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+                            </div>
+                        </div>
+                        <div class="field" style="margin-bottom:22px;">
+                            <label for="g-reg-pass2">Repetir contraseña</label>
+                            <input id="g-reg-pass2" type="password" placeholder="Repetí la contraseña" autocomplete="new-password">
+                        </div>
+                        <button class="btn-navy" id="btn-gastro-reg" onclick="gastroRegistrar()">Crear cuenta</button>
+                        <p id="g-reg-error" style="display:none;color:#dc2626;font-size:13px;text-align:center;margin-top:10px;"></p>
+                        <!-- Las secretarias NO se registran acá: las invita el médico (el rol
+                             nace en el servidor, no se elige en un formulario). -->
+                        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:10px 14px;text-align:center;margin-top:14px;">
+                            <span style="font-size:.78rem;color:#64748b;">¿Sos secretaria/o? No necesitás registrarte: el médico te invita desde su app (<b>Mi equipo</b>) y te llega un email para crear tu contraseña.</span>
+                        </div>
+                    </div>
+                    <div id="g-reg-ok" style="display:none;text-align:center;padding:10px 0;">
+                        <div style="font-size:2rem;margin-bottom:8px;">✅</div>
+                        <p class="form-title">¡Cuenta creada!</p>
+                        <p class="form-subtitle">Revisá tu email para confirmar la cuenta y después iniciá sesión. Tenés 15 días de prueba gratis; después activás tu plan con Mercado Pago.</p>
+                        <button class="btn-navy" style="margin-top:10px;" onclick="accesoIrA('gastro-login')">Ir a iniciar sesión</button>
+                    </div>
+                    <button class="dl-back" onclick="accesoIrA('gastro')">← Volver</button>
                 </div>
 
                 <!-- Paso B: Datos del médico -->
@@ -718,6 +852,14 @@
                     </div>
                     <span style="margin-left:auto;color:#94a3b8;font-size:.9rem;">→</span>
                 </a>
+                <div class="dl-card" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;cursor:pointer;" onclick="irAGastro('gastro-login')">
+                    <span style="font-size:1.5rem;margin-right:14px;">🔬</span>
+                    <div>
+                        <div style="font-size:1rem;font-weight:700;color:#0f172a;">Gastroenterología</div>
+                        <div style="font-size:.78rem;color:#94a3b8;margin-top:2px;">Endoscopía · Imágenes · Informes · Agenda</div>
+                    </div>
+                    <span style="margin-left:auto;color:#94a3b8;font-size:.9rem;">→</span>
+                </div>
                 <div class="dl-card dl-disabled" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;">
                     <span style="font-size:1.5rem;margin-right:14px;">➕</span>
                     <div>
@@ -766,6 +908,14 @@
                             <div>
                                 <div style="font-size:1rem;font-weight:700;color:#0f172a;">Nefrología</div>
                                 <div style="font-size:.78rem;color:#94a3b8;margin-top:2px;">App · Laboratorio · Kt/V · Diálisis</div>
+                            </div>
+                            <span style="margin-left:auto;color:#94a3b8;font-size:.9rem;">→</span>
+                        </div>
+                        <div class="dl-card" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;cursor:pointer;" onclick="irAGastro('gastro-planes')">
+                            <span style="font-size:1.5rem;margin-right:14px;">🔬</span>
+                            <div>
+                                <div style="font-size:1rem;font-weight:700;color:#0f172a;">Gastroenterología</div>
+                                <div style="font-size:.78rem;color:#94a3b8;margin-top:2px;">Endoscopía · Imágenes · Informes · Agenda</div>
                             </div>
                             <span style="margin-left:auto;color:#94a3b8;font-size:.9rem;">→</span>
                         </div>
@@ -1169,7 +1319,7 @@
             document.getElementById('reg-nefrologia-sub').style.display = 'block'
         }
 
-        const accesoSteps = ['specialty', 'register', 'lab', '1', '2', '3']
+        const accesoSteps = ['specialty', 'register', 'gastro', 'gastro-planes', 'gastro-login', 'gastro-register', 'lab', '1', '2', '3']
         function accesoIrA(step) {
             accesoSteps.forEach(s => {
                 const el = document.getElementById('acceso-step-' + s) ||
@@ -1182,8 +1332,114 @@
         }
 
         function seleccionarEspecialidad(esp) {
+            if (esp === 'Gastroenterología') {
+                accesoIrA('gastro')
+                return
+            }
             document.getElementById('acceso-lab-title').textContent = esp
             accesoIrA('register')
+        }
+
+        // ===== Gastroenterología: login y registro (mismo backend que nefro) =====
+
+        // Salta desde el modal "Iniciar sesión" / "Registrarse" al flujo gastro
+        // (que vive dentro del panel Acceder), directo al paso pedido.
+        function irAGastro(paso) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'))
+            document.getElementById('panel-acceso').classList.add('active')
+            accesoIrA(paso)
+        }
+
+        // El registro público es SOLO para médicos. Las secretarias entran por
+        // INVITACIÓN: el médico carga su email en "Mi equipo" (app), les llega un
+        // mail y crean su contraseña. Así el rol nace en el servidor y nadie puede
+        // autodeclararse médico ni colarse en un consultorio ajeno.
+        let gastroPlan = null
+
+        // El plan elegido viaja con el registro. El cobro real usa los mismos
+        // endpoints de Mercado Pago que nefro (/auth/create-payment y
+        // /auth/create-subscription): se dispara al iniciar sesión, con token.
+        function gastroElegirPlan(plan) {
+            gastroPlan = plan
+            accesoIrA('gastro-register')
+        }
+
+        async function gastroLogin() {
+            const email = document.getElementById('g-login-email').value.trim()
+            const pass  = document.getElementById('g-login-pass').value
+            const err   = document.getElementById('g-login-error')
+            err.style.display = 'none'
+            if (!email || !pass) {
+                err.textContent = 'Completá email y contraseña'
+                err.style.display = 'block'
+                return
+            }
+            const btn = document.getElementById('btn-gastro-login')
+            btn.disabled = true
+            btn.textContent = 'Entrando...'
+            try {
+                const body = new URLSearchParams()
+                body.append('username', email)
+                body.append('password', pass)
+                const res = await fetch(`${API}/auth/login`, { method: 'POST', body })
+                if (res.ok) {
+                    const data = await res.json()
+                    localStorage.setItem('gastro_token', data.token)
+                    localStorage.setItem('gastro_usuario', data.full_name)
+                    window.location.href = 'gastro.html'
+                    return
+                }
+                err.textContent = 'Email o contraseña incorrectos'
+                err.style.display = 'block'
+            } catch {
+                err.textContent = 'No se pudo conectar con el servidor'
+                err.style.display = 'block'
+            }
+            btn.disabled = false
+            btn.textContent = 'Entrar'
+        }
+
+        async function gastroRegistrar() {
+            const nombre = document.getElementById('g-reg-nombre').value.trim()
+            const email  = document.getElementById('g-reg-email').value.trim()
+            const pass   = document.getElementById('g-reg-pass').value
+            const pass2  = document.getElementById('g-reg-pass2').value
+            const err    = document.getElementById('g-reg-error')
+            err.style.display = 'none'
+            const fallar = (m) => { err.textContent = m; err.style.display = 'block' }
+            if (!nombre || !email || !pass) return fallar('Completá todos los campos')
+            if (pass !== pass2) return fallar('Las contraseñas no coinciden')
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/
+            if (!passwordRegex.test(pass)) return fallar('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un carácter especial (!@#$...)')
+            const btn = document.getElementById('btn-gastro-reg')
+            btn.disabled = true
+            btn.textContent = 'Creando cuenta...'
+            try {
+                // rol y especialidad viajan de más: el backend actual los ignora,
+                // pero quedan listos para cuando se agregue el campo rol (S2).
+                const res  = await fetch(`${API}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    // Registro público = siempre médico. Las secretarias entran por
+                    // invitación del médico (endpoint aparte, trabajo de backend S2).
+                    body: JSON.stringify({
+                        full_name: nombre, email, password: pass,
+                        rol: 'medico', especialidad: 'gastroenterologia',
+                        plan: gastroPlan,
+                    })
+                })
+                const data = await res.json()
+                if (res.ok) {
+                    document.getElementById('g-reg-form').style.display = 'none'
+                    document.getElementById('g-reg-ok').style.display = 'block'
+                } else {
+                    fallar(data.detail || 'Error al registrarse')
+                }
+            } catch {
+                fallar('No se pudo conectar con el servidor')
+            }
+            btn.disabled = false
+            btn.textContent = 'Crear cuenta'
         }
 
         function dlSeleccionarApp(nombre) {

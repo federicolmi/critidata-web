@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CritiData Gastro — Invitación</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f7f7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Header navy, igual que el panel de gastro ── */
+        header {
+            background: #0D1B3E;
+            color: #fff;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+        }
+        header .marca { font-weight: 700; font-size: 1.05rem; line-height: 1.2; }
+
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 36px 32px;
+            max-width: 440px;
+            width: 100%;
+            box-shadow: 0 2px 12px rgba(15, 23, 42, .06);
+        }
+        .card h2 {
+            color: #0f172a;
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .card .subtitulo {
+            color: #64748b;
+            font-size: .93rem;
+            line-height: 1.55;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        /* ── Campos del formulario ── */
+        .field { margin-bottom: 16px; text-align: left; }
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+        .field input {
+            width: 100%;
+            padding: 10px 13px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 9px;
+            font-size: 14.5px;
+            color: #0f172a;
+        }
+        .field input:focus { outline: none; border-color: #1a3a6b; }
+        /* El email invitado se muestra pero no se puede editar:
+           la cuenta nace atada al email al que llegó la invitación. */
+        .field input[readonly] {
+            background: #f8fafc;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+        .pass-regla {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+
+        /* ── Botón navy, mismo gradiente que .btn-navy de index.html ── */
+        .btn-navy {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #0D1B3E, #1a3a6b);
+            color: #fff;
+            font-size: 14.5px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+            box-shadow: 0 4px 14px rgba(13,27,62,0.4);
+        }
+        .btn-navy:hover { opacity: 0.88; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(13,27,62,0.5); }
+        .btn-navy:active { transform: translateY(0); }
+        .btn-navy:disabled { opacity: 0.6; cursor: default; transform: none; }
+
+        .error {
+            display: none;
+            color: #dc2626;
+            font-size: 13px;
+            text-align: center;
+            margin-top: 12px;
+            line-height: 1.5;
+        }
+
+        /* Cada "pantalla" (cargando / inválida / formulario / éxito)
+           es un bloque oculto; el JS muestra el que corresponde. */
+        .pantalla { display: none; text-align: center; }
+        .pantalla.visible { display: block; }
+        .pantalla .icono { font-size: 2.4rem; margin-bottom: 12px; }
+        .pantalla p { color: #64748b; font-size: .95rem; line-height: 1.55; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="marca">CritiData<br>Gastro</div>
+    </header>
+
+    <main>
+        <div class="card">
+
+            <!-- Pantalla 1: mientras consultamos al backend si el token sirve -->
+            <div class="pantalla visible" id="pantalla-cargando">
+                <div class="icono">⏳</div>
+                <h2>Verificando invitación...</h2>
+                <p>Un momento, por favor.</p>
+            </div>
+
+            <!-- Pantalla 2: token ausente, inválido, vencido o ya usado -->
+            <div class="pantalla" id="pantalla-invalida">
+                <div class="icono">✉️</div>
+                <h2>Invitación no válida</h2>
+                <p id="motivo-invalida">Esta invitación ya fue usada o venció. Pedile al médico que te invite de nuevo.</p>
+            </div>
+
+            <!-- Pantalla 3: invitación válida -> formulario para crear la cuenta -->
+            <div class="pantalla" id="pantalla-formulario">
+                <h2>Te invitaron a CritiData Gastroenterología</h2>
+                <p class="subtitulo">El médico de tu consultorio te invitó a formar parte de su equipo. Creá tu contraseña para empezar.</p>
+
+                <div class="field">
+                    <label for="inv-email">Email invitado</label>
+                    <input id="inv-email" type="email" readonly>
+                </div>
+                <div class="field">
+                    <label for="inv-nombre">Nombre completo</label>
+                    <input id="inv-nombre" type="text" placeholder="Tu nombre y apellido" autocomplete="name">
+                </div>
+                <div class="field">
+                    <label for="inv-pass">Contraseña</label>
+                    <input id="inv-pass" type="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+                    <p class="pass-regla">Al menos 8 caracteres, una mayúscula, una minúscula y un carácter especial (!@#$...)</p>
+                </div>
+                <div class="field">
+                    <label for="inv-pass2">Repetir contraseña</label>
+                    <input id="inv-pass2" type="password" placeholder="Repetí la contraseña" autocomplete="new-password">
+                </div>
+
+                <button class="btn-navy" id="btn-crear" onclick="aceptarInvitacion()">Crear mi cuenta</button>
+                <p class="error" id="error-form"></p>
+            </div>
+
+            <!-- Pantalla 4: cuenta creada con éxito -->
+            <div class="pantalla" id="pantalla-exito">
+                <div class="icono">✅</div>
+                <h2>¡Cuenta creada!</h2>
+                <p>Ya podés iniciar sesión con tu email y tu contraseña.</p>
+                <button class="btn-navy" onclick="window.location.href = 'index.html'" style="margin-top: 20px;">Iniciar sesión</button>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        const API = "https://backend-login-api-production.up.railway.app"
+
+        // El token viene en la URL del link que llegó por email:
+        // https://critidata.com/invitacion.html?token=...
+        const token = new URLSearchParams(window.location.search).get("token")
+
+        // Muestra una pantalla y oculta las demás.
+        function mostrar(id) {
+            document.querySelectorAll(".pantalla").forEach(p => p.classList.remove("visible"))
+            document.getElementById(id).classList.add("visible")
+        }
+
+        // Al cargar la página: si hay token, le preguntamos al backend si sirve.
+        async function validarInvitacion() {
+            if (!token) {
+                document.getElementById("motivo-invalida").textContent =
+                    "El link no tiene una invitación. Revisá que hayas copiado la dirección completa del email."
+                mostrar("pantalla-invalida")
+                return
+            }
+
+            try {
+                const res = await fetch(`${API}/auth/invitations/validate?token=${encodeURIComponent(token)}`)
+
+                if (res.ok) {
+                    // Invitación válida: el backend devuelve el email invitado.
+                    const data = await res.json()
+                    document.getElementById("inv-email").value = data.email
+                    mostrar("pantalla-formulario")
+                } else {
+                    // Usada, vencida o inexistente: mismo mensaje claro para la secretaria.
+                    mostrar("pantalla-invalida")
+                }
+            } catch (e) {
+                // fetch tira excepción cuando ni siquiera hubo respuesta (sin internet, servidor caído).
+                document.getElementById("motivo-invalida").textContent =
+                    "No se pudo conectar con el servidor. Revisá tu conexión e intentá de nuevo."
+                mostrar("pantalla-invalida")
+            }
+        }
+
+        async function aceptarInvitacion() {
+            const nombre = document.getElementById("inv-nombre").value.trim()
+            const pass   = document.getElementById("inv-pass").value
+            const pass2  = document.getElementById("inv-pass2").value
+            const err    = document.getElementById("error-form")
+            err.style.display = "none"
+
+            const fallar = (m) => { err.textContent = m; err.style.display = "block" }
+
+            if (!nombre || !pass) return fallar("Completá todos los campos")
+            if (pass !== pass2) return fallar("Las contraseñas no coinciden")
+
+            // Misma regla de contraseña que el registro del sitio.
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/
+            if (!passwordRegex.test(pass)) {
+                return fallar("La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un carácter especial (!@#$...)")
+            }
+
+            const btn = document.getElementById("btn-crear")
+            btn.disabled = true
+            btn.textContent = "Creando cuenta..."
+
+            try {
+                // El rol NO viaja desde acá: lo define el servidor según la invitación.
+                const res = await fetch(`${API}/auth/invitations/accept`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        token: token,
+                        full_name: nombre,
+                        password: pass
+                    })
+                })
+
+                if (res.ok) {
+                    mostrar("pantalla-exito")
+                } else {
+                    // El backend explica qué pasó en "detail" (ya usada, vencida, email existente...).
+                    const data = await res.json().catch(() => null)
+                    fallar((data && data.detail) ? data.detail : "No se pudo crear la cuenta. Intentá de nuevo.")
+                    btn.disabled = false
+                    btn.textContent = "Crear mi cuenta"
+                }
+            } catch (e) {
+                fallar("No se pudo conectar con el servidor")
+                btn.disabled = false
+                btn.textContent = "Crear mi cuenta"
+            }
+        }
+
+        validarInvitacion()
+    </script>
+</body>
+</html>
