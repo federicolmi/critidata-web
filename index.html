@@ -692,6 +692,11 @@
                             <input id="g-reg-email" type="email" placeholder="tu@email.com" autocomplete="email">
                         </div>
                         <div class="field">
+                            <label for="g-reg-phone">Teléfono (WhatsApp)</label>
+                            <input id="g-reg-phone" type="tel" placeholder="+5491112345678" autocomplete="tel">
+                            <p style="font-size:11px;color:#94a3b8;margin-top:4px;">Para recibir el código de verificación</p>
+                        </div>
+                        <div class="field">
                             <label for="g-reg-pass">Contraseña</label>
                             <div class="password-wrap">
                                 <input id="g-reg-pass" type="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
@@ -710,10 +715,26 @@
                             <span style="font-size:.78rem;color:#64748b;">¿Sos secretaria/o? No necesitás registrarte: el médico te invita desde su app (<b>Mi equipo</b>) y te llega un email para crear tu contraseña.</span>
                         </div>
                     </div>
+                    <!-- Paso OTP: mismo flujo que nefro — el código llega por WhatsApp/SMS -->
+                    <div id="g-reg-otp" style="display:none;">
+                        <p class="form-title">Verificá tu teléfono</p>
+                        <p class="form-subtitle" id="g-otp-subtitle">Ingresá el código que te enviamos</p>
+                        <form onsubmit="gastroVerificarOtp(); return false;">
+                            <div class="field" style="margin-bottom:22px;">
+                                <label for="g-otp-code">Código de verificación</label>
+                                <input id="g-otp-code" type="text" inputmode="numeric" maxlength="6" placeholder="123456" autocomplete="one-time-code" style="text-align:center;letter-spacing:6px;font-size:18px;">
+                            </div>
+                            <button type="submit" class="btn-navy" id="btn-gastro-otp">Confirmar</button>
+                            <p id="g-otp-error" style="display:none;color:#dc2626;font-size:13px;text-align:center;margin-top:10px;"></p>
+                            <p style="font-size:.78rem;text-align:center;margin-top:12px;margin-bottom:0;">
+                                <a href="#" onclick="gastroReenviarOtp(); return false;" style="color:#1565c0;">Reenviar código</a>
+                            </p>
+                        </form>
+                    </div>
                     <div id="g-reg-ok" style="display:none;text-align:center;padding:10px 0;">
                         <div style="font-size:2rem;margin-bottom:8px;">✅</div>
-                        <p class="form-title">¡Cuenta creada!</p>
-                        <p class="form-subtitle">Revisá tu email para confirmar la cuenta y después iniciá sesión. Tenés 15 días de prueba gratis; después activás tu plan con Mercado Pago.</p>
+                        <p class="form-title">¡Cuenta verificada!</p>
+                        <p class="form-subtitle">Ya podés iniciar sesión. Tenés 15 días de prueba gratis; después activás tu plan con Mercado Pago.</p>
                         <button class="btn-navy" style="margin-top:10px;" onclick="accesoIrA('gastro-login')">Ir a iniciar sesión</button>
                     </div>
                     <button class="dl-back" onclick="accesoIrA('gastro')">← Volver</button>
@@ -1389,7 +1410,16 @@
                     window.location.href = 'gastro.html'
                     return
                 }
-                err.textContent = 'Email o contraseña incorrectos'
+                // Mostrar el motivo REAL: una cuenta sin verificar no es lo mismo
+                // que una contraseña incorrecta. (El 403 del backend es "cuenta no
+                // confirmada": en gastro la verificación es por código de WhatsApp.)
+                if (res.status === 403) {
+                    err.textContent = 'Cuenta no verificada. Registrate de nuevo con el mismo email para recibir otro código por WhatsApp.'
+                } else {
+                    let detalle = ''
+                    try { detalle = (await res.json()).detail || '' } catch {}
+                    err.textContent = detalle || 'Email o contraseña incorrectos'
+                }
                 err.style.display = 'block'
             } catch {
                 err.textContent = 'No se pudo conectar con el servidor'
@@ -1399,15 +1429,19 @@
             btn.textContent = 'Entrar'
         }
 
+        // Teléfono del registro en curso: lo usan verificar y reenviar el OTP.
+        let gastroTelefono = null
+
         async function gastroRegistrar() {
             const nombre = document.getElementById('g-reg-nombre').value.trim()
             const email  = document.getElementById('g-reg-email').value.trim()
+            const phone  = document.getElementById('g-reg-phone').value.replace(/\s/g, '')
             const pass   = document.getElementById('g-reg-pass').value
             const pass2  = document.getElementById('g-reg-pass2').value
             const err    = document.getElementById('g-reg-error')
             err.style.display = 'none'
             const fallar = (m) => { err.textContent = m; err.style.display = 'block' }
-            if (!nombre || !email || !pass) return fallar('Completá todos los campos')
+            if (!nombre || !email || !phone || !pass) return fallar('Completá todos los campos')
             if (pass !== pass2) return fallar('Las contraseñas no coinciden')
             const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/
             if (!passwordRegex.test(pass)) return fallar('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un carácter especial (!@#$...)')
@@ -1415,23 +1449,27 @@
             btn.disabled = true
             btn.textContent = 'Creando cuenta...'
             try {
-                // rol y especialidad viajan de más: el backend actual los ignora,
-                // pero quedan listos para cuando se agregue el campo rol (S2).
+                // MISMO flujo que nefrología: el backend manda un código por
+                // WhatsApp/SMS al teléfono y la cuenta se activa con /verify-phone.
                 const res  = await fetch(`${API}/auth/register`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     // Registro público = siempre médico. Las secretarias entran por
-                    // invitación del médico (endpoint aparte, trabajo de backend S2).
+                    // invitación del médico desde su panel (Mi equipo).
                     body: JSON.stringify({
-                        full_name: nombre, email, password: pass,
-                        rol: 'medico', especialidad: 'gastroenterologia',
+                        full_name: nombre, email, phone, password: pass,
+                        especialidad: 'gastroenterologia',
                         plan: gastroPlan,
                     })
                 })
                 const data = await res.json()
                 if (res.ok) {
+                    gastroTelefono = phone
+                    document.getElementById('g-otp-subtitle').textContent =
+                        `Ingresá el código que te enviamos al ${phone}`
                     document.getElementById('g-reg-form').style.display = 'none'
-                    document.getElementById('g-reg-ok').style.display = 'block'
+                    document.getElementById('g-reg-otp').style.display = 'block'
+                    document.getElementById('g-otp-code').focus()
                 } else {
                     fallar(data.detail || 'Error al registrarse')
                 }
@@ -1440,6 +1478,60 @@
             }
             btn.disabled = false
             btn.textContent = 'Crear cuenta'
+        }
+
+        async function gastroVerificarOtp() {
+            const code = document.getElementById('g-otp-code').value.trim()
+            const err  = document.getElementById('g-otp-error')
+            err.style.display = 'none'
+            if (!code || code.length < 6) {
+                err.textContent = 'Ingresá el código de 6 dígitos'
+                err.style.display = 'block'
+                return
+            }
+            const btn = document.getElementById('btn-gastro-otp')
+            btn.disabled = true
+            btn.textContent = 'Verificando...'
+            try {
+                const res  = await fetch(`${API}/auth/verify-phone`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone: gastroTelefono, code })
+                })
+                const data = await res.json()
+                if (res.ok) {
+                    document.getElementById('g-reg-otp').style.display = 'none'
+                    document.getElementById('g-reg-ok').style.display = 'block'
+                } else {
+                    err.textContent = data.detail || 'Código incorrecto'
+                    err.style.display = 'block'
+                }
+            } catch {
+                err.textContent = 'No se pudo conectar con el servidor'
+                err.style.display = 'block'
+            }
+            btn.disabled = false
+            btn.textContent = 'Confirmar'
+        }
+
+        async function gastroReenviarOtp() {
+            const err = document.getElementById('g-otp-error')
+            err.style.display = 'none'
+            try {
+                const res  = await fetch(`${API}/auth/resend-otp`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ phone: gastroTelefono })
+                })
+                const data = await res.json()
+                err.textContent = res.ok ? '✓ Te enviamos un código nuevo' : (data.detail || 'No se pudo reenviar')
+                err.style.color = res.ok ? '#15803d' : '#dc2626'
+                err.style.display = 'block'
+            } catch {
+                err.textContent = 'No se pudo conectar con el servidor'
+                err.style.color = '#dc2626'
+                err.style.display = 'block'
+            }
         }
 
         function dlSeleccionarApp(nombre) {
