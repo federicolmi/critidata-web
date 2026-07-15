@@ -600,12 +600,20 @@
                             <span class="dl-name">Iniciar sesión</span>
                             <span class="dl-sub">Ya tengo cuenta</span>
                         </div>
-                        <div class="dl-card" onclick="accesoIrA('gastro-planes')">
+                        <div class="dl-card" onclick="accesoIrA('gastro-sub')">
                             <span class="dl-name">Registrarme</span>
                             <span class="dl-sub">Crear cuenta nueva</span>
                         </div>
                     </div>
                     <button class="dl-back" onclick="accesoIrA('specialty')">← Volver</button>
+                </div>
+
+                <!-- Paso Gastro-Sub: presentación + Ver planes (mismo formato que nefro) -->
+                <div id="acceso-step-gastro-sub" style="display:none;">
+                    <p class="form-title" style="text-align:center;margin-bottom:4px;">CritiData Gastroenterología</p>
+                    <p style="font-size:.8rem;color:#94a3b8;text-align:center;margin-bottom:28px;">Endoscopía · Imágenes · Informes · Agenda</p>
+                    <button class="btn-navy" onclick="accesoIrA('gastro-planes')">Ver planes</button>
+                    <button class="dl-back" onclick="accesoIrA('gastro')" style="margin-top:14px;display:block;">← Volver</button>
                 </div>
 
                 <!-- Paso Gastro-Planes: elegir plan (idéntico a nefro, mismo Mercado Pago) -->
@@ -655,7 +663,7 @@
 
                     <p style="font-size:.72rem;color:#94a3b8;text-align:center;margin-top:14px;margin-bottom:0;">Los precios se actualizan cada 6 meses por IPC.</p>
                     <p style="font-size:.72rem;color:#94a3b8;text-align:center;margin-top:8px;margin-bottom:0;">¿Sos secretaria/o? No necesitás plan ni registrarte: el médico te invita desde su app.</p>
-                    <button class="dl-back" onclick="accesoIrA('gastro')">← Volver</button>
+                    <button class="dl-back" onclick="accesoIrA('gastro-sub')">← Volver</button>
                 </div>
 
                 <!-- Paso Gastro-Login: iniciar sesión (mismo backend que nefro) -->
@@ -688,26 +696,46 @@
                             <input id="g-reg-nombre" type="text" placeholder="Dr. Juan García" autocomplete="name">
                         </div>
                         <div class="field">
-                            <label for="g-reg-email">Email</label>
+                            <label for="g-reg-email">Correo</label>
                             <input id="g-reg-email" type="email" placeholder="tu@email.com" autocomplete="email">
                         </div>
-                        <div class="field">
-                            <label for="g-reg-phone">Teléfono (WhatsApp)</label>
-                            <input id="g-reg-phone" type="tel" placeholder="+5491112345678" autocomplete="tel">
-                            <p style="font-size:11px;color:#94a3b8;margin-top:4px;">Para recibir el código de verificación</p>
-                        </div>
-                        <div class="field">
+                        <div class="field" style="margin-bottom:8px;">
                             <label for="g-reg-pass">Contraseña</label>
                             <div class="password-wrap">
-                                <input id="g-reg-pass" type="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+                                <input id="g-reg-pass" type="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password" oninput="gastroCheckPass(this.value)">
                                 <button type="button" class="toggle-pass" onclick="togglePass('g-reg-pass', this, event)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
                             </div>
+                            <!-- Indicadores en vivo, mismo formato que el registro de nefro -->
+                            <p style="font-size:11px;margin-top:6px;">
+                                <span id="g-ck-mayus" style="color:#94a3b8;">○ Mayúscula</span>&nbsp;&nbsp;
+                                <span id="g-ck-minus" style="color:#94a3b8;">○ minúscula</span>&nbsp;&nbsp;
+                                <span id="g-ck-num" style="color:#94a3b8;">○ número</span>&nbsp;&nbsp;
+                                <span id="g-ck-esp" style="color:#94a3b8;">○ especial</span>
+                            </p>
                         </div>
-                        <div class="field" style="margin-bottom:22px;">
-                            <label for="g-reg-pass2">Repetir contraseña</label>
+                        <div class="field">
+                            <label for="g-reg-pass2">Repita la contraseña</label>
                             <input id="g-reg-pass2" type="password" placeholder="Repetí la contraseña" autocomplete="new-password">
                         </div>
+                        <div class="field" style="margin-bottom:14px;">
+                            <label>Teléfono (Autenticacion/WhatsApp/SMS)</label>
+                            <div style="display:flex;gap:8px;align-items:center;">
+                                <span style="padding:10px 8px;color:#475569;font-size:14px;font-weight:700;">+549</span>
+                                <input id="g-reg-area" type="tel" inputmode="numeric" placeholder="11" maxlength="4" style="width:70px;text-align:center;">
+                                <input id="g-reg-numero" type="tel" inputmode="numeric" placeholder="12345678" maxlength="8" style="flex:1;">
+                            </div>
+                            <p style="font-size:11px;color:#94a3b8;margin-top:4px;">Sin cero inicial ni 15 · ej: área 11, número 12345678</p>
+                        </div>
+                        <div class="field" style="margin-bottom:18px;">
+                            <label style="display:flex;align-items:flex-start;gap:8px;font-weight:400;font-size:12.5px;color:#475569;letter-spacing:0;cursor:pointer;">
+                                <input id="g-reg-privacidad" type="checkbox" style="width:auto;margin-top:2px;">
+                                <span>Acepto la <a href="privacidad.html" target="_blank" style="color:#1565c0;">Política de Privacidad</a> y el tratamiento de mis datos personales.</span>
+                            </label>
+                        </div>
                         <button class="btn-navy" id="btn-gastro-reg" onclick="gastroRegistrar()">Crear cuenta</button>
+                        <p style="font-size:.78rem;text-align:center;margin-top:12px;margin-bottom:0;">
+                            ¿Ya tenés cuenta? <a href="#" onclick="accesoIrA('gastro-login'); return false;" style="color:#1565c0;">Iniciá sesión</a>
+                        </p>
                         <p id="g-reg-error" style="display:none;color:#dc2626;font-size:13px;text-align:center;margin-top:10px;"></p>
                         <!-- Las secretarias NO se registran acá: las invita el médico (el rol
                              nace en el servidor, no se elige en un formulario). -->
@@ -932,7 +960,7 @@
                             </div>
                             <span style="margin-left:auto;color:#94a3b8;font-size:.9rem;">→</span>
                         </div>
-                        <div class="dl-card" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;cursor:pointer;" onclick="irAGastro('gastro-planes')">
+                        <div class="dl-card" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;cursor:pointer;" onclick="irAGastro('gastro-sub')">
                             <span style="font-size:1.5rem;margin-right:14px;">🔬</span>
                             <div>
                                 <div style="font-size:1rem;font-weight:700;color:#0f172a;">Gastroenterología</div>
@@ -1340,7 +1368,7 @@
             document.getElementById('reg-nefrologia-sub').style.display = 'block'
         }
 
-        const accesoSteps = ['specialty', 'register', 'gastro', 'gastro-planes', 'gastro-login', 'gastro-register', 'lab', '1', '2', '3']
+        const accesoSteps = ['specialty', 'register', 'gastro', 'gastro-sub', 'gastro-planes', 'gastro-login', 'gastro-register', 'lab', '1', '2', '3']
         function accesoIrA(step) {
             accesoSteps.forEach(s => {
                 const el = document.getElementById('acceso-step-' + s) ||
@@ -1432,19 +1460,40 @@
         // Teléfono del registro en curso: lo usan verificar y reenviar el OTP.
         let gastroTelefono = null
 
+        // Indicadores en vivo de la contraseña (mismo formato que nefro).
+        function gastroCheckPass(v) {
+            const reglas = [
+                ['g-ck-mayus', /[A-Z]/.test(v), 'Mayúscula'],
+                ['g-ck-minus', /[a-z]/.test(v), 'minúscula'],
+                ['g-ck-num',   /[0-9]/.test(v), 'número'],
+                ['g-ck-esp',   /[^a-zA-Z0-9]/.test(v), 'especial'],
+            ]
+            for (const [id, ok, label] of reglas) {
+                const el = document.getElementById(id)
+                el.textContent = (ok ? '✓ ' : '○ ') + label
+                el.style.color = ok ? '#15803d' : '#94a3b8'
+                el.style.fontWeight = ok ? '700' : '400'
+            }
+        }
+
         async function gastroRegistrar() {
             const nombre = document.getElementById('g-reg-nombre').value.trim()
             const email  = document.getElementById('g-reg-email').value.trim()
-            const phone  = document.getElementById('g-reg-phone').value.replace(/\s/g, '')
+            const area   = document.getElementById('g-reg-area').value.replace(/\D/g, '')
+            const numero = document.getElementById('g-reg-numero').value.replace(/\D/g, '')
             const pass   = document.getElementById('g-reg-pass').value
             const pass2  = document.getElementById('g-reg-pass2').value
             const err    = document.getElementById('g-reg-error')
             err.style.display = 'none'
             const fallar = (m) => { err.textContent = m; err.style.display = 'block' }
-            if (!nombre || !email || !phone || !pass) return fallar('Completá todos los campos')
+            if (!nombre || !email || !area || !numero || !pass) return fallar('Completá todos los campos')
+            if (area.startsWith('0') || numero.startsWith('15')) return fallar('El teléfono va sin cero inicial ni 15 · ej: área 11, número 12345678')
+            if (area.length < 2 || numero.length < 6) return fallar('Revisá el teléfono: área de 2 a 4 dígitos y número de 6 a 8')
             if (pass !== pass2) return fallar('Las contraseñas no coinciden')
-            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$/
-            if (!passwordRegex.test(pass)) return fallar('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un carácter especial (!@#$...)')
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,}$/
+            if (!passwordRegex.test(pass)) return fallar('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial (!@#$...)')
+            if (!document.getElementById('g-reg-privacidad').checked) return fallar('Tenés que aceptar la Política de Privacidad')
+            const phone = `+549${area}${numero}`
             const btn = document.getElementById('btn-gastro-reg')
             btn.disabled = true
             btn.textContent = 'Creando cuenta...'
