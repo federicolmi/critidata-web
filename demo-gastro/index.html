@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="/demo-gastro/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="critidata_gastro">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>critidata_gastro</title>
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    /* SPLASH de carga: el motor tarda ~15s en arrancar y una pantalla en
+       blanco parece tildada. Se saca al primer frame de Flutter (y por un
+       fallback de 30s, por si el evento no llegara jamás). pointer-events
+       none: aunque quedara colgado, nunca bloquea un click. */
+    #cargando {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      display: flex; flex-direction: column; gap: 12px;
+      align-items: center; justify-content: center;
+      background: #F8F7F7; color: #64748B;
+      font-family: system-ui, sans-serif; font-size: 14px;
+    }
+    #cargando .aro {
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 3px solid #E2E8F0; border-top-color: #0F4C81;
+      animation: girar 1s linear infinite;
+    }
+    @keyframes girar { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div id="cargando"><div class="aro"></div><div>Cargando CritiData Gastro…</div></div>
+
+  <script>
+    // EL GUARDIÁN DEL PANEL OCULTO (21-jul-2026, tras tres "está tildada"
+    // en un día): si la página carga con la pestaña OCULTA, Flutter nunca
+    // pinta el primer frame (requestAnimationFrame no dispara) y NO se
+    // recupera solo al mostrarse. Este script detecta ese estado y recarga
+    // UNA vez cuando la pestaña se hace visible — con tope de 2 reintentos
+    // por sesión: jamás un loop de recargas.
+    (function () {
+      var cargoOculta = document.visibilityState === 'hidden';
+      var pinto = false;
+
+      function sacarSplash() {
+        var s = document.getElementById('cargando');
+        if (s) s.remove();
+      }
+
+      window.addEventListener('flutter-first-frame', function () {
+        pinto = true;
+        sessionStorage.removeItem('gastro-reintentos');
+        sacarSplash();
+      });
+      setTimeout(sacarSplash, 30000); // fallback: el splash nunca es eterno
+
+      if (!cargoOculta) return; // carga visible: no hay nada que curar
+
+      document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState !== 'visible' || pinto) return;
+        // 5s de gracia: si el motor se recupera solo, no recargamos.
+        setTimeout(function () {
+          if (pinto) return;
+          var n = +(sessionStorage.getItem('gastro-reintentos') || 0);
+          if (n >= 2) return;
+          sessionStorage.setItem('gastro-reintentos', String(n + 1));
+          location.reload();
+        }, 5000);
+      });
+    })();
+  </script>
+
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
