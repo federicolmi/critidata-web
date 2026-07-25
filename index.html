@@ -120,6 +120,28 @@
 
         .hero h1 span { color: #fff; }
 
+        .hero-demo {
+            display: inline-block;
+            margin-top: 24px;
+            padding: 13px 30px;
+            border-radius: 12px;
+            background: #ffffff;
+            color: #0d1b3e;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: .3px;
+            text-decoration: none;
+            box-shadow: 0 8px 28px rgba(0,0,0,.35);
+            transition: transform .15s ease, opacity .15s ease;
+        }
+        .hero-demo:hover { opacity: .92; transform: translateY(-1px); }
+        .hero-demo-sub {
+            margin-top: 10px;
+            font-size: 12.5px;
+            letter-spacing: .4px;
+            color: rgba(255,255,255,.6);
+        }
+
         /* ── Tarjeta ── */
         .card {
             width: 100%;
@@ -595,7 +617,7 @@
                 onclick="switchTab('register', this)">Registrarse</button>
         <button class="nav-btn" id="btn-contact"
                 onclick="switchTab('contact', this)">Contáctenos</button>
-        <a class="nav-btn" href="/demo.html" style="color:rgba(255,255,255,.55);text-decoration:none;">▶ Ver demo</a>
+        <a class="nav-btn" href="/demo.html" style="color:rgba(255,255,255,.85);text-decoration:none;">▶ Ver demo</a>
         <div class="nav-download-wrap">
             <button class="nav-btn" id="btn-download"
                     onclick="switchTab('download', this)">⬇ Descargar App</button>
@@ -606,6 +628,8 @@
     <div class="hero">
         <span class="hero-label">critidata.com</span>
         <h1>Convertir datos en<br><span>decisiones</span></h1>
+        <a class="hero-demo" href="/demo.html">▶ Probá el demo</a>
+        <div class="hero-demo-sub">Sin registro · Nefrología y Gastroenterología · Datos de ejemplo</div>
     </div>
 
     <!-- Tarjeta central -->
