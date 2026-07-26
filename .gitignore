@@ -8,6 +8,7 @@ CritiData_Nefrologia.exe
 # CanvasKit — Flutter lo carga desde el CDN de Google, no hace falta en el repo
 app/canvaskit/
 demo-gastro/canvaskit/
+demo-nefro/canvaskit/
 
 # Sistema
 .DS_Store
