@@ -9,6 +9,8 @@ CritiData_Nefrologia.exe
 app/canvaskit/
 demo-gastro/canvaskit/
 demo-nefro/canvaskit/
+demo-laboratorio/canvaskit/
+demo-patologia/canvaskit/
 
 # Sistema
 .DS_Store
