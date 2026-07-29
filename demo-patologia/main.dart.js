@@ -9902,7 +9902,7 @@ return B.p.b3(s,"/demo-laboratorio")||B.p.b3(s,"/demo-patologia")},
 b6O(){var s=A.pl().gcl()
 if(B.p.b3(s,"/demo-laboratorio"))return"CritiData Laboratorio"
 if(B.p.b3(s,"/demo-patologia"))return"CritiData Patolog\xeda"
-return"CritiData Gastro"},
+return"CritiData Gastroenterolog\xeda"},
 aTG(a){return B.p.b3(a,"/estudios")||B.p.b3(a,"/consultas")||B.p.b3(a,"/estadisticas")||B.p.b3(a,"/importacion")},
 b6G(a,b){var s="/patologa",r=null,q="/importacion"
 switch(a.a){case 0:return B.p.b3(b,s)?"/biopsias":r
