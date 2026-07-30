@@ -52038,7 +52038,7 @@ $S:746}
 A.ayC.prototype={
 $1(a){var s=null,r=this.a
 r=A.P("\xbfEliminar el turno de "+r.e+" ("+r.c+")?",s,s,s,s,s,s,s,s)
-return A.j_(A.b([A.e1(!1,B.hi,s,s,s,s,s,s,new A.ayA(a),s,s),A.e1(!1,B.oZ,s,s,s,s,s,s,new A.ayB(a),s,A.nr(s,s,s,s,s,s,s,s,s,B.db,s,s,s,s,s,s,s,s,s,s))],t.p),r,s,B.b83)},
+return A.j_(A.b([A.e1(!1,B.hi,s,s,s,s,s,s,new A.ayA(a),s,s),A.e1(!1,B.oZ,s,s,s,s,s,s,new A.ayB(a),s,A.nr(s,s,s,s,s,s,s,s,s,B.db,s,s,s,s,s,s,s,s,s,s))],t.p),r,s,B.b84)},
 $S:47}
 A.ayA.prototype={
 $0(){A.c_(this.a,!1).bV(!1)
@@ -52123,14 +52123,14 @@ n.ap.push(n.gKz().aJ3(m,new A.aEJ(p),o))
 n=n.bW(m,t.J)
 s=B.n.aE(A.al(a,B.eT,t.w).w.a.a-128,0,430)
 m=t.p
-r=A.b([B.b9l],m)
+r=A.b([B.b9m],m)
 q=p.a.e
 if((q==null?o:q.e)!=null)B.m.O(r,A.b([B.bM,A.P("Al agendar, reemplaza el turno anterior ("+q.f+").",o,o,o,o,B.b6W,o,o,o)],m))
 r.push(B.bL)
 r.push(new A.a3(B.bS,A.P("Paciente *",o,o,o,o,B.bu,o,o,o),o))
 r.push(p.aiM(n.a,s))
 r.push(B.eb)
-r.push(A.b6(A.b([B.b8p,new A.cZ(1,B.b1,A.ZS(B.a0Q,B.b9m,p.gakh(),A.nr(o,o,o,o,o,o,o,o,o,B.V,o,o,B.et,o,o,o,o,o,o,B.cl)),o)],m),B.Q,B.C,B.K,0,o))
+r.push(A.b6(A.b([B.b8p,new A.cZ(1,B.b1,A.ZS(B.a0Q,B.b9n,p.gakh(),A.nr(o,o,o,o,o,o,o,o,o,B.V,o,o,B.et,o,o,o,o,o,o,B.cl)),o)],m),B.Q,B.C,B.K,0,o))
 r.push(B.bL)
 r.push(new A.a3(B.bS,A.P("Tipo *",o,o,o,o,B.bu,o,o,o),o))
 r.push(new A.AV(p.as,new A.aEK(p),B.bcj,o,t.Zr))
@@ -52144,7 +52144,7 @@ r.push(A.aeV(B.jD,"Dr. Federico Lami",!0,B.axd,new A.aEQ(),t.N))
 n=A.c7(A.p6(A.ay(r,B.ab,o,B.C,B.am,0,B.P),o,o,o,B.b7),o,s)
 r=A.e1(!1,B.hi,o,o,o,o,o,o,p.CW?o:new A.aER(a),o,o)
 q=A.f5(B.V,o,o,o)
-return A.j_(A.b([r,A.ol(!1,B.b8o,B.T,o,o,o,o,o,p.ga_r()&&!p.CW?p.gahF():o,o,q)],m),n,o,B.b9h)},
+return A.j_(A.b([r,A.ol(!1,B.b8o,B.T,o,o,o,o,o,p.ga_r()&&!p.CW?p.gahF():o,o,q)],m),n,o,B.b9i)},
 D3(){var s=0,r=A.J(t.H),q,p=this,o,n,m
 var $async$D3=A.K(function(a,b){if(a===1)return A.G(b,r)
 for(;;)switch(s){case 0:m=p.c
@@ -52651,12 +52651,12 @@ B.m.O(r,q)}q=m.length
 if(q!==0){q=A.b([new A.a3(B.qP,A.P("\u2714 C\xedrculo cerrado ("+q+")",f,f,f,f,B.vA,f,f,f),f)],e)
 for(l=m.length,k=0;k<m.length;m.length===l||(0,A.u)(m),++k){j=m[k]
 i=new A.b_(20,20)
-i=g.KY(j,A.cl(f,B.b87,B.T,f,f,new A.bI(B.Xb,f,f,new A.cN(i,i,i,i),f,f,B.aq),f,f,f,f,B.yz,f,f,f))
+i=g.KY(j,A.cl(f,B.b88,B.T,f,f,new A.bI(B.Xb,f,f,new A.cN(i,i,i,i),f,f,B.aq),f,f,f,f,B.yz,f,f,f))
 h=j.w
 h=h.length===0?"":" \xb7 Protocolo "+h
 h=A.b([i,B.eb,A.P("Recibido el "+j.z+" \xb7 "+j.x+h,1,B.R,f,f,B.aJ,f,f,f),B.d1,g.Ve(j,c)],e)
 if(c&&j.at.length!==0)B.m.O(h,A.b([B.c3,g.UZ(j)],e))
-q.push(A.fj(new A.a3(B.b9,A.ay(h,B.ab,f,B.C,B.K,0,B.P),f),f,f))}B.m.O(r,q)}s=A.iy(r,B.b9,f,!1)}}}return A.dE(A.fi(f,B.b8S),f,s,f,f)},
+q.push(A.fj(new A.a3(B.b9,A.ay(h,B.ab,f,B.C,B.K,0,B.P),f),f,f))}B.m.O(r,q)}s=A.iy(r,B.b9,f,!1)}}}return A.dE(A.fi(f,B.b8T),f,s,f,f)},
 ZK(a){var s,r=J.cs(this.gb_().aO($.dR(),t.J).a,new A.azL(a))
 if(!r.gR(0).p())s="(paciente no encontrado)"
 else{s=r.gai(0)
@@ -52683,7 +52683,7 @@ s=A.ck(20)
 r=A.p(p)
 r=n?"\u26a0 hace "+r+" d\xedas":"hace "+r+" d\xedas"
 o=A.cl(q,A.P(r,q,q,q,q,A.dH(q,q,n?B.jj:B.b8,q,q,q,q,q,q,q,q,11.5,q,q,B.b2,q,q,!0,q,q,q,q,q,q,q,q),q,q,q),B.T,q,q,new A.bI(o,q,q,s,q,q,B.aq),q,q,q,q,B.yz,q,q,q)}s=t.p
-return A.fj(new A.a3(B.b9,A.ay(A.b([this.KY(a,o),B.eb,A.P("En patolog\xeda: "+a.x,q,q,q,q,B.aJ,q,q,q),B.c3,A.ey(B.b_,A.b([A.kP(B.rM,B.b9c,new A.azI(this,a),q)],s),B.cm,8,8)],s),B.ab,q,B.C,B.K,0,B.P),q),q,q)},
+return A.fj(new A.a3(B.b9,A.ay(A.b([this.KY(a,o),B.eb,A.P("En patolog\xeda: "+a.x,q,q,q,q,B.aJ,q,q,q),B.c3,A.ey(B.b_,A.b([A.kP(B.rM,B.b9d,new A.azI(this,a),q)],s),B.cm,8,8)],s),B.ab,q,B.C,B.K,0,B.P),q),q,q)},
 Ea(a){return this.axp(a)},
 axp(a){var s=0,r=A.J(t.H),q=this,p,o,n
 var $async$Ea=A.K(function(b,c){if(b===1)return A.G(c,r)
@@ -52838,7 +52838,7 @@ $0(){return this.a.Um(this.b)},
 $S:0}
 A.azG.prototype={
 $1(a){var s=null
-return A.j_(A.b([A.e1(!1,B.b9t,s,s,s,s,s,s,new A.azE(a),s,s),A.ol(!1,B.b99,B.T,s,s,s,s,s,new A.azF(a),s,A.f5(B.V,s,s,s))],t.p),B.b98,s,B.b8r)},
+return A.j_(A.b([A.e1(!1,B.b9t,s,s,s,s,s,s,new A.azE(a),s,s),A.ol(!1,B.b9a,B.T,s,s,s,s,s,new A.azF(a),s,A.f5(B.V,s,s,s))],t.p),B.b99,s,B.b8s)},
 $S:47}
 A.azE.prototype={
 $0(){return A.c_(this.a,!1).bV(!1)},
@@ -52936,11 +52936,11 @@ r.push(new A.SL(m.gWz(),new A.aQk(m),l))
 j=A.c7(A.p6(A.ay(r,B.ab,l,B.C,B.am,0,B.P),l,l,l,B.b7),l,440)
 i=m.x
 s=A.e1(!1,B.vG,l,l,l,l,l,l,i?l:new A.aQl(a),l,l)
-r=A.e1(!1,B.b8Z,l,l,l,l,l,l,i?l:new A.aQm(m),l,l)
+r=A.e1(!1,B.b9_,l,l,l,l,l,l,i?l:new A.aQm(m),l,l)
 q=A.f5(B.V,l,l,l)
 i=m.x
 p=i?l:new A.aQn(m)
-return A.j_(A.b([s,r,A.ol(!1,A.P(i?"Guardando\u2026":"Guardar y avisar al paciente",l,l,l,l,l,l,l,l),B.T,l,l,l,l,l,p,l,q)],n),j,l,B.b9o)}}
+return A.j_(A.b([s,r,A.ol(!1,A.P(i?"Guardando\u2026":"Guardar y avisar al paciente",l,l,l,l,l,l,l,l),B.T,l,l,l,l,l,p,l,q)],n),j,l,B.b9p)}}
 A.aQh.prototype={
 $0(){return this.a.x=!0},
 $S:0}
@@ -53398,7 +53398,7 @@ if(p==null){if(!a1.c)o=r.ga0(s)&&a1.d.length===0
 else o=!0
 if(o)return A.dE(A.fi(b,B.kM),b,B.cH,b,b)
 return c.a08()}if(a2.a!==a||a2.d)return A.dE(A.fi(b,B.kM),b,B.cH,b,b)
-if(a2.e.length!==0)return A.dE(c.CK(),b,A.dK(new A.a3(B.f4,A.ay(A.b([B.a1b,B.bL,B.b8J,B.bM,B.b8n,B.eJ,A.kC(B.a1k,B.vI,c.gaj9(),A.f5(B.V,b,b,b))],t.p),B.Q,b,B.C,B.am,0,B.P),b),b,b),b,b)
+if(a2.e.length!==0)return A.dE(c.CK(),b,A.dK(new A.a3(B.f4,A.ay(A.b([B.a1b,B.bL,B.b8K,B.bM,B.b8n,B.eJ,A.kC(B.a1k,B.vI,c.gaj9(),A.f5(B.V,b,b,b))],t.p),B.Q,b,B.C,B.am,0,B.P),b),b,b),b,b)
 n=p.c+", "+p.d
 m=a0.bW($.nQ(),t.YL)
 l=a0.bW($.y0(),t.Ff)
@@ -53424,7 +53424,7 @@ c.at=d.a}return A.dE(c.CK(),b,A.ji(new A.aCb(c,p,n,d)),b,b)},
 CK(){var s=null
 return A.fi(A.e9(s,s,s,B.ma,s,s,this.ga2W(),s,s,s,"Volver",s),B.kM)},
 a08(){var s=null,r=this.a.e,q=this.CK()
-return A.dE(q,s,A.dK(new A.a3(B.f4,A.ay(A.b([B.mb,B.bL,B.R4,B.bM,A.P(r==null||B.p.b4(r).length===0?"No se muestra ninguna consulta: sin paciente identificado, cualquier dato podr\xeda ser de OTRA persona.":'No se muestra la consulta de "'+r+u.p,s,s,s,s,B.hh,B.bV,s,s),B.eJ,A.kC(B.m9,B.b8v,this.ga2W(),A.f5(B.V,s,s,s))],t.p),B.Q,s,B.C,B.am,0,B.P),s),s,s),s,s)},
+return A.dE(q,s,A.dK(new A.a3(B.f4,A.ay(A.b([B.mb,B.bL,B.R4,B.bM,A.P(r==null||B.p.b4(r).length===0?"No se muestra ninguna consulta: sin paciente identificado, cualquier dato podr\xeda ser de OTRA persona.":'No se muestra la consulta de "'+r+u.p,s,s,s,s,B.hh,B.bV,s,s),B.eJ,A.kC(B.m9,B.b8w,this.ga2W(),A.f5(B.V,s,s,s))],t.p),B.Q,s,B.C,B.am,0,B.P),s),s,s),s,s)},
 Ke(a,b,c){var s=null,r=t.p
 return A.fj(new A.a3(B.b9,A.b6(A.b([A.ys(B.V,A.P(A.Ea(c),s,s,s,s,B.oX,s,s,s),22),B.eH,A.bv(A.ay(A.b([A.P(c,2,B.R,s,s,B.oW,s,s,s),B.ea,A.P("DNI "+b.b+" \xb7 "+b.e+" \xb7 "+b.zA(this.gb_().bW($.fw(),t.F).$0())+" a\xf1os \xb7 "+b.grM()+" \xb7 \ud83d\udcde "+b.y,2,B.R,s,s,B.aJ,s,s,s)],r),B.ab,s,B.C,B.K,0,B.P),1),A.ZS(B.rN,B.vJ,new A.aBt(a,b),s)],r),B.Q,B.C,B.K,0,s),s),s,s)},
 Vh(a,b,c){var s=null
@@ -53502,7 +53502,7 @@ if(p.n(0,o.a))k.push(new A.a3(B.ZD,A.ay(l.c.$0(),B.ab,j,B.C,B.K,0,B.P),j))
 g.push(A.fj(A.ay(k,B.cY,j,B.C,B.K,0,B.P),B.dp,j))}return A.iy(g,B.Zt,j,!1)},
 ak3(a){var s,r,q=this,p=null,o=q.gb_(),n=o.bW($.fw(),t.F).$0(),m=o.bW($.nQ(),t.YL),l=o.bW($.y0(),t.Ff),k=q.a.f
 if(!(m.a==k&&l.a==k)||m.d||l.c)return B.aMI
-if(m.e.length!==0||l.d.length!==0)return A.b([B.b9n,A.e1(!1,B.vI,p,p,p,p,p,p,new A.aBK(q,a),p,p)],t.p)
+if(m.e.length!==0||l.d.length!==0)return A.b([B.b9o,A.e1(!1,B.vI,p,p,p,p,p,p,new A.aBK(q,a),p,p)],t.p)
 s=A.b5Y(o.bW($.pU(),t.fb).b,m.b,n,l.b)
 o=new A.aBM()
 if(s.gRT())return B.aRS
@@ -53539,7 +53539,7 @@ case 2:s="VEDA + VCC"
 break
 default:s=null}return s},
 a_V(a,b){var s=null
-return A.ey(B.b_,A.b([A.P(a,s,s,s,s,B.aJ,s,s,s),A.e1(!1,B.b8U,s,s,s,s,s,s,b,s,A.nr(s,s,s,s,s,s,s,s,s,s,s,s,B.et,s,s,s,s,s,s,B.cl))],t.p),B.dk,0,2)},
+return A.ey(B.b_,A.b([A.P(a,s,s,s,s,B.aJ,s,s,s),A.e1(!1,B.b8V,s,s,s,s,s,s,b,s,A.nr(s,s,s,s,s,s,s,s,s,s,s,s,B.et,s,s,s,s,s,s,B.cl))],t.p),B.dk,0,2)},
 ak1(a){var s,r,q,p,o,n=this.gb_(),m=n.bW($.pU(),t.fb).b
 n=J.cs(m,new A.aBC(n.bW($.fw(),t.F).$0()))
 s=A.B(n,n.$ti.i("l.E"))
@@ -53564,7 +53564,7 @@ s=A.b([],n)
 if(!k||m.c)s.push(B.vE)
 else if(m.d.length!==0)s.push(o.a_V("No se pudieron cargar los laboratorios",new A.aBH(o)))
 else{n=A.b([],n)
-if(q.length===0)n.push(B.b9d)
+if(q.length===0)n.push(B.b9e)
 else B.m.O(n,o.MG(q,new A.aBI(),new A.aBJ(),t._j))
 if(p)n.push(B.um)
 B.m.O(s,n)}return s},
@@ -53584,7 +53584,7 @@ m=A.b([A.kC(k,A.P(h&&j.ch?"Guardando\u2026":"Guardar",i,i,i,i,i,i,i,i),l,m)],o)
 if(h)m.push(A.rJ(f,"Guard\xe1 la consulta para poder agendar el estudio"))
 else m.push(f)
 m=A.ey(B.b_,m,B.cm,8,10)
-return A.fj(new A.a3(B.b9,A.ay(A.b([g,B.hg,s,B.bL,r,B.bL,q,B.bL,p,B.bM,B.b8M,n,B.bL,m,B.c3,A.P(h?'\ud83d\udca1 Consulta nueva: Guardar crea la primera consulta del paciente. "Agendar estudio" se habilita al guardarla.':'\ud83d\udca1 "Agendar estudio" crea un turno tipo Estudio con este mismo paciente (el flujo consulta\u2192estudio). Sin re-tipear nada.',i,i,i,i,B.aJ,i,i,i)],o),B.ab,i,B.C,B.K,0,B.P),i),i,i)},
+return A.fj(new A.a3(B.b9,A.ay(A.b([g,B.hg,s,B.bL,r,B.bL,q,B.bL,p,B.bM,B.b8N,n,B.bL,m,B.c3,A.P(h?'\ud83d\udca1 Consulta nueva: Guardar crea la primera consulta del paciente. "Agendar estudio" se habilita al guardarla.':'\ud83d\udca1 "Agendar estudio" crea un turno tipo Estudio con este mismo paciente (el flujo consulta\u2192estudio). Sin re-tipear nada.',i,i,i,i,B.aJ,i,i,i)],o),B.ab,i,B.C,B.K,0,B.P),i),i,i)},
 a1A(a,b,c){var s=null
 return A.dt(!1,A.ck(8),!0,A.b6(A.b([A.aZI(s,!1,s,s,s,!1,B.o8,s,new A.aC7(c),s,s,s,s,s,!1,b,B.cl),A.P(a,s,s,s,s,s,s,s,s)],t.p),B.Q,B.C,B.am,0,s),s,!0,s,s,s,s,s,s,s,s,s,s,s,new A.aC8(c,b),s,s,s,s,s,s,s)},
 a0U(a,b){this.P(new A.aC3(this,b,a))},
@@ -53615,7 +53615,7 @@ $0(){},
 $S:0}
 A.aCe.prototype={
 $1(a){var s=null
-return A.j_(A.b([A.e1(!1,B.vF,s,s,s,s,s,s,new A.aCc(a),s,s),A.ol(!1,B.b8O,B.T,s,s,s,s,s,new A.aCd(a),s,A.f5(B.V,s,s,s))],t.p),B.b8k,s,B.b8_)},
+return A.j_(A.b([A.e1(!1,B.vF,s,s,s,s,s,s,new A.aCc(a),s,s),A.ol(!1,B.b8P,B.T,s,s,s,s,s,new A.aCd(a),s,A.f5(B.V,s,s,s))],t.p),B.b8k,s,B.b80)},
 $S:47}
 A.aCc.prototype={
 $0(){A.c_(this.a,!1).bV(!1)
@@ -53681,7 +53681,7 @@ $0(){return A.aTk(this.a,this.b)},
 $S:0}
 A.aBS.prototype={
 $1(a){var s=null
-return A.j_(A.b([A.e1(!1,B.hi,s,s,s,s,s,s,new A.aBQ(a),s,s),A.ol(!1,B.b7G,B.T,s,s,s,s,s,new A.aBR(a),s,A.f5(B.V,s,s,s))],t.p),B.b8m,s,B.b9_)},
+return A.j_(A.b([A.e1(!1,B.hi,s,s,s,s,s,s,new A.aBQ(a),s,s),A.ol(!1,B.b7G,B.T,s,s,s,s,s,new A.aBR(a),s,A.f5(B.V,s,s,s))],t.p),B.b8m,s,B.b90)},
 $S:47}
 A.aBQ.prototype={
 $0(){A.c_(this.a,!1).bV(!1)
@@ -53885,7 +53885,7 @@ r.w=s
 p=s}return A.ahU(new A.aNy(r,q),p,t.e1)}}
 A.aNy.prototype={
 $2(a,b){var s,r,q,p,o,n=null,m=b.b,l=b.a===B.fJ&&b.c==null&&m!=null
-if(b.c!=null)s=B.b8x
+if(b.c!=null)s=B.b8y
 else if(!l)s=B.Lv
 else if(m.gRT())s=B.R6
 else{r=this.a
@@ -54014,7 +54014,7 @@ $label0$0:{if(1===r){s="Ventana m\xf3vil: los \xfaltimos 12 meses, como los boto
 break $label0$0}if(5===r){s="Ventana m\xf3vil: los \xfaltimos 5 a\xf1os."
 break $label0$0}s="Ventana m\xf3vil: los \xfaltimos 10 a\xf1os \u2014 todo lo que la app retiene."
 break $label0$0}return s},
-I(a){var s,r=this,q=null,p=A.fi(q,B.b97),o=r.w
+I(a){var s,r=this,q=null,p=A.fi(q,B.b98),o=r.w
 if(o===$){s=r.xA()
 r.w!==$&&A.aq()
 r.w=s
@@ -54571,7 +54571,7 @@ return A.fi(A.e9(s,s,s,B.ma,s,s,new A.aFL(a),s,s,s,"Volver a los estudios del d\
 X6(){var s=this,r=null,q=s.a.e,p=s.c
 p.toString
 p=s.X5(p)
-return A.dE(p,r,A.dK(new A.a3(B.f4,A.ay(A.b([B.mb,B.bL,B.R4,B.bM,A.P(q==null||B.p.b4(q).length===0?"No se muestran estudios: sin paciente identificado, cualquier dato podr\xeda ser de OTRA persona.":'No se muestran los estudios de "'+q+u.p,r,r,r,r,B.hh,B.bV,r,r),B.eJ,A.kC(B.m9,B.b8X,new A.aGc(s),A.f5(B.V,r,r,r))],t.p),B.Q,r,B.C,B.am,0,B.P),r),r,r),r,r)},
+return A.dE(p,r,A.dK(new A.a3(B.f4,A.ay(A.b([B.mb,B.bL,B.R4,B.bM,A.P(q==null||B.p.b4(q).length===0?"No se muestran estudios: sin paciente identificado, cualquier dato podr\xeda ser de OTRA persona.":'No se muestran los estudios de "'+q+u.p,r,r,r,r,B.hh,B.bV,r,r),B.eJ,A.kC(B.m9,B.b8Y,new A.aGc(s),A.f5(B.V,r,r,r))],t.p),B.Q,r,B.C,B.am,0,B.P),r),r,r),r,r)},
 amp(a,b,c){var s=null,r=A.ys(B.V,A.P(A.Ea(c),s,s,s,s,B.oX,s,s,s),22),q=A.P(c,s,s,s,s,B.oW,s,s,s),p=this.gb_(),o=t.p
 o=A.b([r,B.eH,A.bv(A.ay(A.b([q,B.ea,A.P("DNI "+b.b+" \xb7 "+b.e+" \xb7 "+b.zA(p.bW($.fw(),t.F).$0())+" a\xf1os \xb7 "+b.grM()+" \xb7 "+b.y,s,s,s,s,B.aJ,s,s,s)],o),B.ab,s,B.C,B.K,0,B.P),1)],o)
 if(p.bW($.mr(),t.xS)===B.eE)o.push(A.ZS(B.rN,B.vJ,new A.aFU(a,b),s))
@@ -54830,7 +54830,7 @@ $0(){return A.aav(this.a,this.c,this.b)},
 $S:84}
 A.aFX.prototype={
 $1(a){var s=null,r=this.a,q=A.P('\xbfEliminar "'+A.aWE(r.c)+'" del '+r.d+"?",s,s,s,s,s,s,s,s)
-return A.j_(A.b([A.e1(!1,B.hi,s,s,s,s,s,s,new A.aFV(a),s,s),A.ol(!1,B.oZ,B.T,s,s,s,s,s,new A.aFW(this.b,r,a),s,A.f5(B.db,s,s,s))],t.p),q,s,B.b84)},
+return A.j_(A.b([A.e1(!1,B.hi,s,s,s,s,s,s,new A.aFV(a),s,s),A.ol(!1,B.oZ,B.T,s,s,s,s,s,new A.aFW(this.b,r,a),s,A.f5(B.db,s,s,s))],t.p),q,s,B.b85)},
 $S:47}
 A.aFV.prototype={
 $0(){A.c_(this.a,!1).bV(null)
@@ -54975,7 +54975,7 @@ return A.I($async$DB,r)},
 I(a){var s,r,q,p,o,n,m=this,l=null,k=m.a.d,j=t.w,i=B.n.aE(A.al(a,B.eT,j).w.a.b-280,120,480),h=B.p.b4(k.as),g=B.p.b4(k.at),f=A.P("\ud83d\udccb Historia cl\xednica \u2014 "+(k.c+", "+k.d),2,B.R,l,l,l,l,l,l)
 j=B.n.aE(A.al(a,B.eT,j).w.a.a-128,0,520)
 s=t.p
-r=A.b([B.b8F,B.eb],s)
+r=A.b([B.b8G,B.eb],s)
 q=h.length===0
 if(q&&g.length===0)r.push(B.Rb)
 else{p=A.P("Familiares: "+(q?"\u2014":h),4,B.R,l,l,B.aJ,l,l,l)
@@ -55035,7 +55035,7 @@ $S:63}
 A.aS6.prototype={
 $1(a){var s=null,r=this.a,q=this.b,p=q===1?"":"s"
 p=A.P(r.c+", "+r.d+" tiene "+q+" registro"+p+" que ya superaron los 10 a\xf1os de retenci\xf3n ("+B.m.bP(this.c,", ")+').\n\n\xbfEliminarlos definitivamente? Los antecedentes y todo lo m\xe1s nuevo quedan intactos. "Ahora no" los conserva y vuelve a preguntar al abrir la ficha.',s,s,s,s,B.kJ,s,s,s)
-return A.j_(A.b([A.e1(!1,B.b7W,s,s,s,s,s,s,new A.aS1(a),s,s),A.e1(!1,B.oZ,s,s,s,s,s,s,new A.aS2(a),s,A.nr(s,s,s,s,s,s,s,s,s,B.db,s,s,s,s,s,s,s,s,s,s))],t.p),p,s,B.b9r)},
+return A.j_(A.b([A.e1(!1,B.b7X,s,s,s,s,s,s,new A.aS1(a),s,s),A.e1(!1,B.oZ,s,s,s,s,s,s,new A.aS2(a),s,A.nr(s,s,s,s,s,s,s,s,s,B.db,s,s,s,s,s,s,s,s,s,s))],t.p),p,s,B.b9r)},
 $S:47}
 A.aS1.prototype={
 $0(){A.c_(this.a,!1).bV(!1)
@@ -55240,7 +55240,7 @@ s=A.b([],l)
 for(r=0;r<2;++r){q=B.aNN[r]
 s.push(A.kP(B.a0G,A.P("Habilitar "+A.b3f(q),p,p,p,p,B.iI,p,p,p),new A.aIt(this,q),p))}k.push(A.b6(A.b([A.bv(A.ey(B.b_,s,B.cm,8,8),1)],l),B.Q,B.C,B.K,0,p))
 k.push(B.bM)
-return A.b([B.Qw,B.b9a,B.oM,B.b9q,B.c3,A.cl(p,A.ay(k,B.Q,p,B.C,B.K,0,B.P),B.T,p,p,new A.bI(B.J,p,m,n,p,p,B.aq),p,p,p,p,B.lK,p,p,p)],l)},
+return A.b([B.Qw,B.b9b,B.oM,B.b7W,B.c3,A.cl(p,A.ay(k,B.Q,p,B.C,B.K,0,B.P),B.T,p,p,new A.bI(B.J,p,m,n,p,p,B.aq),p,p,p,p,B.lK,p,p,p)],l)},
 amK(a){var s,r,q=null,p=a.c===B.lP,o=a.a,n=A.h_(o===B.kQ?B.jC:B.hZ,B.V,q,19),m=t.p
 o=A.bv(A.ay(A.b([A.P(p?a.b:"Invitaci\xf3n enviada",q,q,q,q,B.kL,q,q,q),A.P(A.aWF(o)+" \xb7 "+a.d,q,q,q,q,B.oT,q,q,q)],m),B.ab,q,B.C,B.K,0,B.P),3)
 s=p?B.m7:B.m8
@@ -55278,7 +55278,7 @@ case 1:return A.H(q,r)}})
 return A.I($async$Ej,r)},
 atO(){var s,r=null,q=A.ck(14),p=A.fA(B.f_,1),o=t.p,n=A.b([],o)
 for(s=0;s<1;++s)n.push(new A.a3(B.ZB,A.b6(A.b([B.a0E,B.Qu,new A.j8(1,B.ds,A.ay(A.b([A.P("Dr. Federico Lami",r,r,r,r,B.kL,r,r,r),A.P("MP 12.345 \xb7 desde el 19-jul-2026",r,r,r,r,B.oT,r,r,r)],o),B.ab,r,B.C,B.K,0,B.P),r),B.a0T,B.eI,B.b7r],o),B.Q,B.C,B.K,0,r),r))
-return A.b([B.Qw,B.b8z,B.oM,B.b8i,B.c3,A.cl(r,A.ay(n,B.Q,r,B.C,B.K,0,B.P),B.T,r,r,new A.bI(B.J,r,p,q,r,r,B.aq),r,r,r,r,B.jx,r,r,r)],o)},
+return A.b([B.Qw,B.b8A,B.oM,B.b8i,B.c3,A.cl(r,A.ay(n,B.Q,r,B.C,B.K,0,B.P),B.T,r,r,new A.bI(B.J,r,p,q,r,r,B.aq),r,r,r,r,B.jx,r,r,r)],o)},
 Kn(a,b,c){var s=null,r=this.w===c,q=A.h_(b,r?B.J:B.V,s,17),p=A.P(a,s,s,s,s,s,s,s,s)
 return A.acD(q,p,A.dH(s,s,r?B.J:B.fH,s,s,s,s,s,s,s,s,13,s,s,B.b2,s,s,!0,s,s,s,s,s,s,s,s),new A.aHX(this,c),r,B.V,!1,s)},
 aBt(){var s,r=this,q=null,p=r.w===B.eR,o=r.gahG(),n=r.Q?B.V.ij(0.06):B.e_,m=A.ck(14),l=r.Q,k=A.fA(l?B.V:B.f_,1.5),j=p?B.jC:B.hZ
@@ -55305,8 +55305,8 @@ case 1:s=a.c
 s=A.b([B.a1r,A.P(s.b+" \xb7 DNI "+s.c,r,r,r,r,B.b3L,r,r,r)],t.p)
 if(this.w===B.dQ&&a.f==null)s.push(B.b7v)
 return A.ey(B.b_,s,B.dk,0,6)
-case 3:return A.ey(B.b_,A.b([B.zw,B.R8,A.aVN(B.b86,new A.aIb(this,a),A.Ij(r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,B.wO,r,r,r,B.cl))],t.p),B.dk,0,6)
-case 2:return A.ey(B.b_,A.b([B.zw,B.R8,A.aVN(B.b82,new A.aIc(this,a),A.Ij(r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,B.wO,r,r,r,B.cl))],t.p),B.dk,0,6)
+case 3:return A.ey(B.b_,A.b([B.zw,B.R8,A.aVN(B.b87,new A.aIb(this,a),A.Ij(r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,B.wO,r,r,r,B.cl))],t.p),B.dk,0,6)
+case 2:return A.ey(B.b_,A.b([B.zw,B.R8,A.aVN(B.b83,new A.aIc(this,a),A.Ij(r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,B.wO,r,r,r,B.cl))],t.p),B.dk,0,6)
 case 4:return A.b6(A.b([B.a1f,B.fh,A.bv(A.P("Archivado en "+a.c.b,r,B.R,r,r,B.b6G,r,r,r),1)],t.p),B.Q,B.C,B.K,0,r)}},
 asA(a){var s,r,q,p,o,n,m,l,k=null
 if(a!==B.ix&&a!==B.ko)return B.nM
@@ -55318,7 +55318,7 @@ q=A.fA(B.f_,1)
 p=t.p
 o=A.b([],p)
 for(n=s.length,m=0;m<s.length;s.length===n||(0,A.u)(s),++m){l=s[m]
-o.push(new A.a3(B.f3,A.b6(A.b([B.a17,B.cA,new A.j8(3,B.ds,A.ay(A.b([A.P(l.a,1,B.R,k,k,B.oU,k,k,k),A.P(l.b.b+" \xb7 "+l.c,k,k,k,k,B.oT,k,k,k)],p),B.ab,k,B.C,B.K,0,B.P),k),B.iG,this.ajx(l)],p),B.Q,B.C,B.K,0,k),k))}return A.b([B.b1e,B.b8B,B.oM,B.b8E,B.c3,A.cl(k,A.ay(o,B.Q,k,B.C,B.K,0,B.P),B.T,k,k,new A.bI(B.J,k,q,r,k,k,B.aq),k,k,k,k,B.lK,k,k,k)],p)},
+o.push(new A.a3(B.f3,A.b6(A.b([B.a17,B.cA,new A.j8(3,B.ds,A.ay(A.b([A.P(l.a,1,B.R,k,k,B.oU,k,k,k),A.P(l.b.b+" \xb7 "+l.c,k,k,k,k,B.oT,k,k,k)],p),B.ab,k,B.C,B.K,0,B.P),k),B.iG,this.ajx(l)],p),B.Q,B.C,B.K,0,k),k))}return A.b([B.b1e,B.b8C,B.oM,B.b8F,B.c3,A.cl(k,A.ay(o,B.Q,k,B.C,B.K,0,B.P),B.T,k,k,new A.bI(B.J,k,q,r,k,k,B.aq),k,k,k,k,B.lK,k,k,k)],p)},
 ajx(a){var s,r,q,p,o,n=null
 switch(a.d.a){case 0:s=B.aZI
 break
@@ -55366,9 +55366,9 @@ break
 case 5:case 1:return A.H(q,r)}})
 return A.I($async$Ev,r)},
 aBu(){var s=this,r=null,q=s.gam5(),p=s.Q?B.V.ij(0.06):B.e_,o=A.ck(14),n=s.Q,m=A.fA(n?B.V:B.f_,1.5),l=A.h_(B.a0h,n?B.V:B.b8,r,42)
-return A.b_u(A.jl(A.lG(r,A.RU(A.ay(A.b([l,B.c3,A.P("Arrastr\xe1 el archivo ac\xe1 o toc\xe1 para elegirlo",r,r,r,r,A.dH(r,r,n?B.V:B.fH,r,r,r,r,r,r,r,r,14.5,r,r,B.b2,r,r,!0,r,r,r,r,r,r,r,r),r,r,r),B.eb,B.b8t,B.bL,A.b_L(B.zA,B.b8j,q)],t.p),B.Q,r,B.fa,B.K,0,B.P),r,B.aC,new A.bI(p,r,m,o,r,r,B.aq),B.qK,r,r,B.ZH,r),B.ao,!1,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,q,r,r,r,r,r,r),B.da,r,new A.aIJ(s),new A.aIK(s),r),new A.aIL(s),new A.aIM(s),new A.aIN(s))},
+return A.b_u(A.jl(A.lG(r,A.RU(A.ay(A.b([l,B.c3,A.P("Arrastr\xe1 el archivo ac\xe1 o toc\xe1 para elegirlo",r,r,r,r,A.dH(r,r,n?B.V:B.fH,r,r,r,r,r,r,r,r,14.5,r,r,B.b2,r,r,!0,r,r,r,r,r,r,r,r),r,r,r),B.eb,B.b8u,B.bL,A.b_L(B.zA,B.b8j,q)],t.p),B.Q,r,B.fa,B.K,0,B.P),r,B.aC,new A.bI(p,r,m,o,r,r,B.aq),B.qK,r,r,B.ZH,r),B.ao,!1,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,q,r,r,r,r,r,r),B.da,r,new A.aIJ(s),new A.aIK(s),r),new A.aIL(s),new A.aIM(s),new A.aIN(s))},
 awI(){var s,r,q=null,p=A.ck(14),o=A.fA(B.f_,1),n=this.z,m=t.p
-n=A.b([A.b6(A.b([B.a1i,B.cA,A.bv(A.P(n.a,1,B.R,q,q,B.b4k,q,q,q),1),A.P(n.ga96(),q,q,q,q,B.ca,q,q,q),B.cA,A.e9(q,q,q,B.a0R,q,q,new A.aIi(this),q,q,q,"Quitar",B.cl)],m),B.Q,B.C,B.K,0,q),B.yf,B.b8C,B.c3],m)
+n=A.b([A.b6(A.b([B.a1i,B.cA,A.bv(A.P(n.a,1,B.R,q,q,B.b4k,q,q,q),1),A.P(n.ga96(),q,q,q,q,B.ca,q,q,q),B.cA,A.e9(q,q,q,B.a0R,q,q,new A.aIi(this),q,q,q,"Quitar",B.cl)],m),B.Q,B.C,B.K,0,q),B.yf,B.b8D,B.c3],m)
 for(s=0;s<6;++s){r=B.aR6[s]
 n.push(new A.a3(B.Zz,A.b6(A.b([new A.j8(1,B.ds,A.P(r[0],q,q,q,q,B.b2T,q,q,q),q),B.a0H,B.iG,new A.j8(1,B.ds,A.P(r[1],q,q,q,q,B.b43,q,q,q),q)],m),B.Q,B.C,B.K,0,q),q))}n.push(B.yf)
 n.push(A.b6(A.b([B.zz,B.fh,B.a_n,A.kC(B.a0Z,B.b7R,new A.aIj(this),A.f5(B.bE,q,q,q))],m),B.Q,B.C,B.K,0,q))
@@ -55409,7 +55409,7 @@ o=A.P(A.aXR(p.d)+" del "+p.e,k,k,k,k,k,k,k,k)
 n=p.gB0()
 m=p.r
 l=m===1?"frasco":"frascos"
-j.push(new A.Bx(new A.aI4(a,p),A.oD(!1,B.aG,k,k,!0,k,!0,k,B.a0K,k,k,!1,k,k,k,A.P(n+" \xb7 "+(""+m+" "+l),k,k,k,k,k,k,k,k),k,o,k,k,k),k))}return A.aWo(j,B.b8K)},
+j.push(new A.Bx(new A.aI4(a,p),A.oD(!1,B.aG,k,k,!0,k,!0,k,B.a0K,k,k,!1,k,k,k,A.P(n+" \xb7 "+(""+m+" "+l),k,k,k,k,k,k,k,k),k,o,k,k,k),k))}return A.aWo(j,B.b8L)},
 $S:118}
 A.aI4.prototype={
 $0(){A.c_(this.a,!1).bV(this.b)
@@ -55634,8 +55634,8 @@ s.toString
 A.c_(s,!1).bV(!0)
 r.fV(B.b1B)},
 I(a){var s=this,r=null,q=s.a.d,p=A.P("Habilitar a tu "+A.b3f(q),r,r,r,r,r,r,r,r),o=A.P("Le mand\xe1s un link de un solo uso. Cuando lo abre, crea su cuenta y queda habilitado para cargar informes en tu bandeja de "+A.aWF(q)+" \u2014 y solo en la tuya.",r,r,r,r,B.b6Y,r,r,r),n=A.fA(B.cp,1),m=A.ck(10),l=t.p
-m=A.c7(A.p6(A.ay(A.b([o,B.bL,A.cl(r,A.b2A(q===B.kQ?"critidata.com/invitacion/lab-7f3a2c":"critidata.com/invitacion/pat-4b91e8",B.b2Y),B.T,r,r,new A.bI(B.e_,r,n,m,r,r,B.aq),r,r,r,r,B.ZC,r,r,1/0),B.d1,A.b6(A.b([B.a1o,B.fh,A.bv(A.P("Vence el "+s.a.e+" y sirve una sola vez.",r,r,r,r,B.ca,r,r,r),1)],l),B.Q,B.C,B.K,0,r),B.c3,B.b8b],l),B.ab,r,B.C,B.am,0,B.P),r,r,r,B.b7),r,420)
-return A.j_(A.b([A.e1(!1,B.hi,r,r,r,r,r,r,new A.aJY(a),r,r),A.ZS(B.a13,B.b7Y,s.gakd(),r),A.kC(B.rM,B.b95,s.gamk(),A.f5(B.V,r,r,r))],l),m,r,p)}}
+m=A.c7(A.p6(A.ay(A.b([o,B.bL,A.cl(r,A.b2A(q===B.kQ?"critidata.com/invitacion/lab-7f3a2c":"critidata.com/invitacion/pat-4b91e8",B.b2Y),B.T,r,r,new A.bI(B.e_,r,n,m,r,r,B.aq),r,r,r,r,B.ZC,r,r,1/0),B.d1,A.b6(A.b([B.a1o,B.fh,A.bv(A.P("El link vence el "+s.a.e+" y sirve una sola vez.",r,r,r,r,B.ca,r,r,r),1)],l),B.Q,B.C,B.K,0,r),B.c3,B.b8r],l),B.ab,r,B.C,B.am,0,B.P),r,r,r,B.b7),r,420)
+return A.j_(A.b([A.e1(!1,B.hi,r,r,r,r,r,r,new A.aJY(a),r,r),A.ZS(B.a13,B.b7Z,s.gakd(),r),A.kC(B.rM,B.b96,s.gamk(),A.f5(B.V,r,r,r))],l),m,r,p)}}
 A.aJX.prototype={
 $1(a){this.a.fV(B.b1v)
 return!1},
@@ -56394,7 +56394,7 @@ s=A.fi(p,A.P(s==null?"Paciente":s,p,p,p,p,p,p,p,p))
 if(k){o=n.d
 o=A.dK(A.P(o.length!==0?o:"Paciente no encontrado",p,p,p,p,p,p,p,p),p,p)}else{k=t.p
 r=A.b([],k)
-if(o.bW($.mr(),t.xS)===B.eE)B.m.O(r,A.b([A.ey(B.b_,A.b([A.kP(B.rN,B.vJ,new A.aLl(a,l),p),A.kP(B.a1h,B.b91,new A.aLm(a,l),p),A.kP(B.a0U,B.Ra,new A.aLn(q,l),A.Ij(p,p,p,p,p,p,p,p,p,B.db,p,p,p,p,p,B.TB,p,p,p,p))],k),B.cm,8,8),B.bL],k))
+if(o.bW($.mr(),t.xS)===B.eE)B.m.O(r,A.b([A.ey(B.b_,A.b([A.kP(B.rN,B.vJ,new A.aLl(a,l),p),A.kP(B.a1h,B.b92,new A.aLm(a,l),p),A.kP(B.a0U,B.Ra,new A.aLn(q,l),A.Ij(p,p,p,p,p,p,p,p,p,B.db,p,p,p,p,p,B.TB,p,p,p,p))],k),B.cm,8,8),B.bL],k))
 r.push(q.o7("DNI",l.b))
 r.push(q.o7("Sexo",l.e))
 r.push(q.o7("Edad",""+l.zA(o.bW($.fw(),t.F).$0())+" a\xf1os"))
@@ -56510,7 +56510,7 @@ aug(a){var s=this.x
 if(s!=null)s.by()
 this.x=A.cX(B.qN,new A.aLu(this,a))},
 I(a){var s=this,r=null,q=s.gb_().bW($.dR(),t.J)
-return A.dE(A.fi(r,B.b8g),r,A.ay(A.b([new A.a3(B.es,A.h8(r,B.by,!1,r,!0,B.a0,r,A.hr(),s.w,r,r,r,r,r,2,B.a2_,B.ao,!0,r,!0,r,!1,r,B.bg,r,r,r,r,r,r,r,r,1,r,r,!1,"\u2022",r,s.gauf(),r,r,r,!1,r,r,!1,r,!0,r,B.bF,r,r,r,r,r,r,r,r,r,r,r,r,!0,B.aI,r,B.d5,r,r,r,r),r),A.bv(s.aij(q),1)],t.p),B.Q,r,B.C,B.K,0,B.P),r,new A.zq(B.a12,s.gahc(),B.b9f,r))},
+return A.dE(A.fi(r,B.b8g),r,A.ay(A.b([new A.a3(B.es,A.h8(r,B.by,!1,r,!0,B.a0,r,A.hr(),s.w,r,r,r,r,r,2,B.a2_,B.ao,!0,r,!0,r,!1,r,B.bg,r,r,r,r,r,r,r,r,1,r,r,!1,"\u2022",r,s.gauf(),r,r,r,!1,r,r,!1,r,!0,r,B.bF,r,r,r,r,r,r,r,r,r,r,r,r,!0,B.aI,r,B.d5,r,r,r,r),r),A.bv(s.aij(q),1)],t.p),B.Q,r,B.C,B.K,0,B.P),r,new A.zq(B.a12,s.gahc(),B.b9g,r))},
 Cs(){var s=0,r=A.J(t.H),q,p=this,o
 var $async$Cs=A.K(function(a,b){if(a===1)return A.G(b,r)
 for(;;)switch(s){case 0:o=p.c
@@ -56641,7 +56641,7 @@ return A.I($async$Dq,r)},
 I(a){var s,r,q,p,o,n=this,m=null,l="\u2022",k=A.al(a,B.eT,t.w).w.a.a,j=k<500,i=Math.max(0,Math.min(430,k-((j?16:40)+24)*2))
 j=j?16:40
 s=t.p
-r=A.b([B.b8D,B.eb,new A.a3(B.bS,A.P("DNI *",1,B.R,m,m,B.bu,m,m,m),m),A.h8(m,B.by,!1,m,!0,B.a0,m,A.hr(),n.w,m,m,m,m,m,2,B.a21,B.ao,!0,m,!0,m,!1,m,B.bg,m,m,A.b([$.aYm()],t.VS),m,B.oQ,m,m,m,1,m,m,!1,l,m,new A.aEd(n),m,m,m,!1,m,m,!1,m,!0,m,B.bF,m,m,m,m,m,m,m,m,m,m,m,m,!0,B.aI,m,B.d5,m,m,m,m),new A.a3(B.bS,A.P("Apellido *",1,B.R,m,m,B.bu,m,m,m),m),A.h8(m,B.by,!1,m,!0,B.a0,m,A.hr(),n.x,m,m,m,m,m,2,B.a24,B.ao,!0,m,!0,m,!1,m,B.bg,m,m,m,m,m,m,m,m,1,m,m,!1,l,m,new A.aEe(n),m,m,m,!1,m,m,!1,m,!0,m,B.bF,m,m,m,m,m,m,m,m,m,m,m,m,!0,B.aI,m,B.kH,m,m,m,m),new A.a3(B.bS,A.P("Nombre *",1,B.R,m,m,B.bu,m,m,m),m),A.h8(m,B.by,!1,m,!0,B.a0,m,A.hr(),n.y,m,m,m,m,m,2,B.a23,B.ao,!0,m,!0,m,!1,m,B.bg,m,m,m,m,m,m,m,m,1,m,m,!1,l,m,new A.aEf(n),m,m,m,!1,m,m,!1,m,!0,m,B.bF,m,m,m,m,m,m,m,m,m,m,m,m,!0,B.aI,m,B.kH,m,m,m,m),new A.a3(B.bS,A.P("Fecha de nacimiento (opcional)",1,B.R,m,m,B.bu,m,m,m),m),A.h8(m,B.by,!1,m,!0,B.a0,m,A.hr(),n.z,m,m,m,m,m,2,A.zW(m,B.c1,m,m,m,m,m,m,!0,m,m,m,m,m,n.gX2(),m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,"dd-mmm-aaaa \u2014 ej: 12-mar-1980",m,m,m,m,m,!0,m,m,m,!0,!0,m,m,m,m,m,m,m,m,m,m,m,m,m,m),B.ao,!0,m,!0,m,!1,m,B.bg,m,m,m,m,m,m,m,m,1,m,m,!1,l,m,new A.aEg(n),m,m,m,!1,m,m,!1,m,!0,m,B.bF,m,m,m,m,m,m,m,m,m,m,m,m,!0,B.aI,m,B.d5,m,m,m,m)],s)
+r=A.b([B.b8E,B.eb,new A.a3(B.bS,A.P("DNI *",1,B.R,m,m,B.bu,m,m,m),m),A.h8(m,B.by,!1,m,!0,B.a0,m,A.hr(),n.w,m,m,m,m,m,2,B.a21,B.ao,!0,m,!0,m,!1,m,B.bg,m,m,A.b([$.aYm()],t.VS),m,B.oQ,m,m,m,1,m,m,!1,l,m,new A.aEd(n),m,m,m,!1,m,m,!1,m,!0,m,B.bF,m,m,m,m,m,m,m,m,m,m,m,m,!0,B.aI,m,B.d5,m,m,m,m),new A.a3(B.bS,A.P("Apellido *",1,B.R,m,m,B.bu,m,m,m),m),A.h8(m,B.by,!1,m,!0,B.a0,m,A.hr(),n.x,m,m,m,m,m,2,B.a24,B.ao,!0,m,!0,m,!1,m,B.bg,m,m,m,m,m,m,m,m,1,m,m,!1,l,m,new A.aEe(n),m,m,m,!1,m,m,!1,m,!0,m,B.bF,m,m,m,m,m,m,m,m,m,m,m,m,!0,B.aI,m,B.kH,m,m,m,m),new A.a3(B.bS,A.P("Nombre *",1,B.R,m,m,B.bu,m,m,m),m),A.h8(m,B.by,!1,m,!0,B.a0,m,A.hr(),n.y,m,m,m,m,m,2,B.a23,B.ao,!0,m,!0,m,!1,m,B.bg,m,m,m,m,m,m,m,m,1,m,m,!1,l,m,new A.aEf(n),m,m,m,!1,m,m,!1,m,!0,m,B.bF,m,m,m,m,m,m,m,m,m,m,m,m,!0,B.aI,m,B.kH,m,m,m,m),new A.a3(B.bS,A.P("Fecha de nacimiento (opcional)",1,B.R,m,m,B.bu,m,m,m),m),A.h8(m,B.by,!1,m,!0,B.a0,m,A.hr(),n.z,m,m,m,m,m,2,A.zW(m,B.c1,m,m,m,m,m,m,!0,m,m,m,m,m,n.gX2(),m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,m,"dd-mmm-aaaa \u2014 ej: 12-mar-1980",m,m,m,m,m,!0,m,m,m,!0,!0,m,m,m,m,m,m,m,m,m,m,m,m,m,m),B.ao,!0,m,!0,m,!1,m,B.bg,m,m,m,m,m,m,m,m,1,m,m,!1,l,m,new A.aEg(n),m,m,m,!1,m,m,!1,m,!0,m,B.bF,m,m,m,m,m,m,m,m,m,m,m,m,!0,B.aI,m,B.d5,m,m,m,m)],s)
 if(i<380)B.m.O(r,A.b([n.Vj(),n.Vi()],s))
 else r.push(A.b6(A.b([A.bv(n.Vj(),1),B.cA,A.bv(n.Vi(),1)],s),B.ab,B.C,B.K,0,m))
 r.push(new A.a3(B.bS,A.P("Obra social / prepaga *",1,B.R,m,m,B.bu,m,m,m),m))
@@ -56656,7 +56656,7 @@ r=A.c7(A.p6(A.ay(r,B.ab,m,B.C,B.am,0,B.P),m,m,m,B.b7),m,i)
 q=A.e1(!1,B.hi,m,m,m,m,m,m,n.CW?m:new A.aEj(a),m,m)
 p=A.f5(B.V,m,m,m)
 o=n.ga_s()?n.gao7():m
-return A.j_(A.b([q,A.ol(!1,n.CW?B.b1c:B.b8f,B.T,m,m,m,m,m,o,m,p)],s),r,new A.a7(j,24,j,24),B.b93)},
+return A.j_(A.b([q,A.ol(!1,n.CW?B.b1c:B.b8f,B.T,m,m,m,m,m,o,m,p)],s),r,new A.a7(j,24,j,24),B.b94)},
 Vj(){var s=null,r=t.N
 return A.ay(A.b([new A.a3(B.bS,A.P("Sexo *",1,B.R,s,s,B.bu,s,s,s),s),A.aeV(B.jD,this.ch,!0,A.b([A.aV_(A.P("M \u2014 Masculino",1,B.R,s,s,s,s,s,s),"M",r),A.aV_(A.P("F \u2014 Femenino",1,B.R,s,s,s,s,s,s),"F",r),A.aV_(A.P("X \u2014 Otro",1,B.R,s,s,s,s,s,s),"X",r)],t.FG),new A.aE4(this),r)],t.p),B.ab,s,B.C,B.am,0,B.P)},
 Vi(){var s=null
@@ -56792,11 +56792,11 @@ for(s=A.bmE(this.d),r=s.length,q=this.c,p=0;p<s.length;s.length===r||(0,A.u)(s),
 n=A.b([n,B.qI,A.bv(A.iy(l,B.f3,o,!1),1)],m)
 if(!A.aTC())B.m.O(n,A.b([B.qI,B.SL],m))
 m=B.p.b6(A.pl().gcm(),"/demo-gastro")||A.aTC()
-if(m)n.push(new A.a3(B.ZI,A.kP(B.a0F,B.b8A,A.bpZ(),A.Ij(o,o,B.xA,o,o,o,o,o,o,o,o,B.b17,o,o,o,B.Tz,o,o,o,o)),o))
+if(m)n.push(new A.a3(B.ZI,A.kP(B.a0F,B.b8B,A.bpZ(),A.Ij(o,o,B.xA,o,o,o,o,o,o,o,o,B.b17,o,o,o,B.Tz,o,o,o,o)),o))
 return A.c7(A.eP(!1,B.ak,!0,o,A.ay(n,B.Q,o,B.C,B.K,0,B.P),B.T,B.qi,2,o,o,o,o,o,B.ch),o,220)}}
 A.a6X.prototype={
 vf(a,b){var s=null,r=b.bW($.mr(),t.xS)
-return new A.AJ(new A.aOb(r),new A.aOc(b,a),"Cambiar de rol (demo)",A.oD(!1,s,!0,s,!0,s,!0,s,A.b2o(r,B.aW,20),s,s,!1,s,s,s,B.b96,s,A.P(A.b2n(r),s,s,s,s,B.b5I,s,s,s),s,B.a0N,s),s,t.RT)}}
+return new A.AJ(new A.aOb(r),new A.aOc(b,a),"Cambiar de rol (demo)",A.oD(!1,s,!0,s,!0,s,!0,s,A.b2o(r,B.aW,20),s,s,!1,s,s,s,B.b97,s,A.P(A.b2n(r),s,s,s,s,B.b5I,s,s,s),s,B.a0N,s),s,t.RT)}}
 A.aOc.prototype={
 $1(a){var s=$.mr(),r=s.ch
 if(r===$)r=s.ch=A.bm6(s,s.$ti.c)
@@ -56871,7 +56871,7 @@ $1(a){var s,r,q,p,o,n=null,m=t.p,l=A.b([B.c3,A.cl(n,n,B.T,n,n,new A.bI(B.xO,n,n,
 for(s=this.a,r=s.gX8(),q=r.length,p=this.b,o=0;o<r.length;r.length===q||(0,A.u)(r),++o)l.push(new A.e3(new A.aKD(s,r[o],a,p),n))
 if(!A.aTC())B.m.O(l,A.b([B.qI,B.SL],m))
 m=B.p.b6(A.pl().gcm(),"/demo-gastro")||A.aTC()
-if(m)l.push(A.oD(!1,n,n,n,!0,n,!0,n,B.a0I,n,new A.aKE(a),!1,n,n,n,A.P("Volver a critidata.com \xb7 datos de ejemplo",n,n,n,n,A.dH(n,n,B.J.ij(0.6),n,n,n,n,n,n,n,n,11,n,n,n,n,n,!0,n,n,n,n,n,n,n,n),n,n,n),n,B.b8s,n,n,n))
+if(m)l.push(A.oD(!1,n,n,n,!0,n,!0,n,B.a0I,n,new A.aKE(a),!1,n,n,n,A.P("Volver a critidata.com \xb7 datos de ejemplo",n,n,n,n,A.dH(n,n,B.J.ij(0.6),n,n,n,n,n,n,n,n,11,n,n,n,n,n,!0,n,n,n,n,n,n,n,n),n,n,n),n,B.b8t,n,n,n))
 l.push(B.d1)
 return A.p4(!0,A.ay(l,B.Q,n,B.C,B.am,0,B.P),B.aG,!1)},
 $S:426}
@@ -107121,7 +107121,7 @@ A.a6C.prototype={}
 A.zj.prototype={
 I(a){var s=null,r=this.c
 r=r==null?s:"GoException: "+r.a
-return A.p4(!0,A.dK(A.ay(A.b([B.b8L,B.eJ,A.P(r==null?"page not found":r,s,s,s,s,s,s,s,s),B.eJ,new A.LZ(new A.agq(a),B.b8W,s)],t.p),B.Q,s,B.fa,B.K,0,B.P),s,s),B.aG,!0)}}
+return A.p4(!0,A.dK(A.ay(A.b([B.b8M,B.eJ,A.P(r==null?"page not found":r,s,s,s,s,s,s,s,s),B.eJ,new A.LZ(new A.agq(a),B.b8X,s)],t.p),B.Q,s,B.fa,B.K,0,B.P),s,s),B.aG,!0)}}
 A.agq.prototype={
 $0(){return A.da(this.a).jp("/",null)},
 $S:0}
@@ -107168,7 +107168,7 @@ return A.bg(s,s,this.$ti.i("iq<1>").a(this.c).x,!1,s,s,s,!1,s,!0,s,s,s,s,s,s,s,s
 rH(a,b,c,d){return this.$ti.i("iq<1>").a(this.c).CW.$4(a,b,c,d)}}
 A.vC.prototype={}
 A.Ah.prototype={
-I(a){var s=null,r=A.fi(s,B.b8I),q=this.c
+I(a){var s=null,r=A.fi(s,B.b8J),q=this.c
 q=q==null?s:"GoException: "+q.a
 return A.dE(r,s,A.dK(A.ay(A.b([A.b2A(q==null?"page not found":q,s),A.e1(!1,B.b7u,s,s,s,s,s,s,new A.amY(a),s,s)],t.p),B.Q,s,B.fa,B.K,0,B.P),s,s),s,s)}}
 A.amY.prototype={
@@ -126460,8 +126460,8 @@ B.beL=new A.ayw(0,"material")
 B.Wo=new A.qd(null,null,null)
 B.cH=new A.hV(B.aE,null,null,B.Wo,null)
 B.hh=new A.q(!0,B.b8,null,null,null,null,13,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.b9g=new A.a_("No se pudieron cargar los datos: la estad\xedstica saldr\xeda incompleta.",null,B.hh,B.bV,null,null,null,null,null,null,null)
-B.W7=new A.hV(B.aE,null,null,B.b9g,null)
+B.b9h=new A.a_("No se pudieron cargar los datos: la estad\xedstica saldr\xeda incompleta.",null,B.hh,B.bV,null,null,null,null,null,null,null)
+B.W7=new A.hV(B.aE,null,null,B.b9h,null)
 B.b8e=new A.a_("No hay biopsias en seguimiento.",null,B.eM,null,null,null,null,null,null,null,null)
 B.W8=new A.hV(B.aE,null,null,B.b8e,null)
 B.xh=new A.acy(4,"luminance")
@@ -127023,10 +127023,10 @@ B.yG=new A.us(!1,!1,!1,!1)
 B.yH=new A.us(!1,!1,!1,!0)
 B.ds=new A.Ui(0,"tight")
 B.ca=new A.q(!0,B.b8,null,null,null,null,12,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.b88=new A.a_("Vista previa de ejemplo. Revis\xe1 el mapeo antes de importar.",null,B.ca,null,null,null,null,null,null,null,null)
-B.a_n=new A.j8(1,B.ds,B.b88,null)
-B.b8P=new A.a_("Revis\xe1 las asignaciones antes de confirmar.",null,B.ca,null,null,null,null,null,null,null,null)
-B.a_o=new A.j8(1,B.ds,B.b8P,null)
+B.b89=new A.a_("Vista previa de ejemplo. Revis\xe1 el mapeo antes de importar.",null,B.ca,null,null,null,null,null,null,null,null)
+B.a_n=new A.j8(1,B.ds,B.b89,null)
+B.b8Q=new A.a_("Revis\xe1 las asignaciones antes de confirmar.",null,B.ca,null,null,null,null,null,null,null,null)
+B.a_o=new A.j8(1,B.ds,B.b8Q,null)
 B.bd0=new A.a1V(null)
 B.yI=new A.j8(1,B.ds,B.bd0,null)
 B.bd1=new A.a1W(null)
@@ -127432,8 +127432,8 @@ B.A4=new A.vm(3,"center")
 B.a30=new A.vm(4,"bottom")
 B.a0i=new A.b4(61426,"MaterialIcons",null,!1)
 B.a1y=new A.aO(B.a0i,null,B.V,null,null,null)
-B.b8Y=new A.a_("Descargar PDF",null,null,null,null,null,null,null,null,null,null)
-B.a31=new A.lL(B.a1y,B.b8Y,null,null,null,!0,null,null,null,B.aG,!0,null,null,!1,null,!1,null,null,null,null,!0,null)
+B.b8Z=new A.a_("Descargar PDF",null,null,null,null,null,null,null,null,null,null)
+B.a31=new A.lL(B.a1y,B.b8Z,null,null,null,!0,null,null,null,B.aG,!0,null,null,!1,null,!1,null,null,null,null,!0,null)
 B.a0u=new A.b4(62158,"MaterialIcons",null,!1)
 B.a1c=new A.aO(B.a0u,null,B.V,null,null,null)
 B.b9v=new A.a_("Imprimir",null,null,null,null,null,null,null,null,null,null)
@@ -127469,8 +127469,8 @@ B.EB=s([37,80,68,70],t.t)
 B.ark=s([3,3,11],t.t)
 B.axc=s([4,9,14,19],t.t)
 B.R=new A.BW(2,"ellipsis")
-B.b8a=new A.a_("Dr. Federico Lami",null,null,null,null,null,B.R,null,1,null,null)
-B.YT=new A.f4("Dr. Federico Lami",B.b8a,B.co,null,t.b7)
+B.b8b=new A.a_("Dr. Federico Lami",null,null,null,null,null,B.R,null,1,null,null)
+B.YT=new A.f4("Dr. Federico Lami",B.b8b,B.co,null,t.b7)
 B.axd=s([B.YT],t.FG)
 B.Yn=new A.fW(0,"normal")
 B.Yo=new A.fW(1,"hPylori")
@@ -127668,8 +127668,8 @@ B.aLc=s([5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5],t.t)
 B.aLj=s([B.pU,B.pV],A.aa("r<EH>"))
 B.aLo=s([0,1,3,7,15,31,63,127,255,511,1023,2047,4095],t.t)
 B.Fl=s([0,1,2,3,4,4,5,5,6,6,6,6,7,7,7,7,8,8,8,8,8,8,8,8,9,9,9,9,9,9,9,9,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,0,0,16,17,18,18,19,19,20,20,20,20,21,21,21,21,22,22,22,22,22,22,22,22,23,23,23,23,23,23,23,23,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29],t.t)
-B.b9e=new A.a_("Dr. Federico Lami (yo)",null,null,null,null,null,B.R,null,1,null,null)
-B.YO=new A.f4("Dr. Federico Lami",B.b9e,B.co,null,t.b7)
+B.b9f=new A.a_("Dr. Federico Lami (yo)",null,null,null,null,null,B.R,null,1,null,null)
+B.YO=new A.f4("Dr. Federico Lami",B.b9f,B.co,null,t.b7)
 B.b7C=new A.a_("Otro m\xe9dico\u2026",null,null,null,null,null,B.R,null,1,null,null)
 B.YU=new A.f4("otro",B.b7C,B.co,null,t.b7)
 B.aLs=s([B.YO,B.YU],t.FG)
@@ -127852,12 +127852,12 @@ B.b9Y=new A.fI(14,"linearRaw")
 B.b9Z=new A.fI(15,"depth")
 B.vM=new A.fI(16,"unknown")
 B.aMT=s([B.vL,B.b9T,B.ba_,B.vN,B.ba0,B.Ri,B.ba1,B.ba2,B.ba3,B.ba4,B.b9U,B.b9V,B.b9W,B.b9X,B.b9Y,B.b9Z,B.vM],A.aa("r<fI>"))
-B.b8y=new A.a_("Todos (ambos)",null,null,null,null,null,B.R,null,1,null,null)
-B.YR=new A.f4(B.lZ,B.b8y,B.co,null,t.Qn)
-B.b9j=new A.a_("Consultas",null,null,null,null,null,B.R,null,1,null,null)
-B.YS=new A.f4(B.z_,B.b9j,B.co,null,t.Qn)
-B.b7X=new A.a_("Estudios",null,null,null,null,null,B.R,null,1,null,null)
-B.YP=new A.f4(B.z0,B.b7X,B.co,null,t.Qn)
+B.b8z=new A.a_("Todos (ambos)",null,null,null,null,null,B.R,null,1,null,null)
+B.YR=new A.f4(B.lZ,B.b8z,B.co,null,t.Qn)
+B.b9k=new A.a_("Consultas",null,null,null,null,null,B.R,null,1,null,null)
+B.YS=new A.f4(B.z_,B.b9k,B.co,null,t.Qn)
+B.b7Y=new A.a_("Estudios",null,null,null,null,null,B.R,null,1,null,null)
+B.YP=new A.f4(B.z0,B.b7Y,B.co,null,t.Qn)
 B.aMV=s([B.YR,B.YS,B.YP],A.aa("r<f4<mL>>"))
 B.cx=new A.vG(0,"portrait")
 B.eB=new A.vG(1,"landscape")
@@ -128097,12 +128097,12 @@ B.FE=s([B.iY,B.pt],A.aa("r<nC>"))
 B.nJ=s([0,1,4,5,16,17,20,21,64,65,68,69,80,81,84,85,256,257,260,261,272,273,276,277,320,321,324,325,336,337,340,341,1024,1025,1028,1029,1040,1041,1044,1045,1088,1089,1092,1093,1104,1105,1108,1109,1280,1281,1284,1285,1296,1297,1300,1301,1344,1345,1348,1349,1360,1361,1364,1365,4096,4097,4100,4101,4112,4113,4116,4117,4160,4161,4164,4165,4176,4177,4180,4181,4352,4353,4356,4357,4368,4369,4372,4373,4416,4417,4420,4421,4432,4433,4436,4437,5120,5121,5124,5125,5136,5137,5140,5141,5184,5185,5188,5189,5200,5201,5204,5205,5376,5377,5380,5381,5392,5393,5396,5397,5440,5441,5444,5445,5456,5457,5460,5461,16384,16385,16388,16389,16400,16401,16404,16405,16448,16449,16452,16453,16464,16465,16468,16469,16640,16641,16644,16645,16656,16657,16660,16661,16704,16705,16708,16709,16720,16721,16724,16725,17408,17409,17412,17413,17424,17425,17428,17429,17472,17473,17476,17477,17488,17489,17492,17493,17664,17665,17668,17669,17680,17681,17684,17685,17728,17729,17732,17733,17744,17745,17748,17749,20480,20481,20484,20485,20496,20497,20500,20501,20544,20545,20548,20549,20560,20561,20564,20565,20736,20737,20740,20741,20752,20753,20756,20757,20800,20801,20804,20805,20816,20817,20820,20821,21504,21505,21508,21509,21520,21521,21524,21525,21568,21569,21572,21573,21584,21585,21588,21589,21760,21761,21764,21765,21776,21777,21780,21781,21824,21825,21828,21829,21840,21841,21844,21845],t.t)
 B.FF=s([127,127,191,127,159,191,223,127,143,159,175,191,207,223,239,127,135,143,151,159,167,175,183,191,199,207,215,223,231,239,247,127,131,135,139,143,147,151,155,159,163,167,171,175,179,183,187,191,195,199,203,207,211,215,219,223,227,231,235,239,243,247,251,127,129,131,133,135,137,139,141,143,145,147,149,151,153,155,157,159,161,163,165,167,169,171,173,175,177,179,181,183,185,187,189,191,193,195,197,199,201,203,205,207,209,211,213,215,217,219,221,223,225,227,229,231,233,235,237,239,241,243,245,247,249,251,253,127],t.t)
 B.FG=s([7,6,6,5,5,5,5,4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0],t.t)
-B.b7Z=new A.a_("VEDA \u2014 Endoscop\xeda alta",null,null,null,null,null,B.R,null,1,null,null)
-B.YV=new A.f4(B.ck,B.b7Z,B.co,null,t.Me)
-B.b92=new A.a_("VCC \u2014 Colonoscop\xeda",null,null,null,null,null,B.R,null,1,null,null)
-B.YQ=new A.f4(B.cC,B.b92,B.co,null,t.Me)
-B.b80=new A.a_("Ambos (VEDA + VCC)",null,null,null,null,null,B.R,null,1,null,null)
-B.YW=new A.f4(B.hk,B.b80,B.co,null,t.Me)
+B.b8_=new A.a_("VEDA \u2014 Endoscop\xeda alta",null,null,null,null,null,B.R,null,1,null,null)
+B.YV=new A.f4(B.ck,B.b8_,B.co,null,t.Me)
+B.b93=new A.a_("VCC \u2014 Colonoscop\xeda",null,null,null,null,null,B.R,null,1,null,null)
+B.YQ=new A.f4(B.cC,B.b93,B.co,null,t.Me)
+B.b81=new A.a_("Ambos (VEDA + VCC)",null,null,null,null,null,B.R,null,1,null,null)
+B.YW=new A.f4(B.hk,B.b81,B.co,null,t.Me)
 B.aP1=s([B.YV,B.YQ,B.YW],A.aa("r<f4<nt>>"))
 B.nK=s([28679,28679,31752,-32759,-31735,-30711,-29687,-28663,29703,29703,30727,30727,-27639,-26615,-25591,-24567],t.t)
 B.aPc=s(["click","scroll"],t.s)
@@ -132753,8 +132753,8 @@ B.aVY=new A.vL(null)
 B.b8q=new A.a_("No se pudo cargar el historial",null,B.aJ,null,null,null,null,null,null,null,null)
 B.aVZ=new A.a3(B.hJ,B.b8q,null)
 B.qS=new A.a7(18,18,18,18)
-B.b8N=new A.a_("Sin estudios agendados para este d\xeda.",null,B.eM,null,null,null,null,null,null,null,null)
-B.aW_=new A.a3(B.qS,B.b8N,null)
+B.b8O=new A.a_("Sin estudios agendados para este d\xeda.",null,B.eM,null,null,null,null,null,null,null,null)
+B.aW_=new A.a3(B.qS,B.b8O,null)
 B.b6S=new A.q(!0,B.cX,null,null,null,null,11,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
 B.b7E=new A.a_("\u2713 = la solapa ya tiene contenido cargado",null,B.b6S,null,null,null,null,null,null,null,null)
 B.aW0=new A.a3(B.qQ,B.b7E,null)
@@ -132763,35 +132763,35 @@ B.bu=new A.q(!0,B.jd,null,null,null,null,12.5,null,null,null,null,null,null,null
 B.b7D=new A.a_("Tild\xe1 las regiones de las que se tom\xf3 biopsia:",null,B.bu,null,null,null,null,null,null,null,null)
 B.aW2=new A.a3(B.Zo,B.b7D,null)
 B.yq=new A.a7(0,4,0,0)
-B.b85=new A.a_("Sin estudios cargados.",null,B.eM,null,null,null,null,null,null,null,null)
-B.aW3=new A.a3(B.yq,B.b85,null)
+B.b86=new A.a_("Sin estudios cargados.",null,B.eM,null,null,null,null,null,null,null,null)
+B.aW3=new A.a3(B.yq,B.b86,null)
 B.yr=new A.a7(0,8,0,0)
-B.b8u=new A.a_("Ac\xe1 se marca de qu\xe9 regiones se tom\xf3 muestra y cu\xe1ntos frascos van a patolog\xeda. La descripci\xf3n de cada biopsia figura en el informe del pat\xf3logo (documento aparte).",null,B.ca,null,null,null,null,null,null,null,null)
-B.aW4=new A.a3(B.yr,B.b8u,null)
-B.b9k=new A.a_("Sin registros todav\xeda.",null,B.aJ,null,null,null,null,null,null,null,null)
-B.aW5=new A.a3(B.hJ,B.b9k,null)
-B.b8H=new A.a_("Toc\xe1 una imagen para marcarla con un \u2713 para el informe. El agente del mini PC las sube en vivo, durante el estudio.",null,B.ca,null,null,null,null,null,null,null,null)
-B.aW6=new A.a3(B.qQ,B.b8H,null)
+B.b8v=new A.a_("Ac\xe1 se marca de qu\xe9 regiones se tom\xf3 muestra y cu\xe1ntos frascos van a patolog\xeda. La descripci\xf3n de cada biopsia figura en el informe del pat\xf3logo (documento aparte).",null,B.ca,null,null,null,null,null,null,null,null)
+B.aW4=new A.a3(B.yr,B.b8v,null)
+B.b9l=new A.a_("Sin registros todav\xeda.",null,B.aJ,null,null,null,null,null,null,null,null)
+B.aW5=new A.a3(B.hJ,B.b9l,null)
+B.b8I=new A.a_("Toc\xe1 una imagen para marcarla con un \u2713 para el informe. El agente del mini PC las sube en vivo, durante el estudio.",null,B.ca,null,null,null,null,null,null,null,null)
+B.aW6=new A.a3(B.qQ,B.b8I,null)
 B.vy=new A.q(!0,B.cX,null,null,null,null,11.5,null,B.hS,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.b9b=new A.a_("Se muestra el \xfaltimo a\xf1o: lo anterior est\xe1 en el Historial.",null,B.vy,null,null,null,null,null,null,null,null)
-B.um=new A.a3(B.yr,B.b9b,null)
-B.b8T=new A.a_("Resumen de los \xfaltimos 10 a\xf1os.",null,B.vy,null,null,null,null,null,null,null,null)
-B.Lu=new A.a3(B.yq,B.b8T,null)
+B.b9c=new A.a_("Se muestra el \xfaltimo a\xf1o: lo anterior est\xe1 en el Historial.",null,B.vy,null,null,null,null,null,null,null,null)
+B.um=new A.a3(B.yr,B.b9c,null)
+B.b8U=new A.a_("Resumen de los \xfaltimos 10 a\xf1os.",null,B.vy,null,null,null,null,null,null,null,null)
+B.Lu=new A.a3(B.yq,B.b8U,null)
 B.Zw=new A.a7(0,28,0,0)
-B.b9i=new A.a_("Sin indicaciones registradas para este paciente.",null,B.eM,null,null,null,null,null,null,null,null)
-B.W6=new A.hV(B.aE,null,null,B.b9i,null)
+B.b9j=new A.a_("Sin indicaciones registradas para este paciente.",null,B.eM,null,null,null,null,null,null,null,null)
+B.W6=new A.hV(B.aE,null,null,B.b9j,null)
 B.aW7=new A.a3(B.Zw,B.W6,null)
-B.b8w=new A.a_("Sin consultas agendadas para este d\xeda.",null,B.eM,null,null,null,null,null,null,null,null)
-B.aW8=new A.a3(B.qS,B.b8w,null)
+B.b8x=new A.a_("Sin consultas agendadas para este d\xeda.",null,B.eM,null,null,null,null,null,null,null,null)
+B.aW8=new A.a3(B.qS,B.b8x,null)
 B.yx=new A.a7(4,10,0,0)
 B.QZ=new A.q(!0,B.cX,null,null,null,null,12,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
 B.b9z=new A.a_("Toc\xe1 un paciente para abrir su consulta: diagn\xf3stico e indicaciones.",null,B.QZ,null,null,null,null,null,null,null,null)
 B.aW9=new A.a3(B.yx,B.b9z,null)
 B.b48=new A.q(!0,B.cX,null,null,null,null,12.5,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.b9p=new A.a_("Sin turnos.",null,B.b48,null,null,null,null,null,null,null,null)
-B.aWa=new A.a3(B.hJ,B.b9p,null)
-B.b8V=new A.a_("Sin turnos para este d\xeda.",null,B.eM,null,null,null,null,null,null,null,null)
-B.aWb=new A.a3(B.qS,B.b8V,null)
+B.b9q=new A.a_("Sin turnos.",null,B.b48,null,null,null,null,null,null,null,null)
+B.aWa=new A.a3(B.hJ,B.b9q,null)
+B.b8W=new A.a_("Sin turnos para este d\xeda.",null,B.eM,null,null,null,null,null,null,null,null)
+B.aWb=new A.a3(B.qS,B.b8W,null)
 B.b8d=new A.a_("Toc\xe1 un paciente para abrir su estudio: im\xe1genes en vivo, biopsias e informe.",null,B.QZ,null,null,null,null,null,null,null,null)
 B.aWc=new A.a3(B.yx,B.b8d,null)
 B.Zv=new A.a7(0,20,0,20)
@@ -132800,8 +132800,8 @@ B.b1i=new A.cW(22,22,B.Wp,null)
 B.W9=new A.hV(B.aE,null,null,B.b1i,null)
 B.Lv=new A.a3(B.Zv,B.W9,null)
 B.Zu=new A.a7(0,18,0,18)
-B.b90=new A.a_("Estudio pendiente: las im\xe1genes aparecen ac\xe1 EN VIVO, capturadas por el agente del mini PC durante el procedimiento.",null,B.hh,null,null,null,null,null,null,null,null)
-B.aWd=new A.a3(B.Zu,B.b90,null)
+B.b91=new A.a_("Estudio pendiente: las im\xe1genes aparecen ac\xe1 EN VIVO, capturadas por el agente del mini PC durante el procedimiento.",null,B.hh,null,null,null,null,null,null,null,null)
+B.aWd=new A.a3(B.Zu,B.b91,null)
 B.aWe=new A.In(0,"natural")
 B.aWf=new A.In(1,"landscape")
 B.aWg=new A.In(2,"portrait")
@@ -132970,13 +132970,13 @@ B.P=new A.axS(1,"down")
 B.xj=new A.qd(2,null,null)
 B.b1h=new A.cW(14,14,B.xj,null)
 B.cA=new A.cW(8,null,null,null)
-B.b8R=new A.a_("Leyendo documento\u2026",null,B.aJ,null,null,null,null,null,null,null,null)
-B.aOT=s([B.b1h,B.cA,B.b8R],t.p)
+B.b8S=new A.a_("Leyendo documento\u2026",null,B.aJ,null,null,null,null,null,null,null,null)
+B.aOT=s([B.b1h,B.cA,B.b8S],t.p)
 B.aZT=new A.Bh(B.bW,B.C,B.K,B.Q,null,B.P,null,0,B.aOT,null)
 B.eI=new A.cW(4,null,null,null)
 B.b35=new A.q(!0,B.V,null,null,null,null,11.5,B.b2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.b8Q=new A.a_("Ver informe",null,B.b35,null,null,null,null,null,null,null,null)
-B.axf=s([B.zD,B.eI,B.b8Q],t.p)
+B.b8R=new A.a_("Ver informe",null,B.b35,null,null,null,null,null,null,null,null)
+B.axf=s([B.zD,B.eI,B.b8R],t.p)
 B.aZU=new A.Bh(B.bW,B.C,B.am,B.Q,null,B.P,null,0,B.axf,null)
 B.aZV=new A.JK(1333)
 B.uJ=new A.JK(2222)
@@ -133263,8 +133263,8 @@ B.b7I=new A.a_("Complet\xe1 todos los campos obligatorios (*)",null,null,null,nu
 B.b1r=new A.hj(B.b7I,null,null,null,null,null,null,null,null,null,null,null,null,B.e1,!1,null,null,null,B.a0,null)
 B.b7F=new A.a_("Faltan datos obligatorios del turno",null,null,null,null,null,null,null,null,null,null)
 B.b1s=new A.hj(B.b7F,null,null,null,null,null,null,null,null,null,null,null,null,B.e1,!1,null,null,null,B.a0,null)
-B.b8G=new A.a_("No se pudo guardar la validaci\xf3n",null,null,null,null,null,null,null,null,null,null)
-B.b1t=new A.hj(B.b8G,null,null,null,null,null,null,null,null,null,null,null,null,B.e1,!1,null,null,null,B.a0,null)
+B.b8H=new A.a_("No se pudo guardar la validaci\xf3n",null,null,null,null,null,null,null,null,null,null)
+B.b1t=new A.hj(B.b8H,null,null,null,null,null,null,null,null,null,null,null,null,B.e1,!1,null,null,null,B.a0,null)
 B.b7y=new A.a_("PDF descargado \u2014 adjuntalo en el chat de WhatsApp",null,null,null,null,null,null,null,null,null,null)
 B.b1u=new A.hj(B.b7y,null,null,null,null,null,null,null,null,null,null,null,null,B.e1,!1,null,null,null,B.a0,null)
 B.b7z=new A.a_("No se pudo abrir WhatsApp: copi\xe1 el link y mandalo",null,null,null,null,null,null,null,null,null,null)
@@ -133273,16 +133273,16 @@ B.b7S=new A.a_("\u2713 Paciente creado",null,null,null,null,null,null,null,null,
 B.b1w=new A.hj(B.b7S,null,null,null,null,null,null,null,null,null,null,null,null,B.dI,!1,null,null,null,B.a0,null)
 B.b7P=new A.a_("Error al crear paciente",null,null,null,null,null,null,null,null,null,null)
 B.b1x=new A.hj(B.b7P,null,null,null,null,null,null,null,null,null,null,null,null,B.e1,!1,null,null,null,B.a0,null)
-B.b89=new A.a_("No se pudo generar la salida del PDF",null,null,null,null,null,null,null,null,null,null)
-B.b1y=new A.hj(B.b89,null,null,null,null,null,null,null,null,null,null,null,null,B.e1,!1,null,null,null,B.a0,null)
-B.b94=new A.a_("No se pudo abrir WhatsApp",null,null,null,null,null,null,null,null,null,null)
-B.b1z=new A.hj(B.b94,null,null,null,null,null,null,null,null,null,null,null,null,B.e1,!1,null,null,null,B.a0,null)
+B.b8a=new A.a_("No se pudo generar la salida del PDF",null,null,null,null,null,null,null,null,null,null)
+B.b1y=new A.hj(B.b8a,null,null,null,null,null,null,null,null,null,null,null,null,B.e1,!1,null,null,null,B.a0,null)
+B.b95=new A.a_("No se pudo abrir WhatsApp",null,null,null,null,null,null,null,null,null,null)
+B.b1z=new A.hj(B.b95,null,null,null,null,null,null,null,null,null,null,null,null,B.e1,!1,null,null,null,B.a0,null)
 B.b9y=new A.a_("El motor de importaci\xf3n est\xe1 en camino: el mapeo y la carga al padr\xf3n se activan pronto.",null,null,null,null,null,null,null,null,null,null)
 B.b1A=new A.hj(B.b9y,null,null,null,null,null,null,null,null,null,null,null,null,B.qM,!1,null,null,null,B.a0,null)
 B.b7A=new A.a_("Invitaci\xf3n copiada: pegala donde quieras",null,null,null,null,null,null,null,null,null,null)
 B.b1B=new A.hj(B.b7A,null,null,null,null,null,null,null,null,null,null,null,null,B.e1,!1,null,null,null,B.a0,null)
-B.b81=new A.a_("\u2713 Informe guardado \u2014 estudio informado",null,null,null,null,null,null,null,null,null,null)
-B.b1C=new A.hj(B.b81,null,null,null,null,null,null,null,null,null,null,null,null,B.dI,!1,null,null,null,B.a0,null)
+B.b82=new A.a_("\u2713 Informe guardado \u2014 estudio informado",null,null,null,null,null,null,null,null,null,null)
+B.b1C=new A.hj(B.b82,null,null,null,null,null,null,null,null,null,null,null,null,B.dI,!1,null,null,null,B.a0,null)
 B.Qy=new A.Kq(0,"permissive")
 B.b1D=new A.Kq(1,"normal")
 B.b1E=new A.Kq(2,"forced")
@@ -133735,20 +133735,20 @@ B.b4N=new A.q(!0,B.jd,null,null,null,null,12.5,B.b2,null,null,null,null,null,nul
 B.b7T=new A.a_("Frascos a patolog\xeda:",null,B.b4N,null,null,null,null,null,null,null,null)
 B.b7U=new A.a_("Sin estudios realizados",null,B.aJ,null,null,null,null,null,null,null,null)
 B.b7V=new A.a_("Ning\xfan informe coincide con la b\xfasqueda.",null,B.eM,B.bV,null,null,null,null,null,null,null)
-B.b7W=new A.a_("Ahora no",null,null,null,null,null,null,null,null,null,null)
-B.b7Y=new A.a_("Copiar invitaci\xf3n",null,null,null,null,null,null,null,null,null,null)
-B.b8_=new A.a_("Cambios sin guardar",null,null,null,null,null,null,null,null,null,null)
+B.b4t=new A.q(!0,B.b8,null,null,null,null,12,null,null,null,null,null,1.4,null,null,null,null,null,null,null,null,null,null,null,null,null)
+B.b7W=new A.a_("Laboratorio y Patolog\xeda entran con su propia cuenta, pero solo si vos los habilit\xe1s: les mand\xe1s un link por WhatsApp y cargan en tu bandeja. El v\xednculo no vence \u2014 dura hasta que vos lo des de baja.",null,B.b4t,null,null,null,null,null,null,null,null)
+B.b7X=new A.a_("Ahora no",null,null,null,null,null,null,null,null,null,null)
+B.b7Z=new A.a_("Copiar invitaci\xf3n",null,null,null,null,null,null,null,null,null,null)
+B.b80=new A.a_("Cambios sin guardar",null,null,null,null,null,null,null,null,null,null)
 B.R_=new A.q(!0,B.eo,null,null,null,null,12,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.b82=new A.a_("Elegir paciente",null,B.R_,null,null,null,null,null,null,null,null)
-B.b83=new A.a_("Eliminar turno",null,null,null,null,null,null,null,null,null,null)
+B.b83=new A.a_("Elegir paciente",null,B.R_,null,null,null,null,null,null,null,null)
+B.b84=new A.a_("Eliminar turno",null,null,null,null,null,null,null,null,null,null)
 B.R4=new A.a_("No se pudo cargar el paciente",null,B.fj,B.bV,null,null,null,null,null,null,null)
-B.b84=new A.a_("Eliminar estudio",null,null,null,null,null,null,null,null,null,null)
-B.b86=new A.a_("Elegir biopsia",null,B.R_,null,null,null,null,null,null,null,null)
+B.b85=new A.a_("Eliminar estudio",null,null,null,null,null,null,null,null,null,null)
+B.b87=new A.a_("Elegir biopsia",null,B.R_,null,null,null,null,null,null,null,null)
 B.b2z=new A.q(!0,B.qe,null,null,null,null,11.5,B.b2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.b87=new A.a_("\u2714 avisada",null,B.b2z,null,null,null,null,null,null,null,null)
+B.b88=new A.a_("\u2714 avisada",null,B.b2z,null,null,null,null,null,null,null,null)
 B.vG=new A.a_("Cerrar",null,null,null,null,null,null,null,null,null,null)
-B.b6f=new A.q(!0,B.b8,null,null,null,null,12,null,B.hS,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.b8b=new A.a_("Mandarla no habilita a nadie: queda esperando que la acepte.",null,B.b6f,null,null,null,null,null,null,null,null)
 B.R5=new A.a_("Agenda",null,null,null,null,null,null,null,null,null,null)
 B.b8f=new A.a_("Guardar paciente",null,null,null,null,null,null,null,null,null,null)
 B.b8g=new A.a_("Pacientes",null,null,null,null,null,null,null,null,null,null)
@@ -133765,63 +133765,63 @@ B.b8o=new A.a_("Agendar turno",null,null,null,null,null,null,null,null,null,null
 B.b2w=new A.q(!0,B.eo,null,null,null,null,12.5,B.b2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
 B.R8=new A.a_("Para revisar",null,B.b2w,null,null,null,null,null,null,null,null)
 B.b8p=new A.a_("\xbfNo est\xe1?",null,B.ca,null,null,null,null,null,null,null,null)
-B.b8r=new A.a_("\xbfEl paciente qued\xf3 avisado?",null,null,null,null,null,null,null,null,null,null)
+B.b6f=new A.q(!0,B.b8,null,null,null,null,12,null,B.hS,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
+B.b8r=new A.a_("Mandarla no habilita a nadie: queda esperando que la acepte. Lo que vence es el link \u2014 el v\xednculo, una vez aceptado, no caduca: sigue hasta que lo des de baja.",null,B.b6f,null,null,null,null,null,null,null,null)
+B.b8s=new A.a_("\xbfEl paciente qued\xf3 avisado?",null,null,null,null,null,null,null,null,null,null)
 B.b3p=new A.q(!0,B.J,null,null,null,null,null,B.b2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.b8s=new A.a_("Salir del demo",null,B.b3p,null,null,null,null,null,null,null,null)
-B.b8t=new A.a_("CSV o Excel (.csv, .xlsx)",null,B.ca,null,null,null,null,null,null,null,null)
-B.b8v=new A.a_("Volver",null,null,null,null,null,null,null,null,null,null)
-B.b8x=new A.a_("No se pudo cargar la historia: el resumen saldr\xeda incompleto.",null,B.aJ,null,null,null,null,null,null,null,null)
+B.b8t=new A.a_("Salir del demo",null,B.b3p,null,null,null,null,null,null,null,null)
+B.b8u=new A.a_("CSV o Excel (.csv, .xlsx)",null,B.ca,null,null,null,null,null,null,null,null)
+B.b8w=new A.a_("Volver",null,null,null,null,null,null,null,null,null,null)
+B.b8y=new A.a_("No se pudo cargar la historia: el resumen saldr\xeda incompleto.",null,B.aJ,null,null,null,null,null,null,null,null)
 B.R9=new A.a_("Paciente no v\xe1lido",null,B.fj,B.bV,null,null,null,null,null,null,null)
 B.vH=new A.a_("PDF",null,null,null,null,null,null,null,null,null,null)
-B.b8z=new A.a_("Mis m\xe9dicos",null,B.fj,null,null,null,null,null,null,null,null)
+B.b8A=new A.a_("Mis m\xe9dicos",null,B.fj,null,null,null,null,null,null,null,null)
 B.b58=new A.q(!0,B.J,null,null,null,null,13,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.b8A=new A.a_("Salir del demo",null,B.b58,null,null,null,null,null,null,null,null)
-B.b8B=new A.a_("Cargados",null,B.fj,null,null,null,null,null,null,null,null)
+B.b8B=new A.a_("Salir del demo",null,B.b58,null,null,null,null,null,null,null,null)
+B.b8C=new A.a_("Cargados",null,B.fj,null,null,null,null,null,null,null,null)
 B.vI=new A.a_("Reintentar",null,null,null,null,null,null,null,null,null,null)
-B.b8C=new A.a_("Columnas detectadas",null,B.oU,null,null,null,null,null,null,null,null)
-B.b8D=new A.a_("Los campos con * son obligatorios",null,B.aJ,null,null,null,null,null,null,null,null)
-B.b8E=new A.a_("Tu registro: cada carga con su estado en el consultorio.",null,B.ca,null,null,null,null,null,null,null,null)
+B.b8D=new A.a_("Columnas detectadas",null,B.oU,null,null,null,null,null,null,null,null)
+B.b8E=new A.a_("Los campos con * son obligatorios",null,B.aJ,null,null,null,null,null,null,null,null)
+B.b8F=new A.a_("Tu registro: cada carga con su estado en el consultorio.",null,B.ca,null,null,null,null,null,null,null,null)
 B.b7_=new A.q(!0,null,null,null,null,null,12.5,B.bG,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.b8F=new A.a_("Antecedentes",null,B.b7_,null,null,null,null,null,null,null,null)
-B.b8I=new A.a_("Page Not Found",null,null,null,null,null,null,null,null,null,null)
-B.b8J=new A.a_("No se pudieron cargar las consultas. Reintent\xe1.",null,B.fj,B.bV,null,null,null,null,null,null,null)
-B.b8K=new A.a_("\xbfA qu\xe9 biopsia corresponde este informe?",null,B.vz,null,null,null,null,null,null,null,null)
-B.b8L=new A.a_("Page Not Found",null,B.oY,null,null,null,null,null,null,null,null)
-B.b8M=new A.a_("Solicitar estudio:",null,B.bu,null,null,null,null,null,null,null,null)
+B.b8G=new A.a_("Antecedentes",null,B.b7_,null,null,null,null,null,null,null,null)
+B.b8J=new A.a_("Page Not Found",null,null,null,null,null,null,null,null,null,null)
+B.b8K=new A.a_("No se pudieron cargar las consultas. Reintent\xe1.",null,B.fj,B.bV,null,null,null,null,null,null,null)
+B.b8L=new A.a_("\xbfA qu\xe9 biopsia corresponde este informe?",null,B.vz,null,null,null,null,null,null,null,null)
+B.b8M=new A.a_("Page Not Found",null,B.oY,null,null,null,null,null,null,null,null)
+B.b8N=new A.a_("Solicitar estudio:",null,B.bu,null,null,null,null,null,null,null,null)
 B.kM=new A.a_("Consultorio",null,null,null,null,null,null,null,null,null,null)
-B.b8O=new A.a_("S\xed",null,null,null,null,null,null,null,null,null,null)
-B.b8S=new A.a_("Biopsias",null,null,null,null,null,null,null,null,null,null)
+B.b8P=new A.a_("S\xed",null,null,null,null,null,null,null,null,null,null)
+B.b8T=new A.a_("Biopsias",null,null,null,null,null,null,null,null,null,null)
 B.Ra=new A.a_("Eliminar paciente",null,null,null,null,null,null,null,null,null,null)
-B.b8U=new A.a_("Reintentar",null,B.iI,null,null,null,null,null,null,null,null)
+B.b8V=new A.a_("Reintentar",null,B.iI,null,null,null,null,null,null,null,null)
 B.Rb=new A.a_("Sin antecedentes registrados",null,B.aJ,null,null,null,null,null,null,null,null)
 B.b3U=new A.q(!0,B.J,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.b8W=new A.a_("Go to home page",null,B.b3U,null,null,null,null,null,null,null,null)
-B.b8X=new A.a_("Volver a los estudios del d\xeda",null,null,null,null,null,null,null,null,null,null)
-B.b8Z=new A.a_("Solo guardar",null,null,null,null,null,null,null,null,null,null)
+B.b8X=new A.a_("Go to home page",null,B.b3U,null,null,null,null,null,null,null,null)
+B.b8Y=new A.a_("Volver a los estudios del d\xeda",null,null,null,null,null,null,null,null,null,null)
+B.b9_=new A.a_("Solo guardar",null,null,null,null,null,null,null,null,null,null)
 B.Rc=new A.a_("Indicaciones",null,null,null,null,null,null,null,null,null,null)
-B.b9_=new A.a_("\xbfGuardar la historia cl\xednica sin antecedentes?",null,null,null,null,null,null,null,null,null,null)
-B.b91=new A.a_("Resumen de historia cl\xednica",null,null,null,null,null,null,null,null,null,null)
-B.b93=new A.a_("Nuevo paciente",null,null,null,null,null,null,null,null,null,null)
-B.b95=new A.a_("Enviar por WhatsApp",null,null,null,null,null,null,null,null,null,null)
+B.b90=new A.a_("\xbfGuardar la historia cl\xednica sin antecedentes?",null,null,null,null,null,null,null,null,null,null)
+B.b92=new A.a_("Resumen de historia cl\xednica",null,null,null,null,null,null,null,null,null,null)
+B.b94=new A.a_("Nuevo paciente",null,null,null,null,null,null,null,null,null,null)
+B.b96=new A.a_("Enviar por WhatsApp",null,null,null,null,null,null,null,null,null,null)
 B.b4T=new A.q(!0,B.qr,null,null,null,null,10.5,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.b96=new A.a_("Cambiar de rol (demo)",null,B.b4T,null,null,null,null,null,null,null,null)
+B.b97=new A.a_("Cambiar de rol (demo)",null,B.b4T,null,null,null,null,null,null,null,null)
 B.kN=new A.a_("Estudios",null,null,null,null,null,null,null,null,null,null)
-B.b97=new A.a_("Estad\xedstica",null,null,null,null,null,null,null,null,null,null)
-B.b98=new A.a_('Se abri\xf3 WhatsApp con el mensaje listo. Confirm\xe1 reci\xe9n cuando el mensaje haya salido: si se marca "avisada" sin avisar, la deuda desaparece de la bandeja y nadie la retoma.',null,null,null,null,null,null,null,null,null,null)
-B.b99=new A.a_("S\xed, ya le avis\xe9",null,null,null,null,null,null,null,null,null,null)
-B.b9a=new A.a_("Qui\xe9n carga en estas bandejas",null,B.fj,null,null,null,null,null,null,null,null)
-B.b9c=new A.a_("Reclamar por WhatsApp",null,null,null,null,null,null,null,null,null,null)
-B.b9d=new A.a_("Sin laboratorios registrados",null,B.aJ,null,null,null,null,null,null,null,null)
-B.b9f=new A.a_("Nuevo",null,null,null,null,null,null,null,null,null,null)
-B.b9h=new A.a_("Nuevo turno",null,null,null,null,null,null,null,null,null,null)
-B.b9l=new A.a_("Lo agenda la secretaria o el m\xe9dico",null,B.aJ,null,null,null,null,null,null,null,null)
-B.b9m=new A.a_("Crear paciente nuevo",null,B.R2,null,null,null,B.R,null,1,null,null)
-B.b9n=new A.a_("No se pudieron cargar los estudios o laboratorios: el resumen saldr\xeda incompleto.",null,B.aJ,null,null,null,null,null,null,null,null)
+B.b98=new A.a_("Estad\xedstica",null,null,null,null,null,null,null,null,null,null)
+B.b99=new A.a_('Se abri\xf3 WhatsApp con el mensaje listo. Confirm\xe1 reci\xe9n cuando el mensaje haya salido: si se marca "avisada" sin avisar, la deuda desaparece de la bandeja y nadie la retoma.',null,null,null,null,null,null,null,null,null,null)
+B.b9a=new A.a_("S\xed, ya le avis\xe9",null,null,null,null,null,null,null,null,null,null)
+B.b9b=new A.a_("Qui\xe9n carga en estas bandejas",null,B.fj,null,null,null,null,null,null,null,null)
+B.b9d=new A.a_("Reclamar por WhatsApp",null,null,null,null,null,null,null,null,null,null)
+B.b9e=new A.a_("Sin laboratorios registrados",null,B.aJ,null,null,null,null,null,null,null,null)
+B.b9g=new A.a_("Nuevo",null,null,null,null,null,null,null,null,null,null)
+B.b9i=new A.a_("Nuevo turno",null,null,null,null,null,null,null,null,null,null)
+B.b9m=new A.a_("Lo agenda la secretaria o el m\xe9dico",null,B.aJ,null,null,null,null,null,null,null,null)
+B.b9n=new A.a_("Crear paciente nuevo",null,B.R2,null,null,null,B.R,null,1,null,null)
+B.b9o=new A.a_("No se pudieron cargar los estudios o laboratorios: el resumen saldr\xeda incompleto.",null,B.aJ,null,null,null,null,null,null,null,null)
 B.oZ=new A.a_("Eliminar",null,null,null,null,null,null,null,null,null,null)
 B.Rd=new A.a_("Volver al listado",null,null,null,null,null,null,null,null,null,null)
-B.b9o=new A.a_("Ver resultado de biopsia",null,null,null,null,null,null,null,null,null,null)
-B.b4t=new A.q(!0,B.b8,null,null,null,null,12,null,null,null,null,null,1.4,null,null,null,null,null,null,null,null,null,null,null,null,null)
-B.b9q=new A.a_("Laboratorio y Patolog\xeda entran con su propia cuenta, pero solo si vos los habilit\xe1s: les mand\xe1s un link por WhatsApp y cargan en tu bandeja.",null,B.b4t,null,null,null,null,null,null,null,null)
+B.b9p=new A.a_("Ver resultado de biopsia",null,null,null,null,null,null,null,null,null,null)
 B.b9r=new A.a_("Registros con m\xe1s de 10 a\xf1os",null,null,null,null,null,null,null,null,null,null)
 B.vJ=new A.a_("Historial",null,null,null,null,null,null,null,null,null,null)
 B.b9s=new A.a_("\xbfDe qu\xe9 paciente es este informe?",null,B.vz,null,null,null,null,null,null,null,null)
