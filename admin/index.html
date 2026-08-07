@@ -70,7 +70,7 @@
 <body>
 
 <div id="error-auth">
-    <p>Acceso denegado. <a href="/" style="color:#1565c0;">Volver al inicio</a></p>
+    <p>Acceso denegado. <a href="/login.html" style="color:#1565c0;">Iniciar sesión</a> · <a href="/" style="color:#1565c0;">Volver al inicio</a></p>
 </div>
 
 <div class="snack" id="snack"></div>
@@ -186,7 +186,11 @@
     let maintenanceActive = false
 
     async function init() {
-        const token = (localStorage.getItem('cd_token') || localStorage.getItem('token'))
+        // Purga de sesiones viejas persistentes: el admin ahora vive en
+        // sessionStorage y muere al cerrar el navegador.
+        localStorage.removeItem('cd_token')
+        localStorage.removeItem('cd_email')
+        const token = sessionStorage.getItem('cd_token')
         if (!token) { showError(); return }
 
         try {
@@ -201,7 +205,7 @@
             maintenanceActive = maint.active
             updateMaintenanceBtn()
 
-            document.getElementById('admin-email').textContent = localStorage.getItem('cd_email') || localStorage.getItem('usuario') || 'admin'
+            document.getElementById('admin-email').textContent = sessionStorage.getItem('cd_email') || 'admin'
             document.getElementById('content').style.display = 'block'
             renderAll()
         } catch { showError() }
@@ -219,7 +223,7 @@
     }
 
     async function toggleMaintenance() {
-        const token  = (localStorage.getItem('cd_token') || localStorage.getItem('token'))
+        const token  = sessionStorage.getItem('cd_token')
         const newVal = !maintenanceActive
         const btn    = document.getElementById('btn-maint')
         btn.disabled = true
@@ -330,7 +334,7 @@
     }
 
     async function toggleUser(id) {
-        const token = (localStorage.getItem('cd_token') || localStorage.getItem('token'))
+        const token = sessionStorage.getItem('cd_token')
         try {
             const res = await fetch(`${API}/auth/users/${id}/toggle`, {
                 method: 'PATCH', headers: { 'Authorization': `Bearer ${token}` }
@@ -344,7 +348,7 @@
 
     async function expireTrial(id, nombre) {
         if (!confirm(`¿Forzar vencimiento del trial de ${nombre}? Se usa para probar el flujo de pago.`)) return
-        const token = (localStorage.getItem('cd_token') || localStorage.getItem('token'))
+        const token = sessionStorage.getItem('cd_token')
         try {
             const res = await fetch(`${API}/auth/users/${id}/expire-trial`, {
                 method: 'PATCH', headers: { 'Authorization': `Bearer ${token}` }
@@ -357,7 +361,7 @@
 
     async function renovarSuscripcion(id, nombre) {
         if (!confirm(`¿Activar suscripción para ${nombre}?`)) return
-        const token = (localStorage.getItem('cd_token') || localStorage.getItem('token'))
+        const token = sessionStorage.getItem('cd_token')
         try {
             const res = await fetch(`${API}/auth/users/${id}/renovar-suscripcion`, {
                 method: 'PATCH', headers: { 'Authorization': `Bearer ${token}` }
@@ -370,7 +374,7 @@
 
     async function deleteUser(id, nombre) {
         if (!confirm(`¿Eliminar a ${nombre} y todos sus datos? Esta acción no se puede deshacer.`)) return
-        const token = (localStorage.getItem('cd_token') || localStorage.getItem('token'))
+        const token = sessionStorage.getItem('cd_token')
         try {
             const res = await fetch(`${API}/auth/users/${id}`, {
                 method: 'DELETE', headers: { 'Authorization': `Bearer ${token}` }
@@ -382,7 +386,7 @@
     }
 
     async function reload() {
-        const token = (localStorage.getItem('cd_token') || localStorage.getItem('token'))
+        const token = sessionStorage.getItem('cd_token')
         const res   = await fetch(`${API}/auth/users`, { headers: { 'Authorization': `Bearer ${token}` } })
         allUsers    = await res.json()
         renderAll()
@@ -405,6 +409,8 @@
     function showError() { document.getElementById('error-auth').style.display = 'block' }
 
     function logout() {
+        sessionStorage.removeItem('cd_token')
+        sessionStorage.removeItem('cd_email')
         localStorage.removeItem('cd_token')
         localStorage.removeItem('cd_email')
         window.location.href = '/'

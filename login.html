@@ -75,10 +75,17 @@
 
             if (response.ok) {
                 const data = await response.json()
-                localStorage.setItem("token", data.token)
-                localStorage.setItem("usuario", data.full_name)
-                // El admin va directo a su panel; el resto, al de siempre.
-                window.location.href = (data.roles || []).includes("admin") ? "/admin/" : "panel.html"
+                if ((data.roles || []).includes("admin")) {
+                    // Sesión de admin SOLO mientras el navegador esté abierto:
+                    // al cerrarlo, la próxima entrada vuelve a pedir contraseña.
+                    sessionStorage.setItem("cd_token", data.token)
+                    sessionStorage.setItem("cd_email", data.email || "")
+                    window.location.href = "/admin/"
+                } else {
+                    localStorage.setItem("token", data.token)
+                    localStorage.setItem("usuario", data.full_name)
+                    window.location.href = "panel.html"
+                }
             } else {
                 document.getElementById("error").textContent = "Email o contraseña incorrectos"
             }

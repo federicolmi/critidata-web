@@ -1947,8 +1947,10 @@
                     errEl.textContent = data.detail || 'Credenciales incorrectas'
                     errEl.style.display = 'block'
                 } else {
-                    localStorage.setItem('cd_token', data.token)
-                    localStorage.setItem('cd_email', email)
+                    // Sesión de admin SOLO mientras el navegador esté abierto:
+                    // al cerrarlo, la próxima entrada vuelve a pedir contraseña.
+                    sessionStorage.setItem('cd_token', data.token)
+                    sessionStorage.setItem('cd_email', email)
                     window.location.href = '/admin/'
                 }
             } catch(err) {
