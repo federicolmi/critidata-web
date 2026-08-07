@@ -187,9 +187,12 @@
 
     async function init() {
         // Purga de sesiones viejas persistentes: el admin ahora vive en
-        // sessionStorage y muere al cerrar el navegador.
+        // sessionStorage y muere al cerrar el navegador. Se borra TODA llave
+        // persistente al pisar esta página: acá no se entra sin contraseña.
         localStorage.removeItem('cd_token')
         localStorage.removeItem('cd_email')
+        localStorage.removeItem('token')
+        localStorage.removeItem('usuario')
         const token = sessionStorage.getItem('cd_token')
         if (!token) { showError(); return }
 
