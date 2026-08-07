@@ -77,7 +77,8 @@
                 const data = await response.json()
                 localStorage.setItem("token", data.token)
                 localStorage.setItem("usuario", data.full_name)
-                window.location.href = "panel.html"
+                // El admin va directo a su panel; el resto, al de siempre.
+                window.location.href = (data.roles || []).includes("admin") ? "/admin/" : "panel.html"
             } else {
                 document.getElementById("error").textContent = "Email o contraseña incorrectos"
             }
