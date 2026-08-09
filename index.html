@@ -140,9 +140,15 @@
         }
 
         .card.visible {
-            max-height: 700px;
+            /* min(): usa hasta 900px en pantallas altas; en pantallas bajas
+               (notebooks 768p) se limita al 92% del viewport y el scroll
+               interno (overflow-y) garantiza que el último renglón de los
+               planes siempre se pueda ver. Antes: 700px fijos + hidden →
+               la leyenda de precios quedaba cortada e inalcanzable. */
+            max-height: min(92vh, 900px);
             opacity: 1;
             pointer-events: auto;
+            overflow-y: auto;
         }
 
         /* ── Paneles ── */
