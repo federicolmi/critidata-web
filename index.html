@@ -675,7 +675,7 @@
                     <div style="border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s,background .2s;margin-bottom:8px;" onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'" onclick="gastroElegirPlan('mensual_unico')">
                         <div style="flex:1;">
                             <div style="font-size:.85rem;font-weight:700;color:#0f172a;">Pago único</div>
-                            <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;">$50.000</div>
+                            <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;"><span class="js-precio-mensual">USD 40</span></div>
                             <div style="font-size:.75rem;color:#94a3b8;margin-top:1px;">Hasta 60 pacientes · Renovás el próximo mes.</div>
                         </div>
                         <span style="color:#94a3b8;font-size:.9rem;">→</span>
@@ -683,7 +683,7 @@
                     <div style="border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s,background .2s;margin-bottom:18px;" onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'" onclick="gastroElegirPlan('mensual_debito')">
                         <div style="flex:1;">
                             <div style="font-size:.85rem;font-weight:700;color:#0f172a;">Débito automático</div>
-                            <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;">$50.000 <span style="font-size:.8rem;font-weight:400;">/mes</span></div>
+                            <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;"><span class="js-precio-mensual">USD 40</span> <span style="font-size:.8rem;font-weight:400;">/mes</span></div>
                             <div style="font-size:.75rem;color:#94a3b8;margin-top:1px;">Hasta 60 pacientes · Se cobra automáticamente.</div>
                         </div>
                         <span style="color:#94a3b8;font-size:.9rem;">→</span>
@@ -693,21 +693,21 @@
                     <div style="border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s,background .2s;margin-bottom:8px;" onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'" onclick="gastroElegirPlan('anual_unico')">
                         <div style="flex:1;">
                             <div style="font-size:.85rem;font-weight:700;color:#0f172a;">Pago único</div>
-                            <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;">$500.000</div>
-                            <div style="font-size:.75rem;color:#94a3b8;margin-top:1px;">Hasta 60 pacientes · Equivale a $41.666/mes.</div>
+                            <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;"><span class="js-precio-anual">USD 400</span></div>
+                            <div style="font-size:.75rem;color:#94a3b8;margin-top:1px;">Hasta 60 pacientes · Ahorrás USD 80 al año.</div>
                         </div>
                         <span style="color:#94a3b8;font-size:.9rem;">→</span>
                     </div>
                     <div style="border:1.5px solid transparent;border-radius:12px;padding:14px 16px;background:#0f172a;display:flex;align-items:center;gap:12px;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'" onclick="gastroElegirPlan('anual_debito')">
                         <div style="flex:1;">
                             <div style="font-size:.85rem;font-weight:700;color:#fff;">Débito automático <span style="font-size:.72rem;background:rgba(255,255,255,.15);padding:2px 7px;border-radius:6px;margin-left:4px;">Mejor valor</span></div>
-                            <div style="font-size:1.1rem;font-weight:700;color:#fff;margin-top:2px;">$500.000 <span style="font-size:.8rem;font-weight:400;">/año</span></div>
-                            <div style="font-size:.75rem;color:rgba(255,255,255,.55);margin-top:1px;">Hasta 60 pacientes · Equivale a $41.666/mes.</div>
+                            <div style="font-size:1.1rem;font-weight:700;color:#fff;margin-top:2px;"><span class="js-precio-anual">USD 400</span> <span style="font-size:.8rem;font-weight:400;">/año</span></div>
+                            <div style="font-size:.75rem;color:rgba(255,255,255,.55);margin-top:1px;">Hasta 60 pacientes · Ahorrás USD 80 al año.</div>
                         </div>
                         <span style="color:rgba(255,255,255,.4);font-size:.9rem;">→</span>
                     </div>
 
-                    <p style="font-size:.72rem;color:#94a3b8;text-align:center;margin-top:14px;margin-bottom:0;">Los precios se actualizan cada 6 meses por IPC.</p>
+                    <p style="font-size:.72rem;color:#94a3b8;text-align:center;margin-top:14px;margin-bottom:0;">Precios en pesos equivalentes a USD 40 (mensual) y USD 400 (anual), al dólar oficial venta.</p>
                     <p style="font-size:.72rem;color:#94a3b8;text-align:center;margin-top:8px;margin-bottom:0;">¿Sos secretaria/o? No necesitás plan ni registrarte: el médico te invita desde su app.</p>
                     <button class="dl-back" onclick="accesoIrA('gastro-sub')">← Volver</button>
                 </div>
@@ -1049,7 +1049,7 @@
                         <div style="border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s,background .2s;" onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'">
                             <div style="flex:1;">
                                 <div style="font-size:.85rem;font-weight:700;color:#0f172a;">Pago único</div>
-                                <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;">$50.000</div>
+                                <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;"><span class="js-precio-mensual">USD 40</span></div>
                                 <div style="font-size:.75rem;color:#94a3b8;margin-top:1px;">Hasta 60 pacientes · Renovás el próximo mes.</div>
                             </div>
                             <span style="color:#94a3b8;font-size:.9rem;">→</span>
@@ -1059,7 +1059,7 @@
                         <div style="border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s,background .2s;" onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'">
                             <div style="flex:1;">
                                 <div style="font-size:.85rem;font-weight:700;color:#0f172a;">Débito automático</div>
-                                <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;">$50.000 <span style="font-size:.8rem;font-weight:400;">/mes</span></div>
+                                <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;"><span class="js-precio-mensual">USD 40</span> <span style="font-size:.8rem;font-weight:400;">/mes</span></div>
                                 <div style="font-size:.75rem;color:#94a3b8;margin-top:1px;">Hasta 60 pacientes · Se cobra automáticamente.</div>
                             </div>
                             <span style="color:#94a3b8;font-size:.9rem;">→</span>
@@ -1071,8 +1071,8 @@
                         <div style="border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s,background .2s;" onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'">
                             <div style="flex:1;">
                                 <div style="font-size:.85rem;font-weight:700;color:#0f172a;">Pago único</div>
-                                <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;">$500.000</div>
-                                <div style="font-size:.75rem;color:#94a3b8;margin-top:1px;">Hasta 60 pacientes · Equivale a $41.666/mes.</div>
+                                <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;"><span class="js-precio-anual">USD 400</span></div>
+                                <div style="font-size:.75rem;color:#94a3b8;margin-top:1px;">Hasta 60 pacientes · Ahorrás USD 80 al año.</div>
                             </div>
                             <span style="color:#94a3b8;font-size:.9rem;">→</span>
                         </div>
@@ -1081,14 +1081,14 @@
                         <div style="border:1.5px solid transparent;border-radius:12px;padding:14px 16px;background:#0f172a;display:flex;align-items:center;gap:12px;cursor:pointer;transition:opacity .2s;" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
                             <div style="flex:1;">
                                 <div style="font-size:.85rem;font-weight:700;color:#fff;">Débito automático <span style="font-size:.72rem;background:rgba(255,255,255,.15);padding:2px 7px;border-radius:6px;margin-left:4px;">Mejor valor</span></div>
-                                <div style="font-size:1.1rem;font-weight:700;color:#fff;margin-top:2px;">$500.000 <span style="font-size:.8rem;font-weight:400;">/año</span></div>
-                                <div style="font-size:.75rem;color:rgba(255,255,255,.55);margin-top:1px;">Hasta 60 pacientes · Equivale a $41.666/mes.</div>
+                                <div style="font-size:1.1rem;font-weight:700;color:#fff;margin-top:2px;"><span class="js-precio-anual">USD 400</span> <span style="font-size:.8rem;font-weight:400;">/año</span></div>
+                                <div style="font-size:.75rem;color:rgba(255,255,255,.55);margin-top:1px;">Hasta 60 pacientes · Ahorrás USD 80 al año.</div>
                             </div>
                             <span style="color:rgba(255,255,255,.4);font-size:.9rem;">→</span>
                         </div>
                     </a>
 
-                    <p style="font-size:.72rem;color:#94a3b8;text-align:center;margin-top:14px;margin-bottom:0;">Los precios se actualizan cada 6 meses por IPC.</p>
+                    <p style="font-size:.72rem;color:#94a3b8;text-align:center;margin-top:14px;margin-bottom:0;">Precios en pesos equivalentes a USD 40 (mensual) y USD 400 (anual), al dólar oficial venta.</p>
                     <button class="dl-back" onclick="regVolverPlanes()" style="margin-top:10px;display:block;">← Volver</button>
                 </div><!-- /reg-nefrologia-planes -->
 
@@ -2002,5 +2002,25 @@
         </div>
     </div>
 
+    <!-- Precios atados al dólar: el backend convierte USD 40 (mensual) y
+         USD 400 (anual) al oficial venta (BCRA) — la MISMA fuente con la
+         que Mercado Pago cobra. Si el backend no responde, quedan los
+         textos "USD 40" / "USD 400", que son siempre verdaderos. -->
+    <script>
+    (function () {
+        fetch('https://backend-login-api-production.up.railway.app/auth/precios')
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (p) {
+                if (!p || !p.ars_texto || !p.anual_ars_texto) return;
+                document.querySelectorAll('.js-precio-mensual').forEach(function (el) {
+                    el.textContent = p.ars_texto;
+                });
+                document.querySelectorAll('.js-precio-anual').forEach(function (el) {
+                    el.textContent = p.anual_ars_texto;
+                });
+            })
+            .catch(function () { /* sin red: quedan los precios en USD */ });
+    })();
+    </script>
 </body>
 </html>
