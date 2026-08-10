@@ -306,6 +306,7 @@
         const toggleTxt = u.is_active ? 'Desactivar' : 'Activar'
         const toggleCls = u.is_active ? 'btn-toggle-on' : 'btn-toggle-off'
         let html = `<button class="btn-sm ${toggleCls}" onclick="toggleUser(${u.id})">${toggleTxt}</button>`
+        html += `<button class="btn-sm btn-sub" onclick="changeEmail(${u.id})">Cambiar email</button>`
         if (u.role !== 'admin') {
             if (u.subscription_status === 'trial') {
                 html += `<button class="btn-sm" style="background:#fef9c3;color:#854d0e;" onclick="expireTrial(${u.id}, '${u.full_name}')">Vencer trial</button>`
@@ -386,6 +387,36 @@
             toast('Usuario eliminado')
             await reload()
         } catch { toast('Error al eliminar') }
+    }
+
+    // Corrige el email de una cuenta (typo del registro) sin tocar sus datos.
+    // El id se busca en allUsers para no interpolar strings en el onclick
+    // (nombres/emails con apóstrofo rompen el atributo HTML).
+    async function changeEmail(id) {
+        const u = allUsers.find(x => x.id === id)
+        if (!u) return
+        const nuevo = prompt(`Email nuevo para ${u.full_name}:`, u.email)
+        if (!nuevo) return
+        const limpio = nuevo.trim().toLowerCase()
+        if (!limpio || limpio === (u.email || '').toLowerCase()) return
+        const token = sessionStorage.getItem('cd_token')
+        try {
+            // El email va por body (no en la URL) para no dejar el dato
+            // personal escrito en los access logs del servidor.
+            const res = await fetch(`${API}/auth/users/${id}/email`, {
+                method: 'PATCH',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nuevo_email: limpio })
+            })
+            if (!res.ok) {
+                const data = await res.json().catch(() => ({}))
+                const msg = Array.isArray(data.detail) ? 'Email inválido' : data.detail
+                toast(msg || 'Error al cambiar el email')
+                return
+            }
+            toast('Email actualizado — ese usuario deberá volver a iniciar sesión')
+            await reload()
+        } catch { toast('Error al cambiar el email') }
     }
 
     async function reload() {
