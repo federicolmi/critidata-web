@@ -44,6 +44,20 @@
        de home, barra del navegador retrayéndose) se veía como barra blanca. */
     html, body { margin: 0; background: #F8F7F7; }
 
+    /* La franja del indicador de home / barra de gestos (iPhone y Android
+       edge-to-edge): pintada NAVY desde el HTML, del color exacto de la
+       barra de navegación (_kNavy en web_shell.dart). Si el canvas no llega
+       o no pinta ese inset, acá abajo igual se ve barra y no una línea
+       blanca (visto en teléfono real, 14-ago-2026). En escritorio el inset
+       es 0 y el div no existe visualmente. pointer-events none: jamás tapa
+       un tap. */
+    #inset-abajo {
+      position: fixed; left: 0; right: 0; bottom: 0;
+      height: env(safe-area-inset-bottom, 0px);
+      background: #0D1B3E;
+      z-index: 2; pointer-events: none;
+    }
+
     /* SPLASH de carga: el motor tarda ~15s en arrancar y una pantalla en
        blanco parece tildada. Se saca al primer frame de Flutter (y por un
        fallback de 30s, por si el evento no llegara jamás). pointer-events
@@ -65,6 +79,7 @@
 </head>
 <body>
   <div id="cargando"><div class="aro"></div><div>Cargando CritiData Gastro…</div></div>
+  <div id="inset-abajo"></div>
 
   <script>
     // EL GUARDIÁN DEL PANEL OCULTO (21-jul-2026, tras tres "está tildada"
@@ -82,18 +97,30 @@
         if (s) s.remove();
       }
 
-      window.addEventListener('flutter-first-frame', function () {
-        pinto = true;
-        sessionStorage.removeItem('gastro-reintentos');
-        // El motor instala SU meta viewport (pisa al del <head>) y no trae
-        // viewport-fit=cover: sin esto el safe-area del iPhone nunca llega a
-        // Flutter y la franja del indicador de home queda blanca en vez de
-        // pintarla la barra de navegación.
-        var vp = document.querySelector('meta[name="viewport"][flt-viewport]') ||
-                 document.querySelector('meta[name="viewport"]');
+      // El motor instala SU meta viewport (pisa al del <head>) y no trae
+      // viewport-fit=cover: sin esto el safe-area del iPhone nunca llega a
+      // Flutter, y Chrome Android (135+, edge-to-edge) decide su barra
+      // inferior ("chin", clarita: la línea blanca del teléfono, 14-ago)
+      // mirando el meta VIGENTE. Parchearlo recién en flutter-first-frame
+      // dejaba SEGUNDOS a la página sin cover; el observer de acá abajo lo
+      // parcha en el INSTANTE en que el motor lo toca. Se observa SOLO el
+      // <head> (el DOM que Flutter muta por frame vive en el body: el
+      // observer no corre en caliente).
+      function pegarCover() {
+        var vp = document.querySelector('meta[name="viewport"]');
         if (vp && vp.content.indexOf('viewport-fit') === -1) {
           vp.content += ', viewport-fit=cover';
         }
+      }
+      new MutationObserver(pegarCover).observe(document.head, {
+        childList: true, subtree: true,
+        attributes: true, attributeFilter: ['content']
+      });
+
+      window.addEventListener('flutter-first-frame', function () {
+        pinto = true;
+        sessionStorage.removeItem('gastro-reintentos');
+        pegarCover(); // cinturón además del observer: jamás sin cover
         sacarSplash();
       });
       setTimeout(sacarSplash, 30000); // fallback: el splash nunca es eterno
