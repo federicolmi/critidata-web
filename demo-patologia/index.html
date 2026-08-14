@@ -18,6 +18,11 @@
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <!-- viewport-fit=cover: sin él, el iPhone no extiende la página bajo el
+       indicador de home y queda una franja blanca abajo. Este meta rige la
+       fase de carga; el motor de Flutter instala el suyo al arrancar y el
+       script de abajo le agrega viewport-fit=cover también a ese. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="description" content="A new Flutter project.">
 
   <!-- iOS meta tags & icons -->
@@ -33,6 +38,12 @@
   <link rel="manifest" href="manifest.json">
 
   <style>
+    /* Fondo del documento = fondo de la app (#F8F7F7). html y body son
+       transparentes por defecto y el navegador pinta blanco: cualquier
+       franja que el canvas no cubra en el teléfono (letterbox del indicador
+       de home, barra del navegador retrayéndose) se veía como barra blanca. */
+    html, body { margin: 0; background: #F8F7F7; }
+
     /* SPLASH de carga: el motor tarda ~15s en arrancar y una pantalla en
        blanco parece tildada. Se saca al primer frame de Flutter (y por un
        fallback de 30s, por si el evento no llegara jamás). pointer-events
@@ -74,6 +85,15 @@
       window.addEventListener('flutter-first-frame', function () {
         pinto = true;
         sessionStorage.removeItem('gastro-reintentos');
+        // El motor instala SU meta viewport (pisa al del <head>) y no trae
+        // viewport-fit=cover: sin esto el safe-area del iPhone nunca llega a
+        // Flutter y la franja del indicador de home queda blanca en vez de
+        // pintarla la barra de navegación.
+        var vp = document.querySelector('meta[name="viewport"][flt-viewport]') ||
+                 document.querySelector('meta[name="viewport"]');
+        if (vp && vp.content.indexOf('viewport-fit') === -1) {
+          vp.content += ', viewport-fit=cover';
+        }
         sacarSplash();
       });
       setTimeout(sacarSplash, 30000); // fallback: el splash nunca es eterno
