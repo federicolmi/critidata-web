@@ -1487,7 +1487,9 @@
                 const body = new URLSearchParams()
                 body.append('username', email)
                 body.append('password', pass)
-                const res = await fetch(`${API}/auth/login`, { method: 'POST', body })
+                // ?producto (18-ago): el mismo email puede tener cuenta nefro
+                // Y gastro — este login entra SIEMPRE a la de gastro.
+                const res = await fetch(`${API}/auth/login?producto=gastroenterologia`, { method: 'POST', body })
                 if (res.ok) {
                     const data = await res.json()
                     localStorage.setItem('gastro_token', data.token)
