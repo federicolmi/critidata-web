@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="/gastro-app/">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <!-- viewport-fit=cover: sin él, el iPhone no extiende la página bajo el
+       indicador de home y queda una franja blanca abajo. Este meta rige la
+       fase de carga; el motor de Flutter instala el suyo al arrancar y el
+       script de abajo le agrega viewport-fit=cover también a ese. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="CritiData Gastroenterología — historia clínica y estudios endoscópicos.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="CritiData Gastro">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>CritiData Gastroenterología</title>
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    /* Fondo del documento = fondo de la app (#F8F7F7). html y body son
+       transparentes por defecto y el navegador pinta blanco: cualquier
+       franja que el canvas no cubra en el teléfono (letterbox del indicador
+       de home, barra del navegador retrayéndose) se veía como barra blanca. */
+    html, body { margin: 0; background: #F8F7F7; }
+
+    /* La franja del indicador de home / barra de gestos (iPhone y Android
+       edge-to-edge): pintada NAVY desde el HTML, del color exacto de la
+       barra de navegación (_kNavy en web_shell.dart). Si el canvas no llega
+       o no pinta ese inset, acá abajo igual se ve barra y no una línea
+       blanca (visto en teléfono real, 14-ago-2026). En escritorio el inset
+       es 0 y el div no existe visualmente. pointer-events none: jamás tapa
+       un tap. */
+    #inset-abajo {
+      position: fixed; left: 0; right: 0; bottom: 0;
+      height: env(safe-area-inset-bottom, 0px);
+      background: #0D1B3E;
+      z-index: 2; pointer-events: none;
+    }
+
+    /* SPLASH de carga: el motor tarda ~15s en arrancar y una pantalla en
+       blanco parece tildada. Se saca al primer frame de Flutter (y por un
+       fallback de 30s, por si el evento no llegara jamás). pointer-events
+       none: aunque quedara colgado, nunca bloquea un click. */
+    #cargando {
+      position: fixed; inset: 0; z-index: 1; pointer-events: none;
+      display: flex; flex-direction: column; gap: 12px;
+      align-items: center; justify-content: center;
+      background: #F8F7F7; color: #64748B;
+      font-family: system-ui, sans-serif; font-size: 14px;
+    }
+    #cargando .aro {
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 3px solid #E2E8F0; border-top-color: #0F4C81;
+      animation: girar 1s linear infinite;
+    }
+    @keyframes girar { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div id="cargando"><div class="aro"></div><div>Cargando CritiData Gastro…</div></div>
+  <div id="inset-abajo"></div>
+
+  <script>
+    // EL GUARDIÁN DEL PANEL OCULTO (21-jul-2026, tras tres "está tildada"
+    // en un día): si la página carga con la pestaña OCULTA, Flutter nunca
+    // pinta el primer frame (requestAnimationFrame no dispara) y NO se
+    // recupera solo al mostrarse. Este script detecta ese estado y recarga
+    // UNA vez cuando la pestaña se hace visible — con tope de 2 reintentos
+    // por sesión: jamás un loop de recargas.
+    (function () {
+      var cargoOculta = document.visibilityState === 'hidden';
+      var pinto = false;
+
+      function sacarSplash() {
+        var s = document.getElementById('cargando');
+        if (s) s.remove();
+      }
+
+      // El motor instala SU meta viewport (pisa al del <head>) y no trae
+      // viewport-fit=cover: sin esto el safe-area del iPhone nunca llega a
+      // Flutter, y Chrome Android (135+, edge-to-edge) decide su barra
+      // inferior ("chin", clarita: la línea blanca del teléfono, 14-ago)
+      // mirando el meta VIGENTE. Parchearlo recién en flutter-first-frame
+      // dejaba SEGUNDOS a la página sin cover; el observer de acá abajo lo
+      // parcha en el INSTANTE en que el motor lo toca. Se observa SOLO el
+      // <head> (el DOM que Flutter muta por frame vive en el body: el
+      // observer no corre en caliente).
+      function pegarCover() {
+        var vp = document.querySelector('meta[name="viewport"]');
+        if (vp && vp.content.indexOf('viewport-fit') === -1) {
+          vp.content += ', viewport-fit=cover';
+        }
+      }
+      new MutationObserver(pegarCover).observe(document.head, {
+        childList: true, subtree: true,
+        attributes: true, attributeFilter: ['content']
+      });
+
+      window.addEventListener('flutter-first-frame', function () {
+        pinto = true;
+        sessionStorage.removeItem('gastro-reintentos');
+        pegarCover(); // cinturón además del observer: jamás sin cover
+        sacarSplash();
+      });
+      setTimeout(sacarSplash, 30000); // fallback: el splash nunca es eterno
+
+      if (!cargoOculta) return; // carga visible: no hay nada que curar
+
+      document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState !== 'visible' || pinto) return;
+        // 5s de gracia: si el motor se recupera solo, no recargamos.
+        setTimeout(function () {
+          if (pinto) return;
+          var n = +(sessionStorage.getItem('gastro-reintentos') || 0);
+          if (n >= 2) return;
+          sessionStorage.setItem('gastro-reintentos', String(n + 1));
+          location.reload();
+        }, 5000);
+      });
+    })();
+  </script>
+
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
