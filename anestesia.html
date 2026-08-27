@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anestesia en vivo — CritiData</title>
+<style>
+    :root {
+        --azul: #4a90e2; --texto: #1e293b; --suave: #64748b;
+        --verde: #27ae60; --rojo: #e74c3c; --ambar: #f39c12;
+    }
+    * { box-sizing: border-box; }
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background-color: #f0f0f0;
+        color: var(--texto);
+    }
+    .navbar {
+        background-color: var(--azul); color: white;
+        padding: 12px 18px;
+        display: flex; justify-content: space-between; align-items: center;
+        gap: 10px; flex-wrap: wrap;
+    }
+    .navbar .marca { font-weight: bold; }
+    .navbar a { color: white; }
+    .contenido { max-width: 980px; margin: 16px auto; padding: 0 12px; }
+    .tarjeta-caja {
+        background: white; padding: 18px; border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08); margin-bottom: 14px;
+    }
+    /* login */
+    .login-caja { max-width: 340px; margin: 60px auto; text-align: center; }
+    .login-caja input {
+        width: 100%; padding: 10px; margin: 8px 0;
+        border: 1px solid #ddd; border-radius: 6px;
+    }
+    .btn {
+        padding: 10px 18px; border: none; border-radius: 6px;
+        font-size: 15px; cursor: pointer;
+        background-color: var(--azul); color: white;
+    }
+    .btn-chico { padding: 6px 10px; font-size: 13px; }
+    .btn-gris { background: #e2e8f0; color: #334155; }
+    .error { color: var(--rojo); margin-top: 8px; }
+    /* barra de sesión */
+    .fila-sesion { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .fila-sesion select {
+        flex: 1; min-width: 180px; padding: 8px;
+        border: 1px solid #ddd; border-radius: 6px; font-size: 14px;
+    }
+    .chip {
+        font-size: 12px; font-weight: bold; padding: 3px 9px;
+        border-radius: 999px; white-space: nowrap;
+    }
+    .chip-vivo { background: #e8f8ee; color: var(--verde); }
+    .chip-quieto { background: #fdf3e0; color: var(--ambar); }
+    .chip-cerrada { background: #eef1f5; color: var(--suave); }
+    .chip-sin { background: #fdeceb; color: var(--rojo); }
+    /* tarjetas de valores */
+    .tarjetas {
+        display: grid; gap: 10px;
+        grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+        margin-bottom: 14px;
+    }
+    .tarjeta {
+        background: white; border-radius: 10px; padding: 10px 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+    .tarjeta-rotulo { font-size: 12px; color: var(--suave); font-weight: bold; }
+    .tarjeta-rotulo .unidad { font-weight: normal; }
+    .tarjeta-valor { font-size: 30px; font-weight: bold; margin-top: 2px; }
+    .tarjeta-sub { font-size: 11px; color: var(--suave); min-height: 13px; }
+    .v-fc  .tarjeta-valor { color: #4caf50; }
+    .v-spo2 .tarjeta-valor { color: #29b6f6; }
+    .v-ta  .tarjeta-valor { color: #e05555; }
+    .tarjeta-ta { grid-column: span 2; }
+    /* gráfico */
+    .panel-titulo { font-weight: bold; margin-bottom: 8px; }
+    .leyenda { font-weight: normal; font-size: 12px; margin-left: 8px; }
+    .chip-leyenda { margin-right: 8px; white-space: nowrap; }
+    svg#grafico { width: 100%; height: auto; display: block; }
+    .pie-nota { color: var(--suave); font-size: 12px; text-align: center; margin: 14px 0; }
+    .oculto { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="navbar">
+    <span class="marca">CritiData — Anestesia en vivo</span>
+    <span id="nav-derecha" class="oculto">
+        <span id="nav-usuario"></span>
+        <a href="#" id="salir" style="margin-left:12px">Salir</a>
+    </span>
+</div>
+
+<!-- login -->
+<div id="vista-login" class="contenido oculto">
+    <div class="tarjeta-caja login-caja">
+        <h2>Iniciar sesión</h2>
+        <input type="email" id="login-email" placeholder="Email" autocomplete="username">
+        <input type="password" id="login-pass" placeholder="Contraseña" autocomplete="current-password">
+        <button class="btn" style="width:100%" onclick="entrar()">Entrar</button>
+        <p class="error" id="login-error"></p>
+    </div>
+</div>
+
+<!-- monitor -->
+<div id="vista-monitor" class="contenido oculto">
+    <div class="tarjeta-caja fila-sesion">
+        <select id="selector-sesion"></select>
+        <span id="chip-frescura" class="chip chip-sin">—</span>
+        <button class="btn btn-chico btn-gris" onclick="cargarSesiones()">Actualizar</button>
+        <button class="btn btn-chico btn-gris" id="boton-borrar" onclick="borrarSesion()">Borrar</button>
+    </div>
+
+    <div id="sin-sesiones" class="tarjeta-caja oculto">
+        Todavía no hay sesiones subidas. En la notebook del quirófano:
+        <b>Nube — critidata.com → Subir en vivo</b>.
+    </div>
+
+    <div id="zona-datos" class="oculto">
+        <div id="tarjetas" class="tarjetas"></div>
+        <div class="tarjeta-caja">
+            <div class="panel-titulo">Tendencia <span class="leyenda" id="leyenda"></span></div>
+            <svg id="grafico" viewBox="0 0 860 340" role="img"
+                 aria-label="Tendencia de signos vitales"></svg>
+        </div>
+    </div>
+
+    <p class="pie-nota">La página se actualiza sola cada 3 segundos.
+       Los datos completos del parte quedan en la notebook del quirófano.</p>
+</div>
+
+<script>
+"use strict";
+// ?api= permite apuntar a un backend de prueba (dev local)
+const API = new URLSearchParams(location.search).get("api")
+         || "https://backend-login-api-production.up.railway.app";
+
+// ── sesión de usuario (mismo token que login.html/panel.html) ───────────────
+function token() { return localStorage.getItem("token"); }
+
+function mostrarLogin() {
+    document.getElementById("vista-login").classList.remove("oculto");
+    document.getElementById("vista-monitor").classList.add("oculto");
+    document.getElementById("nav-derecha").classList.add("oculto");
+}
+
+function mostrarMonitor(nombre) {
+    document.getElementById("vista-login").classList.add("oculto");
+    document.getElementById("vista-monitor").classList.remove("oculto");
+    document.getElementById("nav-derecha").classList.remove("oculto");
+    document.getElementById("nav-usuario").textContent = nombre || localStorage.getItem("usuario") || "";
+}
+
+async function entrar() {
+    const body = new URLSearchParams();
+    body.append("username", document.getElementById("login-email").value);
+    body.append("password", document.getElementById("login-pass").value);
+    const r = await fetch(`${API}/auth/login`, { method: "POST", body });
+    if (!r.ok) {
+        document.getElementById("login-error").textContent = "Email o contraseña incorrectos";
+        return;
+    }
+    const data = await r.json();
+    if (data.requires_device_verification) {
+        document.getElementById("login-error").textContent =
+            "Este dispositivo necesita verificación: entrá primero por critidata.com/login.html";
+        return;
+    }
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("usuario", data.full_name || "");
+    document.getElementById("login-pass").value = "";
+    arrancarMonitor(data.full_name);
+}
+document.getElementById("login-pass").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") entrar();
+});
+
+async function renovarToken() {
+    if (!token()) { mostrarLogin(); return false; }
+    const r = await fetch(`${API}/auth/check-status`,
+                          { headers: { Authorization: `Bearer ${token()}` } });
+    if (!r.ok) { mostrarLogin(); return false; }
+    const data = await r.json();
+    localStorage.setItem("token", data.token);
+    mostrarMonitor(data.full_name);
+    return true;
+}
+setInterval(renovarToken, 30 * 60 * 1000);
+
+document.getElementById("salir").addEventListener("click", (e) => {
+    e.preventDefault();
+    localStorage.removeItem("token");
+    localStorage.removeItem("usuario");
+    location.reload();
+});
+
+// ── API con token ───────────────────────────────────────────────────────────
+async function pedirJSON(ruta, opciones = {}) {
+    opciones.headers = { ...(opciones.headers || {}),
+                         Authorization: `Bearer ${token()}` };
+    const r = await fetch(`${API}${ruta}`, opciones);
+    if (r.status === 401) { mostrarLogin(); throw new Error("Sesión vencida"); }
+    if (!r.ok) {
+        let detalle = `HTTP ${r.status}`;
+        try { detalle = (await r.json()).detail || detalle; } catch (e) { /* nada */ }
+        throw new Error(detalle);
+    }
+    return r.json();
+}
+
+// ── sesiones ────────────────────────────────────────────────────────────────
+let sesiones = [];
+let sesionActual = null;
+
+function pintarSelector() {
+    const sel = document.getElementById("selector-sesion");
+    sel.innerHTML = "";
+    for (const s of sesiones) {
+        const op = document.createElement("option");
+        const fecha = (s.creado || "").slice(0, 10);
+        op.value = s.id;
+        op.textContent = `${s.etiqueta || `Sesión ${s.id}`} — ${fecha}` +
+                         (s.estado === "en_curso" ? " (en curso)" : "");
+        sel.appendChild(op);
+    }
+    if (sesionActual) sel.value = sesionActual;
+}
+
+async function cargarSesiones() {
+    try { sesiones = await pedirJSON("/anestesia/sesiones"); }
+    catch (e) { return; }
+    document.getElementById("sin-sesiones").classList.toggle("oculto", sesiones.length > 0);
+    document.getElementById("zona-datos").classList.toggle("oculto", !sesiones.length);
+    document.querySelector(".fila-sesion").classList.toggle("oculto", !sesiones.length);
+    if (!sesiones.length) { sesionActual = null; return; }
+    if (!sesiones.some((s) => s.id === sesionActual)) {
+        const enCurso = sesiones.find((s) => s.estado === "en_curso");
+        elegirSesion((enCurso || sesiones[0]).id);
+    }
+    pintarSelector();
+}
+
+function elegirSesion(id) {
+    sesionActual = id;
+    vitales = [];
+    ultimoTs = null;
+    ultimaLlegada = null;
+    pintarSelector();
+    pintarTarjetas();
+    pintarGrafico();
+    traerVitales();
+}
+
+document.getElementById("selector-sesion").addEventListener("change", (e) => {
+    elegirSesion(parseInt(e.target.value, 10));
+});
+
+async function borrarSesion() {
+    if (!sesionActual) return;
+    const s = sesiones.find((x) => x.id === sesionActual);
+    if (!confirm(`¿Borrar "${s ? s.etiqueta || `Sesión ${s.id}` : sesionActual}" de la nube?\n` +
+                 "(El parte completo sigue en la notebook.)")) return;
+    try {
+        await pedirJSON(`/anestesia/sesiones/${sesionActual}`, { method: "DELETE" });
+        sesionActual = null;
+        cargarSesiones();
+    } catch (e) { alert(`No se pudo borrar: ${e.message}`); }
+}
+
+// ── datos en vivo ───────────────────────────────────────────────────────────
+let vitales = [];
+let ultimoTs = null;
+let ultimaLlegada = null;   // reloj del navegador: cuándo llegó el último dato
+
+const fmtHora = (iso) => (iso || "").slice(11, 16) || "—";
+const num = (v) => (v == null ? "—" : (Math.round(v * 10) / 10).toString());
+
+const TARJETAS = [
+    { clase: "v-fc", rotulo: "FC", unidad: "lpm", texto: (u) => num(u.hr) },
+    { clase: "v-spo2", rotulo: "SpO2", unidad: "%", texto: (u) => num(u.spo2) },
+    { clase: "v-ta tarjeta-ta", rotulo: "TA", unidad: "mmHg",
+      texto: (u) => (u.nibp_sis != null ? `${num(u.nibp_sis)}/${num(u.nibp_dia)} (${num(u.nibp_pam)})` : "—"),
+      sub: (u) => (u._ts_nibp ? `medida ${fmtHora(u._ts_nibp)}` : "") },
+    { clase: "", rotulo: "etCO2", unidad: "mmHg", texto: (u) => num(u.etco2) },
+    { clase: "", rotulo: "Sev Et/Fi", unidad: "%",
+      texto: (u) => (u.sev_et != null || u.sev_fi != null ? `${num(u.sev_et)}/${num(u.sev_fi)}` : "—") },
+    { clase: "", rotulo: "MAC", unidad: "", texto: (u) => num(u.mac) },
+    { clase: "", rotulo: "VT × FR", unidad: "",
+      texto: (u) => (u.vt != null || u.fr_vent != null ? `${num(u.vt)}×${num(u.fr_vent)}` : "—") },
+    { clase: "", rotulo: "PEEP / PIP", unidad: "cmH2O",
+      texto: (u) => (u.peep != null || u.pip != null ? `${num(u.peep)} / ${num(u.pip)}` : "—") },
+];
+
+const SERIES = [
+    { key: "nibp_sis", etiqueta: "TAS", simbolo: "v", color: "#e05555" },
+    { key: "nibp_dia", etiqueta: "TAD", simbolo: "^", color: "#e09955" },
+    { key: "hr",       etiqueta: "FC",  simbolo: "●", color: "#4caf50" },
+    { key: "spo2",     etiqueta: "SpO2", simbolo: "○", color: "#29b6f6" },
+];
+
+function ultimosValores() {
+    const u = {};
+    for (const v of vitales) {
+        for (const [k, val] of Object.entries(v)) {
+            if (val != null && k !== "ts" && k !== "fuente") {
+                u[k] = val;
+                if (k === "nibp_sis") u._ts_nibp = v.ts;
+            }
+        }
+    }
+    return u;
+}
+
+function pintarTarjetas() {
+    const u = ultimosValores();
+    const cont = document.getElementById("tarjetas");
+    cont.innerHTML = "";
+    for (const t of TARJETAS) {
+        const d = document.createElement("div");
+        d.className = `tarjeta ${t.clase}`;
+        const unidad = t.unidad ? ` <span class="unidad">${t.unidad}</span>` : "";
+        d.innerHTML = `
+            <div class="tarjeta-rotulo">${t.rotulo}${unidad}</div>
+            <div class="tarjeta-valor">${t.texto(u)}</div>
+            <div class="tarjeta-sub">${(t.sub && t.sub(u)) || ""}</div>`;
+        cont.appendChild(d);
+    }
+}
+
+const SVG_NS = "http://www.w3.org/2000/svg";
+const G = { ancho: 860, alto: 340, izq: 34, der: 8, arr: 8, aba: 22, yMax: 220 };
+
+function svgEl(nombre, atributos) {
+    const el = document.createElementNS(SVG_NS, nombre);
+    for (const [k, v] of Object.entries(atributos)) el.setAttribute(k, v);
+    return el;
+}
+
+function pintarGrafico() {
+    const svg = document.getElementById("grafico");
+    svg.innerHTML = "";
+    const w = G.ancho - G.izq - G.der, h = G.alto - G.arr - G.aba;
+    const conTs = vitales.filter((v) => v.ts);
+    const ahora = Date.now();
+    let t0 = conTs.length ? new Date(conTs[0].ts).getTime() : ahora - 30 * 60000;
+    let t1 = conTs.length ? Math.max(new Date(conTs[conTs.length - 1].ts).getTime(), t0 + 60000) : ahora;
+    if (t1 - t0 < 30 * 60000) t1 = t0 + 30 * 60000;
+    const x = (t) => G.izq + ((t - t0) / (t1 - t0)) * w;
+    const y = (v) => G.arr + (1 - v / G.yMax) * h;
+
+    for (let v = 0; v <= G.yMax; v += 20) {
+        svg.appendChild(svgEl("line", { x1: G.izq, x2: G.ancho - G.der, y1: y(v), y2: y(v),
+            stroke: v % 100 === 0 ? "#c9d2dd" : "#e7ecf2", "stroke-width": 1 }));
+        const et = svgEl("text", { x: G.izq - 5, y: y(v) + 3.5, "text-anchor": "end",
+            "font-size": 10, fill: "#5b6675" });
+        et.textContent = v;
+        svg.appendChild(et);
+    }
+    const paso = Math.max(5, Math.round((t1 - t0) / 60000 / 6 / 5) * 5) * 60000;
+    for (let t = Math.ceil(t0 / paso) * paso; t <= t1; t += paso) {
+        svg.appendChild(svgEl("line", { x1: x(t), x2: x(t), y1: G.arr, y2: G.alto - G.aba,
+            stroke: "#eef1f5", "stroke-width": 1 }));
+        const et = svgEl("text", { x: x(t), y: G.alto - 7, "text-anchor": "middle",
+            "font-size": 10, fill: "#5b6675" });
+        et.textContent = new Date(t).toTimeString().slice(0, 5);
+        svg.appendChild(et);
+    }
+    for (const serie of SERIES) {
+        for (const v of conTs) {
+            const val = v[serie.key];
+            if (val == null) continue;
+            const m = svgEl("text", { x: x(new Date(v.ts).getTime()), y: y(val) + 4,
+                "text-anchor": "middle", "font-size": 11, "font-weight": 700,
+                fill: serie.color });
+            m.textContent = serie.simbolo;
+            svg.appendChild(m);
+        }
+    }
+    document.getElementById("leyenda").innerHTML = SERIES
+        .map((s) => `<span class="chip-leyenda" style="color:${s.color}">${s.simbolo} ${s.etiqueta}</span>`)
+        .join("");
+}
+
+function pintarFrescura() {
+    const chip = document.getElementById("chip-frescura");
+    const s = sesiones.find((x) => x.id === sesionActual);
+    if (s && s.estado !== "en_curso") {
+        chip.className = "chip chip-cerrada"; chip.textContent = "Cerrada"; return;
+    }
+    if (!ultimaLlegada) {
+        chip.className = "chip chip-sin"; chip.textContent = "Sin datos"; return;
+    }
+    const seg = Math.round((Date.now() - ultimaLlegada) / 1000);
+    if (seg <= 60) { chip.className = "chip chip-vivo"; chip.textContent = "EN VIVO"; }
+    else {
+        const min = Math.round(seg / 60);
+        chip.className = "chip chip-quieto";
+        chip.textContent = `Último dato hace ${min} min`;
+    }
+}
+
+async function traerVitales() {
+    if (!sesionActual) return;
+    const id = sesionActual;
+    const url = `/anestesia/sesiones/${id}/vitales` +
+                (ultimoTs ? `?desde=${encodeURIComponent(ultimoTs)}` : "");
+    let nuevos;
+    try { nuevos = await pedirJSON(url); }
+    catch (e) { return; }
+    if (id !== sesionActual) return;  // cambió la sesión mientras respondía
+    if (nuevos.length) {
+        vitales = vitales.concat(nuevos);
+        ultimoTs = nuevos[nuevos.length - 1].ts;
+        ultimaLlegada = Date.now();
+        pintarTarjetas();
+        pintarGrafico();
+    }
+    pintarFrescura();
+}
+
+// ── arranque ────────────────────────────────────────────────────────────────
+let intervalos = false;
+function arrancarMonitor(nombre) {
+    mostrarMonitor(nombre);
+    cargarSesiones();
+    if (!intervalos) {
+        intervalos = true;
+        setInterval(() => { traerVitales(); }, 3000);
+        setInterval(() => { cargarSesiones(); }, 30000);
+        setInterval(pintarFrescura, 5000);
+    }
+}
+
+(async function () {
+    if (await renovarToken()) arrancarMonitor();
+})();
+</script>
+
+</body>
+</html>
