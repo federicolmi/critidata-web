@@ -126,12 +126,7 @@
             <svg id="grafico" viewBox="0 0 860 340" role="img"
                  aria-label="Tendencia de signos vitales"></svg>
         </div>
-        <div class="tarjeta-caja">
-            <div class="panel-titulo">Ventilación y gases
-                <span class="leyenda" id="leyenda2"></span></div>
-            <svg id="grafico2" viewBox="0 0 860 300" role="img"
-                 aria-label="Curvas de ventilación y gases"></svg>
-        </div>
+        <div id="paneles-vent"></div>
     </div>
 
     <p class="pie-nota">La página se actualiza sola cada 3 segundos.
@@ -257,7 +252,7 @@ function elegirSesion(id) {
     pintarSelector();
     pintarTarjetas();
     pintarGrafico();
-    pintarGrafico2();
+    pintarPaneles();
     traerVitales();
 }
 
@@ -428,75 +423,105 @@ function pintarGrafico() {
         .join("");
 }
 
-// ── curvas de ventilación y gases ───────────────────────────────────────────
-// Eje izquierdo (0–60, se amplía si hace falta): presiones en cmH2O, CO2 en
-// mmHg y FR en rpm — rangos compatibles. Eje derecho (0–8): Sevo y MAC.
-const SERIES_VENT = [
-    { key: "pip",     etiqueta: "PIP",    unidad: "cmH2O", color: "#3f51b5" },
-    { key: "pmedia",  etiqueta: "Pmedia", unidad: "cmH2O", color: "#7986cb" },
-    { key: "peep",    etiqueta: "PEEP",   unidad: "cmH2O", color: "#9fa8da" },
-    { key: "fr_vent", etiqueta: "FR",     unidad: "rpm",   color: "#78909c" },
-    { key: "mv",      etiqueta: "MV",     unidad: "L/min", color: "#4db6ac" },
-    { key: "etco2",   etiqueta: "etCO2",  unidad: "mmHg",  color: "#f39c12" },
-    { key: "fico2",   etiqueta: "FiCO2",  unidad: "mmHg",  color: "#f7ca6b" },
+// ── paneles de ventilación y gases, POR SEPARADO ────────────────────────────
+// Un panel por familia de parámetros con SU escala (como las pantallas de
+// tendencias del monitor). El panel sin ningún dato en la sesión se oculta.
+const PANELES = [
+    { id: "presiones", titulo: "Presión de vía aérea", unidad: "cmH2O",
+      yBase: 40, paso: 10,
+      series: [
+        { key: "pip",    etiqueta: "PIP",    color: "#3f51b5" },
+        { key: "pmedia", etiqueta: "Pmedia", color: "#7986cb" },
+        { key: "peep",   etiqueta: "PEEP",   color: "#9fa8da" },
+      ] },
+    { id: "ventilacion", titulo: "Ventilación", unidad: "FR rpm · MV L/min",
+      yBase: 40, paso: 10,
+      series: [
+        { key: "fr_vent", etiqueta: "FR", color: "#78909c" },
+        { key: "mv",      etiqueta: "MV", color: "#4db6ac" },
+      ] },
+    { id: "co2", titulo: "CO2", unidad: "mmHg",
+      yBase: 60, paso: 10,
+      series: [
+        { key: "etco2", etiqueta: "etCO2", color: "#f39c12" },
+        { key: "fico2", etiqueta: "FiCO2", color: "#f7ca6b" },
+      ] },
+    { id: "sevo", titulo: "Sevoflurano y MAC", unidad: "%",
+      yBase: 8, paso: 2,
+      series: [
+        { key: "sev_et", etiqueta: "Sev Et", color: "#26a69a" },
+        { key: "sev_fi", etiqueta: "Sev Fi", color: "#7fcbc4" },
+        { key: "mac",    etiqueta: "MAC",    color: "#8d6e63" },
+      ] },
 ];
-const SERIES_GAS = [
-    { key: "sev_et", etiqueta: "Sev Et", unidad: "%", color: "#26a69a" },
-    { key: "sev_fi", etiqueta: "Sev Fi", unidad: "%", color: "#7fcbc4" },
-    { key: "mac",    etiqueta: "MAC",    unidad: "",  color: "#8d6e63" },
-];
-const G2 = { ancho: 860, alto: 300, izq: 34, der: 34, arr: 8, aba: 22, yDerMax: 8 };
+const GP = { ancho: 860, alto: 180, izq: 34, der: 8, arr: 8, aba: 20 };
 
-function pintarGrafico2() {
-    const svg = document.getElementById("grafico2");
-    svg.innerHTML = "";
-    const w = G2.ancho - G2.izq - G2.der, h = G2.alto - G2.arr - G2.aba;
+// Las cajas se crean una sola vez; después cada refresco pinta los SVG.
+function crearPaneles() {
+    const cont = document.getElementById("paneles-vent");
+    for (const p of PANELES) {
+        const caja = document.createElement("div");
+        caja.className = "tarjeta-caja oculto";
+        caja.id = `panel-${p.id}`;
+        caja.innerHTML = `
+            <div class="panel-titulo">${p.titulo}
+                <span class="unidad" style="font-weight:normal;color:var(--suave);font-size:12px">(${p.unidad})</span>
+                <span class="leyenda" id="leyenda-${p.id}"></span></div>
+            <svg id="svg-${p.id}" viewBox="0 0 ${GP.ancho} ${GP.alto}" role="img"
+                 style="width:100%;height:auto;display:block"
+                 aria-label="Curvas de ${p.titulo}"></svg>`;
+        cont.appendChild(caja);
+    }
+}
+
+function pintarPaneles() {
+    if (!document.getElementById(`panel-${PANELES[0].id}`)) crearPaneles();
     const conTs = vitales.filter((v) => v.ts);
     const { t0, t1 } = rangoTiempo(conTs);
-
-    // techo del eje izquierdo: 60, ampliado al dato más alto (PIP puede pasar)
-    let yMax = 60;
-    for (const v of conTs) {
-        for (const s of SERIES_VENT) {
-            if (v[s.key] != null) yMax = Math.max(yMax, Math.ceil(v[s.key] / 10) * 10);
-        }
-    }
-    const x = (t) => G2.izq + ((t - t0) / (t1 - t0)) * w;
-    const y = (v) => G2.arr + (1 - v / yMax) * h;
-    const yDer = (v) => G2.arr + (1 - v / G2.yDerMax) * h;
-
-    const pasoY = yMax > 80 ? 20 : 10;
-    for (let v = 0; v <= yMax; v += pasoY) {
-        svg.appendChild(svgEl("line", { x1: G2.izq, x2: G2.ancho - G2.der, y1: y(v), y2: y(v),
-            stroke: v === 0 ? "#c9d2dd" : "#e7ecf2", "stroke-width": 1 }));
-        const et = svgEl("text", { x: G2.izq - 5, y: y(v) + 3.5, "text-anchor": "end",
-            "font-size": 10, fill: "#5b6675" });
-        et.textContent = v;
-        svg.appendChild(et);
-    }
-    for (let v = 0; v <= G2.yDerMax; v += 2) {
-        const et = svgEl("text", { x: G2.ancho - G2.der + 5, y: yDer(v) + 3.5,
-            "text-anchor": "start", "font-size": 10, fill: "#26a69a" });
-        et.textContent = v;
-        svg.appendChild(et);
-    }
+    const w = GP.ancho - GP.izq - GP.der, h = GP.alto - GP.arr - GP.aba;
     const paso = Math.max(5, Math.round((t1 - t0) / 60000 / 6 / 5) * 5) * 60000;
-    for (let t = Math.ceil(t0 / paso) * paso; t <= t1; t += paso) {
-        svg.appendChild(svgEl("line", { x1: x(t), x2: x(t), y1: G2.arr, y2: G2.alto - G2.aba,
-            stroke: "#eef1f5", "stroke-width": 1 }));
-        const et = svgEl("text", { x: x(t), y: G2.alto - 7, "text-anchor": "middle",
-            "font-size": 10, fill: "#5b6675" });
-        et.textContent = new Date(t).toTimeString().slice(0, 5);
-        svg.appendChild(et);
-    }
-    for (const s of SERIES_VENT) lineaSerie(svg, conTs, s.key, x, y, s.color, 1.6, 0.9);
-    for (const s of SERIES_GAS) lineaSerie(svg, conTs, s.key, x, yDer, s.color, 1.6, 0.9);
 
-    const chip = (s) => `<span class="chip-leyenda" style="color:${s.color}">— ${s.etiqueta}` +
-                        (s.unidad ? ` <span style="opacity:.7">(${s.unidad})</span>` : "") + "</span>";
-    document.getElementById("leyenda2").innerHTML =
-        SERIES_VENT.map(chip).join("") + SERIES_GAS.map(chip).join("") +
-        '<span class="chip-leyenda" style="color:#26a69a">eje derecho: Sevo/MAC</span>';
+    for (const p of PANELES) {
+        const caja = document.getElementById(`panel-${p.id}`);
+        const hayDato = conTs.some((v) => p.series.some((s) => v[s.key] != null));
+        caja.classList.toggle("oculto", !hayDato);
+        if (!hayDato) continue;
+
+        // techo del eje: la base del panel, ampliada si un dato la pasa
+        let yMax = p.yBase;
+        for (const v of conTs) {
+            for (const s of p.series) {
+                if (v[s.key] != null) yMax = Math.max(yMax, Math.ceil(v[s.key] / p.paso) * p.paso);
+            }
+        }
+        const x = (t) => GP.izq + ((t - t0) / (t1 - t0)) * w;
+        const y = (v) => GP.arr + (1 - v / yMax) * h;
+        const svg = document.getElementById(`svg-${p.id}`);
+        svg.innerHTML = "";
+
+        const pasoY = yMax / p.paso > 6 ? p.paso * 2 : p.paso;
+        for (let v = 0; v <= yMax; v += pasoY) {
+            svg.appendChild(svgEl("line", { x1: GP.izq, x2: GP.ancho - GP.der,
+                y1: y(v), y2: y(v),
+                stroke: v === 0 ? "#c9d2dd" : "#e7ecf2", "stroke-width": 1 }));
+            const et = svgEl("text", { x: GP.izq - 5, y: y(v) + 3.5, "text-anchor": "end",
+                "font-size": 10, fill: "#5b6675" });
+            et.textContent = v;
+            svg.appendChild(et);
+        }
+        for (let t = Math.ceil(t0 / paso) * paso; t <= t1; t += paso) {
+            svg.appendChild(svgEl("line", { x1: x(t), x2: x(t), y1: GP.arr,
+                y2: GP.alto - GP.aba, stroke: "#eef1f5", "stroke-width": 1 }));
+            const et = svgEl("text", { x: x(t), y: GP.alto - 6, "text-anchor": "middle",
+                "font-size": 10, fill: "#5b6675" });
+            et.textContent = new Date(t).toTimeString().slice(0, 5);
+            svg.appendChild(et);
+        }
+        for (const s of p.series) lineaSerie(svg, conTs, s.key, x, y, s.color, 1.6, 0.9);
+        document.getElementById(`leyenda-${p.id}`).innerHTML = p.series
+            .map((s) => `<span class="chip-leyenda" style="color:${s.color}">— ${s.etiqueta}</span>`)
+            .join("");
+    }
 }
 
 function pintarFrescura() {
@@ -532,7 +557,7 @@ async function traerVitales() {
         ultimaLlegada = Date.now();
         pintarTarjetas();
         pintarGrafico();
-        pintarGrafico2();
+        pintarPaneles();
     }
     pintarFrescura();
 }
