@@ -303,16 +303,35 @@ const SERIES = [
     { key: "spo2",     etiqueta: "SpO2", simbolo: "○", color: "#29b6f6" },
 ];
 
+// Un parámetro CONTINUO (FC, SpO2, etCO2, Sevo...) vale solo mientras la
+// señal está: si su última aparición quedó a más de FRESCURA_S del último
+// dato de la sesión, la tarjeta vuelve a "—". Sin esto, una lectura
+// fantasma del VGA (un dígito que cae en el ROI equivocado y pasa el rango
+// de plausibilidad) quedaba CLAVADA como valor actual por horas — se vio
+// FC 100-122 sin ningún sensor de paciente conectado (28-ago-2026). El
+// NIBP es intermitente por naturaleza: conserva su última toma y declara
+// la hora ("medida HH:MM").
+const FRESCURA_S = 60;
+const CAMPOS_INTERMITENTES = new Set(["nibp_sis", "nibp_dia", "nibp_pam"]);
+
 function ultimosValores() {
     const u = {};
+    const ts = {};
     for (const v of vitales) {
         for (const [k, val] of Object.entries(v)) {
             if (val != null && k !== "ts" && k !== "fuente") {
                 u[k] = val;
-                if (k === "nibp_sis") u._ts_nibp = v.ts;
+                ts[k] = v.ts;
             }
         }
     }
+    const tope = vitales.length
+        ? new Date(vitales[vitales.length - 1].ts).getTime() : 0;
+    for (const k of Object.keys(u)) {
+        if (CAMPOS_INTERMITENTES.has(k)) continue;
+        if (tope - new Date(ts[k]).getTime() > FRESCURA_S * 1000) delete u[k];
+    }
+    if (u.nibp_sis != null) u._ts_nibp = ts.nibp_sis;
     return u;
 }
 
@@ -426,6 +445,10 @@ function pintarGrafico() {
 // ── paneles de ventilación y gases, POR SEPARADO ────────────────────────────
 // Un panel por familia de parámetros con SU escala (como las pantallas de
 // tendencias del monitor). El panel sin ningún dato en la sesión se oculta.
+// Pedido del usuario (28-ago): SOLO la curva de PEEP y presión de vía
+// aérea — FR/MV/CO2/Sevo quedan en las tarjetas numéricas, sin curva.
+// (Las definiciones de esos paneles viven en el historial de git por si
+// alguna cirugía las reclama.)
 const PANELES = [
     { id: "presiones", titulo: "Presión de vía aérea", unidad: "cmH2O",
       yBase: 40, paso: 10,
@@ -433,25 +456,6 @@ const PANELES = [
         { key: "pip",    etiqueta: "PIP",    color: "#3f51b5" },
         { key: "pmedia", etiqueta: "Pmedia", color: "#7986cb" },
         { key: "peep",   etiqueta: "PEEP",   color: "#9fa8da" },
-      ] },
-    { id: "ventilacion", titulo: "Ventilación", unidad: "FR rpm · MV L/min",
-      yBase: 40, paso: 10,
-      series: [
-        { key: "fr_vent", etiqueta: "FR", color: "#78909c" },
-        { key: "mv",      etiqueta: "MV", color: "#4db6ac" },
-      ] },
-    { id: "co2", titulo: "CO2", unidad: "mmHg",
-      yBase: 60, paso: 10,
-      series: [
-        { key: "etco2", etiqueta: "etCO2", color: "#f39c12" },
-        { key: "fico2", etiqueta: "FiCO2", color: "#f7ca6b" },
-      ] },
-    { id: "sevo", titulo: "Sevoflurano y MAC", unidad: "%",
-      yBase: 8, paso: 2,
-      series: [
-        { key: "sev_et", etiqueta: "Sev Et", color: "#26a69a" },
-        { key: "sev_fi", etiqueta: "Sev Fi", color: "#7fcbc4" },
-        { key: "mac",    etiqueta: "MAC",    color: "#8d6e63" },
       ] },
 ];
 const GP = { ancho: 860, alto: 180, izq: 34, der: 8, arr: 8, aba: 20 };
