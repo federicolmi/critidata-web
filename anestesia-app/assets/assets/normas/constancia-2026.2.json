@@ -1,0 +1,315 @@
+{
+  "_lea_esto_primero": [
+    "LOS TEXTOS DE LA CONSTANCIA VIVEN ACÁ. Igual que los umbrales: contenido",
+    "normativo versionado, firmado con sha256 y NUNCA editado una vez publicado.",
+    "",
+    "ESTO NO ES UN CONSENTIMIENTO INFORMADO. Es la constancia de que se informó el",
+    "riesgo estimado. No es una declaración de voluntad, no autoriza nada y no",
+    "reemplaza el consentimiento escrito que la ley 26.529 exige para la",
+    "intervención quirúrgica y para el acto anestésico. Eso está escrito en el CUERPO",
+    "del documento con el mismo peso que el título, no en una nota al pie.",
+    "",
+    "FIRMA EL PACIENTE. El familiar acompaña. 'Familiar responsable' no existe en la",
+    "ley argentina: no aparece ni en la ley 26.529, ni en su decreto reglamentario,",
+    "ni en el art. 59 del Código Civil y Comercial. Por eso el formulario pregunta en",
+    "qué CARÁCTER firma quien firma, y sólo habilita la firma por representación con",
+    "el motivo asentado por escrito.",
+    "",
+    "HUECO LEGAL DECLARADO Y GRANDE: nada de este archivo fue validado por un abogado.",
+    "Ver los pendientes PF-01 a PF-05. Antes de que esto llegue a un paciente real",
+    "tiene que revisarlo alguien con práctica en responsabilidad profesional médica."
+  ],
+
+  "id": "constancia-riesgo-informado",
+  "version": "2026.2",
+  "vigenciaDesde": "2026-09-01",
+  "vigenciaHasta": null,
+  "catalogosCompatibles": {
+    "normas": { "id": "riesgo-quirurgico", "version": "2026.1" },
+    "procedimientos": { "id": "procedimientos-y-derivacion-inicial", "version": "2026.2" },
+    "conclusion": { "id": "conclusion-riesgo", "version": "2026.2" }
+  },
+
+  "revision": {
+    "revisadoPor": "PENDIENTE — anestesiólogo con nombre y matrícula, Y asesor legal de la institución",
+    "revisadoEl": "PENDIENTE",
+    "proximaRevision": "2027-09-01"
+  },
+
+  "titulo": "CONSTANCIA DE INFORMACIÓN SOBRE RIESGO PERIOPERATORIO ESTIMADO",
+  "subtituloConElMismoPesoQueElTitulo": "Este documento NO es un consentimiento informado y no autoriza ningún procedimiento. El consentimiento informado para el acto quirúrgico y para el acto anestésico se instrumenta por escrito, en documento separado, conforme al art. 7 inc. b de la ley 26.529.",
+
+  "demo": {
+    "esUnDemo": true,
+    "bandaSuperior": "DOCUMENTO DE DEMOSTRACIÓN — NO USAR CON PACIENTES REALES",
+    "marcaDeAgua": "DEMO — SIN VALIDEZ LEGAL",
+    "marcaDeAguaEnMosaico": true,
+    "textoDelBotonDeFirma": "Simular firma (demo)",
+    "selloSobreElTrazo": "MUESTRA",
+    "exportaPDF": false,
+    "permiteImprimir": false,
+    "porQueNoExporta": "Un PDF prolijo con nombre, matrícula, puntajes y dos firmas es indistinguible de un documento clínico. La marca de agua se recorta, el pie se ignora; el archivo no. No hace falta mala fe: alcanza con un residente apurado.",
+    "identidadFija": {
+      "paciente": "Paciente de prueba 001",
+      "documentoPaciente": "DNI 00.000.000 (demo)",
+      "profesional": "Profesional de prueba",
+      "matricula": "M.N. 00000 / M.P. 00000 (demo)",
+      "porQueFija": "El demo no acepta nombre ni documento escritos a mano. Datos de salud son datos sensibles (ley 25.326, arts. 2 y 8) y un demo educativo no tiene ninguna razón para recibirlos."
+    },
+    "persistencia": {
+      "guarda": false,
+      "texto": "Esta demostración no guarda datos: al recargar la página se pierde todo."
+    }
+  },
+
+  "cuerpo": {
+    "_registro": "Primera persona del PROFESIONAL, no del paciente. Un documento que narra lo que el médico hizo no se confunde con una declaración de voluntad, y no se puede leer como asunción de riesgo por parte del paciente.",
+    "parrafos": [
+      { "id": "c01", "texto": "Dejo constancia de haber informado a {nombrePaciente} sobre el riesgo perioperatorio estimado para el procedimiento {procedimientoNombre} ({procedimientoVia}), con carácter {urgencia}." },
+      { "id": "c02", "texto": "La estimación se hizo con escalas publicadas, cuyos resultados, alcance y límites constan en la conclusión que se transcribe a continuación y forma parte de esta constancia." },
+      { "id": "c03", "texto": "Expliqué que los porcentajes son incidencias observadas en las cohortes en las que se construyeron esas escalas — Reino Unido, España y Estados Unidos, entre 1999 y 2010 —, que no están calibradas a población argentina, y que describen lo que le pasó a un grupo de pacientes, no lo que le va a pasar a esta persona." },
+      { "id": "c04", "texto": "Informé qué escalas no se pudieron aplicar a este caso y por qué, y qué datos quedaron sin responder, si los hubo." },
+      { "id": "c05", "texto": "Hubo oportunidad de preguntar y las preguntas fueron respondidas." },
+      { "id": "c06", "texto": "Los ítems que aparecen señalados como derivados fueron propuestos por el sistema a partir del procedimiento elegido y confirmados por mí; los demás los consigné directamente." }
+    ],
+    "transcripcionDeLaConclusion": {
+      "incluir": true,
+      "titulo": "Conclusión transcripta (texto generado el {fechaHoraGeneracion})",
+      "nota": "Se transcribe el texto tal como se generó. Si cambian las respuestas, no se reimprime encima: se emite una constancia NUEVA que referencia a la anterior, y la vieja queda."
+    },
+    "frasePacienteParaElPie": "Recibí esta información y tuve oportunidad de preguntar.",
+    "fraseUnicaParaElPaciente": {
+      "_para_que": "Registro llano, para la hoja que firma el paciente. NO van los cinco resultados: mostrarle cinco números lo empuja a quedarse con el peor. Va sólo el porcentaje que el catálogo calcula, con denominador FIJO de 100 y en las dos direcciones.",
+      "texto": "Se me explicó el riesgo de esta cirugía con escalas publicadas. Sobre la posibilidad de fallecer dentro del mes de operado: en el estudio del que sale la escala, de cada 100 pacientes con las características que se cargaron, alrededor de {nDeCada100} fallecieron y alrededor de {complementoDe100} no. Entiendo que ese número viene de pacientes de otro país y de otra época, y que no dice qué me va a pasar a mí. Se me explicó también el riesgo cardíaco y el de complicaciones del pulmón, y pude hacer preguntas.",
+      "reglasDeFormato": {
+        "denominadorFijo": 100,
+        "prohibido1EnX": "Prohibido el formato '1 en x' con denominador variable en todo el proyecto: hay evidencia fuerte de que se entiende peor y eleva la percepción de riesgo.",
+        "ambasDirecciones": "El número se da en los dos sentidos, para no encuadrar sólo en pérdidas.",
+        "ayudaVisual": "Opcional: una grilla de 100 figuritas entra en 360 px y mejora comprensión y satisfacción.",
+        "siNoHayPorcentaje": "Si el SORT no se calculó o no aplica, esta frase NO se imprime: se imprime en su lugar el motivo, sin número."
+      }
+    }
+  },
+
+  "clausulasProhibidas": {
+    "_para_que": "El test de la suite verifica que ninguna de estas frases aparezca en el documento generado. Son nulas cuando afectan derechos indisponibles (CCyC art. 1743, dispensa anticipada de la responsabilidad) y, peor todavía, delatan un documento redactado como escudo y no como información.",
+    "frases": [
+      "acepto el riesgo",
+      "asumo el riesgo",
+      "asumo las consecuencias",
+      "me hago responsable",
+      "haciéndome responsable",
+      "deslindo",
+      "exime de responsabilidad",
+      "libre de toda responsabilidad",
+      "bajo juramento",
+      "declaro no haber omitido",
+      "autorizo la cirugía",
+      "presto mi consentimiento",
+      "consiento"
+    ]
+  },
+
+  "firmantes": [
+    {
+      "id": "profesional",
+      "rotulo": "Profesional que informó",
+      "obligatorio": true,
+      "campos": [
+        { "id": "nombre", "rotulo": "Nombre y apellido", "tipo": "texto", "obligatorio": true },
+        { "id": "profesion", "rotulo": "Profesión", "tipo": "texto", "obligatorio": true },
+        { "id": "matricula", "rotulo": "M.N. / M.P.", "tipo": "texto", "obligatorio": true, "ayuda": "Genérico a propósito: falta confirmar si en la provincia de Buenos Aires corresponde consignar la matrícula provincial además de la nacional (pendiente PF-04)." },
+        { "id": "fecha", "rotulo": "Fecha", "tipo": "fecha", "obligatorio": true },
+        { "id": "hora", "rotulo": "Hora", "tipo": "hora", "obligatorio": true, "ayuda": "La reglamentación del art. 15 del decreto 1089/2012 pide fecha y hora en toda actuación profesional." },
+        { "id": "firma", "rotulo": "Firma y sello", "tipo": "trazo", "obligatorio": true }
+      ]
+    },
+    {
+      "id": "paciente",
+      "rotulo": "Paciente",
+      "obligatorioSi": "el paciente puede firmar",
+      "leyenda": "Recibí esta información y tuve oportunidad de preguntar.",
+      "leyendaExplicativa": "Recepción, no aceptación: firmar acá no significa aceptar el riesgo ni autorizar nada.",
+      "campos": [
+        { "id": "firma", "rotulo": "Firma", "tipo": "trazo", "obligatorio": true },
+        { "id": "aclaracion", "rotulo": "Aclaración", "tipo": "texto", "obligatorio": true },
+        { "id": "documento", "rotulo": "Documento", "tipo": "texto", "obligatorio": true }
+      ]
+    },
+    {
+      "id": "acompanante",
+      "rotulo": "Acompañante presente durante la información",
+      "obligatorio": false,
+      "leyendaImpresa": "La presencia del acompañante no sustituye ni complementa la firma del paciente.",
+      "campos": [
+        { "id": "autorizacionDelPaciente", "rotulo": "El paciente autorizó que esté presente y que se le informe", "tipo": "casilla", "obligatorio": true, "ayuda": "Si el paciente puede decidir, la información sanitaria sólo se comparte con terceros con su autorización (ley 26.529, art. 4). Hacer firmar a un familiar sin esto no sólo pone a firmar a quien no corresponde: expone datos sensibles de un paciente capaz a alguien que no estaba autorizado." },
+        { "id": "aclaracion", "rotulo": "Aclaración", "tipo": "texto", "obligatorio": true },
+        { "id": "vinculo", "rotulo": "Vínculo", "tipo": "texto", "obligatorio": true },
+        { "id": "documento", "rotulo": "Documento", "tipo": "texto", "obligatorio": true },
+        { "id": "firma", "rotulo": "Firma", "tipo": "trazo", "obligatorio": false }
+      ]
+    },
+    {
+      "id": "por_representacion",
+      "rotulo": "Firma por representación",
+      "colapsadoPorDefecto": true,
+      "seAbreSolo": "cuando el profesional tilda «el paciente no puede firmar»",
+      "obligatorio": false,
+      "campos": [
+        { "id": "motivo", "rotulo": "Motivo por el que el paciente no firma", "tipo": "texto_libre", "obligatorio": true, "ayuda": "Campo obligatorio, no opcional. Sin motivo asentado, la firma por representación no se habilita." },
+        { "id": "caracter", "rotulo": "Carácter en que interviene quien firma", "tipo": "opciones", "obligatorio": true, "opcionesDe": "caracteresDeQuienFirma" },
+        { "id": "aclaracion", "rotulo": "Aclaración", "tipo": "texto", "obligatorio": true },
+        { "id": "documento", "rotulo": "Documento", "tipo": "texto", "obligatorio": true },
+        { "id": "firma", "rotulo": "Firma", "tipo": "trazo", "obligatorio": true },
+        { "id": "acreditacionDelVinculo", "rotulo": "Cómo se acreditó el vínculo", "tipo": "texto", "obligatorio": true, "ayuda": "A falta de otra prueba, la reglamentación admite declaración jurada como prueba suficiente por 48 horas, con la documentación a acompañar después (decreto 1089/2012, regl. art. 5)." }
+      ]
+    },
+    {
+      "id": "testigos",
+      "rotulo": "Testigos",
+      "obligatorioSi": "el paciente no pudo firmar",
+      "cantidad": 2,
+      "fundamento": "Reglamentación del art. 7 del decreto 1089/2012, último párrafo: si no le fuera posible firmar al paciente, se documenta esa circunstancia en la historia clínica y el profesional requiere la firma de dos testigos.",
+      "campos": [
+        { "id": "aclaracion", "rotulo": "Aclaración", "tipo": "texto", "obligatorio": true },
+        { "id": "documento", "rotulo": "Documento", "tipo": "texto", "obligatorio": true },
+        { "id": "firma", "rotulo": "Firma", "tipo": "trazo", "obligatorio": true }
+      ]
+    }
+  ],
+
+  "caracteresDeQuienFirma": {
+    "_para_que": "Reemplaza el rótulo 'familiar responsable', que no existe en la normativa argentina. Estas son las figuras que la norma sí nombra.",
+    "advertenciaDeOrden": "El orden que sigue NO lo resuelve la app. Se muestran los dos órdenes que la normativa deja disponibles y la elección la hace y la firma una persona.",
+    "opciones": [
+      { "valor": "representante_legal", "texto": "Representante legal", "ayuda": "Con sentencia o designación. Se acredita con el documento." },
+      { "valor": "apoyo", "texto": "Apoyo con funciones de representación", "ayuda": "Art. 59 del Código Civil y Comercial." },
+      { "valor": "conyuge", "texto": "Cónyuge", "ayuda": "" },
+      { "valor": "conviviente", "texto": "Conviviente", "ayuda": "" },
+      { "valor": "pariente", "texto": "Pariente", "ayuda": "Ver el orden entre parientes más abajo." },
+      { "valor": "allegado_que_acompana", "texto": "Allegado que acompaña al paciente", "ayuda": "Art. 59 CCyC, en situación de emergencia con riesgo cierto e inminente." },
+      { "valor": "a_cargo_del_cuidado", "texto": "Persona que convive o está a cargo de la asistencia o el cuidado", "ayuda": "Ley 26.529, art. 4, y decreto 1089/2012." }
+    ]
+  },
+
+  "ordenesDePrelacion": {
+    "huecoDeclarado": {
+      "titulo": "La remisión del art. 6 de la ley 26.529 apunta a una norma derogada",
+      "detalle": "El art. 6 remite al art. 21 de la ley 24.193, y la ley 27.447 derogó la ley 24.193 en su totalidad (art. 71) sin reproducir aquel orden de prelación. No se halló norma posterior que corrija la remisión. Por eso este catálogo registra los DOS órdenes y no elige por el usuario: la articulación entre ellos es materia de interpretación y la app no la resuelve.",
+      "estado": "pendiente"
+    },
+    "historico_art21_ley24193": {
+      "nota": "Orden del art. 21 de la ley 24.193, hoy derogada. La doctrina lo sigue usando para leer qué significa 'pariente' en el art. 59 del CCyC, por ser más preciso.",
+      "orden": [
+        "Cónyuge no divorciado que convivía, o conviviente en relación de tipo conyugal no menor a tres años",
+        "Cualquiera de los hijos mayores de 18 años",
+        "Cualquiera de los padres",
+        "Cualquiera de los hermanos mayores de 18 años",
+        "Cualquiera de los nietos mayores de 18 años",
+        "Cualquiera de los abuelos",
+        "Cualquier pariente consanguíneo hasta el cuarto grado",
+        "Cualquier pariente por afinidad hasta el segundo grado",
+        "Quien convive o está a cargo de la asistencia o cuidado del paciente (agregado por el decreto 1089/2012)"
+      ]
+    },
+    "art59_ccyc": {
+      "nota": "Orden del último párrafo del art. 59 del Código Civil y Comercial, para el caso de emergencia con riesgo cierto e inminente de un mal grave para la vida o la salud.",
+      "orden": [
+        "El representante legal",
+        "El apoyo",
+        "El cónyuge",
+        "El conviviente",
+        "El pariente o el allegado que acompañe al paciente"
+      ]
+    },
+    "discrepanciaEntreFamiliaresDelMismoGrado": "Si dos personas del mismo grado discrepan, la oposición de una sola requiere la intervención del comité de ética institucional (decreto 1089/2012, regl. art. 5). La app no dirime: lo dice y para."
+  },
+
+  "reglasDeFirmaPorEdad": {
+    "_para_que": "Lo que selecciona la rama es la EDAD, que ya se carga arriba. La rama se MUESTRA y la confirma una persona: nunca se aplica en silencio, porque una edad mal tipeada terminaría en un documento firmado por quien no correspondía.",
+    "confirmacionHumanaObligatoria": true,
+    "reglas": [
+      {
+        "id": "F-01", "desdeEdad": 16, "hastaEdad": null,
+        "firmantePrimario": "paciente",
+        "textoEnPantalla": "Desde los 16 años el adolescente es considerado un adulto para las decisiones sobre el cuidado de su propio cuerpo: firma el paciente.",
+        "fundamento": "Código Civil y Comercial, art. 26, párrafo 4."
+      },
+      {
+        "id": "F-02", "desdeEdad": 13, "hastaEdad": 15,
+        "firmantePrimario": "paciente_con_asistencia_de_progenitores",
+        "textoEnPantalla": "Entre 13 y 16 años la presunción de aptitud para decidir por sí alcanza a lo NO invasivo. Una cirugía con anestesia es invasiva, así que el adolescente firma con la asistencia de sus progenitores.",
+        "fundamento": "Código Civil y Comercial, art. 26, párrafo 5."
+      },
+      {
+        "id": "F-03", "desdeEdad": 0, "hastaEdad": 12,
+        "firmantePrimario": "representantes_legales",
+        "textoEnPantalla": "Firman los representantes legales, dejando constancia de que se escuchó al chico en la medida de sus posibilidades.",
+        "fundamento": "Código Civil y Comercial, art. 26; ley 26.529, art. 6, último párrafo (participación del paciente en la medida de sus posibilidades)."
+      }
+    ]
+  },
+
+  "bloqueos": {
+    "_para_que": "Un documento firmado que omite ítems sin responder es el default benigno con rúbrica encima: la firma le da apariencia de completitud a un cálculo incompleto. Hoy, si falta un dato, la excepción molesta a un programador; con firma, produce una constancia que subestima el riesgo y la firman dos personas.",
+    "noSePuedeFirmarSi": [
+      { "id": "B-01", "condicion": "faltan_respuestas", "texto": "Faltan datos sin responder. La constancia no se habilita hasta que estén todos: {listaFaltantes}." },
+      { "id": "B-02", "condicion": "hay_propuestos_sin_confirmar", "texto": "Hay ítems propuestos por la app que nadie confirmó todavía: {listaPropuestos}. Se confirman de a uno." },
+      { "id": "B-03", "condicion": "falta_dato", "dato": "procedimiento", "texto": "Falta elegir el procedimiento." },
+      { "id": "B-04", "condicion": "firma_por_representacion_sin_motivo", "texto": "Falta el motivo por el que el paciente no firma. Es campo obligatorio." },
+      { "id": "B-05", "condicion": "paciente_no_pudo_firmar_sin_dos_testigos", "texto": "Falta la firma de los dos testigos." }
+    ],
+    "mostrarLoQueFalta": true,
+    "sinBotonEscondido": "La lista de lo que falta se ve al lado del botón deshabilitado. Un botón gris sin explicación se lee como un error de la app."
+  },
+
+  "avisoDeFirmaElectronica": {
+    "titulo": "Esto no es una firma digital",
+    "texto": "Un trazo capturado en pantalla es, a lo sumo, firma electrónica: no goza de las presunciones de autoría e integridad de los arts. 7 y 8 de la ley 25.506, y si alguien la desconoce, la carga de probar autoría e inalterabilidad recae sobre quien la invoca (art. 5). Para instrumentos generados por medios electrónicos, el art. 288 del Código Civil y Comercial exige firma digital. Si esto saliera alguna vez de demo, las dos opciones honestas son imprimir y firmar de puño y letra, o firma digital con certificado de certificador licenciado.",
+    "dondeVa": ["pantalla de firma", "cuerpo del documento", "README del proyecto"]
+  },
+
+  "pieDeTrazabilidad": {
+    "texto": "Constancia emitida el {fechaHoraGeneracion} · catálogo de normas {versionNormas} (huella {huellaNormasCorta}) · procedimientos {versionProcedimientos} (huella {huellaProcedimientosCorta}) · conclusión {versionConclusion} (huella {huellaConclusionCorta}) · constancia {versionConstancia} (huella {huellaConstanciaCorta}).",
+    "reglaDeReemision": "Una constancia firmada no se reimprime recalculada. Si cambia algo, se emite una constancia NUEVA que referencia a la anterior por su identificador y su fecha; la vieja queda intacta. Mismo criterio que el recálculo guardado al lado del original."
+  },
+
+  "pendientesDelCatalogo": [
+    {
+      "id": "PF-01",
+      "titulo": "Nada de este archivo lo revisó un abogado",
+      "detalle": "El articulado citado (ley 26.529 y su modificatoria 26.742, decreto 1089/2012, CCyC arts. 26, 59, 288 y 1743, ley 25.506, ley 17.132, ley 14.464 de la provincia de Buenos Aires) se consultó en fuentes públicas, pero la construcción de la figura 'constancia de riesgo informado' y su redacción son interpretación de este proyecto. Antes de usarlo con pacientes reales, lo tiene que revisar alguien con práctica en responsabilidad profesional médica en la provincia de Buenos Aires.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "PF-02",
+      "titulo": "La 'constancia de riesgo informado' no es una categoría legal argentina",
+      "detalle": "No existe norma que la cree, regule ni nombre. Lo que sí existe: el deber de informar es autónomo y anterior al de recabar consentimiento, y la normativa usa la palabra 'constancia' para los asientos de historia clínica. La figura es defendible como documentación del proceso informativo, pero es construcción, no texto legal.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "PF-03",
+      "titulo": "El orden de prelación remite a una ley derogada",
+      "detalle": "Ver el bloque ordenesDePrelacion. El art. 6 de la ley 26.529 remite al art. 21 de la ley 24.193, derogada por el art. 71 de la ley 27.447. La app registra los dos órdenes y no elige.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "PF-04",
+      "titulo": "Matrícula: nacional, provincial o las dos",
+      "detalle": "La provincia de Buenos Aires adhirió a la ley 26.529 sólo en materia de sanciones y gratuidad (ley 14.464). No se verificó el régimen de colegiación provincial ni a qué distrito corresponde Saladillo. Por eso el campo dice 'M.N. / M.P.' y no elige.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "PF-05",
+      "titulo": "Jurisprudencia: no se cita ninguna",
+      "detalle": "Aparecieron fallos citados en notas de opinión que no se pudieron confirmar en repertorio oficial. No se citan. La proposición de fondo —que el consentimiento informado es un proceso y no un formulario— no necesita jurisprudencia: está en el texto del decreto 1089/2012, que lo define literalmente como proceso.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "PF-06",
+      "titulo": "El demo no exporta PDF ni imprime",
+      "detalle": "Decisión de diseño. El proyecto ya tiene el andamiaje de PDF de los hermanos gastro y nefrología, y no se usa acá a propósito. Si alguna vez se habilita, la primera página tiene que ser una carátula que sólo diga que es un demo.",
+      "estado": "decidido"
+    }
+  ]
+}

@@ -1,0 +1,484 @@
+{
+  "_lea_esto_primero": [
+    "ESTE ARCHIVO ES EL CATÁLOGO. El código no tiene ni un umbral ni un",
+    "coeficiente escrito adentro: todo sale de acá. Por eso se versiona, se",
+    "firma y NUNCA se edita una vez publicado — si hay que cambiar algo se crea",
+    "la versión siguiente. Editarlo en silencio haría que toda evaluación que",
+    "dice '2026.1' mienta sobre con qué versión se calculó.",
+    "",
+    "CADA SCORE DICE QUÉ DESENLACE ESTIMA. Mortalidad, eventos cardíacos y",
+    "complicaciones pulmonares NO son lo mismo, y mostrarlos juntos sin",
+    "aclararlo sería el error más caro de la pantalla.",
+    "",
+    "Las PREGUNTAS viven separadas de los SCORES: un mismo dato (edad, clase",
+    "ASA) alimenta varios scores con pesos distintos. El profesional contesta",
+    "una vez y el motor reparte."
+  ],
+
+  "id": "riesgo-quirurgico",
+  "version": "2026.1",
+  "vigenciaDesde": "2026-03-01",
+  "vigenciaHasta": null,
+
+  "fuente": {
+    "entidad": "Literatura internacional publicada (ver referencia de cada score)",
+    "documento": "Scores de estratificación de riesgo perioperatorio",
+    "url": "https://sortsurgery.com/"
+  },
+
+  "revision": {
+    "revisadoPor": "PENDIENTE — nombre y matrícula de quien firma la revisión",
+    "revisadoEl": "PENDIENTE",
+    "proximaRevision": "2027-03-01"
+  },
+
+  "advertenciasPermanentes": [
+    "Herramienta de APOYO a la decisión: no reemplaza el juicio clínico.",
+    "El score no decide: no indica ni contraindica la cirugía, no autoriza ni suspende.",
+    "Los porcentajes son de las cohortes originales, no de población argentina.",
+    "Demo educativo. No cargar datos de pacientes reales."
+  ],
+
+  "preguntas": [
+    { "id": "edad", "tipo": "numerico", "texto": "Edad", "unidad": "años", "minimo": 0, "maximo": 120 },
+    {
+      "id": "asa_clase", "tipo": "categorico", "texto": "Clase ASA-PS (estado físico)",
+      "ayuda": "La E de emergencia se registra aparte, en Urgencia.",
+      "opciones": [
+        { "valor": "I", "texto": "ASA I — sano", "ayuda": "Sin enfermedad sistémica." },
+        { "valor": "II", "texto": "ASA II — enfermedad sistémica leve", "ayuda": "Sin limitación funcional sustancial: fumador, embarazo no complicado, obesidad con IMC de 30 a menos de 40, diabetes o hipertensión bien controladas." },
+        { "valor": "III", "texto": "ASA III — enfermedad sistémica grave", "ayuda": "Con limitación funcional sustancial, o varias condiciones moderadas a graves: diabetes o hipertensión mal controladas, EPOC, obesidad mórbida (IMC 40 o más), diálisis programada, y antecedente de MÁS de 3 meses de infarto, ACV, accidente isquémico transitorio, embolia pulmonar o enfermedad coronaria/stents." },
+        { "valor": "IV", "texto": "ASA IV — grave con amenaza vital constante", "ayuda": "IAM o ACV de menos de 3 meses, isquemia en curso, valvulopatía severa, sepsis, insuficiencia renal sin diálisis regular." },
+        { "valor": "V", "texto": "ASA V — moribundo, no sobrevive sin la cirugía", "ayuda": "Aneurisma roto, trauma masivo, hemorragia intracraneal con efecto de masa." },
+        { "valor": "VI", "texto": "ASA VI — muerte encefálica, donante", "ayuda": "" }
+      ]
+    },
+    {
+      "id": "urgencia", "tipo": "categorico", "texto": "Urgencia de la cirugía",
+      "opciones": [
+        { "valor": "electiva", "texto": "Electiva", "ayuda": "Programada, en el momento que convenga." },
+        { "valor": "acelerada", "texto": "Acelerada", "ayuda": "Paciente estable pero requiere intervención temprana, en días." },
+        { "valor": "urgente", "texto": "Urgente", "ayuda": "Requiere intervención dentro de horas." },
+        { "valor": "inmediata", "texto": "Inmediata", "ayuda": "Amenaza vital: reanimación simultánea con la cirugía." }
+      ]
+    },
+    { "id": "cancer", "tipo": "booleano", "texto": "La cirugía es por cáncer" },
+    {
+      "id": "dominio_quirurgico", "tipo": "categorico", "texto": "Dominio de la cirugía",
+      "ayuda": "Define qué scores APLICAN. El SORT se derivó sobre cirugía no cardíaca y no neurológica: fuera de eso no se usa, no se aproxima.",
+      "opciones": [
+        { "valor": "general", "texto": "Cirugía no cardíaca y no neurológica", "ayuda": "El campo donde se derivaron el SORT y el RCRI." },
+        { "valor": "cardiaca", "texto": "Cirugía cardíaca", "ayuda": "Fuera del SORT y del RCRI. Su score propio (EuroSCORE II) no está en este catálogo." },
+        { "valor": "neuroquirurgica", "texto": "Neurocirugía o cirugía de columna", "ayuda": "Excluida de la derivación del SORT." }
+      ]
+    },
+    { "id": "sort_especialidad_alto_riesgo", "tipo": "booleano", "texto": "Especialidad de alto riesgo", "ayuda": "Gastrointestinal, torácica o vascular. El gastrointestinal va COMPLETO: no se acota a esófago-gástrica ni colorrectal — la hepatobiliar también entra." },
+    {
+      "id": "juicio_clinico_mortalidad", "tipo": "categorico",
+      "texto": "Su propia estimación de la mortalidad a 30 días",
+      "ayuda": "El juicio del equipo predice tan bien como el SORT (AUROC 0,89 contra 0,90; sin diferencia significativa, p=0,309) y los dos juntos predicen mejor que cualquiera solo. Por eso se registra: NO para corregir el score ni para que el score lo corrija.",
+      "opciones": [
+        { "valor": "lt1", "texto": "Menos de 1 %" },
+        { "valor": "1a25", "texto": "Entre 1 % y 2,5 %" },
+        { "valor": "26a5", "texto": "Entre 2,6 % y 5 %" },
+        { "valor": "51a10", "texto": "Entre 5,1 % y 10 %" },
+        { "valor": "101a50", "texto": "Entre 10,1 % y 50 %" },
+        { "valor": "gt50", "texto": "Más del 50 %" }
+      ]
+    },
+    { "id": "sort_severidad_mayor_compleja", "tipo": "booleano", "texto": "Cirugía mayor extendida o compleja", "ayuda": "Categoría Xmajor/complex. Las menores, intermedias y mayores simples no suman." },
+
+    { "id": "rcri_cirugia_alto_riesgo", "tipo": "booleano", "texto": "Cirugía intraperitoneal, intratorácica o vascular suprainguinal" },
+    { "id": "rcri_cardiopatia_isquemica", "tipo": "booleano", "texto": "Cardiopatía isquémica", "ayuda": "Infarto previo, angina, prueba de esfuerzo positiva, uso de nitratos u ondas Q patológicas." },
+    { "id": "rcri_insuficiencia_cardiaca", "tipo": "booleano", "texto": "Insuficiencia cardíaca congestiva", "ayuda": "Edema pulmonar, disnea paroxística nocturna, rales o tercer ruido, redistribución vascular en la radiografía." },
+    { "id": "rcri_enfermedad_cerebrovascular", "tipo": "booleano", "texto": "Enfermedad cerebrovascular", "ayuda": "ACV o accidente isquémico transitorio previos." },
+    { "id": "rcri_diabetes_insulina", "tipo": "booleano", "texto": "Diabetes en tratamiento con insulina", "ayuda": "La controlada con dieta o vía oral NO suma." },
+    { "id": "rcri_creatinina", "tipo": "booleano", "texto": "Creatinina preoperatoria mayor a 2 mg/dL", "ayuda": "Equivale a 177 µmol/L." },
+
+    { "id": "spo2", "tipo": "numerico", "texto": "Saturación de O₂ preoperatoria (aire ambiente)", "unidad": "%", "minimo": 50, "maximo": 100 },
+    { "id": "ariscat_infeccion_respiratoria", "tipo": "booleano", "texto": "Infección respiratoria en el último mes", "ayuda": "Con fiebre y tratamiento antibiótico." },
+    { "id": "ariscat_anemia", "tipo": "booleano", "texto": "Anemia preoperatoria (Hb ≤ 10 g/dL)" },
+    {
+      "id": "ariscat_incision", "tipo": "categorico", "texto": "Sitio de la incisión",
+      "opciones": [
+        { "valor": "periferica", "texto": "Periférica" },
+        { "valor": "abdominal_alta", "texto": "Abdominal alta" },
+        { "valor": "intratoracica", "texto": "Intratorácica" }
+      ]
+    },
+    {
+      "id": "ariscat_duracion", "tipo": "categorico", "texto": "Duración prevista de la cirugía",
+      "ayuda": "Los bordes importan: exactamente 2 horas NO suma; 2 horas y un minuto suma 16.",
+      "opciones": [
+        { "valor": "menos2", "texto": "2 horas o menos" },
+        { "valor": "2a3", "texto": "Más de 2 y hasta 3 horas" },
+        { "valor": "mas3", "texto": "Más de 3 horas" }
+      ]
+    },
+    { "id": "ariscat_emergencia", "tipo": "booleano", "texto": "Procedimiento de emergencia" },
+
+    { "id": "dasi_01", "tipo": "booleano", "texto": "¿Se cuida solo? (comer, vestirse, bañarse, ir al baño)" },
+    { "id": "dasi_02", "tipo": "booleano", "texto": "¿Camina dentro de la casa?" },
+    { "id": "dasi_03", "tipo": "booleano", "texto": "¿Camina una o dos cuadras en llano?" },
+    { "id": "dasi_04", "tipo": "booleano", "texto": "¿Sube un piso por escalera, o sube una loma?" },
+    { "id": "dasi_05", "tipo": "booleano", "texto": "¿Corre una distancia corta?" },
+    { "id": "dasi_06", "tipo": "booleano", "texto": "¿Hace tareas livianas en casa? (quitar el polvo, lavar los platos)" },
+    { "id": "dasi_07", "tipo": "booleano", "texto": "¿Hace tareas moderadas? (pasar la aspiradora, barrer, entrar las compras)" },
+    { "id": "dasi_08", "tipo": "booleano", "texto": "¿Hace tareas pesadas? (baldear pisos, mover muebles)" },
+    { "id": "dasi_09", "tipo": "booleano", "texto": "¿Hace trabajo de jardín? (juntar hojas, desmalezar, cortar el pasto)" },
+    { "id": "dasi_10", "tipo": "booleano", "texto": "¿Tiene relaciones sexuales?" },
+    { "id": "dasi_11", "tipo": "booleano", "texto": "¿Participa de actividades recreativas moderadas? (bailar, bowling, golf, tenis en dobles)" },
+    { "id": "dasi_12", "tipo": "booleano", "texto": "¿Practica deportes intensos? (natación, tenis single, fútbol, básquet)" }
+  ],
+
+  "scores": [
+    {
+      "id": "sort",
+      "nombre": "SORT — mortalidad a 30 días",
+      "desenlace": "MORTALIDAD por cualquier causa dentro de los 30 días de la cirugía. Es el único de esta pantalla que estima muerte.",
+      "paraQue": "Estima con seis datos la probabilidad de que el paciente muera dentro del mes de operado.",
+      "referencia": "Protopapa KL, Simpson JC, Smith NCE, Moonesinghe SR. Development and validation of the Surgical Outcome Risk Tool (SORT). Br J Surg 2014;101(13):1774-1783. Los 11 coeficientes y la constante fueron verificados uno por uno contra la Tabla 4 y la fórmula de la pág. 1779 del artículo original.",
+      "cohorteDerivacion": "Derivado en el Reino Unido (estudio NCEPOD 'Knowing the Risk', ~17.000 pacientes de cirugía no cardíaca ni neurológica con internación). Su calibración en población argentina NO está estudiada.",
+      "tipoCalculo": "logistico",
+      "constante": -7.366,
+      "aportes": [
+        { "pregunta": "asa_clase", "_nota": "ASA I y II comparten peso 0 porque son la categoría de referencia del modelo. ASA VI está AUSENTE a propósito: el SORT se derivó sobre I a V, así que ante ASA VI el score se declara NO APLICABLE — nunca se aproxima al valor más parecido.", "pesoPorOpcion": { "I": 0, "II": 0, "III": 1.411, "IV": 2.388, "V": 4.081 } },
+        { "pregunta": "cancer", "pesoSi": 0.667 },
+        { "pregunta": "edad", "cortes": [ { "hasta": 64, "peso": 0 }, { "hasta": 79, "peso": 0.777 }, { "hasta": null, "peso": 1.591 } ] },
+        { "pregunta": "urgencia", "pesoPorOpcion": { "electiva": 0, "acelerada": 1.236, "urgente": 1.657, "inmediata": 2.452 } },
+        { "pregunta": "sort_especialidad_alto_riesgo", "pesoSi": 0.712 },
+        { "pregunta": "sort_severidad_mayor_compleja", "pesoSi": 0.381 },
+        { "pregunta": "dominio_quirurgico", "_nota": "Sin peso: sólo declara aplicabilidad. 'cardiaca' y 'neuroquirurgica' están AUSENTES del mapa a propósito — el SORT se derivó sobre cirugía no cardíaca ni neurológica, así que ahí el score se declara NO APLICABLE en vez de dar un número que no corresponde.", "pesoPorOpcion": { "general": 0 } }
+      ],
+      "notaBandas": "Los cortes de las bandas son una elección de presentación de este demo: el artículo original devuelve la probabilidad sin categorizarla.",
+      "bandas": [
+        { "desde": 0, "hasta": 1, "etiqueta": "Bajo", "color": "verde", "textoCriollo": "Mortalidad estimada por debajo del 1 %. La conducta la decide el profesional." },
+        { "desde": 1, "hasta": 5, "etiqueta": "Intermedio", "color": "amarillo", "textoCriollo": "Mortalidad estimada entre 1 % y 5 %." },
+        { "desde": 5, "hasta": 10, "etiqueta": "Alto", "color": "naranja", "textoCriollo": "Mortalidad estimada entre 5 % y 10 %." },
+        { "desde": 10, "hasta": 100, "etiqueta": "Muy alto", "color": "rojo", "textoCriollo": "Mortalidad estimada por encima del 10 %." }
+      ]
+    },
+
+    {
+      "id": "rcri",
+      "nombre": "RCRI (Lee) — riesgo CARDÍACO",
+      "desenlace": "EVENTOS CARDÍACOS MAYORES perioperatorios: infarto, edema agudo de pulmón, fibrilación ventricular o paro, bloqueo AV completo. NO es mortalidad global. En la cohorte original se relevaron durante la internación; el encuadre a 30 días viene de validaciones posteriores.",
+      "paraQue": "El índice cardíaco más usado en cirugía no cardíaca. Seis condiciones, un punto cada una.",
+      "referencia": "Lee TH, Marcantonio ER, Mangione CM, et al. Derivation and prospective validation of a simple index for prediction of cardiac risk of major noncardiac surgery. Circulation 1999;100(10):1043-1049.",
+      "cohorteDerivacion": "Pacientes de 50 años o más, cirugía electiva mayor no cardíaca, hospital universitario de EE.UU.",
+      "tipoCalculo": "aditivo",
+      "aportes": [
+        { "pregunta": "rcri_cirugia_alto_riesgo", "pesoSi": 1 },
+        { "pregunta": "rcri_cardiopatia_isquemica", "pesoSi": 1 },
+        { "pregunta": "rcri_insuficiencia_cardiaca", "pesoSi": 1 },
+        { "pregunta": "rcri_enfermedad_cerebrovascular", "pesoSi": 1 },
+        { "pregunta": "rcri_diabetes_insulina", "pesoSi": 1 },
+        { "pregunta": "rcri_creatinina", "pesoSi": 1 },
+        { "pregunta": "dominio_quirurgico", "_nota": "El RCRI se derivó en cirugía mayor NO cardíaca. En cirugía cardíaca no aplica.", "pesoPorOpcion": { "general": 0, "neuroquirurgica": 0 } }
+      ],
+      "bandas": [
+        { "desde": 0, "hasta": 0, "etiqueta": "Clase I", "color": "verde", "textoCriollo": "Ninguna condición presente." },
+        { "desde": 1, "hasta": 1, "etiqueta": "Clase II", "color": "verde", "textoCriollo": "Una condición presente." },
+        { "desde": 2, "hasta": 2, "etiqueta": "Clase III", "color": "naranja", "textoCriollo": "Dos condiciones presentes." },
+        { "desde": 3, "hasta": 6, "etiqueta": "Clase IV", "color": "rojo", "textoCriollo": "Tres o más condiciones presentes." }
+      ]
+    },
+
+    {
+      "id": "ariscat",
+      "nombre": "ARISCAT — riesgo RESPIRATORIO",
+      "desenlace": "COMPLICACIONES PULMONARES POSTOPERATORIAS: insuficiencia respiratoria, infección respiratoria, derrame pleural, atelectasia, neumotórax, broncoespasmo, neumonitis aspirativa. NO es mortalidad.",
+      "paraQue": "Estima el riesgo de complicarse del pulmón después de la cirugía, con siete datos preoperatorios.",
+      "referencia": "Canet J, Gallart L, Gomar C, et al. Prediction of postoperative pulmonary complications in a population-based surgical cohort. Anesthesiology 2010;113(6):1338-1350.",
+      "cohorteDerivacion": "Cohorte poblacional de 2.464 pacientes en 59 hospitales de Cataluña, España; publicada en 2010 (el reclutamiento fue anterior, en días elegidos al azar).",
+      "tipoCalculo": "aditivo",
+      "aportes": [
+        { "pregunta": "edad", "cortes": [ { "hasta": 50, "peso": 0 }, { "hasta": 80, "peso": 3 }, { "hasta": null, "peso": 16 } ] },
+        { "pregunta": "spo2", "cortes": [ { "hasta": 90, "peso": 24 }, { "hasta": 95, "peso": 8 }, { "hasta": null, "peso": 0 } ] },
+        { "pregunta": "ariscat_infeccion_respiratoria", "pesoSi": 17 },
+        { "pregunta": "ariscat_anemia", "pesoSi": 11 },
+        { "pregunta": "ariscat_incision", "pesoPorOpcion": { "periferica": 0, "abdominal_alta": 15, "intratoracica": 24 } },
+        { "pregunta": "ariscat_duracion", "pesoPorOpcion": { "menos2": 0, "2a3": 16, "mas3": 23 } },
+        { "pregunta": "ariscat_emergencia", "pesoSi": 8 }
+      ],
+      "bandas": [
+        { "desde": 0, "hasta": 25, "etiqueta": "Bajo", "color": "verde", "textoCriollo": "Menos de 26 puntos." },
+        { "desde": 26, "hasta": 44, "etiqueta": "Intermedio", "color": "amarillo", "textoCriollo": "Entre 26 y 44 puntos." },
+        { "desde": 45, "hasta": 123, "etiqueta": "Alto", "color": "rojo", "textoCriollo": "45 puntos o más." }
+      ]
+    },
+
+    {
+      "id": "dasi",
+      "nombre": "DASI — capacidad funcional",
+      "desenlace": "CAPACIDAD FUNCIONAL (reserva fisiológica), expresada como VO₂ pico y METs estimados. No es una probabilidad: es cuánto tolera el paciente. Un DASI bajo se asoció con más complicaciones e infarto perioperatorio.",
+      "paraQue": "Doce preguntas de la vida diaria. Por qué se pregunta y no se estima a ojo: en el estudio METS la valoración SUBJETIVA del médico tuvo 19,2 % de sensibilidad para detectar al paciente que no llega a 4 METs — se le escapan 8 de cada 10 — y de todas las mediciones, sólo el DASI predijo el desenlace.",
+      "referencia": "Hlatky MA, Boineau RE, Higginbotham MB, et al. A brief self-administered questionnaire to determine functional capacity (the Duke Activity Status Index). Am J Cardiol 1989;64(10):651-654. · Evidencia perioperatoria: Wijeysundera DN et al. Assessment of functional capacity before major non-cardiac surgery. Lancet 2018;391(10140):2631-2640.",
+      "cohorteDerivacion": "Derivado contra prueba de esfuerzo (correlación con VO₂ pico r≈0,80). El corte perioperatorio de 34 puntos viene de la literatura quirúrgica posterior, no del artículo de 1989.",
+      "tipoCalculo": "aditivo",
+      "aportes": [
+        { "pregunta": "dasi_01", "pesoSi": 2.75 },
+        { "pregunta": "dasi_02", "pesoSi": 1.75 },
+        { "pregunta": "dasi_03", "pesoSi": 2.75 },
+        { "pregunta": "dasi_04", "pesoSi": 5.5 },
+        { "pregunta": "dasi_05", "pesoSi": 8 },
+        { "pregunta": "dasi_06", "pesoSi": 2.7 },
+        { "pregunta": "dasi_07", "pesoSi": 3.5 },
+        { "pregunta": "dasi_08", "pesoSi": 8 },
+        { "pregunta": "dasi_09", "pesoSi": 4.5 },
+        { "pregunta": "dasi_10", "pesoSi": 5.25 },
+        { "pregunta": "dasi_11", "pesoSi": 6 },
+        { "pregunta": "dasi_12", "pesoSi": 7.5 }
+      ],
+      "_suma_de_pesos": "58.2 — verificado sumando los doce. OJO: hay calculadoras online que publican 61,25 como máximo; la suma de los pesos originales da 58,2.",
+      "derivadas": [
+        { "etiqueta": "VO₂ pico estimado", "factor": 0.43, "constante": 9.6, "unidad": "mL/kg/min", "decimales": 1 },
+        { "etiqueta": "METs estimados", "factor": 0.1228571, "constante": 2.7428571, "unidad": "METs", "decimales": 1 }
+      ],
+      "_nota_derivadas": "VO₂ pico = 0,43 × DASI + 9,6 (fórmula publicada). METs = VO₂ / 3,5, expresado como recta equivalente para que el código no tenga números clínicos adentro.",
+      "notaBandas": "El corte de 34 puntos es el usado en la literatura perioperatoria; el artículo original no categoriza.",
+      "bandas": [
+        { "desde": 0, "hasta": 33.9999, "etiqueta": "Capacidad reducida", "color": "naranja", "textoCriollo": "DASI menor a 34: se asoció con mayor riesgo perioperatorio. Equivale a menos de ~4 METs." },
+        { "desde": 34, "hasta": 58.2, "etiqueta": "Capacidad conservada", "color": "verde", "textoCriollo": "DASI 34 o más: reserva funcional conservada." }
+      ]
+    },
+
+    {
+      "id": "asa_ps",
+      "nombre": "ASA-PS — estado físico",
+      "desenlace": "CLASIFICACIÓN del estado físico. Se asocia con la mortalidad perioperatoria pero NO es una probabilidad calculada: es una categoría clínica.",
+      "paraQue": "La clasificación de referencia en anestesiología. Ubica al paciente por su enfermedad sistémica, antes de mirar la cirugía.",
+      "referencia": "American Society of Anesthesiologists. Statement on ASA Physical Status Classification System. Revisada por la ASA House of Delegates el 15-oct-2025; publicada en Anesthesiology Open, enero de 2026. (Reemplaza la enmienda del 13-dic-2020.)",
+      "cohorteDerivacion": "No deriva de una cohorte: es una clasificación consensuada.",
+      "tipoCalculo": "aditivo",
+      "aportes": [
+        { "pregunta": "asa_clase", "pesoPorOpcion": { "I": 1, "II": 2, "III": 3, "IV": 4, "V": 5, "VI": 6 } }
+      ],
+      "bandas": [
+        { "desde": 1, "hasta": 1, "etiqueta": "ASA I", "color": "verde", "textoCriollo": "Paciente sano." },
+        { "desde": 2, "hasta": 2, "etiqueta": "ASA II", "color": "verde", "textoCriollo": "Enfermedad sistémica leve, sin limitación funcional." },
+        { "desde": 3, "hasta": 3, "etiqueta": "ASA III", "color": "amarillo", "textoCriollo": "Enfermedad sistémica grave con limitación funcional." },
+        { "desde": 4, "hasta": 4, "etiqueta": "ASA IV", "color": "naranja", "textoCriollo": "Amenaza vital constante." },
+        { "desde": 5, "hasta": 5, "etiqueta": "ASA V", "color": "rojo", "textoCriollo": "Moribundo: la cirugía es el último recurso." },
+        { "desde": 6, "hasta": 6, "etiqueta": "ASA VI", "color": "rojo", "textoCriollo": "Donante con muerte encefálica." }
+      ]
+    }
+  ],
+
+  "_lea_esto_antes_de_tocar_la_conclusion": [
+    "La conclusión INTEGRA CUALITATIVAMENTE y no produce ni un número nuevo.",
+    "Se buscó a fondo si existe un modelo validado que funda mortalidad, riesgo",
+    "cardíaco, respiratorio y capacidad funcional en una sola cifra: NO EXISTE, y",
+    "está publicado por qué no se puede por la vía fácil — combinar aritméticamente",
+    "riesgos de modelos ya derivados ignora la correlación entre desenlaces",
+    "(Martin GP et al. BMC Med 2025;23:142). Para tener un riesgo conjunto hay que",
+    "definir el desenlace compuesto ANTES y derivar un modelo contra él.",
+    "",
+    "TAMPOCO se cuenta 'cuántos ejes están elevados'. Tres revisores independientes",
+    "coincidieron en que ese conteo ES el puntaje compuesto con otro nombre: una suma",
+    "no ponderada de indicadores dicotomizados, correlacionados y anclados a",
+    "desenlaces distintos. Los ejes se NOMBRAN, no se cuentan.",
+    "",
+    "El único integrador legítimo es la MORTALIDAD (SORT): es el desenlace donde lo",
+    "cardíaco, lo pulmonar, lo funcional y lo quirúrgico confluyen dentro de un mismo",
+    "modelo derivado contra él."
+  ],
+  "conclusion": {
+    "titulo": "Conclusión",
+    "encabezado": "Lectura conjunta de los resultados. No es un puntaje nuevo: es qué dice cada eje y qué umbral publicado cruza. La conducta la decide el profesional.",
+    "_preguntaProcedimiento": "De qué pregunta sale el {procedimiento} de la línea de trazabilidad. Se declara acá para que ningún llamador pueda olvidarse de pasarlo.",
+    "preguntaProcedimiento": "dominio_quirurgico",
+
+    "suprimirSi": [
+      { "_motivo": "Con ASA VI (donante con muerte encefálica) los cinco resultados no significan nada como riesgo quirúrgico. Un motivo escrito vale más que cinco números vacíos.", "respuesta": "asa_clase", "es": "VI" }
+    ],
+    "textoSuprimido": "Paciente ASA VI (donante con muerte encefálica). Los scores de riesgo perioperatorio no aplican a esta situación y no se muestra conclusión.",
+
+    "ejes": [
+      { "scoreId": "sort", "nombre": "Mortalidad", "desenlaceCorto": "muerte por cualquier causa a 30 días", "bandasElevadas": ["Intermedio", "Alto", "Muy alto"] },
+      { "scoreId": "rcri", "nombre": "Cardíaco", "desenlaceCorto": "eventos cardíacos mayores perioperatorios", "bandasElevadas": ["Clase III", "Clase IV"] },
+      { "scoreId": "ariscat", "nombre": "Respiratorio", "desenlaceCorto": "complicaciones pulmonares postoperatorias", "bandasElevadas": ["Intermedio", "Alto"] },
+      { "scoreId": "dasi", "nombre": "Capacidad funcional", "desenlaceCorto": "NO es un riesgo predicho: es una covariable medida. Su corte de 34 se derivó contra muerte o infarto a 30 días.", "esContexto": true, "bandasElevadas": ["Capacidad reducida"] },
+      { "scoreId": "asa_ps", "nombre": "Estado físico", "desenlaceCorto": "clasificación consensuada, no un riesgo predicho", "esContexto": true, "bandasElevadas": [] }
+    ],
+
+    "reglas": [
+      {
+        "id": "C-01", "tono": "limite",
+        "cuando": [{ "score": "sort", "estado": "inaplicable" }],
+        "texto": "El eje de mortalidad no aplica a este caso, así que no hay lectura conjunta: lo que sigue son ejes sueltos, no una conclusión."
+      },
+      {
+        "id": "C-02", "tono": "limite",
+        "cuando": [{ "score": "sort", "estado": "incompleto" }],
+        "texto": "Faltan datos del eje de mortalidad. Sin él no hay integración posible: los otros ejes se leen por separado y ninguno lo reemplaza."
+      },
+      {
+        "id": "C-03", "tono": "dato",
+        "cuando": [{ "score": "sort", "estado": "calculado" }],
+        "texto": "Mortalidad estimada a 30 días: {sort.valor} (banda {sort.banda}). El modelo estima que morirían {sort.deCada100} de cada 100 pacientes con este perfil, dentro de los 30 días de operados. Es una predicción del modelo, no una frecuencia observada en estos pacientes, y su calibración en población argentina no está estudiada."
+      },
+      {
+        "id": "C-04", "tono": "dato",
+        "cuando": [{ "score": "sort", "estado": "calculado" }, { "respuesta": "juicio_clinico_mortalidad", "respondida": true }],
+        "texto": "Su estimación: {juicio_clinico_mortalidad}. Las dos van una al lado de la otra a propósito: NO se promedian ni se corrigen entre sí, porque el modelo publicado que las combina todavía no está cargado (ver pendiente P-08)."
+      },
+      {
+        "id": "C-05", "tono": "limite",
+        "cuando": [{ "score": "sort", "estado": "calculado" }, { "respuesta": "juicio_clinico_mortalidad", "sinResponder": true }],
+        "texto": "Falta su propia estimación de mortalidad. El juicio del equipo predice tan bien como el score (AUROC 0,89 vs 0,90) y aporta información que el score no tiene."
+      },
+      {
+        "id": "C-06", "tono": "atencion",
+        "cuando": [{ "score": "rcri", "banda": ["Clase III", "Clase IV"] }],
+        "texto": "El eje CARDÍACO está por encima de su corte: RCRI {rcri.banda}. Estima eventos cardíacos mayores perioperatorios, no mortalidad."
+      },
+      {
+        "id": "C-07", "tono": "atencion",
+        "cuando": [{ "score": "ariscat", "banda": ["Alto"] }],
+        "texto": "El eje RESPIRATORIO está en banda alta: ARISCAT {ariscat.valor} puntos. Estima complicaciones pulmonares postoperatorias, no mortalidad."
+      },
+      {
+        "id": "C-08", "tono": "atencion",
+        "cuando": [{ "score": "ariscat", "banda": ["Intermedio"] }],
+        "texto": "El eje RESPIRATORIO está en banda intermedia: ARISCAT {ariscat.valor} puntos."
+      },
+      {
+        "id": "C-09", "tono": "atencion",
+        "cuando": [{ "score": "dasi", "banda": ["Capacidad reducida"] }],
+        "texto": "Capacidad funcional reducida: DASI {dasi.valor} puntos. Ojo con el porqué — el DASI no distingue si la limitación es cardiopulmonar o musculoesquelética, y un paciente limitado por una artrosis de cadera puntúa igual que uno limitado por el corazón."
+      },
+      {
+        "id": "C-10", "tono": "atencion",
+        "cuando": [{ "score": "rcri", "banda": ["Clase III", "Clase IV"] }, { "score": "dasi", "banda": ["Capacidad reducida"] }],
+        "texto": "Se dan juntos el eje cardíaco elevado y la capacidad funcional reducida. Las guías tratan esa combinación como un escenario propio; qué hacer con ella lo decide el profesional."
+      },
+      {
+        "id": "C-11", "tono": "atencion",
+        "cuando": [{ "score": "sort", "estado": "calculado" }, { "score": "sort", "banda": ["Bajo"] }, { "score": "dasi", "banda": ["Capacidad reducida"] }],
+        "texto": "La mortalidad estimada es baja pero la capacidad funcional está reducida. El SORT no contiene la capacidad funcional como variable propia: entra sólo, y de forma gruesa, dentro del ASA."
+      },
+      {
+        "id": "C-12", "tono": "tranquilo",
+        "cuando": [
+          { "score": "sort", "estado": "calculado" }, { "score": "sort", "banda": ["Bajo"] },
+          { "score": "rcri", "estado": "calculado" }, { "score": "rcri", "banda": ["Clase I", "Clase II"] },
+          { "score": "ariscat", "estado": "calculado" }, { "score": "ariscat", "banda": ["Bajo"] },
+          { "score": "dasi", "estado": "calculado" }, { "score": "dasi", "banda": ["Capacidad conservada"] }
+        ],
+        "texto": "Los cuatro ejes evaluados quedaron por debajo de su corte publicado: mortalidad, cardíaco, respiratorio y capacidad funcional. Que ningún corte se cruce no significa riesgo cero — significa que estos cuatro modelos, en sus cohortes, no lo señalan."
+      },
+      {
+        "id": "C-13", "tono": "limite",
+        "cuando": [{ "score": "sort", "valorDesde": 10, "unidad": "%" }],
+        "texto": "Con mortalidad estimada por encima del 10 %, tener presente que en el extremo alto de la escala estos modelos tienden a estimar peor y el intervalo alrededor del número es ancho."
+      }
+    ],
+    "_reglas_sacadas": [
+      "C-14 decía que en cirugía VASCULAR los índices discriminan peor, colgado de sort_especialidad_alto_riesgo — que cubre gastrointestinal, torácica Y vascular. Le hablaba de cirugía vascular a una colecistectomía. Vuelve cuando exista una pregunta que declare la vascular por separado (pendiente P-09).",
+      "C-18 repetía palabra por palabra la nota del eje ASA que ya está dos bloques más arriba. La síntesis sólo lleva lo que varía con ESTE paciente."
+    ],
+
+    "limites": [
+      "Ningún score de esta pantalla indica ni contraindica la cirugía, ni autoriza ni suspende. La suspensión la deciden el anestesiólogo y el cirujano.",
+      "Los cuatro scores derivados vienen de cohortes ajenas (Reino Unido, EE.UU., España; años de publicación 2014, 1999, 2010 y 1989) y ninguno está calibrado a población argentina. El ASA-PS no deriva de una cohorte: es una clasificación consensuada.",
+      "Los ejes NO se suman ni se promedian: predicen desenlaces distintos, en escalas distintas, desde cohortes distintas.",
+      "Calculado con el catálogo v{version}, huella {huella}, el {fecha}. Procedimiento previsto: {procedimiento}."
+    ]
+  },
+
+  "_casos_de_ejemplo": "Pacientes INVENTADOS para mostrar el demo andando. No son casos reales ni casos de validación de ningún artículo: sirven para ver la pantalla calculando, nada más.",
+  "casosDeEjemplo": [
+    {
+      "nombre": "Vesícula programada",
+      "descripcion": "58 años, sana, colecistectomía electiva. El caso de todos los días.",
+      "respuestas": {
+        "edad": 58, "asa_clase": "II", "urgencia": "electiva",
+        "dominio_quirurgico": "general", "juicio_clinico_mortalidad": "lt1",
+        "cancer": false, "sort_especialidad_alto_riesgo": true, "sort_severidad_mayor_compleja": false,
+        "rcri_cirugia_alto_riesgo": true, "rcri_cardiopatia_isquemica": false,
+        "rcri_insuficiencia_cardiaca": false, "rcri_enfermedad_cerebrovascular": false,
+        "rcri_diabetes_insulina": false, "rcri_creatinina": false,
+        "spo2": 97, "ariscat_infeccion_respiratoria": false, "ariscat_anemia": false,
+        "ariscat_incision": "abdominal_alta", "ariscat_duracion": "menos2", "ariscat_emergencia": false,
+        "dasi_01": true, "dasi_02": true, "dasi_03": true, "dasi_04": true, "dasi_05": false,
+        "dasi_06": true, "dasi_07": true, "dasi_08": true, "dasi_09": true, "dasi_10": true,
+        "dasi_11": true, "dasi_12": false
+      }
+    },
+    {
+      "nombre": "Colon urgente en añoso",
+      "descripcion": "84 años, cardiópata, colon obstruido por tumor. Todo en contra.",
+      "respuestas": {
+        "edad": 84, "asa_clase": "IV", "urgencia": "urgente",
+        "dominio_quirurgico": "general", "juicio_clinico_mortalidad": "101a50",
+        "cancer": true, "sort_especialidad_alto_riesgo": true, "sort_severidad_mayor_compleja": true,
+        "rcri_cirugia_alto_riesgo": true, "rcri_cardiopatia_isquemica": true,
+        "rcri_insuficiencia_cardiaca": true, "rcri_enfermedad_cerebrovascular": false,
+        "rcri_diabetes_insulina": true, "rcri_creatinina": true,
+        "spo2": 93, "ariscat_infeccion_respiratoria": false, "ariscat_anemia": true,
+        "ariscat_incision": "abdominal_alta", "ariscat_duracion": "2a3", "ariscat_emergencia": true,
+        "dasi_01": true, "dasi_02": true, "dasi_03": false, "dasi_04": false, "dasi_05": false,
+        "dasi_06": true, "dasi_07": false, "dasi_08": false, "dasi_09": false, "dasi_10": false,
+        "dasi_11": false, "dasi_12": false
+      }
+    }
+  ],
+
+  "pendientesDelCatalogo": [
+    {
+      "id": "P-01",
+      "titulo": "Tasas por clase del RCRI y del ARISCAT",
+      "detalle": "Las tasas de eventos por clase difieren entre la derivación y las validaciones posteriores. Hasta elegir y citar cuál se usa, la app muestra la clase sin porcentaje. (El SORT sí muestra porcentaje: su modelo lo calcula.)",
+      "estado": "pendiente"
+    },
+    {
+      "id": "P-02",
+      "titulo": "Verificar el SORT contra los casos de ejemplo del artículo original",
+      "detalle": "Los coeficientes se transcribieron de la validación sueca (Br J Surg 2023), que los reproduce del artículo original. Falta correr los casos de ejemplo del paper de 2014 y confirmar que esta implementación da los mismos porcentajes.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "P-03",
+      "titulo": "SORT v2 y el juicio clínico",
+      "detalle": "Existe una versión actualizada (datos de Reino Unido, Australia y Nueva Zelanda) y un modelo que suma la valoración subjetiva del clínico, publicado en PLOS Medicine 2020, que mejora la predicción. Evaluar si se agrega como score aparte.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "P-04",
+      "titulo": "Catálogo de procedimientos por riesgo intrínseco",
+      "detalle": "La lista de cirugías clasificadas por especialidad de alto riesgo y por severidad, que hoy el profesional tilda a criterio.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "P-05",
+      "titulo": "El RCRI tiene la edad que tiene (1999) — evaluar los índices que la guía 2024 reconoce",
+      "detalle": "La guía perioperatoria AHA/ACC 2024 mantiene el RCRI como herramienta validada pero reconoce además el AUB-HAS2 y el NSQIP-MICA, sin imponer ninguno: pide combinar riesgo clínico y quirúrgico y clasificar en bajo (<1 %) o elevado (≥1 %). Evaluar sumar AUB-HAS2 (libre, 6 variables). El NSQIP-MICA arrastra los términos del American College of Surgeons.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "P-07",
+      "titulo": "ASA-PS: cotejado contra la versión vigente (15-oct-2025)",
+      "detalle": "COTEJADO el 4-ago-2026. Existe una revisión posterior a la de 2020: aprobada por la ASA House of Delegates el 15-oct-2025 y publicada en Anesthesiology Open en enero de 2026. El texto primario está detrás de paywall, así que se coteja contra fuentes secundarias que lo reproducen: los ejemplos cargados acá COINCIDEN (IMC 30 a menos de 40 = II, 40 o más = III; embarazo no complicado = II; diabetes/hipertensión bien controladas = II y mal controladas = III; infarto o ACV de más de 3 meses = III y de menos de 3 meses = IV; diálisis programada = III, insuficiencia renal terminal sin diálisis regular = IV). Se agregaron a ASA III la embolia pulmonar y la enfermedad coronaria/stents de más de 3 meses, que faltaban. PENDIENTE MENOR: leer el texto primario completo si se consigue acceso, para cotejar clase por clase en vez de por fuente secundaria.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "P-08",
+      "titulo": "SORT + juicio clínico: el modelo combinado, sin cargar",
+      "detalle": "Existe un modelo publicado y validado que combina el SORT con la estimación subjetiva del equipo y predice mejor que cualquiera de los dos solo (AUROC 0,92 contra 0,90 y 0,89): Wong DJN et al. PLoS Med 2020;17(10):e1003253, acceso abierto CC BY. NO se implementó: de cuatro búsquedas independientes de los coeficientes de su Tabla 3, dos los transcribieron, una los dio por parciales y una afirmó que el artículo no los publica. Con esa discrepancia no se escribe un coeficiente en el catálogo. Mientras tanto la app registra la estimación del equipo y la muestra AL LADO del SORT, sin fusionarlas.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "P-09",
+      "titulo": "Declarar la cirugía vascular por separado",
+      "detalle": "Hoy `sort_especialidad_alto_riesgo` agrupa gastrointestinal, torácica y vascular, así que no se puede decir nada específico de la vascular sin decírselo también a una vesícula. Hace falta una pregunta propia para poder cargar el caveat de que en cirugía vascular los índices discriminan peor.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "P-06",
+      "titulo": "NO construir un puntaje total propio",
+      "detalle": "Decisión de diseño, anotada para que nadie la revierta por comodidad: sumar o promediar scores que predicen desenlaces distintos, en escalas distintas, derivados de cohortes distintas, produce un número sin validación ni calibración. La integración legítima es el SORT (la mortalidad ES el desenlace que integra) más la capacidad funcional y el juicio clínico, que es lo que muestra la evidencia (METS 2018; SORT + juicio clínico, PLOS Medicine 2020).",
+      "estado": "decidido"
+    }
+  ]
+}

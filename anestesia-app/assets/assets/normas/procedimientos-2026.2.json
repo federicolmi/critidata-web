@@ -1,0 +1,1773 @@
+{
+  "_lea_esto_primero": [
+    "CATÁLOGO DE LA CARGA INICIAL. Acá vive todo lo que se DERIVA de los cuatro datos",
+    "de cabecera: edad, procedimiento (con su vía de abordaje), peso y talla.",
+    "",
+    "ARCHIVO NUEVO Y HERMANO del catálogo de normas: riesgo-2026.1.json NO se toca",
+    "(regla 2). Una evaluación pasa a congelar CUATRO huellas: normas, procedimientos,",
+    "conclusión y constancia.",
+    "",
+    "DERIVAR NO ES RESPONDER. Nada de lo que hay acá contesta una pregunta. Todo entra",
+    "a la pantalla como PROPUESTO, con la fuente a la vista, y sigue contando como SIN",
+    "RESPONDER hasta que una persona lo confirma de a uno. Si la derivación pudiera",
+    "contestar sola, cambiar este archivo alteraría en silencio el puntaje de un",
+    "paciente: la regla del default benigno rota por la puerta de atrás.",
+    "",
+    "LA UNIDAD ES PROCEDIMIENTO x VÍA DE ABORDAJE, nunca el nombre solo. TAPP suma el",
+    "punto del RCRI y TEP no; la prostatectomía transperitoneal suma y la retropúbica",
+    "no; la nefrectomía transperitoneal suma y la lumbotomía no."
+  ],
+  "id": "procedimientos-y-derivacion-inicial",
+  "version": "2026.2",
+  "vigenciaDesde": "2026-09-01",
+  "vigenciaHasta": null,
+  "catalogoNormasCompatible": {
+    "id": "riesgo-quirurgico",
+    "version": "2026.1"
+  },
+  "cubrePendientesDelCatalogoNormas": {
+    "P-04": "Este archivo ES la lista de cirugías por riesgo intrínseco que pedía el P-04. Como una versión publicada no se edita, el P-04 sigue figurando como pendiente dentro de riesgo-2026.1.json; la pantalla lo muestra tachado y con esta nota al lado. Se cierra de verdad en la próxima versión del catálogo de normas."
+  },
+  "fuente": {
+    "entidad": "Criterio anatómico de Lee 1999, taxonomía de especialidades del SORT 2014 y Tabla 5 de la guía ESC 2022",
+    "documento": "Asignación de procedimientos a los ítems del cuestionario",
+    "url": "https://sortsurgery.com/"
+  },
+  "revision": {
+    "revisadoPor": "PENDIENTE — anestesiólogo con nombre y matrícula. NO publicar sin esta firma: hay 51 casillas de severidad Xmajor y casi todas las de incisión ARISCAT que son criterio profesional sin fuente.",
+    "revisadoEl": "PENDIENTE",
+    "proximaRevision": "2027-09-01"
+  },
+  "alias": {
+    "_para_que": "Nombres cortos de las cinco preguntas derivables, para que la tabla se pueda leer de un vistazo. El lector del catálogo tiene que poder revisar 51 filas sin scrollear a lo ancho. La app expande el alias al id real del catálogo de normas.",
+    "dom": "dominio_quirurgico",
+    "rcri": "rcri_cirugia_alto_riesgo",
+    "esp": "sort_especialidad_alto_riesgo",
+    "sev": "sort_severidad_mayor_compleja",
+    "inc": "ariscat_incision"
+  },
+  "leyendaProcedencia": {
+    "citable": "Se desprende directo de un criterio anatómico o textual publicado. La fuente está en la nota.",
+    "interpretacion": "El criterio publicado existe pero su aplicación a este procedimiento es ambigua. Queda registrada la lectura adoptada y la alternativa.",
+    "criterio": "Juicio profesional. NO hay fuente publicada. Lo tiene que validar y firmar el anestesiólogo antes de publicar esta versión.",
+    "manual": "El catálogo NO propone nada: la respuesta depende del caso concreto y la contesta el profesional. Valor null y procedencia manual van SIEMPRE juntos."
+  },
+  "notaPorDefecto": {
+    "sev": "@xmajor_sin_fuente",
+    "_regla": "Cuando una fila no trae nota propia para 'sev' y su procedencia es 'criterio', se usa esta. Evita repetir 30 veces la misma advertencia sin perderla."
+  },
+  "lecturasAdoptadas": [
+    {
+      "id": "L-01",
+      "titulo": "Especialidad de alto riesgo del SORT: lectura AMPLIA",
+      "detalle": "Hepatobiliar y bariátrica cuentan como abdomen y disparan el término de especialidad. La Tabla 3 del artículo las lista APARTE de la gastrointestinal (daría false); la calculadora oficial usa un grupo 'Abdomen' que las fusiona (da true). Se elige la dirección conservadora. Es una ELECCIÓN, no un dato."
+    },
+    {
+      "id": "L-02",
+      "titulo": "Laparoscopía: suma igual que la cirugía abierta",
+      "detalle": "Para el RCRI, una colecistectomía laparoscópica es intraperitoneal y suma el punto igual que la abierta; restarlo 'porque es mini-invasiva' es el error más frecuente y subestima en la dirección peligrosa. Para el ARISCAT, el score no codifica laparoscopia: se clasifica por sitio."
+    },
+    {
+      "id": "L-03",
+      "titulo": "El ARISCAT no tiene 'abdominal baja'",
+      "detalle": "El score tiene TRES categorías de incisión y ninguna es abdominal baja. Apendicectomía, cesárea, histerectomía y resección anterior de recto caen en 'periférica' por descarte, con 0 puntos. Es una limitación del score original, no una decisión de este catálogo, y se declara porque a un médico le va a chocar leer 'periférica' al lado de 'apendicectomía'."
+    },
+    {
+      "id": "L-04",
+      "titulo": "La banda ESC 2022 se muestra, no se calcula",
+      "detalle": "riesgoESC2022 viene de la Tabla 5 de la guía ESC 2022, que estima muerte cardiovascular, infarto y ACV a 30 días del PROCEDIMIENTO SOLO, sin las comorbilidades del paciente. Sirve como criterio de asignación y control de coherencia. NO alimenta ningún score y no es intercambiable con el SORT."
+    }
+  ],
+  "reglasDeDerivacion": {
+    "dominioEsLaPuertaDeAplicabilidad": "dominio_quirurgico no aporta puntos: el catálogo de normas deja las opciones cardiaca y neuroquirurgica AUSENTES del mapa del SORT, así que el motor devuelve ScoreNoAplicable solo. La derivación por procedimiento sólo PROPONE el dominio; el resto lo hace el motor que ya existe, sin código nuevo.",
+    "derivarNoEsResponder": "Cada valor de 'deriva' entra como PROPUESTO. El motor lo trata como SIN RESPONDER hasta que una persona lo confirma. No hay 'confirmar todo': se confirma de a uno.",
+    "preguntasDeCabecera": [
+      "edad"
+    ],
+    "preguntasDerivables": [
+      "dominio_quirurgico",
+      "rcri_cirugia_alto_riesgo",
+      "sort_especialidad_alto_riesgo",
+      "sort_severidad_mayor_compleja",
+      "ariscat_incision"
+    ],
+    "preguntasNuncaDerivables": [
+      "asa_clase",
+      "urgencia",
+      "cancer",
+      "spo2",
+      "juicio_clinico_mortalidad",
+      "rcri_cardiopatia_isquemica",
+      "rcri_insuficiencia_cardiaca",
+      "rcri_enfermedad_cerebrovascular",
+      "rcri_diabetes_insulina",
+      "rcri_creatinina",
+      "ariscat_infeccion_respiratoria",
+      "ariscat_anemia",
+      "ariscat_duracion",
+      "ariscat_emergencia",
+      "dasi_01",
+      "dasi_02",
+      "dasi_03",
+      "dasi_04",
+      "dasi_05",
+      "dasi_06",
+      "dasi_07",
+      "dasi_08",
+      "dasi_09",
+      "dasi_10",
+      "dasi_11",
+      "dasi_12"
+    ],
+    "motivoDeNoDerivar": {
+      "asa_clase": "Es juicio clínico sobre la persona, no sobre la cirugía, y entra al SORT con peso 1,411 para la clase III: una sugerencia automática multiplicaría por ~4,1 el odds de muerte estimado que después se imprime y se firma. Ningún otro campo tiene esa palanca. Tampoco se deriva del IMC: el IMC es UN ejemplo del texto de la ASA, no la definición de la clase, que está redactada en términos de limitación funcional.",
+      "urgencia": "El mismo procedimiento puede ser electivo o inmediato. Es del caso, no de la cirugía.",
+      "ariscat_emergencia": "Igual que urgencia: es del caso.",
+      "cancer": "Una colectomía puede ser por cáncer o por diverticulitis; una mastectomía puede ser profiláctica. Derivarlo se equivoca en las dos direcciones, y la peligrosa (marcar 'no' en una colectomía oncológica) resta 0,667 al SORT en silencio. El campo oncologicoFrecuente es SÓLO pista de interfaz: sube la pregunta al principio y la resalta. Jamás la contesta.",
+      "ariscat_duracion": "No hay fuente publicada de duraciones de quirófano argentinas y el default probable ('2 horas o menos') es el benigno: en un paciente de 60 años con colecistectomía, pasar de '2 horas o menos' a '2 a 3 horas' mueve 18 puntos a 34 y cambia la banda sin tocar un dato del paciente. Además, en la cohorte de Canet la duración es la REAL, que recién se conoce cuando la cirugía terminó.",
+      "spo2": "Es una medición, no una propiedad del procedimiento.",
+      "juicio_clinico_mortalidad": "Es la estimación del equipo, y se registra justamente para poder compararla con el score sin que ninguno corrija al otro. Derivarla sería borrar el único dato de esa pregunta.",
+      "dasi": "Todo el valor del DASI está en que lo conteste el paciente: en el estudio METS la estimación subjetiva del profesional tuvo 19,2 % de sensibilidad para detectar al que no llega a 4 METs. Prellenarlo desde la edad o el IMC es el default benigno con el signo cambiado.",
+      "comorbilidades_rcri": "Son antecedentes del paciente. No salen de la cirugía."
+    },
+    "derivacionEstructural": {
+      "_que_son": "Preguntas que se derivan de la cirugia elegida y CUENTAN SOLAS, sin pedir confirmacion. Son hechos de la cirugia (por donde entra el bisturi, si la especialidad es de alto riesgo), no condiciones del paciente. Igual que el IMC, que se calcula del peso y la talla sin preguntar.",
+      "_quedan_marcadas": "Siguen mostrandose como derivadas, con el procedimiento del que salieron y su procedencia. Un dato derivado que cuenta NO se registra como si lo hubiera tildado una persona.",
+      "_por_que_la_severidad_NO_esta": "sort_severidad_mayor_compleja queda como PROPUESTA y espera confirmacion: sus 52 asignaciones son criterio profesional (la fuente original es un arancelario privado britanico de acceso comercial) y ninguna es citable. Lo que depende de criterio lo confirma una persona.",
+      "ids": [
+        "dominio_quirurgico",
+        "rcri_cirugia_alto_riesgo",
+        "sort_especialidad_alto_riesgo",
+        "ariscat_incision"
+      ]
+    }
+  },
+  "aplicabilidadPorEdad": [
+    {
+      "id": "E-01",
+      "score": "sort",
+      "cuando": "edad_menor",
+      "valor": 16,
+      "efecto": "advertencia",
+      "texto": "El SORT excluyó de su derivación a los menores de 16 años: por debajo de esa edad el número queda fuera de la población en la que se construyó el modelo.",
+      "fuente": "Protopapa KL et al. Br J Surg 2014;101(13):1774-1783, exclusiones p. 1776."
+    },
+    {
+      "id": "E-02",
+      "score": "rcri",
+      "cuando": "edad_menor",
+      "valor": 50,
+      "efecto": "advertencia",
+      "texto": "El RCRI se derivó en pacientes de 50 años o más, en cirugía electiva mayor no cardíaca. Por debajo de 50 el índice se calcula igual, fuera de su cohorte.",
+      "fuente": "Lee TH et al. Circulation 1999;100(10):1043-1049."
+    },
+    {
+      "id": "E-03",
+      "score": null,
+      "cuando": "edad_mayor_o_igual",
+      "valor": 65,
+      "efecto": "hueco_declarado",
+      "texto": "Desde los 65 años corresponde una valoración de fragilidad que este demo NO incluye: la escala más difundida queda afuera por licencia. Hueco declarado, no dato inventado.",
+      "fuente": "Guía perioperatoria AHA/ACC 2024."
+    },
+    {
+      "id": "E-04",
+      "score": null,
+      "cuando": "edad_menor",
+      "valor": 18,
+      "efecto": "hueco_declarado",
+      "texto": "En menores de 18 el IMC se lee contra percentilos por edad y sexo, no contra las bandas de adulto. La app muestra el número y no lo clasifica.",
+      "fuente": "OMS, bandas de IMC para adultos."
+    }
+  ],
+  "antropometria": {
+    "_por_que_esta_aca": "Peso y talla no alimentan NINGUNO de los cinco scores. El SORT los excluyó explícitamente por calidad de dato: en su cohorte el 44,7 % de las tallas y el 31,7 % de los pesos eran estimados, no medidos. El IMC entra como DATO DE APOYO al lado de la pregunta ASA, en un chip, nunca en un campo de respuesta.",
+    "formula": {
+      "expresion": "peso_kg / (talla_m * talla_m)",
+      "decimales": 1
+    },
+    "limitesDePlausibilidad": {
+      "pesoKg": {
+        "minimo": 2,
+        "maximo": 300
+      },
+      "tallaCm": {
+        "minimo": 40,
+        "maximo": 230
+      },
+      "imc": {
+        "minimo": 10,
+        "maximo": 80
+      },
+      "fueraDeRango": "La app se NIEGA a calcular el IMC y lo dice. Un absurdo impreso con un decimal parece un dato medido."
+    },
+    "procedenciaDeLaMedicion": {
+      "obligatoria": true,
+      "opciones": [
+        {
+          "valor": "medido",
+          "texto": "Medido en el consultorio"
+        },
+        {
+          "valor": "referido",
+          "texto": "Referido por el paciente"
+        },
+        {
+          "valor": "estimado",
+          "texto": "Estimado a ojo"
+        }
+      ],
+      "regla": "La procedencia se arrastra hasta el IMC y hasta el documento firmado. El anestesiólogo tiene que poder contestar '¿ese IMC 32,4 lo mediste o te lo dijo el paciente?'."
+    },
+    "bandasOMS": {
+      "fuente": "WHO. Obesity: preventing and managing the global epidemic. WHO Technical Report Series 894, Ginebra, 2000.",
+      "aviso": "Las bandas de la OMS y los ejemplos del texto de la ASA son DOS grillas distintas y no coinciden: la ASA parte en 30 y en 40 nomás. No se mezclan.",
+      "bandas": [
+        {
+          "desde": 10,
+          "hasta": 18.4,
+          "etiqueta": "Bajo peso"
+        },
+        {
+          "desde": 18.5,
+          "hasta": 24.9,
+          "etiqueta": "Normal"
+        },
+        {
+          "desde": 25.0,
+          "hasta": 29.9,
+          "etiqueta": "Sobrepeso"
+        },
+        {
+          "desde": 30.0,
+          "hasta": 34.9,
+          "etiqueta": "Obesidad clase I"
+        },
+        {
+          "desde": 35.0,
+          "hasta": 39.9,
+          "etiqueta": "Obesidad clase II"
+        },
+        {
+          "desde": 40.0,
+          "hasta": 80,
+          "etiqueta": "Obesidad clase III"
+        }
+      ],
+      "zonasDeBorde": [
+        {
+          "desde": 29.9,
+          "hasta": 30.1,
+          "texto": "IMC en el límite: la app no clasifica."
+        },
+        {
+          "desde": 39.9,
+          "hasta": 40.1,
+          "texto": "IMC en el límite: la app no clasifica."
+        }
+      ],
+      "porQueLasZonasDeBorde": "El borde inferior del ejemplo de obesidad de ASA II no está resuelto entre la redacción de 2020 ('30 < IMC < 40', deja afuera el 30,0) y la reproducción de la revisión del 15-oct-2025 ('de 30 a menos de 40', lo incluye). Mientras el pendiente P-07 siga abierto, la app no actúa sobre el borde."
+    },
+    "leyendasPegadas": [
+      {
+        "junto_a": "ariscat",
+        "texto": "La obesidad tiene buena evidencia EN CONTRA de ser factor de riesgo de complicaciones pulmonares, incluso en la obesidad mórbida: lo predictivo es el sitio quirúrgico, no el peso. (Revisión sistemática de la guía del American College of Physicians, Ann Intern Med 2006;144(8):581-595.)"
+      },
+      {
+        "junto_a": "sort",
+        "texto": "Paradoja de la obesidad: en cirugía general no bariátrica el sobrepeso y la obesidad moderada mostraron MENOR mortalidad ajustada que el peso normal, mientras las complicaciones de herida suben con el IMC. El mismo número apunta para lados opuestos según el desenlace. (Mullen JT et al. Ann Surg 2009;250(1):166-172.)"
+      },
+      {
+        "junto_a": "asa_clase",
+        "texto": "El texto vigente de la ASA usa el IMC como EJEMPLO (30 a menos de 40 en clase II; 40 o más en clase III), no como criterio: las clases están definidas por limitación funcional, y un IMC no establece limitación funcional. La clase la pone el profesional."
+      },
+      {
+        "junto_a": "edad_65",
+        "texto": "Desde los 65 el IMC no distingue grasa de músculo: un valor normal no descarta sarcopenia, que es lo que predice estadía prolongada y complicaciones. El consenso ESPEN/EASO de obesidad sarcopénica ajusta la masa magra por peso corporal y no por talla al cuadrado."
+      }
+    ],
+    "notaDeRevision": {
+      "cuando": "imc_mayor_o_igual_40_y_asa_I_o_II",
+      "texto": "Nota de revisión: en una serie de 39.579 pacientes con IMC mayor a 40, el 27,2 % había quedado clasificado por debajo de ASA III. Según los ejemplos del texto vigente, este IMC ubica al paciente en ASA III como MÍNIMO; la clase la define el cuadro completo. (Dyer MW et al. Anesthesiol Res Pract 2024;2024:6989174.)",
+      "bloqueante": false,
+      "modal": false,
+      "regla": "Es una nota al pie del campo, no una alerta. El presupuesto de avisos de esta app está reservado para el bloqueo por datos faltantes, que es el único que protege a un paciente."
+    },
+    "loQueNoSeCalcula": [
+      "Superficie corporal, peso ajustado y peso magro: su único uso clínico es dosificar, y este demo no indica tratamiento. Agregar el número invita al uso que tiene vedado.",
+      "Ningún score de vía aérea armado desde el IMC: no existe uno derivado así.",
+      "La clase ASA. Nunca."
+    ]
+  },
+  "notasComunes": {
+    "laparoscopia_rcri": "Intraperitoneal aunque sea laparoscópica: suma el punto igual que la abierta (Lee 1999).",
+    "laparoscopia_ariscat": "El ARISCAT no codifica laparoscopia: se clasifica por sitio, igual que la abierta. Dirección conservadora.",
+    "abdominal_baja": "El ARISCAT no tiene categoría 'abdominal baja': esto cae en 'periférica' por descarte, con 0 puntos. Limitación del score original, no decisión de este catálogo (lectura L-03).",
+    "hepatobiliar": "AMBIGUO: en la Tabla 3 del SORT la hepatobiliar figura como especialidad aparte de la gastrointestinal (sería false), pero la calculadora oficial fusiona el abdomen en un solo grupo (sería true). Se adopta true por ser la dirección conservadora (lectura L-01).",
+    "bariatrica_aparte": "AMBIGUO: la bariátrica también figura como especialidad aparte en la Tabla 3 del SORT. Se adopta true por la lectura L-01.",
+    "xmajor_sin_fuente": "La categoría Xmajor/complex sale del manual de los AXA Specialist Procedure Codes, un arancelario de hospitales privados del Reino Unido de acceso comercial: NO existe lista pública reproducible. Toda asignación de esta casilla es criterio profesional y necesita firma antes de publicar. Atenuante: en el modelo final la severidad entra como una sola binaria (sólo Xmajor/complex tiene coeficiente, 0,381) y es el término más débil, con intervalo que casi toca el cero.",
+    "extraperitoneal": "No se abre el peritoneo: para el RCRI no es cirugía de alto riesgo.",
+    "transperitoneal": "Se abre el peritoneo: para el RCRI es intraperitoneal y suma el punto.",
+    "infrainguinal": "No es suprainguinal, así que por la cirugía el RCRI suma 0. Que sea cirugía vascular mayor y peligrosa no cambia el criterio anatómico de Lee.",
+    "evar_ambiguo": "AMBIGUO: la aorta es suprainguinal pero el acceso es femoral, y Lee 1999 es anterior a la difusión del EVAR. Sin respaldo textual para ninguna lectura. Queda manual.",
+    "carotida_ambigua": "AMBIGUO: no es suprainguinal en el sentido aorto-ilíaco del criterio de Lee. Sin respaldo textual. Queda manual.",
+    "peritoneo_segun_caso": "Depende de si se abre el peritoneo en este caso concreto. El catálogo no lo puede saber: lo contesta el profesional.",
+    "dominio_neuro": "Dominio neuroquirúrgico (incluye cirugía de columna): la cohorte del SORT lo excluyó, así que el SORT se declara NO APLICABLE. El RCRI sí se calcula.",
+    "dominio_cardiaco": "Dominio cardíaco: fuera del SORT y fuera del RCRI, que es un índice de cirugía NO cardíaca. Los dos se declaran NO APLICABLES; ninguno se aproxima.",
+    "criterio_incision": "CRITERIO UNICO para la incision del ARISCAT, escrito para que no se decida dos veces: 'upper abdominal' es la incision que LLEGA POR ENCIMA DEL OMBLIGO, no la especialidad que opera. Las laparotomias infraumbilicales (apendicectomia, histerectomia, prostatectomia retropubica, reseccion anterior de recto) caen en 'periferica' por descarte, porque el score no tiene categoria 'abdominal baja'. Es un hueco del ARISCAT, no una decision de este catalogo, y por eso todas esas filas van marcadas 'criterio'.",
+    "sin_fila": "El catálogo no propone nada para esta cirugía: los cinco ítems se contestan a mano. No es una limitación del paciente, es del catálogo — y es preferible a que una fila parecida proponga datos ajenos."
+  },
+  "especialidades": [
+    {
+      "id": "cirugia_general",
+      "nombre": "Cirugía general y abdomen",
+      "procedimientos": [
+        {
+          "id": "colecistectomia_lap",
+          "nombre": "Colecistectomía laparoscópica",
+          "via": "laparoscopica",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": true,
+            "sev": false,
+            "inc": "abdominal_alta"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "interpretacion",
+            "sev": "criterio",
+            "inc": "criterio"
+          },
+          "notas": {
+            "rcri": "@laparoscopia_rcri",
+            "esp": "@hepatobiliar",
+            "inc": "@laparoscopia_ariscat"
+          },
+          "riesgoESC2022": "intermedio"
+        },
+        {
+          "id": "colecistectomia_abierta",
+          "nombre": "Colecistectomía convencional (abierta)",
+          "via": "abierta",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": true,
+            "sev": false,
+            "inc": "abdominal_alta"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "interpretacion",
+            "sev": "criterio",
+            "inc": "criterio"
+          },
+          "notas": {
+            "esp": "@hepatobiliar"
+          },
+          "riesgoESC2022": "intermedio"
+        },
+        {
+          "id": "apendicectomia_lap",
+          "nombre": "Apendicectomía laparoscópica",
+          "via": "laparoscopica",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": true,
+            "sev": false,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "criterio"
+          },
+          "notas": {
+            "rcri": "@laparoscopia_rcri",
+            "inc": "@abdominal_baja"
+          }
+        },
+        {
+          "id": "apendicectomia_abierta",
+          "nombre": "Apendicectomía convencional (abierta)",
+          "via": "abierta",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": true,
+            "sev": false,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "criterio"
+          },
+          "notas": {
+            "inc": "@abdominal_baja"
+          }
+        },
+        {
+          "id": "hernia_inguinal_lichtenstein",
+          "nombre": "Hernioplastia inguinal abierta con malla (Lichtenstein)",
+          "via": "abierta",
+          "deriva": {
+            "dom": "general",
+            "rcri": false,
+            "esp": true,
+            "sev": false,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "interpretacion",
+            "sev": "criterio",
+            "inc": "criterio"
+          },
+          "notas": {
+            "rcri": "@extraperitoneal"
+          }
+        },
+        {
+          "id": "hernia_inguinal_tapp",
+          "nombre": "Hernioplastia inguinal laparoscópica TAPP (transabdominal preperitoneal)",
+          "via": "laparoscopica",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": true,
+            "sev": false,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "interpretacion",
+            "sev": "criterio",
+            "inc": "criterio"
+          },
+          "notas": {
+            "rcri": "@transperitoneal"
+          },
+          "advertencias": [
+            {
+              "junto_a": "rcri",
+              "texto": "Misma hernia, distinta respuesta: TAPP entra al abdomen y suma el punto; TEP y Lichtenstein no. Por eso el catálogo separa por vía de abordaje."
+            }
+          ]
+        },
+        {
+          "id": "hernia_inguinal_tep",
+          "nombre": "Hernioplastia inguinal laparoscópica TEP (totalmente extraperitoneal)",
+          "via": "laparoscopica",
+          "deriva": {
+            "dom": "general",
+            "rcri": false,
+            "esp": true,
+            "sev": false,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "interpretacion",
+            "sev": "criterio",
+            "inc": "criterio"
+          },
+          "notas": {
+            "rcri": "@extraperitoneal"
+          }
+        },
+        {
+          "id": "hernia_umbilical",
+          "nombre": "Hernioplastia umbilical o epigástrica",
+          "via": "abierta",
+          "deriva": {
+            "dom": "general",
+            "rcri": null,
+            "esp": true,
+            "sev": false,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "manual",
+            "esp": "interpretacion",
+            "sev": "criterio",
+            "inc": "criterio"
+          },
+          "notas": {
+            "rcri": "@peritoneo_segun_caso"
+          }
+        },
+        {
+          "id": "eventroplastia",
+          "nombre": "Eventroplastia con malla (hernia incisional)",
+          "via": "mixta",
+          "deriva": {
+            "dom": "general",
+            "rcri": null,
+            "esp": true,
+            "sev": null,
+            "inc": null
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "manual",
+            "esp": "interpretacion",
+            "sev": "manual",
+            "inc": "manual"
+          },
+          "notas": {
+            "rcri": "IPOM entra al abdomen y suma; onlay no. Depende de la técnica de este caso.",
+            "inc": "Depende de la altura de la eventración."
+          }
+        },
+        {
+          "id": "hemicolectomia",
+          "nombre": "Hemicolectomía / colectomía",
+          "via": "mixta",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": true,
+            "sev": true,
+            "inc": "abdominal_alta"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "criterio"
+          },
+          "oncologicoFrecuente": true
+        },
+        {
+          "id": "reseccion_anterior_recto",
+          "nombre": "Resección anterior de recto",
+          "via": "mixta",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": true,
+            "sev": true,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "criterio"
+          },
+          "notas": {
+            "inc": "@abdominal_baja"
+          },
+          "oncologicoFrecuente": true,
+          "_correccion": "Derivaba 'abdominal_alta' (15 pts) con la nota @abdominal_baja pegada, que dice lo contrario. Corregido a 'periferica' segun @criterio_incision: es una laparotomia infraumbilical."
+        },
+        {
+          "id": "gastrectomia",
+          "nombre": "Gastrectomía total o subtotal",
+          "via": "mixta",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": true,
+            "sev": true,
+            "inc": "abdominal_alta"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "criterio"
+          },
+          "oncologicoFrecuente": true
+        },
+        {
+          "id": "esofaguectomia",
+          "nombre": "Esofaguectomía",
+          "via": "mixta",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": true,
+            "sev": true,
+            "inc": "intratoracica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "citable"
+          },
+          "notas": {
+            "rcri": "Intratorácica e intraperitoneal a la vez."
+          },
+          "riesgoESC2022": "alto",
+          "oncologicoFrecuente": true
+        },
+        {
+          "id": "duodenopancreatectomia",
+          "nombre": "Duodenopancreatectomía cefálica (Whipple)",
+          "via": "abierta",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": true,
+            "sev": true,
+            "inc": "abdominal_alta"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "criterio"
+          },
+          "riesgoESC2022": "alto",
+          "oncologicoFrecuente": true
+        },
+        {
+          "id": "hepatectomia",
+          "nombre": "Resección hepática",
+          "via": "mixta",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": true,
+            "sev": true,
+            "inc": "abdominal_alta"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "interpretacion",
+            "sev": "criterio",
+            "inc": "criterio"
+          },
+          "notas": {
+            "esp": "@hepatobiliar"
+          },
+          "riesgoESC2022": "alto",
+          "oncologicoFrecuente": true
+        },
+        {
+          "id": "esplenectomia",
+          "nombre": "Esplenectomía",
+          "via": "mixta",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": true,
+            "sev": false,
+            "inc": "abdominal_alta"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "interpretacion",
+            "sev": "criterio",
+            "inc": "criterio"
+          },
+          "notas": {
+            "esp": "@hepatobiliar"
+          },
+          "riesgoESC2022": "intermedio"
+        },
+        {
+          "id": "bariatrica",
+          "nombre": "Bypass gástrico o manga gástrica",
+          "via": "laparoscopica",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": true,
+            "sev": null,
+            "inc": "abdominal_alta"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "interpretacion",
+            "sev": "manual",
+            "inc": "criterio"
+          },
+          "notas": {
+            "rcri": "@laparoscopia_rcri",
+            "esp": "@bariatrica_aparte"
+          }
+        },
+        {
+          "id": "laparotomia_exploradora",
+          "nombre": "Laparotomía exploradora",
+          "via": "abierta",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": true,
+            "sev": null,
+            "inc": "abdominal_alta"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "manual",
+            "inc": "criterio"
+          },
+          "notas": {
+            "sev": "Depende de lo que se termine haciendo. Queda manual."
+          }
+        },
+        {
+          "id": "viscera_perforada",
+          "nombre": "Cirugía por víscera hueca perforada / peritonitis",
+          "via": "mixta",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": true,
+            "sev": true,
+            "inc": "abdominal_alta"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "criterio"
+          },
+          "riesgoESC2022": "alto",
+          "advertencias": [
+            {
+              "junto_a": "resultado",
+              "texto": "El carácter de urgencia y el ARISCAT de emergencia NO se derivan del procedimiento: los contesta el profesional, aunque acá casi nunca sea electivo."
+            }
+          ]
+        },
+        {
+          "id": "tiroidectomia",
+          "nombre": "Tiroidectomía",
+          "via": "abierta",
+          "deriva": {
+            "dom": "general",
+            "rcri": false,
+            "esp": false,
+            "sev": false,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "citable"
+          },
+          "notas": {
+            "esp": "Endocrina: no es gastrointestinal, torácica ni vascular."
+          },
+          "riesgoESC2022": "bajo",
+          "oncologicoFrecuente": true,
+          "advertencias": [
+            {
+              "junto_a": "conclusion",
+              "texto": "Es oncológica con frecuencia, pero la guía ESC la ubica por debajo del 1 %. La marca de 'oncológico frecuente' sirve para que la pantalla PREGUNTE, no para inflar el riesgo."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mama",
+      "nombre": "Mama y superficie corporal",
+      "procedimientos": [
+        {
+          "id": "mastectomia",
+          "nombre": "Mastectomía (total o radical modificada)",
+          "via": "abierta",
+          "deriva": {
+            "dom": "general",
+            "rcri": false,
+            "esp": false,
+            "sev": false,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "citable"
+          },
+          "notas": {
+            "esp": "En la Tabla 3 del SORT la mama figura dentro de 'Body surface (breast)'."
+          },
+          "riesgoESC2022": "bajo",
+          "oncologicoFrecuente": true
+        }
+      ]
+    },
+    {
+      "id": "vascular",
+      "nombre": "Cirugía vascular",
+      "procedimientos": [
+        {
+          "id": "aorta_abdominal_abierta",
+          "nombre": "Cirugía de aorta abdominal abierta (aneurisma)",
+          "via": "abierta",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": true,
+            "sev": true,
+            "inc": "abdominal_alta"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "criterio"
+          },
+          "notas": {
+            "rcri": "Vascular suprainguinal."
+          },
+          "riesgoESC2022": "alto"
+        },
+        {
+          "id": "evar",
+          "nombre": "Reparación endovascular de aneurisma de aorta (EVAR)",
+          "via": "endovascular",
+          "deriva": {
+            "dom": "general",
+            "rcri": null,
+            "esp": true,
+            "sev": null,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "manual",
+            "esp": "citable",
+            "sev": "manual",
+            "inc": "criterio"
+          },
+          "notas": {
+            "rcri": "@evar_ambiguo"
+          },
+          "riesgoESC2022": "intermedio",
+          "advertencias": [
+            {
+              "junto_a": "rcri",
+              "texto": "Es una de las dos casillas del catálogo que más necesitan la firma del anestesiólogo (la otra es la carótida)."
+            }
+          ]
+        },
+        {
+          "id": "bypass_femoropopliteo",
+          "nombre": "Bypass fémoro-poplíteo",
+          "via": "abierta",
+          "deriva": {
+            "dom": "general",
+            "rcri": false,
+            "esp": true,
+            "sev": null,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "manual",
+            "inc": "citable"
+          },
+          "notas": {
+            "rcri": "@infrainguinal"
+          }
+        },
+        {
+          "id": "endarterectomia_carotidea",
+          "nombre": "Endarterectomía carotídea",
+          "via": "abierta",
+          "deriva": {
+            "dom": "general",
+            "rcri": null,
+            "esp": true,
+            "sev": false,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "manual",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "citable"
+          },
+          "notas": {
+            "rcri": "@carotida_ambigua"
+          },
+          "riesgoESC2022": "intermedio"
+        },
+        {
+          "id": "safenectomia",
+          "nombre": "Safenectomía / cirugía de várices",
+          "via": "abierta",
+          "deriva": {
+            "dom": "general",
+            "rcri": false,
+            "esp": true,
+            "sev": false,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "citable"
+          },
+          "notas": {
+            "esp": "Es especialidad vascular: para el SORT dispara el mismo término que una aorta."
+          },
+          "riesgoESC2022": "bajo",
+          "advertencias": [
+            {
+              "junto_a": "sort",
+              "texto": "Desalineamiento conocido: la guía ESC 2022 ubica esta cirugía por debajo del 1 %, pero para el SORT es especialidad vascular y suma el mismo término que una aorta. Acá el modelo SOBREestima."
+            }
+          ]
+        },
+        {
+          "id": "amputacion_miembro_inferior",
+          "nombre": "Amputación de miembro inferior",
+          "via": "abierta",
+          "deriva": {
+            "dom": "general",
+            "rcri": false,
+            "esp": true,
+            "sev": null,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "manual",
+            "inc": "citable"
+          },
+          "notas": {
+            "rcri": "@infrainguinal"
+          },
+          "riesgoESC2022": "alto",
+          "advertencias": [
+            {
+              "junto_a": "rcri",
+              "texto": "El RCRI suma 0 por la cirugía porque el criterio de Lee es anatómico y esto es infrainguinal, mientras la guía ESC 2022 ubica el procedimiento por encima del 5 %."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "toracica",
+      "nombre": "Cirugía torácica",
+      "procedimientos": [
+        {
+          "id": "lobectomia_pulmonar",
+          "nombre": "Lobectomía pulmonar (VATS o toracotomía)",
+          "via": "mixta",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": true,
+            "sev": true,
+            "inc": "intratoracica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "citable"
+          },
+          "oncologicoFrecuente": true
+        },
+        {
+          "id": "neumonectomia",
+          "nombre": "Neumonectomía",
+          "via": "mixta",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": true,
+            "sev": true,
+            "inc": "intratoracica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "citable"
+          },
+          "riesgoESC2022": "alto",
+          "oncologicoFrecuente": true
+        },
+        {
+          "id": "vats_reseccion_menor",
+          "nombre": "Resección pulmonar menor o biopsia por VATS",
+          "via": "videoasistida",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": true,
+            "sev": false,
+            "inc": "intratoracica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "citable"
+          },
+          "riesgoESC2022": "bajo",
+          "oncologicoFrecuente": true,
+          "advertencias": [
+            {
+              "junto_a": "rcri",
+              "texto": "La guía ESC 2022 ubica esta resección por debajo del 1 %, pero para el RCRI es intratorácica y suma el mismo punto que una neumonectomía. No es un error del catálogo: el criterio de Lee es anatómico y grueso."
+            }
+          ]
+        },
+        {
+          "id": "videotoracoscopia_pleurodesis",
+          "nombre": "Videotoracoscopía diagnóstica / pleurodesis",
+          "via": "videoasistida",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": true,
+            "sev": false,
+            "inc": "intratoracica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "citable"
+          }
+        }
+      ]
+    },
+    {
+      "id": "urologia",
+      "nombre": "Urología",
+      "procedimientos": [
+        {
+          "id": "prostatectomia_radical_retropubica",
+          "nombre": "Prostatectomía radical retropúbica abierta",
+          "via": "abierta",
+          "deriva": {
+            "dom": "general",
+            "rcri": false,
+            "esp": false,
+            "sev": null,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "manual",
+            "inc": "criterio"
+          },
+          "notas": {
+            "rcri": "@extraperitoneal",
+            "inc": "@abdominal_baja"
+          },
+          "riesgoESC2022": "intermedio",
+          "oncologicoFrecuente": true
+        },
+        {
+          "id": "prostatectomia_radical_lap",
+          "nombre": "Prostatectomía radical laparoscópica o robótica transperitoneal",
+          "via": "laparoscopica",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": false,
+            "sev": null,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "manual",
+            "inc": "criterio"
+          },
+          "notas": {
+            "rcri": "@transperitoneal",
+            "inc": "@abdominal_baja"
+          },
+          "riesgoESC2022": "intermedio",
+          "oncologicoFrecuente": true,
+          "advertencias": [
+            {
+              "junto_a": "rcri",
+              "texto": "Misma operación, distinta respuesta: la vía transperitoneal suma el punto y la retropúbica no."
+            }
+          ]
+        },
+        {
+          "id": "rtu_prostata",
+          "nombre": "Resección transuretral de próstata (RTUP)",
+          "via": "endoscopica",
+          "deriva": {
+            "dom": "general",
+            "rcri": false,
+            "esp": false,
+            "sev": false,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "citable"
+          },
+          "riesgoESC2022": "bajo"
+        },
+        {
+          "id": "cistectomia_radical",
+          "nombre": "Cistectomía radical con derivación urinaria",
+          "via": "mixta",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": false,
+            "sev": true,
+            "inc": "abdominal_alta"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "criterio"
+          },
+          "notas": {
+            "esp": "Urología: en la Tabla 3 del SORT NO es especialidad de alto riesgo."
+          },
+          "riesgoESC2022": "alto",
+          "oncologicoFrecuente": true,
+          "advertencias": [
+            {
+              "junto_a": "sort",
+              "texto": "El peor desalineamiento del catálogo: la guía ESC 2022 ubica esta cirugía por encima del 5 %, pero para el SORT es urología y no suma el término de especialidad de alto riesgo. Un SORT bajo al lado de una cistectomía es un número correcto según el modelo y una impresión falsa según la clínica."
+            }
+          ]
+        },
+        {
+          "id": "nefrectomia_transperitoneal",
+          "nombre": "Nefrectomía transperitoneal",
+          "via": "mixta",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": false,
+            "sev": null,
+            "inc": "abdominal_alta"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "manual",
+            "inc": "criterio"
+          },
+          "notas": {
+            "rcri": "@transperitoneal"
+          },
+          "oncologicoFrecuente": true
+        },
+        {
+          "id": "nefrectomia_lumbotomia",
+          "nombre": "Nefrectomía por lumbotomía (retroperitoneal)",
+          "via": "abierta",
+          "deriva": {
+            "dom": "general",
+            "rcri": false,
+            "esp": false,
+            "sev": null,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "manual",
+            "inc": "criterio"
+          },
+          "notas": {
+            "rcri": "@extraperitoneal"
+          },
+          "oncologicoFrecuente": true
+        }
+      ]
+    },
+    {
+      "id": "ginecologia_obstetricia",
+      "nombre": "Ginecología y obstetricia",
+      "procedimientos": [
+        {
+          "id": "cesarea",
+          "nombre": "Cesárea",
+          "via": "abierta",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": false,
+            "sev": false,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "criterio"
+          },
+          "notas": {
+            "rcri": "Anatómicamente es intraperitoneal, pero el RCRI se derivó en cirugía electiva mayor NO obstétrica, en pacientes de 50 años o más.",
+            "inc": "@abdominal_baja"
+          },
+          "scoresNoAplican": [
+            {
+              "score": "sort",
+              "motivo": "La cohorte del SORT excluyó los procedimientos obstétricos."
+            }
+          ],
+          "advertencias": [
+            {
+              "junto_a": "rcri",
+              "texto": "El RCRI se derivó en cirugía electiva mayor no cardíaca en pacientes de 50 años o más: una cesárea, y más si es de urgencia en una paciente joven, queda doblemente fuera de esa cohorte aunque el índice dé un número."
+            }
+          ]
+        },
+        {
+          "id": "histerectomia_abdominal_lap",
+          "nombre": "Histerectomía abdominal o laparoscópica",
+          "via": "mixta",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": false,
+            "sev": null,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "manual",
+            "inc": "criterio"
+          },
+          "notas": {
+            "inc": "@abdominal_baja"
+          },
+          "riesgoESC2022": "intermedio",
+          "oncologicoFrecuente": true
+        },
+        {
+          "id": "histerectomia_vaginal",
+          "nombre": "Histerectomía vaginal",
+          "via": "vaginal",
+          "deriva": {
+            "dom": "general",
+            "rcri": false,
+            "esp": false,
+            "sev": false,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "citable"
+          },
+          "riesgoESC2022": "intermedio",
+          "oncologicoFrecuente": true
+        },
+        {
+          "id": "anexectomia_lap",
+          "nombre": "Anexectomía o quistectomía ovárica laparoscópica",
+          "via": "laparoscopica",
+          "deriva": {
+            "dom": "general",
+            "rcri": true,
+            "esp": false,
+            "sev": false,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "criterio"
+          },
+          "notas": {
+            "rcri": "@laparoscopia_rcri",
+            "inc": "@abdominal_baja"
+          },
+          "oncologicoFrecuente": true
+        }
+      ]
+    },
+    {
+      "id": "traumatologia",
+      "nombre": "Traumatología y columna",
+      "procedimientos": [
+        {
+          "id": "protesis_cadera",
+          "nombre": "Artroplastia total de cadera electiva",
+          "via": "abierta",
+          "deriva": {
+            "dom": "general",
+            "rcri": false,
+            "esp": false,
+            "sev": false,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "citable"
+          },
+          "riesgoESC2022": "intermedio"
+        },
+        {
+          "id": "protesis_rodilla",
+          "nombre": "Artroplastia total de rodilla",
+          "via": "abierta",
+          "deriva": {
+            "dom": "general",
+            "rcri": false,
+            "esp": false,
+            "sev": false,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "citable"
+          },
+          "riesgoESC2022": "intermedio"
+        },
+        {
+          "id": "fractura_cadera",
+          "nombre": "Fractura de cadera: osteosíntesis o hemiartroplastia",
+          "via": "abierta",
+          "deriva": {
+            "dom": "general",
+            "rcri": false,
+            "esp": false,
+            "sev": null,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "manual",
+            "inc": "citable"
+          },
+          "advertencias": [
+            {
+              "junto_a": "resultado",
+              "texto": "Acá el procedimiento aporta poco: lo que mueve el SORT en una fractura de cadera es la edad, el carácter de urgencia y la clase ASA. Elegir bien el procedimiento no alcanza."
+            }
+          ]
+        },
+        {
+          "id": "artroscopia_rodilla",
+          "nombre": "Artroscopía de rodilla",
+          "via": "videoasistida",
+          "deriva": {
+            "dom": "general",
+            "rcri": false,
+            "esp": false,
+            "sev": false,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "citable"
+          },
+          "riesgoESC2022": "bajo",
+          "advertencias": [
+            {
+              "junto_a": "sort",
+              "texto": "Si se hace de forma ambulatoria, queda fuera de la cohorte del SORT, que excluyó la cirugía de día y exigía internación de al menos una noche. Depende del caso, no del procedimiento: por eso la app avisa en vez de apagar el score."
+            }
+          ]
+        },
+        {
+          "id": "artrodesis_lumbar",
+          "nombre": "Artrodesis lumbar / cirugía de columna",
+          "via": "abierta",
+          "deriva": {
+            "dom": "neuroquirurgica",
+            "rcri": false,
+            "esp": false,
+            "sev": null,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "manual",
+            "inc": "citable"
+          },
+          "notas": {
+            "dom": "@dominio_neuro",
+            "esp": "En la Tabla 3 del SORT la columna figura en el grupo 'Spine', que no es especialidad de alto riesgo."
+          },
+          "riesgoESC2022": "intermedio",
+          "advertencias": [
+            {
+              "junto_a": "sort",
+              "texto": "La cirugía de columna entra en el dominio neuroquirúrgico, que la cohorte del SORT excluyó: el SORT queda apagado aunque el RCRI y el ARISCAT se calculen."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "oftalmologia",
+      "nombre": "Oftalmología",
+      "procedimientos": [
+        {
+          "id": "facoemulsificacion_catarata",
+          "nombre": "Facoemulsificación de catarata",
+          "via": "microquirurgica",
+          "deriva": {
+            "dom": "general",
+            "rcri": false,
+            "esp": false,
+            "sev": false,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "criterio",
+            "inc": "citable"
+          },
+          "riesgoESC2022": "bajo",
+          "advertencias": [
+            {
+              "junto_a": "sort",
+              "texto": "Si se hace de forma ambulatoria, queda fuera de la cohorte del SORT. Depende del caso, no del procedimiento."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fuera_de_cohorte",
+      "nombre": "Procedimientos que apagan algún score",
+      "_nota": "Acá 'no aplica' NO es 'da bajo'. La tarjeta del score se muestra INHABILITADA con el motivo escrito, nunca con un 0 % ni con la banda verde.",
+      "procedimientos": [
+        {
+          "id": "craneotomia",
+          "nombre": "Craneotomía",
+          "via": "abierta",
+          "deriva": {
+            "dom": "neuroquirurgica",
+            "rcri": false,
+            "esp": false,
+            "sev": null,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "citable",
+            "sev": "manual",
+            "inc": "criterio"
+          },
+          "notas": {
+            "dom": "@dominio_neuro",
+            "rcri": "No es intraperitoneal, ni intratorácica, ni vascular suprainguinal: el RCRI suma 0 por la cirugía, legítimamente."
+          },
+          "oncologicoFrecuente": true,
+          "advertencias": [
+            {
+              "junto_a": "resultado",
+              "texto": "El caso más engañoso del catálogo: el dominio neuroquirúrgico apaga el SORT, el RCRI suma 0 por la cirugía legítimamente y el ARISCAT clasifica la incisión como periférica. Lo que queda encendido puede dar tranquilizador sobre una cirugía que no lo es."
+            }
+          ]
+        },
+        {
+          "id": "cirugia_cardiaca",
+          "nombre": "Cirugía cardíaca (bypass aortocoronario o valvular)",
+          "via": "abierta",
+          "deriva": {
+            "dom": "cardiaca",
+            "rcri": null,
+            "esp": null,
+            "sev": null,
+            "inc": "intratoracica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "manual",
+            "esp": "manual",
+            "sev": "manual",
+            "inc": "citable"
+          },
+          "notas": {
+            "dom": "@dominio_cardiaco"
+          },
+          "advertencias": [
+            {
+              "junto_a": "ariscat",
+              "texto": "El dominio cardíaco apaga el SORT y el RCRI. El ARISCAT se calcula igual, pero se derivó en cirugía no cardíaca y su desempeño acá no está establecido: la advertencia va pegada al número."
+            }
+          ]
+        },
+        {
+          "id": "trasplante",
+          "nombre": "Trasplante renal, hepático o pulmonar",
+          "via": "abierta",
+          "deriva": {
+            "dom": "general",
+            "rcri": null,
+            "esp": null,
+            "sev": null,
+            "inc": null
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "manual",
+            "esp": "manual",
+            "sev": "manual",
+            "inc": "manual"
+          },
+          "notas": {
+            "inc": "Según el sitio: el renal y el hepático son abdominales, el pulmonar es torácico."
+          },
+          "riesgoESC2022": "alto",
+          "scoresNoAplican": [
+            {
+              "score": "sort",
+              "motivo": "La cohorte del SORT excluyó los trasplantes."
+            }
+          ]
+        },
+        {
+          "id": "endoscopia_digestiva",
+          "nombre": "Endoscopía digestiva (VEDA, videocolonoscopía, CPRE)",
+          "via": "endoscopica",
+          "deriva": {
+            "dom": "general",
+            "rcri": false,
+            "esp": null,
+            "sev": null,
+            "inc": "periferica"
+          },
+          "procedencia": {
+            "dom": "citable",
+            "rcri": "citable",
+            "esp": "manual",
+            "sev": "manual",
+            "inc": "criterio"
+          },
+          "scoresNoAplican": [
+            {
+              "score": "sort",
+              "motivo": "El SORT definió cirugía como un procedimiento hecho en quirófano por un cirujano, con internación planificada de al menos una noche; su cohorte excluyó la cirugía de día."
+            }
+          ],
+          "advertencias": [
+            {
+              "junto_a": "ariscat",
+              "texto": "Si es una sedación sin anestesia general, neuroaxial ni regional, queda fuera del alcance de este demo."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sin_clasificar",
+      "nombre": "No está en la lista",
+      "procedimientos": [
+        {
+          "id": "no_esta_en_la_lista",
+          "nombre": "Mi cirugía no está en la lista",
+          "via": "no_aplica",
+          "_porque_existe": "Sin esta fila, el que no encuentra su cirugía elige la más parecida — y una fila parecida PROPONE datos que no son de su caso. Es peor que no proponer nada.",
+          "deriva": {
+            "dom": null,
+            "rcri": null,
+            "esp": null,
+            "sev": null,
+            "inc": null
+          },
+          "procedencia": {
+            "dom": "manual",
+            "rcri": "manual",
+            "esp": "manual",
+            "sev": "manual",
+            "inc": "manual"
+          },
+          "notas": {
+            "general": "@sin_fila"
+          }
+        }
+      ]
+    }
+  ],
+  "pendientesDelCatalogo": [
+    {
+      "id": "PR-01",
+      "titulo": "Las 51 casillas de severidad Xmajor/complex son criterio propio, sin fuente pública",
+      "detalle": "La categoría viene del manual de los AXA Specialist Procedure Codes, arancelario privado británico de acceso comercial (hoy CCSD). No existe lista pública procedimiento por procedimiento que se pueda citar ni reproducir. Cada casilla la valida y la firma el anestesiólogo antes de publicar.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "PR-02",
+      "titulo": "La incisión ARISCAT de lo abdominal bajo es asignación por descarte",
+      "detalle": "El score tiene tres categorías y ninguna es 'abdominal baja'. Apendicectomía, cesárea, histerectomía y resección anterior de recto caen en 'periférica' con 0 puntos.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "PR-03",
+      "titulo": "Duración típica por procedimiento: hueco abierto a propósito",
+      "detalle": "Ninguna fila trae duración. No hay fuente publicada de duraciones de quirófano argentinas y el default probable es el benigno. Si el servicio carga sus medianas, se publica una versión nueva con procedencia 'registro local del servicio, n=..., período...'. Nunca precargado como respuesta.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "PR-04",
+      "titulo": "EVAR y endarterectomía carotídea frente al criterio suprainguinal del RCRI",
+      "detalle": "Lee 1999 es anterior a la difusión del EVAR y no hay respaldo textual para ninguna de las dos lecturas. Las dos quedan en manual. Son las casillas que más necesitan la firma del anestesiólogo.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "PR-05",
+      "titulo": "Sin código del Nomenclador de la AAC",
+      "detalle": "El Nomenclador de Prácticas Quirúrgicas de la Asociación Argentina de Cirugía da los nombres y códigos con los que el médico factura, en un documento argentino público que se actualiza todos los años. Cuando se cargue, entra como identificador ADMINISTRATIVO: su escala de 1 a 10 mezcla complejidad técnica, capacitación exigida y riesgo, y su finalidad es el honorario. NO es una escala de riesgo ni reemplaza la severidad del SORT.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "PR-06",
+      "titulo": "El texto de la pregunta 'cancer' quedó más estrecho que la variable del artículo",
+      "detalle": "El catálogo de normas 2026.1 pregunta 'La cirugía es por cáncer', pero en la Tabla 2 del SORT la variable figura entre las COMORBILIDADES del paciente, junto a cirrosis, arritmia, insuficiencia cardíaca y tabaquismo. La lectura estrecha deja en 'no' a un paciente con cáncer conocido operado de otra cosa, y eso resta 0,667 en la dirección peligrosa. Cambiar el texto es publicar una versión nueva del catálogo de normas, no editar la 2026.1.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "PR-07",
+      "titulo": "No se agrega ningún campo de conducta a este catálogo",
+      "detalle": "Decisión de diseño, hermana de la P-06 del catálogo de normas, anotada para que nadie la revierta por comodidad: este archivo no va a tener nunca un campo 'conducta', 'recomendacion', 'sugerencia' ni 'manejo'. Mientras ese campo no exista, el generador de la conclusión no tiene físicamente de dónde sacar una indicación.",
+      "estado": "decidido"
+    }
+  ],
+  "referenciaDuracion": {
+    "_que_es": "Duracion TIPICA de cada cirugia, como REFERENCIA. NO es una propuesta: no toca el control de las horas y no entra al calculo. Se muestra al lado, como el chip del IMC.",
+    "_por_que_no_se_tilda_sola": "Pasar de 'menos de 2 h' a 'de 2 a 3 h' son 16 PUNTOS de ARISCAT: suficiente para mover a un paciente de banda sin que nadie haya tocado un dato clinico. Y el valor probable es tambien el BENIGNO — la mayoria de las colecistectomias duran menos de dos horas, asi que la app propondria el tramo bajo casi siempre, y en la que se complica (la que mas importa) habria propuesto de menos. La duracion la sabe el equipo, no la tabla.",
+    "_procedencia": "TODO CRITERIO. No existe tabla publicada de duraciones de quirofano argentinas. Si un servicio tiene sus propios registros, se cargan aca con su fuente y dejan de ser criterio.",
+    "etiquetas": {
+      "corto": "suele terminar en menos de 2 h",
+      "medio": "suele caer entre 2 y 3 h",
+      "largo": "suele pasar de 3 h"
+    },
+    "porProcedimiento": {
+      "colecistectomia_lap": "corto",
+      "colecistectomia_abierta": "corto",
+      "apendicectomia_lap": "corto",
+      "apendicectomia_abierta": "corto",
+      "hernia_inguinal_lichtenstein": "corto",
+      "hernia_inguinal_tapp": "corto",
+      "hernia_inguinal_tep": "corto",
+      "hernia_umbilical": "corto",
+      "eventroplastia": "medio",
+      "hemicolectomia": "medio",
+      "reseccion_anterior_recto": "largo",
+      "gastrectomia": "largo",
+      "esofaguectomia": "largo",
+      "duodenopancreatectomia": "largo",
+      "hepatectomia": "largo",
+      "esplenectomia": "medio",
+      "bariatrica": "medio",
+      "tiroidectomia": "medio",
+      "mastectomia": "medio",
+      "aorta_abdominal_abierta": "largo",
+      "evar": "medio",
+      "bypass_femoropopliteo": "medio",
+      "endarterectomia_carotidea": "medio",
+      "safenectomia": "corto",
+      "amputacion_miembro_inferior": "corto",
+      "lobectomia_pulmonar": "largo",
+      "neumonectomia": "largo",
+      "vats_reseccion_menor": "medio",
+      "videotoracoscopia_pleurodesis": "corto",
+      "prostatectomia_radical_retropubica": "largo",
+      "prostatectomia_radical_lap": "largo",
+      "rtu_prostata": "corto",
+      "cistectomia_radical": "largo",
+      "nefrectomia_transperitoneal": "medio",
+      "nefrectomia_lumbotomia": "medio",
+      "cesarea": "corto",
+      "histerectomia_abdominal_lap": "medio",
+      "histerectomia_vaginal": "medio",
+      "anexectomia_lap": "corto",
+      "protesis_cadera": "medio",
+      "protesis_rodilla": "medio",
+      "fractura_cadera": "corto",
+      "artroscopia_rodilla": "corto",
+      "artrodesis_lumbar": "largo",
+      "facoemulsificacion_catarata": "corto",
+      "craneotomia": "largo",
+      "cirugia_cardiaca": "largo",
+      "trasplante": "largo",
+      "endoscopia_digestiva": "corto"
+    },
+    "sinReferencia": {
+      "_por_que": "Estas no llevan referencia: la duracion depende de lo que se encuentre al abrir, y una referencia inventada seria peor que ninguna.",
+      "ids": [
+        "laparotomia_exploradora",
+        "viscera_perforada",
+        "no_esta_en_la_lista"
+      ]
+    }
+  }
+}
