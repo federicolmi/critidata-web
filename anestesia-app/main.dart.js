@@ -45614,7 +45614,7 @@ for(s=b.gFu(),r=s.length,q=b.f,p=b.e,o=b.r,n=0;n<r;++n){m=s[n]
 if(m.f!=null){l=A.b([new A.ax(B.is,A.a7(m.b,a,a,a,B.a_0,a,a,a),a)],a1)
 for(k=m.a,j=m.r,i="ej.: "+A.m(j),j=j==null,h=0;h<o.h(0,k).length;++h){g=A.xn(!1,o.h(0,k)[h].a,B.Lw,!1,a,a,a,a,a,1,new A.asy(b),a,a,a,a,a,B.V,a,a)
 f=o.h(0,k)[h]
-if(B.b.hH(B.Nd,B.c.giK(B.c.aZ(o.h(0,k)[h].a.a.a).toLowerCase())))e="ej.: 2%/2L"
+if(B.b.hH(B.Nd,B.c.giK(B.c.aZ(o.h(0,k)[h].a.a.a).toLowerCase())))e="ej.: 2%/2L/min"
 else e=j?a:i
 e=A.b([new A.hs(3,B.bZ,g,a),B.ec,new A.hs(2,B.bZ,A.xn(!1,f.b,new A.fC(a,a,a,"Dosis",a,a,a,a,a,a,e,a,a,a,a,a,!0,!0,a,a,a,a,B.dS,a,!0,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,B.bi,!0,a,a,a,a),!1,a,a,a,a,a,1,a,a,a,a,a,a,B.V,a,a),a)],a1)
 if(o.h(0,k).length>1)e.push(A.jD(a,a,B.me,a,a,new A.asz(b,m,h),a,a,"Quitar agente",B.dm))
