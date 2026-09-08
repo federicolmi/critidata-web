@@ -22,7 +22,7 @@ window.ESQUEMA_FORMULARIO = {
         { id: "hc_dni", etiqueta: "Historia Clínica o DNI", tipo: "texto" },
         { id: "nombre", etiqueta: "Nombre y Apellido", tipo: "texto", ancho: "grande" },
         { id: "sexo", etiqueta: "Sexo", tipo: "opciones", opciones: ["M", "F"] },
-        { id: "edad", etiqueta: "Edad", tipo: "numero", ancho: "chico" },
+        { id: "edad", etiqueta: "Edad", tipo: "texto", ancho: "chico" },
         { id: "peso", etiqueta: "Peso (kg)", tipo: "numero", ancho: "chico" },
         { id: "diagnostico", etiqueta: "Diagnóstico", tipo: "texto", ancho: "grande" },
         { id: "operacion_propuesta", etiqueta: "Operación Propuesta", tipo: "texto", ancho: "grande" },
