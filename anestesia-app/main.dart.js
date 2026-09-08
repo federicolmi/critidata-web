@@ -7950,7 +7950,7 @@ for(s=new A.Sf(a),r="";s.t();){q=A.dP(s.d)
 p=B.c.h_("\xe1\xe9\xed\xf3\xfa\xfc\xf1\xc1\xc9\xcd\xd3\xda\xdc\xd1",q)
 r+=p>=0?"aeiouunAEIOUUN"[p]:q}return(r.charCodeAt(0)==0?r:r).toLowerCase()},
 aT7(a,b){var s,r,q,p,o,n,m=B.c.av(b)
-if(m.length===0)return B.iW
+if(m.length===0)return B.iX
 s=A.b([],t.rn)
 r=A.b2("^\\d",!0,!1,!1)
 if(r.b.test(m)){b=m.toUpperCase()
@@ -7969,7 +7969,7 @@ _.b=b
 _.c=c
 _.d=d},
 b8l(){var s,r,q=A.b([],t.s)
-for(s=0;s<33;++s){r=B.iZ[s].b
+for(s=0;s<33;++s){r=B.iW[s].b
 if(!B.b.n(q,r))q.push(r)}return q},
 zG(a){var s={}
 s.a=B.c.av(a.toLowerCase())
@@ -7977,7 +7977,7 @@ B.Rj.aA(0,new A.aG2(s))
 return s.a},
 aKS(a){var s,r,q,p,o,n,m,l,k,j,i=A.zG(a)
 if(i.length===0)return null
-for(s=t.s,r=null,q=-1,p=0;p<33;++p){o=B.iZ[p]
+for(s=t.s,r=null,q=-1,p=0;p<33;++p){o=B.iW[p]
 for(n=A.b([o.a],s),B.b.L(n,o.r),m=n.length,l=0;l<n.length;n.length===m||(0,A.v)(n),++l){k=A.zG(n[l])
 if(k===i)return o
 if(!A.a3O(i,k,0))j=A.a3O(k,i,0)
@@ -7996,7 +7996,7 @@ b9j(a){var s,r,q,p,o,n,m=A.zG(a)
 if(m.length<2)return B.E
 s=t.s
 r=A.b([],s)
-for(q=0;q<33;++q){p=B.iZ[q]
+for(q=0;q<33;++q){p=B.iW[q]
 o=p.a
 if(A.zG(o)===m)return B.E
 n=A.b([o],s)
@@ -46377,7 +46377,7 @@ return new A.am(B.lF,A.bQ(q,B.C,B.l,B.q,0,s),s)},
 E(a){var s,r,q,p,o,n,m=this,l=null
 if(m.p1)return A.fX(A.lS(l,l,l,B.a2F),l,A.cJ(A.ba(A.b([B.a39,B.aH,A.QP(B.a29,new A.asd(a),l)],t.p),B.C,l,B.l,B.a1,0,B.t),l,l),l)
 s=A.jF(m.gcf().h6($.aI4(),t.tt))
-if(s==null)s=B.iW
+if(s==null)s=B.iX
 r=A.a0(m.ok==null?"Nuevo paciente":"Editar paciente",l,l,l,l,l,l,l)
 q=t.p
 r=A.lS(A.b([A.fN(l,l,B.rr,l,l,new A.ase(a),l,l,"Drogas de consulta",l)],q),l,l,r)
@@ -46544,7 +46544,7 @@ $1(a){return a.gYE()},
 $S:579}
 A.arJ.prototype={
 $1(a){var s=A.jF(this.a.gcf().ce($.aI4(),t.tt))
-if(s==null)s=B.iW
+if(s==null)s=B.iX
 return A.aT7(s,a.a)},
 $S:578}
 A.arI.prototype={
@@ -46562,7 +46562,7 @@ $0(){},
 $S:0}
 A.arF.prototype={
 $1(a){var s=this.a,r=A.jF(s.gcf().ce($.aI4(),t.tt))
-if(A.aT7(r==null?B.iW:r,a).length!==0)this.b.$0()
+if(A.aT7(r==null?B.iX:r,a).length!==0)this.b.$0()
 else s.FE(a)},
 $S:10}
 A.arK.prototype={
@@ -47022,7 +47022,7 @@ q=A.cw(6)
 p=s?"obeso: peso real":"obeso: peso te\xf3rico"
 return A.dT(o,A.a0(p,o,o,o,A.du(o,o,s?B.pz:B.ld,o,o,o,o,o,o,o,o,10.5,o,o,B.bk,o,o,!0,o,o,o,o,o,o,o,o),o,o,o),B.p,o,o,new A.cx(r,o,o,q,o,o,B.ag),o,o,o,o,B.L0,o,o,o)},
 E(a){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d=null,c=A.b([],t.aK)
-for(s=this.d,r=0;r<33;++r){q=B.iZ[r]
+for(s=this.d,r=0;r<33;++r){q=B.iW[r]
 if(A.b7n(q,s.a.a))c.push(q)}p=A.lS(d,d,d,B.a2B)
 s=A.iB(d,B.E,!1,d,!0,B.I,d,A.jz(),s,d,d,d,d,d,2,A.mq(d,new A.fv(4,A.cw(10),B.kR),d,d,d,d,d,d,!0,d,d,d,d,d,d,d,d,d,d,d,d,d,d,d,d,d,d,d,d,d,d,"Buscar droga o grupo\u2026",d,d,d,d,d,!0,d,d,d,!0,!0,d,B.rp,d,d,d,d,d,d,d,d,d,d,d,d),B.Z,!0,d,!0,d,!1,d,B.aM,d,d,d,d,d,d,d,d,1,d,d,!1,"\u2022",d,new A.auP(this),d,d,d,!1,d,d,!1,d,!0,d,B.bt,d,d,d,d,d,d,d,d,d,d,d,d,!0,B.T,d,B.bO,d,d,d,d)
 o=t.p
@@ -88364,7 +88364,7 @@ if(a)c.y=A.o(t.N,t.UX)
 s=t.jl
 r=A.b([],s)
 q=c.y.h(0,b)
-if(q==null)q=B.iX
+if(q==null)q=B.iY
 p=A.o(t.ob,t.UX)
 o=c.y.gc7()
 n=o.is(o)
@@ -88383,8 +88383,8 @@ if(j){r=A.b([],s)
 i=c.y
 i.toString
 q=i.h(0,h.gek())
-if(q==null)q=B.iX}else{r=B.iX
-q=B.iX}l=h
+if(q==null)q=B.iY}else{r=B.iY
+q=B.iY}l=h
 continue}if(j){i=h.b
 i=i==null?b:i.ga0s()
 j=i===!0}else j=!1
@@ -97330,7 +97330,7 @@ arQ(a){var s=a.c,r=s.gcr()
 a.gCX()
 return new A.bK(s,r,null,null,a.f,a.b,a.d,null,B.a59)},
 KV(a,b){var s=t.N,r=A.o(s,s),q=this.aeo(a,r)
-if(J.fE(q))return new A.d3(B.iY,B.c3,a,b,new A.vQ("no routes for location: "+a.k(0)),A.x3(B.iY))
+if(J.fE(q))return new A.d3(B.iZ,B.c3,a,b,new A.vQ("no routes for location: "+a.k(0)),A.x3(B.iZ))
 return new A.d3(q,r,a,b,null,A.x3(q))},
 av_(a){return this.KV(a,null)},
 aeo(a,b){var s,r,q,p,o
@@ -97359,7 +97359,7 @@ q.k(0)
 return s}catch(o){q=A.af(o)
 if(q instanceof A.vQ){r=q
 r.toString
-return new A.d3(B.iY,B.c3,b,null,r,A.x3(B.iY))}else throw o}},
+return new A.d3(B.iZ,B.c3,b,null,r,A.x3(B.iZ))}else throw o}},
 RW(a){return new A.a5(a,new A.ake(),A.X(a).i("a5<1,j>")).b4(0," => ")},
 k(a){return"RouterConfiguration: "+A.m(this.a.a.a)},
 atP(){var s,r,q=new A.cN("")
@@ -105428,6 +105428,48 @@ B.Oy=s([B.aF,B.k],A.as("q<FR>"))
 B.b_=new A.FV(0,"rtl")
 B.a2=new A.FV(1,"ltr")
 B.mE=s([B.b_,B.a2],A.as("q<FV>"))
+B.JM=new A.cj("Midazolam","Premedicaci\xf3n","0,02\u20130,05 mg/kg IV (premedicaci\xf3n); 0,1\u20130,2 mg/kg IM","amp 5 mg/5 ml y 15 mg/3 ml","real","ansi\xf3lisis y amnesia; en el a\xf1oso, la mitad",B.E)
+B.JK=new A.cj("Ranitidina","Premedicaci\xf3n","50 mg IV lento","amp 50 mg/5 ml","","profilaxis de aspiraci\xf3n (con metoclopramida)",B.E)
+B.Pw=s(["reliveran"],t.s)
+B.JX=new A.cj("Metoclopramida","Premedicaci\xf3n","10 mg IV","amp 10 mg/2 ml","","proquin\xe9tico \u2014 \xfatil en est\xf3mago lleno",B.Pw)
+B.JW=new A.cj("Propofol","Inductores","1,5\u20132,5 mg/kg IV inducci\xf3n; sedaci\xf3n 25\u201375 \xb5g/kg/min","fco 200 mg/20 ml (10 mg/ml)","teorico","hipotensor: bajar dosis en hipovolemia y a\xf1osos",B.E)
+B.JJ=new A.cj("Ketamina","Inductores","1\u20132 mg/kg IV inducci\xf3n; 0,25\u20130,5 mg/kg analgesia","fco 500 mg/10 ml (50 mg/ml)","teorico","de elecci\xf3n en el inestable; broncodilata",B.E)
+B.JO=new A.cj("Etomidato","Inductores","0,2\u20130,3 mg/kg IV","amp 20 mg/10 ml","teorico","estabilidad hemodin\xe1mica; supresi\xf3n suprarrenal",B.E)
+B.Pq=s(["pentotal"],t.s)
+B.JI=new A.cj("Tiopental","Inductores","3\u20135 mg/kg IV","fco 1 g (diluir)","teorico","evitar en porfiria e hipovolemia",B.Pq)
+B.JV=new A.cj("Dexmedetomidina","Inductores","carga 1 \xb5g/kg en 10 min; 0,2\u20130,7 \xb5g/kg/h","fco 200 \xb5g/2 ml","teorico","sedaci\xf3n cooperativa; bradicardia",B.E)
+B.Jz=new A.cj("Fentanilo","Opioides","carga 4\u20135 \xb5g/kg (TIVA); 1\u20133 \xb5g/kg inducci\xf3n balanceada; repiques 0,5\u20131 \xb5g/kg","amp 0,25 mg/5 ml (50 \xb5g/ml)","teorico","",B.E)
+B.JE=new A.cj("Remifentanilo","Opioides","0,1\u20130,5 \xb5g/kg/min","fco 2 y 5 mg (diluir)","teorico","analgesia posoperatoria ANTES de cortar la infusi\xf3n",B.E)
+B.JP=new A.cj("Morfina","Opioides","0,05\u20130,1 mg/kg IV lento","amp 10 mg/1 ml","teorico","",B.E)
+B.JN=new A.cj("Nalbufina","Opioides","0,1\u20130,2 mg/kg IV","amp 10 mg/1 ml","teorico","techo analg\xe9sico; antagoniza \xb5 parcialmente",B.E)
+B.Pz=s(["suxametonio"],t.s)
+B.JB=new A.cj("Succinilcolina","Relajantes","1\u20131,5 mg/kg IV (secuencia r\xe1pida)","fco 500 mg (diluir)","real","inicio 45 s; contraindicada en hiperK, quemados, miopat\xedas",B.Pz)
+B.JH=new A.cj("Rocuronio","Relajantes","0,6 mg/kg IV; secuencia r\xe1pida 1,2 mg/kg","amp 50 mg/5 ml","teorico","reversible con sugammadex",B.E)
+B.JU=new A.cj("Vecuronio","Relajantes","0,08\u20130,1 mg/kg IV","fco 4 y 10 mg (diluir)","teorico","",B.E)
+B.JG=new A.cj("Atracurio","Relajantes","0,4\u20130,5 mg/kg IV","amp 25 y 50 mg","teorico","v\xeda de Hofmann: \xfatil en falla renal/hep\xe1tica",B.E)
+B.JT=new A.cj("Neostigmina","Reversi\xf3n","0,03\u20130,05 mg/kg IV + atropina 0,015\u20130,02 mg/kg","amp 0,5 mg/1 ml","real","siempre con antimuscar\xednico",B.E)
+B.Jv=new A.cj("Sugammadex","Reversi\xf3n","2 mg/kg (2 respuestas del TOF); 4 mg/kg (bloqueo profundo)","fco 200 mg/2 ml","real","solo rocuronio/vecuronio",B.E)
+B.Jx=new A.cj("Atropina","Reversi\xf3n","0,5\u20131 mg IV (0,01 mg/kg)","amp 1 mg/1 ml","real","bradicardia; acompa\xf1a a la neostigmina",B.E)
+B.Py=s(["sevorane"],t.s)
+B.Js=new A.cj("Sevoflurano","Inhalatorios","mantenimiento 1,5\u20132,5% (MAC ~2%); inducci\xf3n inhalatoria hasta 8%","fco 250 ml","",'la app calcula los ml consumidos con "%/L/min" y la duraci\xf3n del parte',B.Py)
+B.ON=s(["duracaina"],t.s)
+B.JQ=new A.cj("Bupivaca\xedna 0,5%","Anest\xe9sicos locales","raqu\xeddea 7,5\u201315 mg (hiperbara); peridural 50\u2013100 mg; m\xe1x 2,5 mg/kg","raqu\xeddea: amp HIPERB\xc1RICA 4 ml (20 mg) \xb7 peridural: fco 20 ml isob\xe1rica (5 mg/ml)","","cardiot\xf3xica en inyecci\xf3n IV inadvertida \u2014 aspirar siempre",B.ON)
+B.PE=s(["xylocaina"],t.s)
+B.JL=new A.cj("Lidoca\xedna","Anest\xe9sicos locales","IV 1\u20131,5 mg/kg; infiltraci\xf3n m\xe1x 4,5 mg/kg (7 con epinefrina)","fco 2% 20 ml (20 mg/ml)","teorico","",B.PE)
+B.JY=new A.cj("Ropivaca\xedna 0,75%","Anest\xe9sicos locales","peridural 75\u2013150 mg; bloqueos 0,2\u20130,5% seg\xfan volumen","fco 20 ml al 0,75% (7,5 mg/ml)","","menos cardiot\xf3xica que la bupivaca\xedna",B.E)
+B.JA=new A.cj("Efedrina","Vasoactivos","bolos 5\u201310 mg IV","amp 50 mg (diluir a 5 mg/ml)","","hipotensi\xf3n con bradicardia (raqu\xeddea)",B.E)
+B.JS=new A.cj("Fenilefrina","Vasoactivos","bolos 50\u2013100 \xb5g IV","amp 10 mg (diluir a 100 \xb5g/ml)","","hipotensi\xf3n con taquicardia \u2014 disponibilidad variable en Argentina: confirmar en tu hospital",B.E)
+B.Ju=new A.cj("Noradrenalina","Vasoactivos","0,05\u20130,5 \xb5g/kg/min","amp 4 mg/4 ml (diluir)","","titular a efecto, idealmente por v\xeda central",B.E)
+B.P5=s(["epinefrina"],t.s)
+B.JR=new A.cj("Adrenalina","Vasoactivos","PCR 1 mg IV c/3\u20135 min; anafilaxia 0,3\u20130,5 mg IM","amp 1 mg/1 ml","","",B.P5)
+B.JF=new A.cj("Ketorolac","Analg\xe9sicos","30 mg IV c/8 h","ampolla 30 mg","","dosis FIJA por ampolla \u2014 m\xe1x 90 mg/d\xeda, 2 d\xedas IV",B.E)
+B.Jt=new A.cj("Diclofenac","Analg\xe9sicos","75 mg IM o IV lento","amp 75 mg/3 ml","","",B.E)
+B.Pn=s(["metamizol"],t.s)
+B.Jy=new A.cj("Dipirona","Analg\xe9sicos","1\u20132 g IV lento","amp 1 g/2 ml","","",B.Pn)
+B.Jw=new A.cj("Paracetamol IV","Analg\xe9sicos","1 g IV en 15 min","fco 1 g/100 ml","","m\xe1x 4 g/d\xeda; menos en hepat\xf3patas",B.E)
+B.JC=new A.cj("Ondansetr\xf3n","Antiem\xe9ticos","4\u20138 mg IV","amp 4 y 8 mg","","",B.E)
+B.JD=new A.cj("Dexametasona","Antiem\xe9ticos","4\u20138 mg IV","amp 8 mg/2 ml","","antiem\xe9tico y coadyuvante analg\xe9sico",B.E)
+B.iW=s([B.JM,B.JK,B.JX,B.JW,B.JJ,B.JO,B.JI,B.JV,B.Jz,B.JE,B.JP,B.JN,B.JB,B.JH,B.JU,B.JG,B.JT,B.Jv,B.Jx,B.Js,B.JQ,B.JL,B.JY,B.JA,B.JS,B.Ju,B.JR,B.JF,B.Jt,B.Jy,B.Jw,B.JC,B.JD],t.aK)
 B.dB=new A.kq(0,"leading")
 B.cc=new A.kq(1,"title")
 B.dC=new A.kq(2,"subtitle")
@@ -105480,15 +105522,15 @@ B.P3=s([],t.fJ)
 B.OR=s([],t.ER)
 B.a7j=s([],t.ss)
 B.OW=s([],t.tc)
-B.iX=s([],t.jl)
+B.iY=s([],t.jl)
 B.OX=s([],t.wi)
 B.OZ=s([],A.as("q<oK>"))
 B.mF=s([],t.fB)
 B.OV=s([],A.as("q<fT<@>>"))
-B.iW=s([],t.rn)
+B.iX=s([],t.rn)
 B.mH=s([],t.AO)
 B.OQ=s([],t.yo)
-B.iY=s([],t.i3)
+B.iZ=s([],t.i3)
 B.mG=s([],t.K1)
 B.OU=s([],t.D1)
 B.mI=s([],t.QF)
@@ -105503,48 +105545,6 @@ B.mp=new A.iZ(0)
 B.Lk=new A.iZ(1)
 B.r9=new A.iZ(8)
 B.rS=s([B.mp,B.Lk,B.fW,B.A,B.ak,B.bk,B.aX,B.iM,B.r9],A.as("q<iZ>"))
-B.JO=new A.cj("Midazolam","Premedicaci\xf3n","0,02\u20130,05 mg/kg IV (premedicaci\xf3n); 0,1\u20130,2 mg/kg IM","amp 5 mg/5 ml y 15 mg/3 ml","real","ansi\xf3lisis y amnesia; en el a\xf1oso, la mitad",B.E)
-B.JL=new A.cj("Ranitidina","Premedicaci\xf3n","50 mg IV lento","amp 50 mg/5 ml","","profilaxis de aspiraci\xf3n (con metoclopramida)",B.E)
-B.Pw=s(["reliveran"],t.s)
-B.JX=new A.cj("Metoclopramida","Premedicaci\xf3n","10 mg IV","amp 10 mg/2 ml","","proquin\xe9tico \u2014 \xfatil en est\xf3mago lleno",B.Pw)
-B.JW=new A.cj("Propofol","Inductores","1,5\u20132,5 mg/kg IV inducci\xf3n; sedaci\xf3n 25\u201375 \xb5g/kg/min","fco 200 mg/20 ml (10 mg/ml)","teorico","hipotensor: bajar dosis en hipovolemia y a\xf1osos",B.E)
-B.JK=new A.cj("Ketamina","Inductores","1\u20132 mg/kg IV inducci\xf3n; 0,25\u20130,5 mg/kg analgesia","fco 500 mg/10 ml (50 mg/ml)","teorico","de elecci\xf3n en el inestable; broncodilata",B.E)
-B.JQ=new A.cj("Etomidato","Inductores","0,2\u20130,3 mg/kg IV","amp 20 mg/10 ml","teorico","estabilidad hemodin\xe1mica; supresi\xf3n suprarrenal",B.E)
-B.Pq=s(["pentotal"],t.s)
-B.JJ=new A.cj("Tiopental","Inductores","3\u20135 mg/kg IV","fco 1 g (diluir)","teorico","evitar en porfiria e hipovolemia",B.Pq)
-B.JU=new A.cj("Dexmedetomidina","Inductores","carga 1 \xb5g/kg en 10 min; 0,2\u20130,7 \xb5g/kg/h","fco 200 \xb5g/2 ml","teorico","sedaci\xf3n cooperativa; bradicardia",B.E)
-B.JV=new A.cj("Fentanilo","Opioides","1\u20133 \xb5g/kg IV inducci\xf3n; repiques 0,5\u20131 \xb5g/kg","amp 0,25 mg/5 ml (50 \xb5g/ml)","teorico","",B.E)
-B.JE=new A.cj("Remifentanilo","Opioides","0,1\u20130,5 \xb5g/kg/min","fco 2 y 5 mg (diluir)","teorico","analgesia posoperatoria ANTES de cortar la infusi\xf3n",B.E)
-B.JR=new A.cj("Morfina","Opioides","0,05\u20130,1 mg/kg IV lento","amp 10 mg/1 ml","teorico","",B.E)
-B.JP=new A.cj("Nalbufina","Opioides","0,1\u20130,2 mg/kg IV","amp 10 mg/1 ml","teorico","techo analg\xe9sico; antagoniza \xb5 parcialmente",B.E)
-B.Pz=s(["suxametonio"],t.s)
-B.JB=new A.cj("Succinilcolina","Relajantes","1\u20131,5 mg/kg IV (secuencia r\xe1pida)","fco 500 mg (diluir)","real","inicio 45 s; contraindicada en hiperK, quemados, miopat\xedas",B.Pz)
-B.JI=new A.cj("Rocuronio","Relajantes","0,6 mg/kg IV; secuencia r\xe1pida 1,2 mg/kg","amp 50 mg/5 ml","teorico","reversible con sugammadex",B.E)
-B.JG=new A.cj("Vecuronio","Relajantes","0,08\u20130,1 mg/kg IV","fco 4 mg (diluir)","teorico","",B.E)
-B.JH=new A.cj("Atracurio","Relajantes","0,4\u20130,5 mg/kg IV","amp 25 y 50 mg","teorico","v\xeda de Hofmann: \xfatil en falla renal/hep\xe1tica",B.E)
-B.JT=new A.cj("Neostigmina","Reversi\xf3n","0,03\u20130,05 mg/kg IV + atropina 0,015\u20130,02 mg/kg","amp 0,5 mg/1 ml","real","siempre con antimuscar\xednico",B.E)
-B.Jv=new A.cj("Sugammadex","Reversi\xf3n","2 mg/kg (2 respuestas del TOF); 4 mg/kg (bloqueo profundo)","fco 200 mg/2 ml","real","solo rocuronio/vecuronio",B.E)
-B.Jy=new A.cj("Atropina","Reversi\xf3n","0,5\u20131 mg IV (0,01 mg/kg)","amp 1 mg/1 ml","real","bradicardia; acompa\xf1a a la neostigmina",B.E)
-B.Py=s(["sevorane"],t.s)
-B.Js=new A.cj("Sevoflurano","Inhalatorios","mantenimiento 1,5\u20132,5% (MAC ~2%); inducci\xf3n inhalatoria hasta 8%","fco 250 ml","",'la app calcula los ml consumidos con "%/L/min" y la duraci\xf3n del parte',B.Py)
-B.ON=s(["duracaina"],t.s)
-B.JN=new A.cj("Bupivaca\xedna 0,5%","Anest\xe9sicos locales","raqu\xeddea 7,5\u201315 mg (hiperbara); peridural 50\u2013100 mg; m\xe1x 2,5 mg/kg","fco 20 ml al 0,5% (5 mg/ml)","","cardiot\xf3xica en inyecci\xf3n IV inadvertida \u2014 aspirar siempre",B.ON)
-B.PE=s(["xylocaina"],t.s)
-B.JM=new A.cj("Lidoca\xedna","Anest\xe9sicos locales","IV 1\u20131,5 mg/kg; infiltraci\xf3n m\xe1x 4,5 mg/kg (7 con epinefrina)","fco 2% 20 ml (20 mg/ml)","teorico","",B.PE)
-B.JY=new A.cj("Ropivaca\xedna 0,75%","Anest\xe9sicos locales","peridural 75\u2013150 mg; bloqueos 0,2\u20130,5% seg\xfan volumen","fco 20 ml al 0,75% (7,5 mg/ml)","","menos cardiot\xf3xica que la bupivaca\xedna",B.E)
-B.JA=new A.cj("Efedrina","Vasoactivos","bolos 5\u201310 mg IV","amp 50 mg (diluir a 5 mg/ml)","","hipotensi\xf3n con bradicardia (raqu\xeddea)",B.E)
-B.Jx=new A.cj("Fenilefrina","Vasoactivos","bolos 50\u2013100 \xb5g IV","amp 10 mg (diluir a 100 \xb5g/ml)","","hipotensi\xf3n con taquicardia",B.E)
-B.Ju=new A.cj("Noradrenalina","Vasoactivos","0,05\u20130,5 \xb5g/kg/min","amp 4 mg/4 ml (diluir)","","titular a efecto, idealmente por v\xeda central",B.E)
-B.P5=s(["epinefrina"],t.s)
-B.JS=new A.cj("Adrenalina","Vasoactivos","PCR 1 mg IV c/3\u20135 min; anafilaxia 0,3\u20130,5 mg IM","amp 1 mg/1 ml","","",B.P5)
-B.JF=new A.cj("Ketorolac","Analg\xe9sicos","30 mg IV c/8 h","ampolla 30 mg","","dosis FIJA por ampolla \u2014 m\xe1x 90 mg/d\xeda, 2 d\xedas IV",B.E)
-B.Jt=new A.cj("Diclofenac","Analg\xe9sicos","75 mg IM o IV lento","amp 75 mg/3 ml","","",B.E)
-B.Pn=s(["metamizol"],t.s)
-B.Jz=new A.cj("Dipirona","Analg\xe9sicos","1\u20132 g IV lento","amp 1 g/2 ml","","",B.Pn)
-B.Jw=new A.cj("Paracetamol IV","Analg\xe9sicos","1 g IV en 15 min","fco 1 g/100 ml","","m\xe1x 4 g/d\xeda; menos en hepat\xf3patas",B.E)
-B.JC=new A.cj("Ondansetr\xf3n","Antiem\xe9ticos","4\u20138 mg IV","amp 4 y 8 mg","","",B.E)
-B.JD=new A.cj("Dexametasona","Antiem\xe9ticos","4\u20138 mg IV","amp 8 mg/2 ml","","antiem\xe9tico y coadyuvante analg\xe9sico",B.E)
-B.iZ=s([B.JO,B.JL,B.JX,B.JW,B.JK,B.JQ,B.JJ,B.JU,B.JV,B.JE,B.JR,B.JP,B.JB,B.JI,B.JG,B.JH,B.JT,B.Jv,B.Jy,B.Js,B.JN,B.JM,B.JY,B.JA,B.Jx,B.Ju,B.JS,B.JF,B.Jt,B.Jz,B.Jw,B.JC,B.JD],t.aK)
 B.Pa=s([B.dH,B.hQ,B.kQ,B.hR],A.as("q<lT>"))
 B.Pt=s(["Pervidona","Alcohol iodado"],t.s)
 B.Hc=new A.eK("antiseptico","Antis\xe9ptico con",B.Pt,!0,1,null,null)
@@ -106277,7 +106277,7 @@ B.OO=s([B.h6,null,null,B.hd],t.L)
 B.NW=s([B.dj,B.dj,B.e1,null],t.L)
 B.Rr=new A.d1(["*",B.NL,"+",B.P6,"-",B.Od,".",B.OD,"/",B.Nd,"0",B.Pu,"1",B.Pl,"2",B.NR,"3",B.PA,"4",B.Pj,"5",B.NP,"6",B.Nf,"7",B.O1,"8",B.P7,"9",B.P9,"Alt",B.NT,"AltGraph",B.Pv,"ArrowDown",B.Om,"ArrowLeft",B.On,"ArrowRight",B.Oo,"ArrowUp",B.Px,"Clear",B.Pg,"Control",B.NU,"Delete",B.OJ,"End",B.Op,"Enter",B.NO,"Home",B.Oq,"Insert",B.Ph,"Meta",B.NV,"PageDown",B.Or,"PageUp",B.OO,"Shift",B.NW],A.as("d1<j,K<h?>>"))
 B.Sb={Midazolam:0,Ranitidina:1,Metoclopramida:2,Propofol:3,Ketamina:4,Etomidato:5,Tiopental:6,Dexmedetomidina:7,Fentanilo:8,Remifentanilo:9,Morfina:10,Nalbufina:11,Succinilcolina:12,Rocuronio:13,Vecuronio:14,Atracurio:15,Neostigmina:16,Sugammadex:17,Atropina:18,Sevoflurano:19,"Bupivaca\xedna 0,5%":20,"Lidoca\xedna":21,"Ropivaca\xedna 0,75%":22,Efedrina:23,Fenilefrina:24,Noradrenalina:25,Adrenalina:26,Ketorolac:27,Diclofenac:28,Dipirona:29,"Paracetamol IV":30,"Ondansetr\xf3n":31,Dexametasona:32}
-B.Rs=new A.bB(B.Sb,["0,03 mg/kg","50 mg","10 mg","2 mg/kg","1,5 mg/kg","0,3 mg/kg","4 mg/kg","0,5 \xb5g/kg/h","2 \xb5g/kg","0,25 \xb5g/kg/min","0,08 mg/kg","0,15 mg/kg","1 mg/kg","0,6 mg/kg","0,1 mg/kg","0,5 mg/kg","0,04 mg/kg","2 mg/kg","0,5 mg","2%/1L/min","15 mg","1,5 mg/kg","100 mg","10 mg","100 \xb5g","0,1 \xb5g/kg/min","1 mg","30 mg","75 mg","1 g","1 g","4 mg","8 mg"],t.li)
+B.Rs=new A.bB(B.Sb,["0,03 mg/kg","50 mg","10 mg","2 mg/kg","1,5 mg/kg","0,3 mg/kg","4 mg/kg","0,5 \xb5g/kg/h","4 \xb5g/kg","0,25 \xb5g/kg/min","0,08 mg/kg","0,15 mg/kg","1 mg/kg","0,6 mg/kg","0,1 mg/kg","0,5 mg/kg","0,04 mg/kg","2 mg/kg","0,5 mg","2%/1L/min","15 mg","1,5 mg/kg","100 mg","10 mg","100 \xb5g","0,1 \xb5g/kg/min","1 mg","30 mg","75 mg","1 g","1 g","4 mg","8 mg"],t.li)
 B.S2={KeyA:0,KeyB:1,KeyC:2,KeyD:3,KeyE:4,KeyF:5,KeyG:6,KeyH:7,KeyI:8,KeyJ:9,KeyK:10,KeyL:11,KeyM:12,KeyN:13,KeyO:14,KeyP:15,KeyQ:16,KeyR:17,KeyS:18,KeyT:19,KeyU:20,KeyV:21,KeyW:22,KeyX:23,KeyY:24,KeyZ:25,Digit1:26,Digit2:27,Digit3:28,Digit4:29,Digit5:30,Digit6:31,Digit7:32,Digit8:33,Digit9:34,Digit0:35,Minus:36,Equal:37,BracketLeft:38,BracketRight:39,Backslash:40,Semicolon:41,Quote:42,Backquote:43,Comma:44,Period:45,Slash:46}
 B.xW=new A.bB(B.S2,["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9","0","-","=","[","]","\\",";","'","`",",",".","/"],t.li)
 B.FT=new A.nQ()
