@@ -38,12 +38,15 @@ function campo(id, tam = "", etiqueta = null) {
          `<span class="relleno ${tam}">${esc(Array.isArray(v) ? v.join(", ") : v ?? "")}</span>`;
 }
 
-// "Etiqueta: Op1 - Op2 - Op3" con la elegida rodeada
+// "Etiqueta: Op1 - Op2 - Op3" con la elegida rodeada. El ASA puede
+// traer "3 E" (clase + emergencia, 8-sep): se rodea POR TOKEN con
+// igualdad exacta — jamás substring (la lección de los checks).
 function ops(id, etiqueta = null) {
   const c = buscarCampo(id);
   const v = crudo(id);
+  const partes = String(v ?? "").split(/[\s,]+/).filter(Boolean);
   const os = c.opciones.map((o) =>
-    `<span class="op${v === o ? " sel" : ""}">${esc(o)}</span>`
+    `<span class="op${partes.includes(o) ? " sel" : ""}">${esc(o)}</span>`
   ).join('<span class="sep">-</span>');
   return `<span class="et">${esc(etiqueta ?? c.etiqueta)}:</span><span class="ops">${os}</span>`;
 }

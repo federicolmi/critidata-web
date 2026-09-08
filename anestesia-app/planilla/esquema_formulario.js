@@ -29,7 +29,7 @@ window.ESQUEMA_FORMULARIO = {
         // 28-ago-2026, pedido del usuario: el código de la cirugía
         // (nomenclador) acompaña a la operación propuesta.
         { id: "codigo_cirugia", etiqueta: "Código de cirugía", tipo: "texto", ancho: "chico" },
-        { id: "asa", etiqueta: "ASA", tipo: "opciones", opciones: ["1", "2", "3", "4", "5", "E"] },
+        { id: "asa", etiqueta: "ASA", tipo: "opciones", multi: true, opciones: ["1", "2", "3", "4", "5", "E"] },
         { id: "anestesiologos", etiqueta: "Anestesiólogo(s)", tipo: "texto", ancho: "grande" },
         { id: "hora_ingreso", etiqueta: "Hora de ingreso", tipo: "hora" },
         { id: "hora_fin", etiqueta: "Hora de finalización", tipo: "hora" },

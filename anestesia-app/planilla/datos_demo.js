@@ -66,7 +66,7 @@
       diagnostico: "Apendicitis aguda",
       operacion_propuesta: "Apendicectomía laparoscópica",
       codigo_cirugia: "07.06.02",   // inventado, como todo el parte
-      asa: "2",
+      asa: "3 E",  // clase + emergencia: el renglón rodea las DOS
       anestesiologos: "Dr. Demo",
       hora_ingreso: "08:00",
       hora_fin: "09:45",
