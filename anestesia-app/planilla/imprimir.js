@@ -143,7 +143,11 @@ function fmtValor(clave, v) {
 function construirGrilla(datos, vitales, eventos) {
   const cfg = window.VITALES_GRAFICO;
   const base = fechaBase(datos, vitales, eventos);
-  const marcas = [...vitales.map((v) => aMs(v.ts)), ...eventos.map((e) => aMs(e.ts))]
+  // Las drogas del celular SIN hora en la grilla (ubicado 0, 11-sep) no
+  // definen el eje de tiempo: su ts es de registro, no de administración.
+  const conHora = (e) => e.ubicado !== 0 && e.ubicado !== false;
+  const marcas = [...vitales.map((v) => aMs(v.ts)),
+                  ...eventos.filter(conHora).map((e) => aMs(e.ts))]
     .filter(Number.isFinite);
 
   let t0 = datos.hora_ingreso ? aMs(`${base}T${datos.hora_ingreso}:00`) : null;
@@ -455,6 +459,10 @@ function construirGrilla(datos, vitales, eventos) {
     const porSlot = {};
     for (const e of eventos) {
       if (e.tipo !== "droga" || !nombre || e.descripcion !== nombre) continue;
+      // sin hora en la grilla (11-sep): nombre en el renglón y dosis en
+      // el Total, pero ninguna columna horaria — hasta que el episodio
+      // del monitor (o el médico) le dé su hora
+      if (!conHora(e)) continue;
       const s = slotDe(e.ts);
       const etq = e.dosis ? `${e.dosis}` : "×";
       porSlot[s] = porSlot[s] ? `${porSlot[s]}+${etq}` : etq;
