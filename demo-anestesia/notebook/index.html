@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<script src="../demo_simulador.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Partes de anestesia — CritiData</title>
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<header class="barra">
+  <h1>Parte Anestésico
+    <span class="sub">Anexo V — Servicio de Anestesia · Htal. Z. Gral. Dr. Posadas, Saladillo</span>
+  </h1>
+  <span class="espacio"></span>
+  <button id="boton-nuevo" class="boton boton-primario" type="button">+ Nuevo parte</button>
+</header>
+
+<main class="contenedor">
+  <div id="aviso" class="aviso oculto"></div>
+
+  <!-- INICIAR MONITOREO (4-oct-2026): lo mismo que "Iniciar registro" del celular. -->
+  <section id="monitoreo" class="panel panel-monitoreo">
+    <div class="monitoreo-fila">
+      <span id="monitoreo-punto" class="punto punto-grande punto-gris"></span>
+      <div class="monitoreo-textos">
+        <div id="monitoreo-titulo" class="panel-titulo sin-margen">Monitoreo detenido</div>
+        <div id="monitoreo-detalle" class="monitoreo-detalle"></div>
+      </div>
+      <span class="espacio"></span>
+      <a id="monitoreo-ver" class="boton oculto" href="#">Ver el parte</a>
+      <button id="monitoreo-detener" class="boton boton-peligro oculto" type="button">Detener</button>
+      <button id="monitoreo-iniciar" class="boton boton-primario boton-grande" type="button">Iniciar monitoreo</button>
+    </div>
+    <div id="monitoreo-error" class="error-captura oculto"></div>
+  </section>
+  <p id="respaldo" class="respaldo"></p>
+
+  <div class="panel panel-tabla">
+    <table class="tabla-partes">
+      <thead>
+        <tr>
+          <th>N°</th>
+          <th>Fecha</th>
+          <th>Paciente</th>
+          <th>Creado</th>
+          <th>Estado</th>
+          <th class="celda-accion"></th>
+        </tr>
+      </thead>
+      <tbody id="cuerpo-partes">
+        <tr><td colspan="5" class="celda-vacia">Cargando…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

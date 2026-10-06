@@ -1,0 +1,40 @@
+{
+  "_lea_esto_primero": [
+    "Indice de las versiones del catalogo que viajan en el bundle.",
+    "Una version publicada NO se saca nunca de aca ni se edita: una evaluacion",
+    "vieja tiene que poder recalcularse contra la norma con la que se hizo.",
+    "La huella sha256 de cada archivo SE VERIFICA AL CARGAR; si no coincide, la",
+    "app se niega a devolver catalogo en vez de calcular con uno alterado."
+  ],
+  "catalogoId": "riesgo-quirurgico",
+  "versiones": [
+    {
+      "version": "2026.1",
+      "archivo": "assets/normas/riesgo-2026.1.json",
+      "vigenciaDesde": "2026-03-01",
+      "estado": "supersedida",
+      "sha256": "6a83811058142d918cfc2e7064bee5c68af934006e2bb6c461f8b4cf09b9b7a1"
+    },
+    {
+      "version": "2026.2",
+      "archivo": "assets/normas/riesgo-2026.2.json",
+      "vigenciaDesde": "2026-08-01",
+      "estado": "supersedida",
+      "sha256": "83500a5d15b386ee88508a45978b6144a7e04b67534a4be46814c2878d0141d4"
+    },
+    {
+      "version": "2026.3",
+      "archivo": "assets/normas/riesgo-2026.3.json",
+      "vigenciaDesde": "2026-08-05",
+      "estado": "supersedida",
+      "sha256": "a8003a58bb9eb7d5afd46c2e52253653c268a1ffae2469885ca662742e292759"
+    },
+    {
+      "version": "2026.4",
+      "archivo": "assets/normas/riesgo-2026.4.json",
+      "vigenciaDesde": "2026-08-05",
+      "estado": "vigente",
+      "sha256": "3ccd432d4359f9711f632a224e0bd1c79c6fe99852a0cda4f0decd66c4dff578"
+    }
+  ]
+}

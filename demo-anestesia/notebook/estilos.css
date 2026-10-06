@@ -1,0 +1,499 @@
+/* estilos.css — CritiData Anestesia (pantalla).
+   Estilo clínico claro, denso y legible. Sin frameworks.
+   La vista de impresión (imprimir.html) tiene sus propios estilos. */
+
+* { box-sizing: border-box; }
+
+:root {
+  --fondo: #eef1f5;
+  --panel: #ffffff;
+  --borde: #d4dbe4;
+  --texto: #1b2430;
+  --texto-suave: #5b6675;
+  --acento: #1d5fc4;
+  --acento-suave: #e8f0fe;
+  --verde: #188a42;
+  --verde-suave: #e2f3e9;
+  --rojo: #c62828;
+  --rojo-suave: #fdecea;
+  --ambar: #a86a00;
+  --ambar-suave: #fff3df;
+  --radio: 8px;
+  --sombra: 0 1px 2px rgba(15, 23, 42, .08);
+}
+
+html { font-size: 14px; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  line-height: 1.4;
+}
+
+.oculto { display: none !important; }
+.espacio { flex: 1 1 auto; }
+
+/* ---------- barra superior ---------- */
+
+.barra {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--borde);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.barra h1 {
+  font-size: 1.15rem;
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.barra .sub { font-weight: 400; color: var(--texto-suave); font-size: .85rem; }
+.barra-parte { flex-wrap: wrap; }
+
+.volver {
+  color: var(--acento);
+  text-decoration: none;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.volver:hover { text-decoration: underline; }
+
+.titulo-bloque {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.acciones { display: flex; gap: 8px; }
+
+/* ---------- botones ---------- */
+
+.boton {
+  font: inherit;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--borde);
+  background: var(--panel);
+  color: var(--texto);
+  white-space: nowrap;
+}
+.boton:hover { background: #f3f6fa; }
+.boton:disabled { opacity: .55; cursor: default; }
+.boton-primario { background: var(--acento); border-color: var(--acento); color: #fff; }
+.boton-primario:hover { background: #174d9f; }
+.boton-peligro { background: var(--rojo); border-color: var(--rojo); color: #fff; }
+.boton-peligro:hover { background: #a32020; }
+
+/* ---------- badges y avisos ---------- */
+
+.badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: .75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.badge-en_curso { background: var(--verde-suave); color: var(--verde); }
+.badge-cerrado { background: #e7eaee; color: var(--texto-suave); }
+
+.guardado { font-size: .8rem; color: var(--texto-suave); white-space: nowrap; }
+.guardado-error { color: var(--rojo); font-weight: 700; }
+
+.aviso {
+  background: var(--rojo-suave);
+  color: var(--rojo);
+  border: 1px solid #f2c1bd;
+  border-radius: var(--radio);
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+/* ---------- contenedores ---------- */
+
+.contenedor {
+  padding: 14px 16px;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 10px 12px;
+}
+.panel-titulo { font-weight: 700; font-size: .95rem; margin-bottom: 6px; }
+.panel-titulo.sin-margen { margin-bottom: 0; }
+
+/* ---------- index: iniciar monitoreo (4-oct-2026) ---------- */
+
+.panel-monitoreo { margin-bottom: 12px; }
+.monitoreo-fila { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.monitoreo-textos { min-width: 0; }
+.monitoreo-detalle { color: var(--texto-suave); font-size: .9rem; margin-top: 2px; }
+.boton-grande { padding: 10px 18px; font-size: 1.05rem; font-weight: 700; }
+.punto-grande { width: 14px; height: 14px; }
+a.boton { text-decoration: none; display: inline-block; }
+
+/* ---------- index: tabla de partes ---------- */
+
+.panel-tabla { padding: 0; overflow: hidden; }
+
+.tabla-partes { width: 100%; border-collapse: collapse; }
+.tabla-partes th {
+  text-align: left;
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--texto-suave);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--borde);
+  background: #f7f9fc;
+}
+.tabla-partes td { padding: 8px 12px; border-bottom: 1px solid #eceff3; }
+.tabla-partes tbody tr { cursor: pointer; }
+.tabla-partes tbody tr:hover,
+.tabla-partes tbody tr:focus-visible { background: var(--acento-suave); outline: none; }
+.tabla-partes tbody tr:last-child td { border-bottom: 0; }
+.celda-num { font-variant-numeric: tabular-nums; color: var(--texto-suave); }
+.celda-nombre { font-weight: 600; }
+.celda-vacia {
+  color: var(--texto-suave);
+  text-align: center;
+  padding: 22px 12px !important;
+  font-style: italic;
+  cursor: default;
+}
+
+/* ---------- parte: grilla general ---------- */
+
+.parte-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .parte-grid { grid-template-columns: 1fr; }
+}
+.col-vivo, .col-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* ---------- tarjetas de vitales ---------- */
+
+.tarjetas {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+@media (max-width: 560px) {
+  .tarjetas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.tarjeta {
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 6px 10px 8px;
+  min-width: 0;
+}
+.tarjeta-ta { grid-column: span 2; }
+.tarjeta-rotulo {
+  font-size: .75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--texto-suave);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tarjeta-rotulo .unidad {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.tarjeta-valor {
+  font-size: 2.8rem;
+  font-weight: 700;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+}
+.tarjeta-ta .tarjeta-valor { font-size: 2.6rem; }
+.tarjeta-sub {
+  font-size: .8rem;
+  color: var(--texto-suave);
+  min-height: 1.15em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.v-fc .tarjeta-valor { color: #2e7d32; }
+.v-spo2 .tarjeta-valor { color: #0277bd; }
+.v-ta .tarjeta-valor { color: #c62828; }
+
+/* ---------- gráfico de tendencia ---------- */
+
+.panel-grafico svg { display: block; width: 100%; height: auto; }
+.leyenda { font-weight: 400; font-size: .8rem; margin-left: 8px; white-space: nowrap; }
+.chip-leyenda { margin-right: 10px; font-weight: 700; }
+
+/* ---------- captura ---------- */
+
+.captura-fila {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.captura-fila + .captura-fila { margin-top: 7px; }
+.nube-pie {
+  margin-top: 8px;
+  color: var(--texto-suave);
+  font-size: .78rem;
+}
+.nube-pie a { color: inherit; }
+.captura-fila label {
+  color: var(--texto-suave);
+  font-size: .85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.punto {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  flex: none;
+}
+.punto-gris { background: #9aa4b1; }
+.punto-verde { background: var(--verde); box-shadow: 0 0 0 3px var(--verde-suave); }
+.punto-ambar { background: var(--ambar); box-shadow: 0 0 0 3px var(--ambar-suave); }
+.punto-rojo { background: var(--rojo); box-shadow: 0 0 0 3px var(--rojo-suave); }
+.error-captura {
+  margin-top: 7px;
+  background: var(--rojo-suave);
+  color: var(--rojo);
+  border: 1px solid #f2c1bd;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: .85rem;
+  font-weight: 700;
+}
+
+/* ---------- entradas ---------- */
+
+input, select, textarea {
+  font: inherit;
+  color: inherit;
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  padding: 5px 8px;
+  min-width: 0;
+}
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid var(--acento);
+  outline-offset: 1px;
+  border-color: var(--acento);
+}
+textarea { width: 100%; resize: vertical; }
+
+/* ---------- formulario dinámico ---------- */
+
+.formulario { display: flex; flex-direction: column; gap: 12px; }
+
+.seccion {
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+.seccion summary {
+  cursor: pointer;
+  padding: 8px 12px;
+  font-weight: 700;
+  user-select: none;
+}
+.seccion summary::marker { color: var(--acento); }
+.seccion[open] summary { border-bottom: 1px solid #eceff3; }
+.seccion-cuerpo {
+  padding: 10px 12px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1 1 200px;
+  min-width: 0;
+}
+.campo-chico { flex: 0 1 120px; }
+.campo-grande { flex: 1 1 100%; }
+
+.rotulo {
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--texto-suave);
+}
+/* rótulo dudoso en la transcripción del formulario papel */
+.rotulo.incierto {
+  align-self: flex-start;
+  color: var(--ambar);
+  border-bottom: 1px dotted var(--ambar);
+  padding-bottom: 1px;
+  cursor: help;
+}
+
+.segmentado {
+  display: inline-flex;
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  overflow: hidden;
+  width: max-content;
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+.segmentado button {
+  font: inherit;
+  border: 0;
+  background: #fff;
+  color: var(--texto);
+  padding: 5px 11px;
+  cursor: pointer;
+  border-right: 1px solid var(--borde);
+}
+.segmentado button:last-child { border-right: 0; }
+.segmentado button:hover { background: #f3f6fa; }
+.segmentado button:focus-visible { outline: 2px solid var(--acento); outline-offset: -2px; }
+.segmentado button.activo { background: var(--acento); color: #fff; }
+
+.checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  padding: 4px 0;
+}
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.check input {
+  accent-color: var(--acento);
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---------- drogas y eventos ---------- */
+
+.form-evento {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+#ev-desc { flex: 1 1 170px; }
+#ev-dosis { width: 76px; }
+#ev-hora { width: 96px; }
+
+.lista-eventos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 340px;
+  overflow-y: auto;
+}
+.evento-fila {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 5px 2px;
+  border-bottom: 1px solid #eceff3;
+}
+.evento-fila:last-child { border-bottom: 0; }
+.evento-hora {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--texto-suave);
+  flex: none;
+}
+.badge-tipo {
+  flex: none;
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  padding: 1px 7px;
+  border-radius: 999px;
+}
+.badge-droga { background: var(--acento-suave); color: var(--acento); }
+.badge-evento { background: #f1e6fb; color: #7b3fbf; }
+.evento-desc { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+.evento-dosis {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  color: var(--texto-suave);
+  font-weight: 600;
+}
+/* la hora por evento (11-sep): "tras hipotensión" / "⏱ a ubicar" / "sin hora" */
+.evento-gatillo {
+  flex: none;
+  font-size: .72rem;
+  color: var(--texto-suave);
+  white-space: nowrap;
+}
+.evento-gatillo.pendiente { color: #b45309; }
+.boton-borrar {
+  flex: none;
+  border: 0;
+  background: none;
+  color: var(--rojo);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+.boton-borrar:hover { background: var(--rojo-suave); }
+.evento-vacio {
+  color: var(--texto-suave);
+  padding: 6px 2px;
+  font-style: italic;
+}
+
+/* La columna del × en la lista de partes (14-sep) */
+.celda-accion { width: 2.5rem; text-align: center; }
+
+/* El respaldo diario de la base (4-oct): una línea arriba de la lista. */
+.respaldo { margin: 0 0 10px; font-size: .85rem; color: var(--texto-suave); }
+.respaldo-mal { color: #a15c07; }

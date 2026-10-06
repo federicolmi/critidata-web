@@ -1,0 +1,311 @@
+{
+  "_lea_esto_primero": [
+    "LAS FRASES DE LA CONCLUSIÓN VIVEN ACÁ, NO EN DART. Si una plantilla vive en el",
+    "código, el texto de una evaluación deja de estar cubierto por la huella sha256 y",
+    "la evaluación miente sobre con qué norma se redactó: es el peor bug del proyecto,",
+    "aplicado al texto en vez de a los umbrales.",
+    "",
+    "EL GENERADOR NO ESCRIBE: RELLENA HUECOS. No tiene una sola frase clínica adentro.",
+    "Recorre los bloques en orden, evalúa la condición de cada uno contra un conjunto",
+    "CERRADO de doce tipos, y reemplaza {placeholders} por valores que vienen del",
+    "catálogo de normas y de lo que contestó el profesional. Un placeholder que no",
+    "esté en la tabla NO se imprime tal cual: rompe. Un hueco silencioso invita a que",
+    "el lector lo rellene de memoria.",
+    "",
+    "NO HAY CAMPO DE CONDUCTA, Y NO LO VA A HABER. Mientras este archivo no tenga un",
+    "campo 'conducta', 'recomendacion', 'sugerencia' o 'manejo', el generador no tiene",
+    "físicamente de dónde sacar una indicación. Ver el pendiente PC-04.",
+    "",
+    "MISMA VERSIÓN + MISMAS RESPUESTAS = MISMO TEXTO, palabra por palabra. Si no es",
+    "reproducible, no se puede defender en una pericia."
+  ],
+
+  "id": "conclusion-riesgo",
+  "version": "2026.2",
+  "vigenciaDesde": "2026-09-01",
+  "vigenciaHasta": null,
+  "catalogosCompatibles": {
+    "normas": { "id": "riesgo-quirurgico", "version": "2026.1" },
+    "procedimientos": { "id": "procedimientos-y-derivacion-inicial", "version": "2026.2" }
+  },
+
+  "revision": {
+    "revisadoPor": "PENDIENTE — anestesiólogo con nombre y matrícula",
+    "revisadoEl": "PENDIENTE",
+    "proximaRevision": "2027-09-01"
+  },
+
+  "reglasDelGenerador": {
+    "ordenDeBloques": "El del array 'bloques'. Fijo.",
+    "ordenDeScores": "El del catálogo de normas. NUNCA por gravedad ni por banda: ordenar por gravedad ya es una jerarquía clínica inventada que el lector lee como priorización.",
+    "placeholderDesconocido": "rompe",
+    "combinadorDeCondiciones": "Sólo Y. Si 'cuando' es una lista, se cumplen todas. No hay O ni NO: si hace falta un O, se escriben dos bloques.",
+    "reproducibilidad": "La única fuente de no determinismo es {fechaHoraGeneracion}, que el generador recibe como parámetro para que el test la pueda fijar.",
+    "seleccionDeMolde": [
+      "1. el score está inaplicable  -> molde 'inaplicable'",
+      "2. el score está incompleto   -> molde 'incompleto'",
+      "3. el score figura en moldePorScore -> ese molde",
+      "4. la unidad del score es '%' -> molde 'calculado_porcentaje'",
+      "5. el score figura en scoresSinTasaDeEventos -> molde 'calculado_puntaje_sin_tasa'",
+      "6. en cualquier otro caso     -> molde 'calculado_puntaje'"
+    ]
+  },
+
+  "verbosProhibidos": {
+    "_para_que": "El test de la suite corre esta lista con límite de palabra sobre el texto generado. Es la línea 'describe pero no indica' convertida en algo que la CI vigila sola. Está acá y no en Dart porque también es contenido normativo: el art. 2 de la ley 17.132 define el ejercicio de la medicina como anunciar, prescribir, indicar o aplicar procedimientos.",
+    "palabras": [
+      "solicitar", "solicite", "solicitamos", "pedir",
+      "indicar", "indica", "indicado", "indicada", "indicamos",
+      "sugerir", "sugiere", "sugerimos", "recomendar", "recomienda", "recomendamos",
+      "aconseja", "aconsejable", "conviene", "convendría",
+      "requiere", "requerirá", "debe", "debería", "deberá",
+      "suspender", "diferir", "posponer", "reprogramar",
+      "optimizar", "corregir", "compensar", "tratar", "administrar", "premedicar",
+      "apto", "inapto", "contraindica", "contraindicado", "autoriza", "habilita"
+    ],
+    "bloquesExentos": ["cierre_advertencias"],
+    "porQueEsaExencion": "En ese bloque se transcriben las advertencias permanentes del catálogo de normas, donde los verbos aparecen NEGADOS a propósito: 'el score no decide: no indica ni contraindica la cirugía, no autoriza ni suspende'. Es la frase que dice justamente lo contrario de lo que la lista prohíbe."
+  },
+
+  "desenlaceCorto": {
+    "sort": "mortalidad a 30 días",
+    "rcri": "eventos cardíacos mayores",
+    "ariscat": "complicaciones pulmonares",
+    "dasi": "capacidad funcional",
+    "asa_ps": "estado físico"
+  },
+
+  "scoresSinTasaDeEventos": {
+    "rcri": "P-01",
+    "ariscat": "P-01",
+    "_por_que": "El catálogo de normas todavía no tiene cargadas las tasas de eventos por clase. Omitir el porcentaje EN SILENCIO invita al lector a rellenarlo de memoria con un número de otro lado, y ese número inventado queda firmado. Por eso el molde lo dice."
+  },
+
+  "datosDisponibles": {
+    "_para_que": "Nombres válidos del campo 'dato' en las condiciones. Es un conjunto cerrado: un dato que no esté acá rompe la lectura del catálogo.",
+    "nombres": ["edad", "peso", "talla", "imc", "procedimiento", "juicio_clinico_mortalidad"]
+  },
+
+  "tiposDeCondicion": {
+    "_para_que": "Conjunto CERRADO. En Dart es un sealed class con switch exhaustivo: si mañana se agrega un tipo acá y no en el código, la lectura del catálogo falla en vez de ignorar el bloque en silencio.",
+    "tipos": [
+      { "tipo": "siempre", "campos": [] },
+      { "tipo": "esta_completo", "campos": [] },
+      { "tipo": "faltan_respuestas", "campos": [] },
+      { "tipo": "hay_propuestos_sin_confirmar", "campos": [] },
+      { "tipo": "hay_derivados_confirmados", "campos": [] },
+      { "tipo": "hay_dato", "campos": ["dato"] },
+      { "tipo": "falta_dato", "campos": ["dato"] },
+      { "tipo": "dato_mayor_o_igual", "campos": ["dato", "valor"] },
+      { "tipo": "dato_menor", "campos": ["dato", "valor"] },
+      { "tipo": "respuesta_en", "campos": ["pregunta", "valores"] },
+      { "tipo": "score_en_banda", "campos": ["score", "bandas"] },
+      { "tipo": "hay_advertencias_de_procedimiento", "campos": [] }
+    ]
+  },
+
+  "placeholdersDisponibles": {
+    "globales": [
+      "{versionNormas}", "{versionProcedimientos}", "{versionConclusion}",
+      "{huellaNormasCorta}", "{huellaProcedimientosCorta}", "{huellaConclusionCorta}",
+      "{fechaHoraGeneracion}",
+      "{nRespondidas}", "{nTotal}", "{nCalculados}", "{nFaltantes}",
+      "{listaFaltantes}", "{listaScoresIncompletos}",
+      "{nPropuestosSinConfirmar}", "{listaPropuestos}",
+      "{nDerivadosConfirmados}", "{listaDerivadosConfirmados}",
+      "{nCorregidos}", "{listaCorregidos}",
+      "{edad}", "{peso}", "{talla}", "{imc}", "{bandaIMC}", "{procedenciaMedicion}",
+      "{procedimientoNombre}", "{procedimientoVia}", "{procedimientoEspecialidad}",
+      "{urgencia}", "{incision}", "{duracion}", "{asaClase}",
+      "{juicioClinico}", "{listaDesenlacesCortos}", "{listaPendientes}", "{listaAdvertenciasProcedimiento}",
+      "{leyendaIMCSort}", "{leyendaIMCAriscat}"
+    ],
+    "porScore": [
+      "{scoreNombre}", "{scoreDesenlace}", "{valorFormateado}", "{bandaEtiqueta}",
+      "{bandaTextoCriollo}", "{cohorte}", "{referencia}", "{notaBandas}",
+      "{derivadas}", "{faltantes}", "{motivoInaplicable}", "{idHueco}",
+      "{desenlaceCorto}"
+    ]
+  },
+
+  "bloques": [
+    {
+      "id": "trazabilidad",
+      "tipo": "texto",
+      "cuando": { "tipo": "siempre" },
+      "titulo": null,
+      "texto": "Evaluación preanestésica · texto generado automáticamente el {fechaHoraGeneracion}. Catálogo de normas {versionNormas} (huella {huellaNormasCorta}) · catálogo de procedimientos {versionProcedimientos} (huella {huellaProcedimientosCorta}) · catálogo de conclusión {versionConclusion} (huella {huellaConclusionCorta})."
+    },
+    {
+      "id": "estado_completo",
+      "tipo": "texto",
+      "cuando": { "tipo": "esta_completo" },
+      "titulo": "Estado de la evaluación",
+      "texto": "Cuestionario completo: {nRespondidas} de {nTotal} ítems contestados. Se calcularon {nCalculados} de los resultados del catálogo."
+    },
+    {
+      "id": "estado_faltan",
+      "tipo": "texto",
+      "cuando": { "tipo": "faltan_respuestas" },
+      "titulo": "Estado de la evaluación",
+      "texto": "EVALUACIÓN INCOMPLETA. Quedaron {nFaltantes} ítems sin responder: {listaFaltantes}. Sin ellos no se calculan: {listaScoresIncompletos}. Un ítem sin responder no se toma como \"no\": el motor no completa lo que nadie contestó, porque asumir el valor benigno subestima el riesgo de forma sistemática y silenciosa."
+    },
+    {
+      "id": "estado_propuestos",
+      "tipo": "texto",
+      "cuando": { "tipo": "hay_propuestos_sin_confirmar" },
+      "titulo": null,
+      "texto": "Hay {nPropuestosSinConfirmar} ítems que la app propuso a partir del procedimiento elegido y que todavía nadie confirmó: {listaPropuestos}. Mientras estén propuestos cuentan como sin responder y no entran a ningún cálculo."
+    },
+    {
+      "id": "encuadre",
+      "tipo": "texto",
+      "cuando": { "tipo": "siempre" },
+      "titulo": "Encuadre",
+      "texto": "Paciente de {edad} años. Procedimiento: {procedimientoNombre} — vía {procedimientoVia}, especialidad {procedimientoEspecialidad}. Carácter {urgencia}. Sitio de incisión {incision}. Duración prevista {duracion}. Clasificación ASA-PS {asaClase}, consignada por el profesional."
+    },
+    {
+      "id": "encuadre_antropometria",
+      "tipo": "texto",
+      "cuando": { "tipo": "hay_dato", "dato": "imc" },
+      "titulo": null,
+      "texto": "Peso {peso} kg y talla {talla} m, {procedenciaMedicion}. IMC {imc} kg/m² — {bandaIMC}; lo calculó la app a partir de esos dos datos. El IMC no alimenta ninguno de los resultados de esta pantalla: el modelo del SORT lo excluyó por calidad de dato, y en su cohorte el 44,7 % de las tallas y el 31,7 % de los pesos eran estimados y no medidos."
+    },
+    {
+      "id": "derivados_confirmados",
+      "tipo": "texto",
+      "cuando": { "tipo": "hay_derivados_confirmados" },
+      "titulo": null,
+      "texto": "De los ítems del cuestionario, {nDerivadosConfirmados} los propuso la app a partir del procedimiento y los confirmó el profesional: {listaDerivadosConfirmados}. Correcciones a mano sobre lo propuesto: {nCorregidos} — {listaCorregidos}."
+    },
+    {
+      "id": "edad_fuera_cohorte_sort",
+      "tipo": "texto",
+      "cuando": { "tipo": "dato_menor", "dato": "edad", "valor": 16 },
+      "titulo": null,
+      "texto": "El paciente tiene menos de 16 años: la cohorte de derivación del SORT excluyó a los menores de esa edad."
+    },
+    {
+      "id": "edad_fuera_cohorte_rcri",
+      "tipo": "texto",
+      "cuando": { "tipo": "dato_menor", "dato": "edad", "valor": 50 },
+      "titulo": null,
+      "texto": "El paciente tiene menos de 50 años: el RCRI se derivó en pacientes de 50 años o más, en cirugía electiva mayor no cardíaca. El índice se calcula igual, fuera de su cohorte."
+    },
+    {
+      "id": "edad_fragilidad",
+      "tipo": "texto",
+      "cuando": { "tipo": "dato_mayor_o_igual", "dato": "edad", "valor": 65 },
+      "titulo": null,
+      "texto": "Desde los 65 años la fragilidad es un factor de riesgo independiente que esta pantalla NO mide: queda como hueco declarado, porque la escala más difundida está fuera de este demo por licencia. En esta franja el IMC tampoco distingue grasa de músculo: un valor normal no descarta sarcopenia."
+    },
+    {
+      "id": "nota_imc_asa",
+      "tipo": "texto",
+      "cuando": [
+        { "tipo": "dato_mayor_o_igual", "dato": "imc", "valor": 40 },
+        { "tipo": "respuesta_en", "pregunta": "asa_clase", "valores": ["I", "II"] }
+      ],
+      "titulo": null,
+      "texto": "Nota de revisión: según los ejemplos del texto vigente de la ASA, un IMC de 40 o más ubica al paciente en ASA III como mínimo, y acá quedó consignada la clase {asaClase}. En una serie de 39.579 pacientes con IMC mayor a 40, el 27,2 % había quedado por debajo de ASA III. La clase la define el cuadro completo y la pone el profesional; la app no la cambia."
+    },
+    {
+      "id": "juicio_clinico",
+      "tipo": "texto",
+      "cuando": { "tipo": "hay_dato", "dato": "juicio_clinico_mortalidad" },
+      "titulo": null,
+      "texto": "El profesional estimó por su cuenta la mortalidad a 30 días en {juicioClinico}. Queda registrada al lado del score y con el mismo peso: el juicio del equipo predice tan bien como el SORT y los dos juntos predicen mejor que cualquiera solo. La app no los promedia, no los concilia y no señala cuál está más cerca."
+    },
+    {
+      "id": "por_score",
+      "tipo": "por_cada_score",
+      "cuando": { "tipo": "siempre" },
+      "titulo": "Resultados, uno por desenlace",
+      "moldePorScore": { "dasi": "calculado_con_derivadas", "asa_ps": "clasificatorio" },
+      "moldes": {
+        "calculado_porcentaje": "{scoreNombre}: {valorFormateado} — banda {bandaEtiqueta}. {bandaTextoCriollo} Qué estima: {scoreDesenlace} De dónde sale el número: {cohorte} ({referencia}) {notaBandas}",
+        "calculado_puntaje": "{scoreNombre}: {valorFormateado} puntos — {bandaEtiqueta}. {bandaTextoCriollo} Qué estima: {scoreDesenlace} De dónde sale: {cohorte} ({referencia}) {notaBandas}",
+        "calculado_puntaje_sin_tasa": "{scoreNombre}: {valorFormateado} puntos — {bandaEtiqueta}. {bandaTextoCriollo} Qué estima: {scoreDesenlace} El catálogo todavía no tiene cargada la tasa de eventos de esta clase (hueco {idHueco}), así que acá no va porcentaje: no se pone uno de memoria. De dónde sale: {cohorte} ({referencia})",
+        "calculado_con_derivadas": "{scoreNombre}: {valorFormateado} puntos — {bandaEtiqueta}. {derivadas}. {bandaTextoCriollo} Qué estima: {scoreDesenlace} De dónde sale: {cohorte} ({referencia}) {notaBandas}",
+        "clasificatorio": "{scoreNombre}: {bandaEtiqueta}. {bandaTextoCriollo} La clase la consigna el profesional; la app no la calcula ni la propone. Texto de referencia: {referencia}",
+        "incompleto": "{scoreNombre} — NO SE CALCULÓ. Faltan {faltantes}. Con datos incompletos no se calcula: suponer \"no\" en lo que nadie contestó subestimaría el riesgo.",
+        "inaplicable": "{scoreNombre} — NO APLICA a este caso. {motivoInaplicable} No se aproximó al valor más parecido ni se sustituyó por otro resultado, y esto no es lo mismo que un resultado bajo."
+      }
+    },
+    {
+      "id": "advertencias_procedimiento",
+      "tipo": "texto",
+      "cuando": { "tipo": "hay_advertencias_de_procedimiento" },
+      "titulo": "Lo que este procedimiento tiene de particular",
+      "texto": "{listaAdvertenciasProcedimiento}"
+    },
+    {
+      "id": "lectura_conjunta",
+      "tipo": "texto",
+      "cuando": { "tipo": "siempre" },
+      "titulo": "Cómo se leen juntos",
+      "texto": "Estos resultados no se suman ni se promedian: miden cosas distintas — {listaDesenlacesCortos} —, en escalas distintas, y salen de cohortes distintas; un total propio no tendría validación ni calibración. Tampoco manda el más alto: cada uno contesta su propia pregunta y el mismo paciente puede dar bajo en uno y alto en otro. La integración la hace el profesional, no la app."
+    },
+    {
+      "id": "limites",
+      "tipo": "texto",
+      "cuando": { "tipo": "siempre" },
+      "titulo": "Límites de estos números",
+      "texto": "Los porcentajes son incidencias observadas en las cohortes de derivación, no de población argentina: la calibración local no está estudiada. Un modelo estima bien el promedio de un grupo; sobre un paciente concreto es una referencia, no un pronóstico. Donde el artículo original no categoriza, los cortes de las bandas son una elección de presentación de este demo y están señalados como tal."
+    },
+    {
+      "id": "cierre_advertencias",
+      "tipo": "texto",
+      "cuando": { "tipo": "siempre" },
+      "titulo": "Alcance",
+      "texto": "Herramienta de apoyo a la decisión: no reemplaza el juicio clínico. El score no decide: no indica ni contraindica la cirugía, no autoriza ni suspende. Esta app no verifica cumplimiento normativo. Demo educativo: no cargar datos de pacientes reales."
+    },
+    {
+      "id": "huecos",
+      "tipo": "texto",
+      "cuando": { "tipo": "siempre" },
+      "titulo": "Huecos declarados en estas versiones",
+      "texto": "{listaPendientes}"
+    },
+    {
+      "id": "comentario_profesional",
+      "tipo": "texto",
+      "cuando": { "tipo": "siempre" },
+      "titulo": "Comentario y conducta",
+      "texto": "Lo escribe y lo firma el profesional. La app no escribe acá, no lo pre-carga y no lo propone."
+    }
+  ],
+
+  "pendientesDelCatalogo": [
+    {
+      "id": "PC-01",
+      "titulo": "La estructura de la conclusión no tiene validación empírica",
+      "detalle": "No existe ningún trabajo publicado sobre generación automática de conclusiones narrativas de riesgo perioperatorio a partir de varios scores. Esta estructura está armada por analogía con el informe radiológico estructurado (hallazgos separados de impresión) y con la separación resultado / evidencia / manejo de las calculadoras conocidas, pero es elaboración propia.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "PC-02",
+      "titulo": "Sin intervalos de confianza",
+      "detalle": "El catálogo de normas no los tiene cargados. Transcribirlos sin cotejarlos contra el artículo original repetiría el problema del pendiente P-02. Si se los quiere, se cargan como campo nuevo con su cita, y eso es una versión nueva.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "PC-03",
+      "titulo": "Las etiquetas de banda son la parte del texto que más manda",
+      "detalle": "Bajo, Intermedio, Alto y Muy alto son etiquetas evaluativas, y la evidencia de comunicación de riesgo muestra que influyen más que el número, sobre todo en lectores poco numéricos. En el SORT esos cortes son, según el propio catálogo de normas, una elección de presentación de este demo. Por eso la nota de bandas viaja pegada en el mismo párrafo.",
+      "estado": "pendiente"
+    },
+    {
+      "id": "PC-04",
+      "titulo": "NO se agrega un campo de conducta a este catálogo",
+      "detalle": "Decisión de diseño, anotada para que nadie la revierta por comodidad. Mientras no exista un campo 'conducta', 'recomendacion', 'sugerencia' o 'manejo', el generador no tiene de dónde sacar una indicación, y la línea entre describir e indicar se sostiene sola por construcción y no por disciplina.",
+      "estado": "decidido"
+    },
+    {
+      "id": "PC-05",
+      "titulo": "Se guarda el TEXTO RENDERIZADO, no sólo las respuestas",
+      "detalle": "Decisión de diseño. La huella congela el catálogo, pero el código que arma la frase también puede cambiar; si sólo se guardaran las respuestas, un renderizado futuro produciría un texto distinto sobre el mismo documento médico-legal. El recálculo se guarda AL LADO del original, con su propio texto y su propia fecha.",
+      "estado": "decidido"
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<script src="../demo_simulador.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parte — CritiData Anestesia</title>
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<header class="barra barra-parte">
+  <div class="titulo-bloque">
+    <a class="volver" href="./">‹ Partes</a>
+    <h1 id="titulo">Parte <span id="titulo-num"></span>
+      <span class="sub" id="titulo-nombre"></span>
+    </h1>
+    <span id="badge-estado" class="badge badge-en_curso">En curso</span>
+  </div>
+  <span class="espacio"></span>
+  <span id="guardado" class="guardado"></span>
+  <div class="acciones">
+    <a id="boton-imprimir" class="boton" href="#" target="_blank">Imprimir</a>
+    <button id="boton-cerrar" class="boton boton-peligro" type="button">Cerrar parte</button>
+  </div>
+</header>
+
+<main class="contenedor">
+  <div id="aviso" class="aviso oculto"></div>
+
+  <div class="parte-grid">
+
+    <!-- columna izquierda: en vivo -->
+    <div class="col-vivo">
+      <div id="tarjetas" class="tarjetas"></div>
+
+      <div class="panel panel-grafico">
+        <div class="panel-titulo">Tendencia
+          <span class="leyenda" id="leyenda"></span>
+        </div>
+        <svg id="grafico" viewBox="0 0 860 340" role="img"
+             aria-label="Gráfico de tendencia de signos vitales"></svg>
+      </div>
+
+      <div class="panel">
+        <div class="panel-titulo">Captura automática (Vista 120)</div>
+        <div class="captura-fila">
+          <span id="captura-punto" class="punto punto-gris"></span>
+          <span id="captura-texto">Inactiva</span>
+          <span class="espacio"></span>
+          <label>Cada
+            <input id="captura-intervalo" type="number" min="5" step="5" value="30" style="width:70px"> s
+          </label>
+          <button id="captura-iniciar" class="boton boton-primario" type="button">Iniciar</button>
+          <button id="captura-detener" class="boton" type="button" disabled>Detener</button>
+        </div>
+        <div id="captura-error" class="error-captura oculto"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-titulo">Nube — critidata.com</div>
+        <div id="nube-conectar" class="captura-fila oculto">
+          <input id="nube-email" type="email" placeholder="Email de CritiData"
+                 autocomplete="username" style="flex:1;min-width:150px">
+          <input id="nube-pass" type="password" placeholder="Contraseña"
+                 autocomplete="current-password" style="flex:1;min-width:110px">
+          <button id="nube-vincular" class="boton boton-primario" type="button">Conectar</button>
+        </div>
+        <div id="nube-conectar-codigo" class="captura-fila oculto">
+          <input id="nube-codigo" type="text" placeholder="o CÓDIGO de la app (6 letras)"
+                 maxlength="6" autocomplete="off"
+                 style="flex:1;min-width:150px;text-transform:uppercase;letter-spacing:2px">
+          <button id="nube-vincular-codigo" class="boton" type="button">Vincular con código</button>
+        </div>
+        <div id="nube-controles" class="captura-fila oculto">
+          <span id="nube-punto" class="punto punto-gris"></span>
+          <span id="nube-texto">Inactiva</span>
+          <span class="espacio"></span>
+          <button id="nube-iniciar" class="boton boton-primario" type="button">Subir en vivo</button>
+          <button id="nube-detener" class="boton" type="button" disabled>Detener</button>
+        </div>
+        <div id="nube-error" class="error-captura oculto"></div>
+        <div class="nube-pie">Suben solo los signos vitales (sin datos del paciente).
+          Verlos en la app, en Datos online: <a href="../app/#/online" target="_blank" rel="noopener">la app del celular</a>
+          · <span id="nube-cuenta"></span>
+          <a href="#" id="nube-desvincular" class="oculto">Desconectar</a>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-titulo">Drogas y eventos</div>
+        <div class="form-evento">
+          <select id="ev-tipo">
+            <option value="droga">Droga</option>
+            <option value="volumen">Volumen</option>
+            <option value="evento">Evento</option>
+          </select>
+          <input id="ev-desc" type="text" placeholder="Descripción (p. ej. Propofol)">
+          <input id="ev-dosis" type="text" placeholder="Dosis">
+          <input id="ev-unidad" type="text" placeholder="Unidad" list="unidades" style="width:80px">
+          <datalist id="unidades">
+            <option value="mg"><option value="mcg"><option value="ml">
+            <option value="UI"><option value="g"><option value="mg/kg">
+          </datalist>
+          <input id="ev-hora" type="time" step="60">
+          <button id="ev-agregar" class="boton boton-primario" type="button">Agregar</button>
+        </div>
+        <ul id="lista-eventos" class="lista-eventos"></ul>
+      </div>
+    </div>
+
+    <!-- columna derecha: formulario del Anexo V -->
+    <div class="col-form">
+      <form id="formulario" class="formulario" autocomplete="off"></form>
+    </div>
+
+  </div>
+</main>
+
+<script src="esquema_formulario.js"></script>
+<script src="parte.js"></script>
+</body>
+</html>

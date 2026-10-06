@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Imprimir parte — Anexo V</title>
+<style>
+/* Réplica del formulario papel "Anexo V" (foto del original): formulario de
+   líneas punteadas, opciones impresas que se rodean, grilla central.
+   Impresión A4 vertical en blanco y negro. */
+* { box-sizing: border-box; }
+@page { size: A4 portrait; margin: 7mm; }
+
+body {
+  margin: 0;
+  background: #9aa4b1;
+  font-family: "Arial Narrow", "Segoe UI", Arial, sans-serif;
+  font-size: 8.4pt;
+  color: #000;
+  line-height: 1.32;
+}
+
+.barra-pantalla {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 8px 14px;
+  background: #1b2430;
+  color: #fff;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 10.5pt;
+}
+.barra-pantalla a { color: #9ec3ff; text-decoration: none; font-weight: 600; }
+.barra-pantalla button {
+  font: inherit;
+  padding: 5px 14px;
+  border: 0;
+  border-radius: 6px;
+  background: #1d5fc4;
+  color: #fff;
+  cursor: pointer;
+}
+
+.hoja {
+  width: 196mm;
+  min-height: 283mm;
+  margin: 10px auto;
+  background: #fff;
+  padding: 4mm 5mm;
+  box-shadow: 0 2px 12px rgba(0,0,0,.35);
+  display: flex;
+  flex-direction: column;
+  gap: 1.1mm;
+}
+
+@media print {
+  body { background: #fff; }
+  .barra-pantalla { display: none; }
+  .hoja { width: auto; min-height: 0; margin: 0; padding: 0; box-shadow: none; }
+}
+
+/* ---------- encabezado ---------- */
+.anexo-titulo {
+  text-align: center;
+  font-weight: 700;
+  font-size: 11pt;
+  text-decoration: underline;
+  letter-spacing: .06em;
+  margin-bottom: .6mm;
+}
+.encabezado { display: flex; justify-content: space-between; gap: 4mm; }
+.encabezado .izq div { line-height: 1.25; }
+.parte-titulo { font-weight: 700; text-decoration: underline; }
+.encabezado .der { min-width: 88mm; }
+
+/* ---------- líneas de formulario ---------- */
+.linea {
+  display: flex;
+  align-items: baseline;
+  gap: 0 1.8mm;
+  flex-wrap: wrap;
+}
+.et { white-space: nowrap; }
+.et.tit { font-weight: 700; }
+.relleno {
+  flex: 1 1 auto;
+  border-bottom: 1px dotted #000;
+  font-weight: 700;
+  padding: 0 1mm;
+  min-width: 12mm;
+  min-height: 1.25em;
+  overflow-wrap: anywhere;
+}
+.relleno.chico { flex: 0 1 14mm; }
+.relleno.medio { flex: 0 1 30mm; }
+
+/* opciones impresas: la elegida queda "rodeada" */
+.ops { white-space: nowrap; }
+.op { padding: 0 .6mm; }
+.op.sel {
+  font-weight: 700;
+  border: 1.1px solid #000;
+  border-radius: 45%;
+  padding: 0 1.3mm;
+}
+.sep { color: #000; }
+
+.chk { white-space: nowrap; }
+.chk .caja { font-size: 9.5pt; vertical-align: -1px; }
+.chk.sel { font-weight: 700; }
+
+/* ---------- recuadros ---------- */
+.fila-marcos { display: flex; gap: 1.6mm; align-items: stretch; }
+.marco { border: 1.1px solid #000; padding: .8mm 1.6mm; }
+.marco.crece { flex: 1 1 auto; }
+.marco-pos {
+  border: 1.1px solid #000;
+  padding: 0 2mm;
+  font-weight: 700;
+  min-width: 16mm;
+  min-height: 1.3em;
+  display: inline-block;
+}
+.parrafo {
+  min-height: 6mm;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-weight: 700;
+}
+.parrafo.bajo { min-height: 3.5mm; }
+
+/* ---------- grilla central ---------- */
+.grilla { border: 1.2px solid #000; margin: .6mm 0; }
+.grilla svg { display: block; width: 100%; height: auto; }
+.sin-datos { padding: 4mm; text-align: center; color: #555; font-style: italic; }
+
+/* ---------- pie ---------- */
+/* dos columnas divididas por línea vertical, como el papel */
+.pie-2col { display: flex; padding: 0; }
+.pie-2col .col { flex: 1 1 50%; padding: .8mm 1.6mm; min-width: 0; }
+.pie-2col .col + .col { border-left: 1px solid #000; }
+
+.firma {
+  display: flex;
+  gap: 2mm;
+  align-items: baseline;
+  margin-top: 1mm;
+  padding-top: 1mm;
+}
+.leyenda-final {
+  text-align: center;
+  font-size: 7.4pt;
+  padding-top: 1mm;
+}
+</style>
+</head>
+<body>
+
+<div class="barra-pantalla">
+  <a id="volver" href="#">‹ Volver al parte</a>
+  <span style="flex:1"></span>
+  <button onclick="window.print()">🖨 Imprimir</button>
+</div>
+
+<div class="hoja" id="hoja">
+  <div class="sin-datos">Cargando…</div>
+</div>
+
+<script src="esquema_formulario.js"></script>
+<script src="datos_demo.js"></script>
+<script src="imprimir.js"></script>
+</body>
+</html>
