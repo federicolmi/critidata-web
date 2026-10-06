@@ -114,14 +114,38 @@
 
   // ── drogas / volúmenes / eventos (mismo shape que /eventos) ────────────
   let idEvento = 0;
-  const evento = (min, tipo, descripcion, dosis, unidad) => ({
+  const evento = (min, tipo, descripcion, dosis, unidad, extra = {}) => ({
     id: ++idEvento, ts: ts(min), tipo, descripcion,
     dosis: dosis ?? null, unidad: unidad ?? null,
+    gatillo: null, ubicado: 1, minutos: null, kg: null, ...extra,
   });
   const eventos = [
     evento(2, "droga", "Fentanilo", "150", "µg"),
     evento(2, "droga", "Propofol", "150", "mg"),
     evento(3, "droga", "Rocuronio", "50", "mg"),
+    // Los TRAMOS de dosis del mantenimiento (15-sep): remifentanilo
+    // 0,25 µg/kg/min al inicio, 0,15 a la hora y 0,1 los últimos 10 min
+    // (fin 09:45 → 09:35). El Total del renglón no suma las tasas: es el
+    // CONSUMO en mg que calculó el cierre (evento con gatillo "consumo",
+    // sin columna horaria): 78 kg × (0,25×60 + 0,15×35 + 0,1×10) µg =
+    // 1657,5 µg ≈ 1,66 mg.
+    evento(0, "droga", "Remifentanilo", "0.25", "µg/kg/min",
+           { gatillo: "inicio", minutos: 0, kg: 78 }),
+    evento(60, "droga", "Remifentanilo", "0.15", "µg/kg/min", { kg: 78 }),
+    evento(95, "droga", "Remifentanilo", "0.1", "µg/kg/min",
+           { gatillo: "cierre", minutos: 10, kg: 78 }),
+    evento(105, "droga", "Remifentanilo", "1.66", "mg",
+           { gatillo: "consumo", ubicado: 0 }),
+    // Un goteo CON TOPE (15-sep): la dexmedetomidina de carga corrió
+    // 10 min y se cortó. La barra del renglón muestra hasta dónde corrió
+    // y la barrita vertical, el corte — sin eso, "0.5" en la columna de
+    // las 08:00 con un Total de 0,51 mg se leería como un Total
+    // equivocado. 78 kg × 0,5 µg/kg/h × 10 min / 60 = 6,5 µg… (la carga
+    // real: 0,5 µg/kg en 10 min); acá va como goteo de 10 min.
+    evento(0, "droga", "Dexmedetomidina", "0.5", "µg/kg/h",
+           { gatillo: "inicio", minutos: 0, kg: 78, duracion: 10 }),
+    evento(105, "droga", "Dexmedetomidina", "0.07", "mg",
+           { gatillo: "consumo", ubicado: 0 }),
     evento(10, "droga", "Cefazolina", "2", "g"),
     evento(62, "droga", "Fentanilo", "50", "µg"),
     evento(80, "droga", "Dipirona", "2", "g"),

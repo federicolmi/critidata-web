@@ -4,8 +4,11 @@
 // y pie con técnica / vía aérea / estado final / destino / firma.
 "use strict";
 
-const ID = parseInt(new URLSearchParams(location.search).get("id"), 10);
-document.getElementById("volver").href = `parte.html?id=${ID}`;
+// ?id= como siempre, o ?dni= (22-sep, "Ver parte" desde la tarjeta del
+// celular): la planilla del parte MAS RECIENTE de ese DNI, sin conocer el id.
+let ID = parseInt(new URLSearchParams(location.search).get("id"), 10);
+const DNI = new URLSearchParams(location.search).get("dni");
+if (Number.isInteger(ID)) document.getElementById("volver").href = `parte.html?id=${ID}`;
 
 const hoja = document.getElementById("hoja");
 const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -36,6 +39,36 @@ function campo(id, tam = "", etiqueta = null) {
   }
   return `<span class="et">${esc(etiqueta ?? c.etiqueta)}:</span>` +
          `<span class="relleno ${tam}">${esc(Array.isArray(v) ? v.join(", ") : v ?? "")}</span>`;
+}
+
+// El AGENTE y la DOSIS del cuadro de BLOQUEOS (27-sep, pedido expreso:
+// "el sevorane figura en el parte en el area de bloqueos"): ese renglon
+// es el anestesico local del bloqueo, no el mantenimiento de la General.
+// La app lo manda aparte (agente_bloqueo / dosis_bloqueo) y
+// agente_anestesico sigue con TODO porque el consumo del sevo vive de el.
+// En un parte de antes: sin bloqueo en tipo_anestesia, nada; con bloqueo
+// (o sin tipo), agente_anestesico sin los inhalatorios, con su dosis
+// apareada por posicion.
+const INHALATORIO = /sevo|isofl|forane|desfl|halot|oxido nitroso|óxido nitroso|\bn2o\b/i;
+const TIPOS_BLOQUEO = /raqu|perid|plexu|perif/i;
+function agenteDelBloqueo(d) {
+  if (d.agente_bloqueo != null) {
+    return { agente: d.agente_bloqueo, dosis: d.dosis_bloqueo || "" };
+  }
+  if (d.tipo_anestesia && !TIPOS_BLOQUEO.test(d.tipo_anestesia)) {
+    return { agente: "", dosis: "" };
+  }
+  const agentes = String(d.agente_anestesico || "").split(" / ");
+  const dosis = String(d.dosis_agente || "").split(" / ");
+  const quedan = agentes
+    .map((a, i) => [a.trim(), (dosis[i] || "").trim()])
+    .filter(([a]) => a && !INHALATORIO.test(a));
+  return {
+    agente: quedan.map(([a]) => a).join(" / "),
+    dosis: quedan.some(([, x]) => x && x !== "—")
+      ? quedan.map(([, x]) => x || "—").join(" / ")
+      : "",
+  };
 }
 
 // "Etiqueta: Op1 - Op2 - Op3" con la elegida rodeada. El ASA puede
@@ -83,7 +116,7 @@ function chkSiNo(id, etiqueta = null) {
 }
 
 // "Etiqueta: ☐ A ☐ B ☐ C" — opciones únicas con casillero (así están en el
-// papel: □Oral □Nasal…, □SALA GENERAL □RECUPERACIÓN □UTI…)
+// papel: □Oral □Nasal…, □SALA GENERAL □RECUPERACIÓN □UCI…)
 function opsCajas(id, etiqueta = null) {
   const c = buscarCampo(id);
   const v = crudo(id);
@@ -130,10 +163,35 @@ function mediana(valores) {
   return v.length % 2 ? v[m] : (v[m - 1] + v[m]) / 2;
 }
 
+// Los numeros como se escriben ACA (21-sep, "¿no se puede poner punto en
+// los miles y coma en los decimales en la planilla?"): punto de miles,
+// coma decimal, hasta dos decimales. Lo guardado y lo que viaja siguen
+// PLANOS ("1444.03"): esto es solo para leerlo en el papel. Lo que no es
+// un numero ("a demanda", "×") pasa tal cual.
+function fmtCriollo(v) {
+  if (v == null || v === "") return "";
+  const n = typeof v === "number" ? v : Number(v);
+  if (!Number.isFinite(n)) return String(v);
+  const r = Math.round(n * 100) / 100;
+  const [ent, dec] = Math.abs(r).toString().split(".");
+  const miles = ent.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  return (r < 0 ? "-" : "") + miles + (dec ? `,${dec}` : "");
+}
+
+// El Total de una DROGA en mg pasa a GRAMOS al llegar a 1000 (21-sep,
+// "cuando suman 1000 mg pasara a gramos, ejemplo 1 gramo"): 1000 → "1 g",
+// 1500 → "1,5 g". Solo en las drogas y solo en mg; los fluidos siguen en
+// ml y las otras unidades (µg, UI) quedan como estan.
+function fmtDosisTotal(n, unidad) {
+  const u = String(unidad || "").trim();
+  if (u === "mg" && Number.isFinite(n) && n >= 1000) return `${fmtCriollo(n / 1000)} g`;
+  return `${fmtCriollo(n)}${u ? ` ${u}` : ""}`;
+}
+
 function fmtValor(clave, v) {
   if (v == null) return "";
   if (["sev_et", "sev_fi", "mv", "mac"].includes(clave)) {
-    return (Math.round(v * 10) / 10).toString();
+    return fmtCriollo(Math.round(v * 10) / 10);
   }
   return Math.round(v).toString();
 }
@@ -145,7 +203,25 @@ function construirGrilla(datos, vitales, eventos) {
   const base = fechaBase(datos, vitales, eventos);
   // Las drogas del celular SIN hora en la grilla (ubicado 0, 11-sep) no
   // definen el eje de tiempo: su ts es de registro, no de administración.
-  const conHora = (e) => e.ubicado !== 0 && e.ubicado !== false;
+  // El CONSUMO de una infusión (gatillo "consumo", 15-sep: los mg que
+  // calculó el cierre) tampoco: vive solo en la celda Total de su renglón.
+  const esConsumo = (e) => e.gatillo === "consumo";
+  // El CONSUMO del SEVORANE (27-sep, pedido expreso: "se puede poner el
+  // consumo de sevorane en mililitros", en la columna Total de la fila
+  // Sev %): el que agrega el cierre como "Sevorane (consumo)" en ml va a
+  // esa celda y no repite renglon en la tabla de drogas.
+  const esConsumoSevo = (e) =>
+    e.tipo === "droga" && /sevo/i.test(e.descripcion || "") &&
+    /\(consumo\)/i.test(e.descripcion || "");
+  const consumoSevo = eventos.find(esConsumoSevo);
+  const conHora = (e) => !esConsumo(e) && e.ubicado !== 0 && e.ubicado !== false;
+  // Unidad de TASA de infusión ("µg/kg/min", "mg/h"; "ml/h" es volumen,
+  // no droga): en ese renglón el Total NO suma las tasas de los tramos
+  // (0,25 + 0,1 no significa nada) sino que muestra el consumo en mg.
+  const esUnidadTasa = (u) => {
+    const t = String(u ?? "").trim().toLowerCase();
+    return !t.startsWith("ml") && (t.includes("/min") || t.includes("/h"));
+  };
   const marcas = [...vitales.map((v) => aMs(v.ts)),
                   ...eventos.filter(conHora).map((e) => aMs(e.ts))]
     .filter(Number.isFinite);
@@ -167,16 +243,29 @@ function construirGrilla(datos, vitales, eventos) {
   const nCol = Math.ceil((t1 - t0) / slotMs);
 
   const IZQ = 86, DER = 3;
-  const ANCHO_UTIL = 650;              // ancho interno fijo: la letra no cambia
+  const ANCHO_UCIL = 650;              // ancho interno fijo: la letra no cambia
   const ANCHO_TOT = 30;                // columna Total: volumen acumulado a mano
-  const anchoCol = (ANCHO_UTIL - ANCHO_TOT) / nCol;
-  const ancho = IZQ + ANCHO_UTIL + DER;
-  const xTot = IZQ + ANCHO_UTIL - ANCHO_TOT;
+  const anchoCol = (ANCHO_UCIL - ANCHO_TOT) / nCol;
+  const ancho = IZQ + ANCHO_UCIL + DER;
+  const xTot = IZQ + ANCHO_UCIL - ANCHO_TOT;
   const ALTO_HORA = 13, ALTO_DROGA = 13, ALTO_GRAF = 235, ALTO_FILA = 13;
 
+  // Un renglón por droga — y, desde el 15-sep, la INFUSIÓN de una droga en
+  // su propio renglón, aparte de sus bolos ("Propofol" con los 150 mg de la
+  // inducción y "Propofol (mg/kg/h)" con los tramos y el consumo): en un
+  // solo renglón el Total no podía ser a la vez la suma de los bolos y el
+  // consumo de la infusión, y el bolo desaparecía del parte impreso (y el
+  // rótulo con la unidad de la tasa hacía leer "150" como 150 mg/kg/h).
+  // UNA fila por droga, siempre (21-sep, "que no se repita en otra fila,
+  // solo una fila de la misma"): el bolo y la infusion de la misma droga
+  // comparten renglon — el bolo en su columna con su unidad, la tasa en
+  // la suya con la barra, y el Total sumando bolo + consumo. Del 15-sep
+  // al 21 iban en dos renglones ("Propofol" y "Propofol (inf.)").
+  const claveRenglon = (e) => e.descripcion;
   const drogas = [];
   for (const e of eventos) {
-    if (e.tipo === "droga" && !drogas.includes(e.descripcion)) drogas.push(e.descripcion);
+    if (e.tipo === "droga" && !esConsumoSevo(e) &&
+        !drogas.includes(claveRenglon(e))) drogas.push(claveRenglon(e));
   }
   // sin filas en blanco: el cuadro crece a medida que se cargan drogas
   // SpO2, etCO2 y Sev no van como filas: van dentro del cuadro de TA/FC
@@ -191,7 +280,22 @@ function construirGrilla(datos, vitales, eventos) {
       volumenes.push(e.descripcion);
     }
   }
-  const FILAS_SUP = [...volumenes, "Diuresis", "Sev %", "Sat %", "pCO2"];
+  // BALANCE (20-sep, pedido expreso: "debajo de la fila de diuresis una
+  // que diga el balance y lo calcule"): ingresos menos diuresis, por
+  // columna y en el Total. SOLO si hay diuresis cargada ("el balance solo
+  // si se incorpora la diuresis"): sin lo que sale no es un balance, es
+  // el total de ingresos otra vez — y un renglon de mas en un papel que
+  // ya viene apretado.
+  const hayDiuresis = eventos.some(
+    (e) => e.tipo === "volumen" && e.descripcion === "Diuresis" &&
+           e.dosis != null && e.dosis !== "");
+  // TOTAL INGRESOS (22-sep, "en el parte falta un total de ingresos"):
+  // la suma de TODOS los renglones de volumen (fluidos y hemoderivados),
+  // columna por columna y en el Total, entre el ultimo volumen y la
+  // diuresis. Solo si hay algun volumen cargado.
+  const FILAS_SUP = [...volumenes, ...(volumenes.length ? ["Total ingresos"] : []),
+                     "Diuresis", ...(hayDiuresis ? ["Balance"] : []),
+                     "Sev %", "Sat %", "pCO2"];
   const alto = ALTO_HORA + FILAS_SUP.length * ALTO_FILA +
                ALTO_GRAF + drogas.length * ALTO_DROGA + 3;
 
@@ -222,7 +326,7 @@ function construirGrilla(datos, vitales, eventos) {
   lin(0, ALTO_HORA, ancho, ALTO_HORA, 0.9);
 
   // ---- tabla 1: valores de gases/sat y aportes ----
-  const anotarFila = (y, etiqueta, valores, celdaTotal, total) => {
+  const anotarFila = (y, etiqueta, valores, total = null) => {
     txt(2, y + 9, etiqueta, 'font-size="6.4" font-weight="700"');
     for (let i = 0; i <= nCol; i++) lin(xCol(i), y, xCol(i), y + ALTO_FILA, 0.15);
     for (const [s, t] of Object.entries(valores || {})) {
@@ -238,9 +342,11 @@ function construirGrilla(datos, vitales, eventos) {
       txt(xTot + ANCHO_TOT / 2, y + 9, String(total),
           'font-size="6" font-weight="700" text-anchor="middle"');
     }
-    // la fila cierra su celda Total solo si es de volumen; en las numéricas
-    // la franja queda lisa, como en el gráfico
-    lin(0, y + ALTO_FILA, celdaTotal ? ancho : xTot, y + ALTO_FILA, 0.3);
+    // TODAS las filas cierran su celda Total (27-sep, pedido expreso: "los
+    // espacios en blanco en la columna del total donde se ubican sev, sat,
+    // pco2 continua la fila hasta el final"); antes las numericas dejaban
+    // la franja lisa, como en el grafico
+    lin(0, y + ALTO_FILA, ancho, y + ALTO_FILA, 0.3);
   };
   const valoresDe = (key) => {
     const porSlot = {};
@@ -279,24 +385,88 @@ function construirGrilla(datos, vitales, eventos) {
     for (const e of eventos) {
       if (e.tipo !== "volumen" || !nombre || e.descripcion !== nombre) continue;
       const s = slotDe(e.ts);
-      const etq = e.dosis ? `${e.dosis}` : "×";
+      const etq = e.dosis ? fmtCriollo(e.dosis) : "×";
       porSlot[s] = porSlot[s] ? `${porSlot[s]}+${etq}` : etq;
       alguno = true;
       const n = e.dosis != null && e.dosis !== "" ? Number(e.dosis) : NaN;
       if (Number.isFinite(n)) suma += n; else sumable = false;
     }
     // sin dosis numéricas no hay suma automática: la celda queda para la mano
-    const total = alguno && sumable ? Math.round(suma * 100) / 100 : null;
+    const total = alguno && sumable ? fmtCriollo(suma) : null;
     return { valores: porSlot, total };
+  };
+  // Los ml de un renglon de volumen por columna, en NUMERO: el texto de
+  // la fila puede decir "500+500" y el balance necesita la cuenta.
+  const mlPorSlot = (nombre) => {
+    const out = {};
+    for (const e of eventos) {
+      if (e.tipo !== "volumen" || e.descripcion !== nombre) continue;
+      const n = e.dosis != null && e.dosis !== "" ? Number(e.dosis) : NaN;
+      if (!Number.isFinite(n)) continue;
+      const s = slotDe(e.ts);
+      out[s] = (out[s] || 0) + n;
+    }
+    return out;
+  };
+  // TOTAL INGRESOS: todos los renglones de volumen sumados, columna por
+  // columna y en el Total, sin signo (es lo que entro).
+  const ingresosFila = () => {
+    const porSlot = {};
+    let total = 0, alguno = false;
+    for (const nombre of volumenes) {
+      for (const [s, ml] of Object.entries(mlPorSlot(nombre))) {
+        porSlot[s] = (porSlot[s] || 0) + ml;
+        total += ml;
+        alguno = true;
+      }
+    }
+    if (!alguno) return { valores: {}, total: null };
+    const valores = {};
+    for (const [s, n] of Object.entries(porSlot)) valores[s] = fmtCriollo(n);
+    return { valores, total: fmtCriollo(total) };
+  };
+  // El BALANCE: lo que entro (todos los renglones de volumen) menos lo
+  // que salio (la diuresis), columna por columna; el Total es el neto de
+  // la cirugia. Con signo SIEMPRE: un balance sin signo no se lee.
+  const balanceFila = () => {
+    const porSlot = {};
+    let total = 0, alguno = false;
+    for (const nombre of [...volumenes, "Diuresis"]) {
+      const signo = nombre === "Diuresis" ? -1 : 1;
+      for (const [s, ml] of Object.entries(mlPorSlot(nombre))) {
+        porSlot[s] = (porSlot[s] || 0) + signo * ml;
+        total += signo * ml;
+        alguno = true;
+      }
+    }
+    if (!alguno) return { valores: {}, total: null };
+    const conSigno = (n) => (n > 0 ? `+${fmtCriollo(n)}` : fmtCriollo(n));
+    const valores = {};
+    for (const [s, n] of Object.entries(porSlot)) valores[s] = conSigno(n);
+    return { valores, total: conSigno(total) };
   };
   let ySup = ALTO_HORA;
   const primeraNum = FILAS_SUP.indexOf("Sev %");
+  // La DIURESIS, el TOTAL INGRESOS y el BALANCE van SOLO en la columna
+  // Total (27-sep, pedido expreso: "la diuresis total y los ingresos y
+  // balance en el parte anestesico van en la ultima columna de total"):
+  // por hora no se leen; los fluidos y hemoderivados siguen en su hora.
   for (const [f, etq] of FILAS_SUP.entries()) {
-    if (f < primeraNum) {
+    if (etq === "Balance") {
+      anotarFila(ySup + f * ALTO_FILA, etq, {}, balanceFila().total);
+    } else if (etq === "Total ingresos") {
+      anotarFila(ySup + f * ALTO_FILA, etq, {}, ingresosFila().total);
+    } else if (etq === "Diuresis") {
+      anotarFila(ySup + f * ALTO_FILA, etq, {}, volumenFila(etq).total);
+    } else if (f < primeraNum) {
       const { valores, total } = volumenFila(etq);
-      anotarFila(ySup + f * ALTO_FILA, etq, valores, true, total);
+      anotarFila(ySup + f * ALTO_FILA, etq, valores, total);
+    } else if (etq === "Sev %" && consumoSevo && consumoSevo.dosis != null &&
+               consumoSevo.dosis !== "") {
+      anotarFila(ySup + f * ALTO_FILA, etq, datosSup[etq],
+                 `${fmtCriollo(consumoSevo.dosis)} ml`);
     } else {
-      anotarFila(ySup + f * ALTO_FILA, etq, datosSup[etq], false);
+      anotarFila(ySup + f * ALTO_FILA, etq, datosSup[etq]);
     }
   }
   // separador grueso (como el de los tres cuadros) entre volúmenes+diuresis
@@ -339,6 +509,10 @@ function construirGrilla(datos, vitales, eventos) {
     ["○ SpO2", COLORES.spo2],
     ["◆ etCO2", COLORES.etco2],
     ["Sev% Et/Fi al pie", COLORES.sev],
+    // las marcas (22-sep), en la columna de referencias como el resto de
+    // los simbolos — cada una solo si el parte la tiene
+    ...(eventos.some((e) => e.tipo === "practica") ? [["✱ Práctica", "#1d5fc4"]] : []),
+    ...(eventos.some((e) => e.tipo === "critico") ? [["✱ Evento crítico", COLORES.nibp_sis]] : []),
   ];
   for (const [f, [t, color]] of claves.entries()) {
     txt(3, yG0 + 12 + f * 10.5, t, `font-size="6.2" font-weight="700" fill="${color}"`);
@@ -445,43 +619,156 @@ function construirGrilla(datos, vitales, eventos) {
           'font-size="9" font-weight="700" text-anchor="middle"');
     }
   }
+  // Las PRACTICAS y los EVENTOS CRITICOS (22-sep, pedido expreso): un
+  // asterisco grande en la columna de su hora — azul la practica, rojo el
+  // evento critico — y el texto de cada uno listado al pie del parte.
+  for (const e of eventos) {
+    if (e.tipo !== "practica" && e.tipo !== "critico") continue;
+    if (!e.ts) continue;
+    const xM = xCol(slotDe(e.ts)) + anchoCol / 2;
+    const color = e.tipo === "critico" ? COLORES.nibp_sis : "#1d5fc4";
+    txt(xM, yG0 + 22, "✱",
+        `font-size="13" font-weight="700" text-anchor="middle" fill="${color}"`);
+    // el evento critico con fin: una raya roja desde el comienzo hasta el
+    // fin ("hora de comienzo y finalizacion, ubicada en relacion al parte")
+    const dur = Number(e.duracion) || 0;
+    if (dur > 0) {
+      const xF = IZQ + Math.min(nCol, Math.max(0, (aMs(e.ts) + dur * 60000 - t0) / slotMs)) * anchoCol;
+      S.push(`<line x1="${xM.toFixed(2)}" y1="${(yG0 + 24).toFixed(2)}" ` +
+                  `x2="${xF.toFixed(2)}" y2="${(yG0 + 24).toFixed(2)}" ` +
+                  `stroke="${color}" stroke-width="1.4"/>`);
+    }
+  }
   yTope = yG1;
   lin(0, yTope, ancho, yTope, 0.9);
 
   // renglones de drogas — pegados debajo del gráfico, con el rótulo vertical
   // DROGAS en el margen, como el papel
   const yD0 = yTope;
-  for (const [f, nombre] of drogas.entries()) {
+  // la letra del Total, por largo: "10" (7), "1.33 mg" (6.4), "0.014 mg" (5.2)
+  const tamTotal = (t) => t.length <= 4 ? 7 : t.length <= 7 ? 6.4 : t.length <= 11 ? 5.2 : 4.4;
+  for (const [f, clave] of drogas.entries()) {
     const y = yTope + f * ALTO_DROGA;
-    txt(14, y + 10, nombre.length > 19 ? nombre.slice(0, 18) + "…" : nombre,
+    const delRenglon = eventos.filter((e) => e.tipo === "droga" && !!e.descripcion &&
+                                             claveRenglon(e) === clave);
+    const nombre = delRenglon.length ? delRenglon[0].descripcion : "";
+    // renglón de INFUSIÓN (15-sep): los tramos van en sus columnas y el
+    // Total es el consumo que calculó el cierre (evento "consumo")
+    const tasa = delRenglon.find((e) => !esConsumo(e) && esUnidadTasa(e.unidad));
+    const consumo = delRenglon.find(esConsumo);
+    const infusion = !!(tasa || consumo);
+    // el rótulo lleva la unidad de la tasa si entra en los 19 caracteres
+    // del margen ("Propofol (mg/kg/h)"); si no entra y la droga también
+    // tiene renglón de bolos, "(inf.)" o "inf." para distinguirlos (el
+    // nombre se recorta solo si ni así entra); si no, el nombre solo
+    let rotulo = nombre;
+    if (infusion) {
+      const conUnidad = tasa ? `${nombre} (${String(tasa.unidad).trim()})` : "";
+      if (conUnidad && conUnidad.length <= 19) rotulo = conUnidad;
+    }
+    // los bolos de la misma droga, en un renglon que tambien lleva la
+    // infusion, van con su unidad ("150 mg") para no leerse como tasa
+    const esBolo = (e) => !esConsumo(e) && !esUnidadTasa(e.unidad);
+    const mixto = infusion && delRenglon.some(esBolo);
+    txt(14, y + 10, rotulo.length > 19 ? rotulo.slice(0, 18) + "…" : rotulo,
         'font-size="6.8" font-weight="700"');
     for (let i = 0; i <= nCol; i++) lin(xCol(i), y, xCol(i), y + ALTO_DROGA, 0.18);
     const porSlot = {};
-    for (const e of eventos) {
-      if (e.tipo !== "droga" || !nombre || e.descripcion !== nombre) continue;
+    for (const e of delRenglon) {
       // sin hora en la grilla (11-sep): nombre en el renglón y dosis en
       // el Total, pero ninguna columna horaria — hasta que el episodio
       // del monitor (o el médico) le dé su hora
       if (!conHora(e)) continue;
       const s = slotDe(e.ts);
-      const etq = e.dosis ? `${e.dosis}` : "×";
+      let etq = e.dosis ? fmtCriollo(e.dosis) : "×";
+      if (mixto && esBolo(e) && e.dosis && e.unidad) etq = `${etq} ${String(e.unidad).trim()}`;
       porSlot[s] = porSlot[s] ? `${porSlot[s]}+${etq}` : etq;
     }
     for (const [s, t] of Object.entries(porSlot)) {
       txt(xCol(+s) + anchoCol / 2, y + 10, t,
           'font-size="7" font-weight="700" text-anchor="middle"');
     }
-    // dosis total en la columna Total, si todas las dosis son numéricas
-    let suma = 0, alguna = false, sumable = true;
-    for (const e of eventos) {
-      if (e.tipo !== "droga" || !nombre || e.descripcion !== nombre) continue;
-      alguna = true;
-      const n = e.dosis != null && e.dosis !== "" ? Number(e.dosis) : NaN;
-      if (Number.isFinite(n)) suma += n; else sumable = false;
+    // LO QUE CORRE (15-sep, revisión): en el papel una infusión se marca
+    // con una línea que va desde que se cuelga hasta que se corta. Sin
+    // ella, "0,5" en la columna de las 9 con un Total de 0,35 mg se lee
+    // como un Total equivocado (0,5 durante la hora entera daría 2,1);
+    // con la línea se ve que ese goteo corrió 10 min. Cada tramo termina
+    // donde arranca el siguiente, o a los `duracion` minutos, o al final.
+    if (infusion) {
+      const tramos = delRenglon
+        .filter((e) => !esConsumo(e) && conHora(e) && esUnidadTasa(e.unidad))
+        .map((e) => ({ ini: aMs(e.ts), dur: Number(e.duracion) || 0 }))
+        .sort((a, b) => a.ini - b.ini);
+      const xDe = (ms) => IZQ + Math.min(nCol, Math.max(0, (ms - t0) / slotMs)) * anchoCol;
+      for (const [i, tr] of tramos.entries()) {
+        const topes = [t1];
+        if (tramos[i + 1]) topes.push(tramos[i + 1].ini);
+        if (tr.dur) topes.push(tr.ini + tr.dur * 60000);
+        const fin = Math.min(...topes);
+        if (fin <= tr.ini) continue;
+        const yL = y + ALTO_DROGA - 3;
+        lin(xDe(tr.ini), yL, xDe(fin), yL, 0.8);
+        // la barrita del final solo si el goteo se cortó antes del cierre
+        if (fin < t1) lin(xDe(fin), yL - 2.5, xDe(fin), yL + 1.5, 0.8);
+      }
     }
-    if (alguna && sumable) {
-      txt(xTot + ANCHO_TOT / 2, y + 10, String(Math.round(suma * 100) / 100),
-          'font-size="7" font-weight="700" text-anchor="middle"');
+    // los bolos del renglon, sumados si todos comparten unidad (150 mg +
+    // 50 mg; un µg y un mg no se suman) — para el Total de la fila mixta
+    const bolos = delRenglon.filter((e) => esBolo(e) && e.dosis != null && e.dosis !== "");
+    const unidadesBolo = [...new Set(bolos.map((e) => String(e.unidad || "").trim()))];
+    const sumaBolos = bolos.length && unidadesBolo.length === 1 &&
+                      bolos.every((e) => Number.isFinite(Number(e.dosis)))
+      ? { n: bolos.reduce((a, e) => a + Number(e.dosis), 0), u: unidadesBolo[0] } : null;
+    if (infusion) {
+      let t = "";
+      if (consumo && consumo.dosis != null && consumo.dosis !== "") {
+        // el consumo calculado al cierre (mg, o UI para una infusión en
+        // UI/h); nada de sumar tasas. En la fila mixta, mas los bolos si
+        // van en la misma unidad; si no, los bolos aparte
+        const uC = consumo.unidad || "mg";
+        if (sumaBolos && sumaBolos.u === uC) {
+          t = fmtDosisTotal(sumaBolos.n + Number(consumo.dosis), uC);
+        } else if (sumaBolos) {
+          t = `${fmtDosisTotal(sumaBolos.n, sumaBolos.u)} + ${fmtDosisTotal(Number(consumo.dosis), uC)}`;
+        } else {
+          t = fmtDosisTotal(Number(consumo.dosis), uC);
+        }
+      } else {
+        // sin consumo (el parte sigue abierto, un tramo sin hora, un parte
+        // cerrado antes del 15-sep, o la app en producción que manda el
+        // mantenimiento sin hora): la/s tasa/s tal cual, como siempre —
+        // nunca un Total vacío ni una suma de tasas
+        const tasas = [];
+        // solo las TASAS (21-sep): en la fila unica el bolo ya va aparte
+        for (const e of delRenglon.filter((e) => !esConsumo(e) && esUnidadTasa(e.unidad))) {
+          const d = e.dosis != null && e.dosis !== "" ? fmtCriollo(e.dosis) : "";
+          if (d && !tasas.includes(d)) tasas.push(d);
+        }
+        t = tasas.join("→");
+        if (t.length > 15) t = `${tasas[0]}→…→${tasas[tasas.length - 1]}`;
+        if (sumaBolos) t = `${fmtDosisTotal(sumaBolos.n, sumaBolos.u)} + ${t}`;
+      }
+      if (t) {
+        txt(xTot + ANCHO_TOT / 2, y + 10, t,
+            `font-size="${tamTotal(t)}" font-weight="700" text-anchor="middle"`);
+      }
+    } else {
+      // dosis total en la columna Total, si todas las dosis son numéricas
+      let suma = 0, alguna = false, sumable = true;
+      for (const e of delRenglon) {
+        if (esConsumo(e)) continue;
+        alguna = true;
+        const n = e.dosis != null && e.dosis !== "" ? Number(e.dosis) : NaN;
+        if (Number.isFinite(n)) suma += n; else sumable = false;
+      }
+      if (alguna && sumable) {
+        // el Total de los bolos va pelado como siempre, salvo que sean
+        // mg y lleguen a 1000: ahi en gramos ("1 g")
+        const enGramos = sumaBolos && sumaBolos.u === "mg" && suma >= 1000;
+        const tt = enGramos ? fmtDosisTotal(suma, "mg") : fmtCriollo(suma);
+        txt(xTot + ANCHO_TOT / 2, y + 10, tt,
+            `font-size="${enGramos ? tamTotal(tt) : 7}" font-weight="700" text-anchor="middle"`);
+      }
     }
     lin(0, y + ALTO_DROGA, ancho, y + ALTO_DROGA, 0.35);
   }
@@ -502,24 +789,73 @@ function construirGrilla(datos, vitales, eventos) {
 
 // ---------------------------------------------- página completa
 
+// La FECHA del encabezado (28-sep, parte de prueba con "Fecha:" en blanco):
+// la app nunca la manda. Sin fecha cargada va la del día del acto: la del
+// primer vital (la captura del monitor) o, sin monitor, la de creación del
+// parte. Lo que se tipee en la ficha web manda.
+function fechaDelParte(parte, vitales) {
+  const d = parte.datos || {};
+  if (d.fecha) return d.fecha;
+  if (vitales.length && vitales[0].ts) return String(vitales[0].ts).slice(0, 10);
+  return parte.creado ? String(parte.creado).slice(0, 10) : "";
+}
+
 function render(parte, vitales, eventos) {
-  DATOS = parte.datos || {};
+  DATOS = { ...(parte.datos || {}), fecha: fechaDelParte(parte, vitales) };
   const inst = window.ESQUEMA_FORMULARIO.institucion;
   // los eventos X/O ya quedan marcados sobre la grilla; drogas y volúmenes
   // viven en sus renglones
   const otros = eventos.filter((e) => e.tipo !== "droga" && e.tipo !== "volumen" &&
+                               e.tipo !== "practica" && e.tipo !== "critico" &&
                                !marcaGrilla(e.descripcion));
+  // Practicas y eventos criticos (22-sep): "HH:MM — texto", cada lista
+  // bajo su titulo y SOLO si hubo alguno; si no, no se ven en el parte.
+  const listaMarcas = (tipo, titulo_) => {
+    const de = eventos.filter((e) => e.tipo === tipo)
+                      .sort((a, b) => String(a.ts).localeCompare(String(b.ts)));
+    if (!de.length) return "";
+    return linea(titulo(titulo_), ...de.map((e) =>
+      `<span class="et">${esc(e.ts ? e.ts.slice(11, 16) : "")}</span>` +
+      `<span class="relleno chico" style="flex:0 1 auto">${esc(e.descripcion)}</span>`));
+  };
   // valor representativo de la captura para los casilleros de ventilación
   const medianaGlobal = (key) => {
     const vals = vitales.map((v) => v[key]).filter((x) => x != null);
     return vals.length ? fmtValor(key, mediana(vals)) : "";
   };
-  // Aldrete: si no fue cargado, se calcula con el estado final + TAS basal
-  if (DATOS.aldrete == null || DATOS.aldrete === "") {
-    const basal = vitales.find((v) => v.nibp_sis != null);
-    const a = window.calcularAldrete(DATOS, basal ? basal.nibp_sis : null);
+  // Aldrete: el intubado bajo ARM NO CALIFICA (21-sep) — se escribe con
+  // letras y manda sobre cualquier numero; si no, y si no fue cargado, se
+  // calcula con el estado final + TAS basal
+  // Los partes de antes del 21-sep guardaron "UTI"; el papel dice UCI.
+  if (DATOS.pasa_a === "UTI") DATOS.pasa_a = "UCI";
+  const basalAldrete = vitales.find((v) => v.nibp_sis != null);
+  const esArm = window.aldreteNoCalifica(DATOS);
+  if (esArm) {
+    DATOS.aldrete = window.ALDRETE_NO_CALIFICA;
+  } else if (DATOS.aldrete == null || DATOS.aldrete === "") {
+    const a = window.calcularAldrete(DATOS, basalAldrete ? basalAldrete.nibp_sis : null);
     if (a != null) DATOS.aldrete = String(a);
   }
+  // Los cinco items del Aldrete para el papel; en el ARM, solo el rotulo.
+  const aldreteImpreso = () => {
+    if (esArm) {
+      return ['<span class="et">Aldrete:</span>',
+              `<span class="relleno chico">${esc(window.ALDRETE_NO_CALIFICA)}</span>`];
+    }
+    const c = window.componentesAldrete(DATOS, basalAldrete ? basalAldrete.nibp_sis : null);
+    const item = (et, v) => [`<span class="et">${et}:</span>`,
+                             `<span class="relleno chico">${v == null ? "" : v}</span>`];
+    return [...item("Actividad", c.actividad), ...item("Respiración", c.respiracion),
+            ...item("Circulación", c.circulacion), ...item("Conciencia", c.conciencia),
+            ...item("Saturación", c.saturacion),
+            '<span class="et">Aldrete:</span>',
+            `<span class="relleno chico">${esc(DATOS.aldrete || "")}</span>`];
+  };
+  const marcados = (v) => Array.isArray(v) ? v : String(v ?? "").split(/[,/]/).map((s) => s.trim());
+  const extubadoUti = marcados(DATOS.via_aerea_uti).includes("Extubado") ||
+                      (DATOS.pasa_a === "UCI" && !esArm);
+  const opcionUti = (sel, txt) => `<span class="op${sel ? " sel" : ""}">${esc(txt)}</span>`;
+  const ingresaUti = esArm || extubadoUti || DATOS.pasa_a === "UCI";
 
   hoja.innerHTML = `
     <div class="anexo-titulo">${esc(inst.titulo)}</div>
@@ -550,18 +886,20 @@ function render(parte, vitales, eventos) {
       <div class="marco">
         <div class="et tit">Vías de Ingreso</div>
         ${linea(checks("vias_ingreso", ""))}
+        ${/* Las vias al ingreso son SOLO los casilleros (24-sep, "solo aparece
+              lo que esta tildado"); el comentario cargado debajo de las vias va
+              DENTRO del cuadro (28-sep, "marcar los chips y si hay comentario
+              sumar el comentario"), solo si hay. */""}
+        ${(DATOS.vias_comentario || "").trim() ? `<div class="parrafo">${esc(DATOS.vias_comentario)}</div>` : ""}
       </div>
     </div>
 
     ${linea(titulo("Antecedentes Patológicos Condicionantes:"))}
     <div class="parrafo bajo" style="border-bottom:1px dotted #000">${esc(DATOS.antecedentes || "")}</div>
 
-    ${linea(titulo("Prácticas Efectuadas"),
-            campo("via_periferica_1", "chico", "Vía Periférica N°"),
-            campo("via_periferica_2", "chico", "Vía Periférica N°"),
-            campo("via_central", "chico", "Vía Central N°"),
-            campo("abordaje", "chico"), campo("via_arterial", "chico"))}
-    ${linea(campo("comentarios"))}
+    ${/* Las practicas AL INGRESO (22-sep): el renglon Comentarios de
+          "Practicas efectuadas", solo si se cargo alguna. */""}
+    ${(DATOS.comentarios || "").trim() ? linea(campo("comentarios", "", "Prácticas al ingreso")) : ""}
     ${linea(chkSiNo("monitoreo_faaaar"), chkSiNo("proteccion_ocular"),
             chkSiNo("proteccion_decubitos"),
             campo("ayuno_hs", "chico"), '<span class="et">hs</span>')}
@@ -573,6 +911,8 @@ function render(parte, vitales, eventos) {
 
     <div class="grilla">${construirGrilla(DATOS, vitales, eventos)}</div>
 
+    ${listaMarcas("practica", "Prácticas durante la anestesia:")}
+    ${listaMarcas("critico", "Eventos críticos:")}
     ${otros.length ? linea(titulo("Eventos:"), ...otros.map((e) =>
       `<span class="et">${esc(e.ts.slice(11, 16))}</span>` +
       `<span class="relleno chico" style="flex:0 1 auto">${esc(e.descripcion)}</span>`)) : ""}
@@ -583,7 +923,10 @@ function render(parte, vitales, eventos) {
         ${linea(checks("antiseptico"))}
         ${linea(campo("zona_puncion"), campo("aguja", "chico"))}
         ${linea(checks("material"), campo("lote", "chico"))}
-        ${linea(campo("agente_anestesico"), campo("dosis_agente", "chico"))}
+        ${linea('<span class="et">Agente anestésico:</span>',
+                `<span class="relleno">${esc(agenteDelBloqueo(DATOS).agente)}</span>`,
+                '<span class="et">Dosis:</span>',
+                `<span class="relleno chico">${esc(agenteDelBloqueo(DATOS).dosis)}</span>`)}
         ${linea(campo("cantidad_inyectada", "chico"),
                 campo("dosis_total", "chico"))}
         ${linea(campo("reinyecciones"))}
@@ -600,47 +943,71 @@ function render(parte, vitales, eventos) {
                 '<span class="et">PEEP:</span>',
                 `<span class="relleno chico">${esc(DATOS.peep_cierre || medianaGlobal("peep"))}</span>`,
                 campo("fio2_cierre", "chico", "FiO2"), '<span class="et">%</span>')}
+        ${/* Vol. corriente y Frec. resp. (22-sep): SIEMPRE del monitor si
+              hubo monitoreo (la mediana de la captura); si no, lo cargado
+              en la anestesia General de la app (vol_corriente / frec_resp).
+              La PIP igual (29-sep): sin monitor, la de la vía aérea de la
+              carga (pip_cierre). */""}
         ${linea('<span class="et">Vol. Corriente:</span>',
-                `<span class="relleno chico">${medianaGlobal("vt")}</span>`,
+                `<span class="relleno chico">${medianaGlobal("vt") || esc(DATOS.vol_corriente || "")}</span>`,
                 '<span class="et">ml</span>',
                 '<span class="et">Frec. Resp.:</span>',
-                `<span class="relleno chico">${medianaGlobal("fr_vent")}</span>`,
+                `<span class="relleno chico">${medianaGlobal("fr_vent") || esc(DATOS.frec_resp || "")}</span>`,
                 '<span class="et">/min</span>',
                 '<span class="et">PIP:</span>',
-                `<span class="relleno chico">${medianaGlobal("pip")}</span>`)}
+                `<span class="relleno chico">${medianaGlobal("pip") || esc(DATOS.pip_cierre || "")}</span>`)}
       </div>
     </div>
 
+    ${/* El Aldrete con sus CINCO items y el total (21-sep, "que figure con
+          todos sus items"): las respuestas crudas (moviliza, depresion,
+          TAS, sat...) llegan de la app y viven en los datos, pero en el
+          papel se lee el puntaje de cada item. En el intubado bajo ARM,
+          "No califica" y nada mas. */""}
     ${linea(titulo("Estado del paciente al finalizar la anestesia:"),
-            sino("reflejo_corneal"), sino("estimulos_dolorosos"),
-            sino("obedece_ordenes"))}
-    ${linea(sino("depresion_circulatoria"), sino("depresion_respiratoria"),
-            sino("moviliza_msup"), sino("moviliza_minf"))}
-    ${linea(campo("tas_final", "chico"), campo("tam_final", "chico"),
-            campo("sat_final", "chico"), '<span class="et">%</span>',
-            campo("fio2_final", "chico"), '<span class="et">%</span>',
-            campo("aldrete", "chico"))}
-    ${linea(titulo("Destino:"), opsCajas("pasa_a"), campo("pasa_hora", "chico"),
-            '<span class="et">hs</span>', sino("requiere_o2"))}
+            ...aldreteImpreso())}
+    ${/* Sin la hora del pase (23-sep, "pase a las hs sacalo del parte"). */""}
+    ${linea(titulo("Destino:"), opsCajas("pasa_a"), sino("requiere_o2"))}
 
+    ${/* El cuadro de la UCI (21-sep, pedido expreso): SOLO si ingresa a
+          UCI, y SOLO la opcion que dicen los datos — "ARM" si va intubado
+          o relajado; si no, "Extubado" con su Aldrete (el puntaje solo,
+          sin items), ventilacion espontanea y con o sin oxigenoterapia.
+          Nada de dos renglones con uno marcado. Queda la linea de la
+          entrega, que es la firma del pase. Si no va a UCI, el cuadro no
+          se imprime. */""}
+    ${!ingresaUti ? "" : `<div class="marco">
+      ${esArm
+        ? linea(titulo("Ingreso a UCI:"), opcionUti(true, "ARM"))
+        : linea(titulo("Ingreso a UCI:"), opcionUti(true, "Extubado"),
+                '<span class="et">Aldrete:</span>',
+                `<span class="relleno chico">${esc(DATOS.aldrete || "")}</span>`,
+                '<span class="et">Ventilación espontánea</span>',
+                '<span class="et">Oxigenoterapia:</span>',
+                `<span class="relleno chico">${esc(DATOS.requiere_o2 || "")}</span>`)}
+      ${/* Sin "Entrega en UCI: Dr." ni la "Firma:" suelta (21-sep): el que
+            entrega es el autor del parte, que firma al pie con aclaracion y
+            matricula. Queda la hora del ingreso y quien recibe. */""}
+      ${/* Sin la hora de ingreso a UCI (24-sep, "la hora en UCI la sacamos"). */""}
+      ${linea(campo("recibe_dr", "medio"))}
+    </div>`}
+
+    ${/* La firma del anestesiologo va AL FINAL del parte (21-sep):
+          antes quedaba entre el destino y el cuadro de la UCI. */""}
+    ${/* La FIRMA electronica (24-sep): si la app mando el trazo, se imprime
+          sobre la linea de Firma con la aclaracion y la matricula, y debajo
+          la constancia con la hora del envio. Si no, la linea queda para
+          firmar a mano. */""}
     <div class="firma">
       <span class="et">(Marcar lo que corresponda)</span>
-      <span class="et">Firma</span><span class="relleno"></span>
+      <span class="et">Firma</span><span class="relleno firma-trazo">${
+        /^[A-Za-z0-9+/=]+$/.test(DATOS.firma_png || "")
+          ? `<img src="data:image/png;base64,${DATOS.firma_png}" alt="firma">` : ""}</span>
       <span class="et">Aclaración</span><span class="relleno">${esc(DATOS.aclaracion || "")}</span>
       <span class="et">MP/MN:</span><span class="relleno medio">${esc(DATOS.mp_mn || "")}</span>
     </div>
-
-    <div class="marco">
-      ${linea(titulo("Ingreso a UTI:"), checks("ingreso_uti", ""))}
-      ${linea(checks("via_aerea_uti"), opsCajas("ventilacion_uti"))}
-      ${linea(campo("vc_uti", "chico"), campo("fr_uti", "chico"),
-              campo("tas_uti", "chico"), campo("tad_uti", "chico"),
-              campo("tam_uti", "chico"), campo("pvc_uti", "chico"),
-              campo("diuresis_uti", "chico"))}
-      ${linea(campo("entrega_dr", "medio"), campo("entrega_hora", "chico"),
-              campo("recibe_dr", "medio"),
-              '<span class="et">Firma:</span>', '<span class="relleno chico"></span>')}
-    </div>
+    ${(DATOS.firmado_en || "").trim() && (DATOS.firma_png || "")
+      ? `<div class="leyenda-final">Firmado electrónicamente desde la app el ${esc(DATOS.firmado_en)}.</div>` : ""}
     <div class="leyenda-final">Conste que una copia fiel de este parte se halla
       archivada en el Servicio.</div>`;
 
@@ -648,6 +1015,26 @@ function render(parte, vitales, eventos) {
 }
 
 (async function arrancar() {
+  if (!Number.isInteger(ID) && DNI) {
+    // El celular manda la carga EN PARALELO con abrir esta pestaña ("Ver
+    // parte" = enviar + ver): se le espera hasta ~30 s, preguntando cada
+    // 1,5 s, antes de decir que no hay.
+    for (let intento = 0; intento < 20 && !Number.isInteger(ID); intento++) {
+      if (intento > 0) await new Promise((ok) => setTimeout(ok, 1500));
+      hoja.innerHTML = `<div class="sin-datos">Esperando el parte del DNI ${esc(DNI)} (el celular lo está mandando a la notebook)…</div>`;
+      try {
+        const r = await fetch(`/api/partes/ultimo?dni=${encodeURIComponent(DNI)}`);
+        if (r.ok) {
+          ID = (await r.json()).id;
+          document.getElementById("volver").href = `parte.html?id=${ID}`;
+        }
+      } catch (e) { /* se reintenta */ }
+    }
+    if (!Number.isInteger(ID)) {
+      hoja.innerHTML = `<div class="sin-datos">No llegó ningún parte para el DNI ${esc(DNI)}: fijate el aviso de la app (falta un dato obligatorio o no hay conexión con la notebook) y volvé a tocar Ver parte.</div>`;
+      return;
+    }
+  }
   if (!Number.isInteger(ID)) {
     hoja.innerHTML = '<div class="sin-datos">Falta ?id= en la URL</div>';
     return;
