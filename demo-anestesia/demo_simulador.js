@@ -927,7 +927,9 @@
   }
   function esperar(ms) { return new Promise((ok) => setTimeout(ok, ms)); }
 
-  async function pdfDePlanilla(parteId) {
+  // La planilla fotografiada en el navegador (html2canvas): el lienzo del
+  // que salen el PDF y, desde el 6-oct, la imagen JPEG.
+  async function lienzoDePlanilla(parteId) {
     await cargarLibrerias();
     const marco = document.createElement("iframe");
     marco.setAttribute("aria-hidden", "true");
@@ -944,16 +946,30 @@
       }
       if (!hoja) throw new Error("la planilla no terminó de armarse");
       await esperar(300);
-      const lienzo = await window.html2canvas(hoja, { scale: 2, backgroundColor: "#ffffff", logging: false });
+      return await window.html2canvas(hoja, { scale: 2, backgroundColor: "#ffffff", logging: false });
+    } finally {
+      marco.remove();
+    }
+  }
+  async function pdfDePlanilla(parteId) {
+    const lienzo = await lienzoDePlanilla(parteId);
+    {
       const { jsPDF } = window.jspdf;
       const pdf = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
       let ancho = 196, alto = (lienzo.height / lienzo.width) * ancho;
       if (alto > 283) { ancho *= 283 / alto; alto = 283; }
       pdf.addImage(lienzo.toDataURL("image/jpeg", 0.92), "JPEG", (210 - ancho) / 2, 7, ancho, alto);
       return pdf.output("arraybuffer");
-    } finally {
-      marco.remove();
     }
+  }
+  // La IMAGEN JPEG de la planilla (6-oct-2026, "dame la opción de JPEG:
+  // guardo y comparto"): la misma foto, sin envolverla en un PDF. La
+  // notebook de verdad la saca con el Edge sin ventana (pdf.generar_jpeg).
+  async function jpegDelParte(parteId) {
+    const lienzo = await lienzoDePlanilla(parteId);
+    const blob = await new Promise((ok, mal) => lienzo.toBlob(
+      (b) => (b ? ok(b) : mal(new Error("la planilla no salió como JPEG"))), "image/jpeg", 0.9));
+    return blob.arrayBuffer();
   }
   async function pdfDeEjemplo() {
     const r = await fetchReal(`${RAIZ}parte_demo.pdf`);
@@ -966,10 +982,10 @@
       return pdfDeEjemplo();
     });
   }
-  function nombrePdf(p) {
+  function nombrePdf(p, extension = "pdf") {
     const nombre = texto(p.datos.nombre).replace(/[^\p{L}\p{N}\s.-]/gu, "").replace(/\s+/g, " ").trim() || "sin nombre";
     const fecha = /^\d{4}-\d\d-\d\d$/.test(texto(p.datos.fecha)) ? p.datos.fecha : p.creado.slice(0, 10);
-    return `Parte anestesico - ${nombre} - ${fecha}.pdf`;
+    return `Parte anestesico - ${nombre} - ${fecha}.${extension}`;
   }
   function ultimoParteDelDni(e, dni) {
     return e.partes.filter((p) => mismoPaciente(dni, p.datos.hc_dni)).sort((a, b) => b.id - a.id)[0] || null;
@@ -1085,9 +1101,12 @@
       const id = ++e.ids.pedido;
       guardar(e);
       const p = ultimoParteDelDni(e, cuerpo && cuerpo.dni);
-      const pedido = { creado: ahora, parteId: p ? p.id : null, nombre: p ? nombrePdf(p) : null, bytes: null, error: null };
+      // (6-oct) tipo "jpeg": la planilla como imagen, por el mismo buzón.
+      const imagen = Boolean(cuerpo) && cuerpo.tipo === "jpeg";
+      const pedido = { creado: ahora, parteId: p ? p.id : null, imagen, nombre: p ? nombrePdf(p, imagen ? "jpg" : "pdf") : null, bytes: null, error: null };
       if (p) {
-        pedido.promesa = pdfDelParte(p.id).then((b) => { pedido.bytes = b; }, (err) => { pedido.error = String(err.message || err); });
+        pedido.promesa = (imagen ? jpegDelParte(p.id) : pdfDelParte(p.id))
+          .then((b) => { pedido.bytes = b; }, (err) => { pedido.error = String(err.message || err); });
       }
       pedidosPdf.set(id, pedido);
       return json({ id });
@@ -1100,13 +1119,13 @@
       if (m[2]) {
         if (pedido.promesa) await pedido.promesa;
         if (!pedido.bytes) throw new ErrorHttp(404, "El PDF todavía no está");
-        return { status: 200, cuerpo: pedido.bytes, tipo: "application/pdf" };
+        return { status: 200, cuerpo: pedido.bytes, tipo: pedido.imagen ? "image/jpeg" : "application/pdf" };
       }
       const madurez = ahora - pedido.creado >= DEMORA_PDF_MS;
       if (!pedido.parteId) {
         return json(madurez ? { id, estado: "sin_parte", detalle: "La notebook del quirófano no tiene un parte con ese DNI" } : { id, estado: "pendiente" });
       }
-      if (pedido.error) return json({ id, estado: "error", detalle: "La notebook no pudo armar el PDF" });
+      if (pedido.error) return json({ id, estado: "error", detalle: `La notebook no pudo armar ${pedido.imagen ? "la imagen" : "el PDF"}` });
       return json(madurez && pedido.bytes ? { id, estado: "listo", nombre: pedido.nombre } : { id, estado: "pendiente" });
     }
     throw new ErrorHttp(404, `La demo no conoce ${metodo} ${camino}`);

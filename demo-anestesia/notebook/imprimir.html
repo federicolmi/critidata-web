@@ -5,6 +5,12 @@
 <script src="../demo_simulador.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Imprimir parte — Anexo V</title>
+<script>
+/* ?imagen=1 (6-oct-2026): la planilla como IMAGEN, para que el navegador
+   sin ventana de la notebook la fotografíe (pdf.py): sola, en blanco,
+   sin barra ni sombra. Antes del CSS, así se dibuja ya así. */
+if (new URLSearchParams(location.search).get("imagen")) document.documentElement.classList.add("imagen");
+</script>
 <style>
 /* Réplica del formulario papel "Anexo V" (foto del original): formulario de
    líneas punteadas, opciones impresas que se rodean, grilla central.
@@ -57,6 +63,12 @@ body {
 /* La firma electronica (24-sep): el trazo sobre la linea, sin romper el renglon. */
 .firma .firma-trazo { position: relative; }
 .firma .firma-trazo img { position: absolute; left: 4mm; bottom: -1mm; height: 9mm; width: auto; max-width: 42mm; }
+
+/* La planilla como imagen (?imagen=1, 6-oct-2026, "la opción de JPEG:
+   guardo y comparto"): como la impresión, pero en pantalla. */
+html.imagen body { background: #fff; }
+html.imagen .barra-pantalla { display: none; }
+html.imagen .hoja { margin: 0 auto; box-shadow: none; }
 
 @media print {
   body { background: #fff; }

@@ -642,6 +642,74 @@ document.getElementById("nube-desvincular").addEventListener("click", async (e) 
   } catch (err) { mostrarAviso(`No se pudo desconectar: ${err.message}`); }
 });
 
+// ----------------------------------------------------------------- aadob
+// La cuenta del portal de AADOB (6-oct-2026): se guarda una vez, cifrada en
+// esta notebook; el panel muestra el usuario, nunca la contraseña.
+
+function pintarAadob(est) {
+  const cargar = document.getElementById("aadob-cargar");
+  const listo = document.getElementById("aadob-listo");
+  const texto = document.getElementById("aadob-texto");
+  const punto = document.getElementById("aadob-punto");
+  const error = document.getElementById("aadob-error");
+  cargar.classList.toggle("oculto", est.configurada);
+  listo.classList.toggle("oculto", !est.configurada);
+  if (est.configurada) {
+    const u = est.ultimo || {};
+    let ultimo = "";
+    if (u.cuando) {
+      const cuando = `${String(u.cuando).slice(8, 10)}/${String(u.cuando).slice(5, 7)} ${fmtHora(u.cuando)}`;
+      ultimo = u.estado === "error" ? ` · último intento ${cuando}: ${u.detalle || "falló"}`
+             : u.estado === "presentado" ? ` · último parte presentado ${cuando}`
+             : ` · último parte cargado ${cuando} (a confirmar)`;
+    }
+    texto.textContent = `Cuenta: ${est.usuario}${ultimo}`;
+    punto.className = `punto ${est.playwright ? "punto-verde" : "punto-ambar"}`;
+  }
+  error.classList.toggle("oculto", est.playwright);
+  error.textContent = est.playwright ? ""
+    : "A esta notebook le falta Playwright para abrir el portal: en una consola, " +
+      "python -m pip install playwright";
+}
+
+async function traerEstadoAadob() {
+  try { pintarAadob(await pedirJSON("/api/aadob/estado")); }
+  catch (e) { /* servidor caído: lo nota el próximo poll */ }
+}
+
+document.getElementById("aadob-guardar").addEventListener("click", async () => {
+  const usuario = document.getElementById("aadob-usuario").value.trim();
+  const password = document.getElementById("aadob-pass").value;
+  if (!usuario || !password) return;
+  const boton = document.getElementById("aadob-guardar");
+  boton.disabled = true;
+  try {
+    await pedirJSON("/api/aadob/cuenta", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ usuario, password }),
+    });
+    document.getElementById("aadob-pass").value = "";
+    traerEstadoAadob();
+  } catch (e) { mostrarAviso(`No se pudo guardar la cuenta de AADOB: ${e.message}`); }
+  boton.disabled = false;
+});
+
+document.getElementById("aadob-cambiar").addEventListener("click", () => {
+  document.getElementById("aadob-listo").classList.add("oculto");
+  document.getElementById("aadob-cargar").classList.remove("oculto");
+  document.getElementById("aadob-usuario").focus();
+});
+
+document.getElementById("aadob-borrar").addEventListener("click", async () => {
+  if (!confirm("¿Borrar la cuenta de AADOB de esta notebook? Hasta cargarla de nuevo, " +
+               "el parte no se puede presentar desde la app.")) return;
+  try {
+    await pedirJSON("/api/aadob/cuenta", { method: "DELETE" });
+    traerEstadoAadob();
+  } catch (e) { mostrarAviso(`No se pudo borrar: ${e.message}`); }
+});
+
 // ---------------------------------------------------------------- cierre
 
 document.getElementById("boton-cerrar").addEventListener("click", async () => {
@@ -677,6 +745,7 @@ document.getElementById("boton-cerrar").addEventListener("click", async () => {
   traerVitales().catch(() => {});
   traerEstadoCaptura();
   traerEstadoNube();
+  traerEstadoAadob();
   setInterval(() => {
     traerVitales().catch(() => {});
     traerEstadoCaptura();
