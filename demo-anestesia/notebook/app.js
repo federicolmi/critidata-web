@@ -46,6 +46,52 @@ async function mostrarRespaldo() {
   }
 }
 
+// (6-oct-2026, "o los leés del disco externo") La PC de casa: si en el disco
+// externo hay un respaldo hecho por la notebook del quirófano, un botón trae
+// esos partes a esta máquina, que desde entonces contesta con ellos (PDF,
+// imagen, AADOB) como si fuera la notebook. Sin tal respaldo, no se ve.
+async function mostrarTraerRespaldo() {
+  const caja = document.getElementById("traer-respaldo");
+  if (!caja) return;
+  try {
+    const r = await fetch("/api/respaldo/disco");
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const e = await r.json();
+    const mejor = (e.respaldos || [])[0];
+    if (!mejor) { caja.classList.add("oculto"); return; }
+    const quien = /^q\d+$/.test(mejor.etiqueta) ? `del quirófano ${mejor.etiqueta.slice(1)}`
+      : mejor.etiqueta ? `de "${mejor.etiqueta}"` : "de la notebook";
+    const dia = `${mejor.fecha.slice(8, 10)}/${mejor.fecha.slice(5, 7)}`;
+    document.getElementById("traer-texto").textContent =
+      `En el disco externo está el respaldo ${quien} del ${dia} (${mejor.partes} partes).`;
+    const boton = document.getElementById("traer-boton");
+    boton.onclick = async () => {
+      const ok = confirm(`Reemplaza los ${e.partes_aqui} partes de esta máquina por los ${mejor.partes} ` +
+        `del respaldo ${quien} del ${dia}. La base de ahora queda guardada al lado. ¿Seguir?`);
+      if (!ok) return;
+      boton.disabled = true;
+      try {
+        const rr = await fetch("/api/respaldo/traer", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ruta: mejor.ruta }),
+        });
+        const d = await rr.json();
+        if (!rr.ok) throw new Error(d.detail || `HTTP ${rr.status}`);
+        mostrarAviso(`Listo: ${d.partes} partes traídos de ${d.nombre}. Esta máquina contesta con ellos.`);
+        cargarPartes();
+        mostrarRespaldo();
+      } catch (err) {
+        mostrarAviso(`No se pudo traer el respaldo: ${err.message}`);
+      } finally {
+        boton.disabled = false;
+      }
+    };
+    caja.classList.remove("oculto");
+  } catch (err) {
+    caja.classList.add("oculto");
+  }
+}
+
 async function cargarPartes() {
   let partes;
   try {
@@ -116,6 +162,7 @@ document.getElementById("boton-nuevo").addEventListener("click", async () => {
 
 cargarPartes();
 mostrarRespaldo();
+mostrarTraerRespaldo();
 // Se vuelve a mirar cada minuto: la copia del día se rehace sola.
 setInterval(mostrarRespaldo, 60000);
 
