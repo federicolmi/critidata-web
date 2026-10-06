@@ -62427,7 +62427,7 @@ case 3:j=b
 if(!j){q=null
 s=1
 break}j=n.a
-n.Lt("Pidiendo el PDF de "+j.b+" a la notebook del quir\xf3fano por la nube (puede tardar un minuto)\u2026",B.Rk)
+n.Lt("Pidiendo el PDF de "+j.b+" a la notebook del quir\xf3fano por la nube (puede tardar un par de minutos)\u2026",B.Rk)
 p=5
 s=8
 return A.w(n.c.$1(j.c),$async$xf)
