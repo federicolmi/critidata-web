@@ -652,6 +652,17 @@ function construirGrilla(datos, vitales, eventos) {
     const delRenglon = eventos.filter((e) => e.tipo === "droga" && !!e.descripcion &&
                                              claveRenglon(e) === clave);
     const nombre = delRenglon.length ? delRenglon[0].descripcion : "";
+    // El CORTE (6-oct-2026, "el remifentanilo que corta 10 min antes no se
+    // ve expresado en el parte"): el evento tipo "corte" de la droga, con
+    // hora, termina ahí la barra de lo que corre —aunque el tramo no traiga
+    // duracion: la ficha reenviada tras el cierre se la borraba— y escribe
+    // "corte" en su columna, para leerlo sin mirar la barra.
+    const mismoNombre = (a, b) =>
+      String(a ?? "").trim().toLowerCase() === String(b ?? "").trim().toLowerCase();
+    const cortesDelRenglon = eventos
+      .filter((e) => e.tipo === "corte" && conHora(e) && mismoNombre(e.descripcion, clave))
+      .sort((a, b) => aMs(a.ts) - aMs(b.ts));
+    const cortesMs = cortesDelRenglon.map((e) => aMs(e.ts)).filter(Number.isFinite);
     // renglón de INFUSIÓN (15-sep): los tramos van en sus columnas y el
     // Total es el consumo que calculó el cierre (evento "consumo")
     const tasa = delRenglon.find((e) => !esConsumo(e) && esUnidadTasa(e.unidad));
@@ -684,6 +695,10 @@ function construirGrilla(datos, vitales, eventos) {
       if (mixto && esBolo(e) && e.dosis && e.unidad) etq = `${etq} ${String(e.unidad).trim()}`;
       porSlot[s] = porSlot[s] ? `${porSlot[s]}+${etq}` : etq;
     }
+    for (const e of cortesDelRenglon) {
+      const s = slotDe(e.ts);
+      porSlot[s] = porSlot[s] ? `${porSlot[s]} corte` : "corte";
+    }
     for (const [s, t] of Object.entries(porSlot)) {
       txt(xCol(+s) + anchoCol / 2, y + 10, t,
           'font-size="7" font-weight="700" text-anchor="middle"');
@@ -693,7 +708,8 @@ function construirGrilla(datos, vitales, eventos) {
     // ella, "0,5" en la columna de las 9 con un Total de 0,35 mg se lee
     // como un Total equivocado (0,5 durante la hora entera daría 2,1);
     // con la línea se ve que ese goteo corrió 10 min. Cada tramo termina
-    // donde arranca el siguiente, o a los `duracion` minutos, o al final.
+    // donde arranca el siguiente, o a los `duracion` minutos, o en el
+    // corte de la droga (6-oct-2026), o al final.
     if (infusion) {
       const tramos = delRenglon
         .filter((e) => !esConsumo(e) && conHora(e) && esUnidadTasa(e.unidad))
@@ -704,6 +720,8 @@ function construirGrilla(datos, vitales, eventos) {
         const topes = [t1];
         if (tramos[i + 1]) topes.push(tramos[i + 1].ini);
         if (tr.dur) topes.push(tr.ini + tr.dur * 60000);
+        const corte = cortesMs.find((ms) => ms > tr.ini);
+        if (corte != null) topes.push(corte);
         const fin = Math.min(...topes);
         if (fin <= tr.ini) continue;
         const yL = y + ALTO_DROGA - 3;
@@ -805,9 +823,12 @@ function render(parte, vitales, eventos) {
   const inst = window.ESQUEMA_FORMULARIO.institucion;
   // los eventos X/O ya quedan marcados sobre la grilla; drogas y volúmenes
   // viven en sus renglones
+  // El CORTE de una infusión (7-oct-2026) vive en el renglón de su droga
+  // ("corte" en su columna, la barra termina ahí): acá se leía como un
+  // evento suelto ("09:50 Remifentanilo").
   const otros = eventos.filter((e) => e.tipo !== "droga" && e.tipo !== "volumen" &&
                                e.tipo !== "practica" && e.tipo !== "critico" &&
-                               !marcaGrilla(e.descripcion));
+                               e.tipo !== "corte" && !marcaGrilla(e.descripcion));
   // Practicas y eventos criticos (22-sep): "HH:MM — texto", cada lista
   // bajo su titulo y SOLO si hubo alguno; si no, no se ven en el parte.
   const listaMarcas = (tipo, titulo_) => {
