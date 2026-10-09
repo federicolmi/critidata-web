@@ -16,7 +16,10 @@ body {
   background: #9aa4b1;
   font-family: "Arial Narrow", "Segoe UI", Arial, sans-serif;
   font-size: 8.4pt;
-  color: #000;
+  /* (9-oct-2026, "una letra menos negra") la tinta de las letras: gris muy
+     oscuro; las líneas y los recuadros siguen en negro (ver TINTA en
+     imprimir.js, la misma para la grilla). */
+  color: #333;
   line-height: 1.32;
 }
 
@@ -103,7 +106,7 @@ body {
   border-radius: 45%;
   padding: 0 1.3mm;
 }
-.sep { color: #000; }
+.sep { color: inherit; }
 
 .chk { white-space: nowrap; }
 .chk .caja { font-size: 9.5pt; vertical-align: -1px; }

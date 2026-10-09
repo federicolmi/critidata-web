@@ -133,6 +133,14 @@ const marcaGrilla = (desc) =>
   /anest|inducc/i.test(desc) ? "X" : /ciru|opera/i.test(desc) ? "O" : null;
 
 // colores de las series (los de la pantalla, oscurecidos para el papel)
+// La TINTA de las letras (9-oct-2026, "en el diseño del parte, ¿podemos
+// poner una letra menos negra?"): un gris muy oscuro en vez del negro puro,
+// en la hoja (imprimir.html: body) y en la grilla. Con Arial Narrow no hay
+// grosor intermedio entre normal y negrita, así que la negrita de los
+// valores queda y lo que se aclara es el tono. Las líneas y los recuadros
+// del formulario siguen en negro; los colores de las series, como estaban.
+const TINTA = "#333";
+
 const COLORES = {
   nibp_sis: "#c62828",   // TAS roja
   nibp_dia: "#e07b00",   // TAD naranja
@@ -305,7 +313,7 @@ function construirGrilla(datos, vitales, eventos) {
   const lin = (x1, y1, x2, y2, g = 0.5) =>
     S.push(`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#000" stroke-width="${g}"/>`);
   const txt = (x, y, t, extra = "") =>
-    S.push(`<text x="${x}" y="${y}" ${extra}>${esc(t)}</text>`);
+    S.push(`<text x="${x}" y="${y}" ${/fill=/.test(extra) ? "" : `fill="${TINTA}" `}${extra}>${esc(t)}</text>`);
   const xCol = (i) => IZQ + i * anchoCol;
   const slotDe = (ts) => Math.min(nCol - 1, Math.max(0, Math.floor((aMs(ts) - t0) / slotMs)));
 
@@ -500,9 +508,9 @@ function construirGrilla(datos, vitales, eventos) {
   // claves apiladas en la primera columna del gráfico (única celda alta:
   // acá reemplazan a la vieja fila "Claves:" de la cabecera)
   const claves = [
-    ["Claves:", "#000"],
-    ["X Anestesia", "#000"],
-    ["O Operación", "#000"],
+    ["Claves:", TINTA],
+    ["X Anestesia", TINTA],
+    ["O Operación", TINTA],
     ["│ TA (TAS–TAD)", COLORES.nibp_sis],
     ["   (Nº = PAM)", COLORES.nibp_sis],
     ["● FC", COLORES.hr],
