@@ -66,6 +66,9 @@
       diagnostico: "Apendicitis aguda",
       operacion_propuesta: "Apendicectomía laparoscópica",
       codigo_cirugia: "07.06.02",   // inventado, como todo el parte
+      // (9-oct-2026, "en Parte, en Ver planilla de demostración solo veo
+      // Anexo V") los dos tipos: la barra ofrece "Ver como CGS"
+      tipos_parte: "anexo_v,cgs",
       asa: "3 E",  // clase + emergencia: el renglón rodea las DOS
       anestesiologos: "Dr. Demo",
       hora_ingreso: "08:00",
@@ -73,7 +76,10 @@
       quirofano: "1",
       condicion_ingreso: "Lúcido, hemodinámicamente estable, afebril.",
       vias_ingreso: ["VP"],
-      antecedentes: "Sin antecedentes patológicos de relevancia. Niega alergias.",
+      // con "Cirugías previas: …" como lo arma la app: el CGS lo separa en su
+      // renglón del Pre anestésico (9-oct-2026)
+      antecedentes: "Sin antecedentes patológicos de relevancia. Niega alergias. " +
+                    "Cirugías previas: Amigdalectomía en la infancia.",
       via_periferica_1: "18G",
       abordaje: "MSI",
       monitoreo_faaaar: "Sí",

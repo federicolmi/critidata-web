@@ -11,11 +11,27 @@ const DNI = new URLSearchParams(location.search).get("dni");
 // El TIPO DE PARTE (9-oct-2026, "sobre la base del parte vamos a diseñar otro
 // que se va a llamar CGS: no va a tener condición al ingreso ni
 // premedicación, y el área destinada a bloqueos va a tener un título (pre
-// anestésico)"): la MISMA planilla con ?tipo=cgs. Sin el parámetro (o con
-// cualquier otro), el Anexo V de siempre, idéntico.
-const TIPO = (new URLSearchParams(location.search).get("tipo") || "").toLowerCase() === "cgs"
-  ? "cgs" : "anexo_v";
-const NOMBRE_TIPO = TIPO === "cgs" ? "CGS" : "Anexo V";
+// anestésico)"): la MISMA planilla en dos tipos. Manda ?tipo= (cgs o
+// anexo_v); sin él, el que eligió la ficha ("enganchá el CGS en la ficha":
+// tipos_parte, "anexo_v,cgs"): el Anexo V si lo lleva, si no el CGS. Sin
+// nada, el Anexo V de siempre, idéntico. Lo fija render().
+const TIPO_PEDIDO = (new URLSearchParams(location.search).get("tipo") || "").toLowerCase();
+let TIPO = "anexo_v";
+let NOMBRE_TIPO = "Anexo V";
+
+/// Los tipos que eligió la ficha ("anexo_v,cgs" → ["anexo_v", "cgs"]). Puro.
+function tiposDelParte(datos) {
+  return String((datos || {}).tipos_parte || "").split(",")
+    .map((t) => t.trim().toLowerCase()).filter(Boolean);
+}
+
+/// El tipo en que sale la planilla (ver arriba). Puro.
+function elegirTipo(datos, pedido = TIPO_PEDIDO) {
+  if (pedido === "cgs" || pedido === "anexo_v") return pedido;
+  const del = tiposDelParte(datos);
+  if (!del.length || del.includes("anexo_v")) return "anexo_v";
+  return del.includes("cgs") ? "cgs" : "anexo_v";
+}
 
 // Los antecedentes y las cirugías anteriores viajan en UN renglón
 // (renglonAntecedentes de la app: "HTA, DBT. Cirugías previas: …", porque el
@@ -27,7 +43,9 @@ function partirAntecedentes(texto) {
   if (!m) return { antecedentes: t, cirugias: "" };
   return { antecedentes: m[1].trim(), cirugias: m[2].trim() };
 }
-if (Number.isInteger(ID)) document.getElementById("volver").href = `parte.html?id=${ID}`;
+if (Number.isInteger(ID) && document.getElementById("volver")) {
+  document.getElementById("volver").href = `parte.html?id=${ID}`;
+}
 
 const hoja = document.getElementById("hoja");
 const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -209,10 +227,39 @@ function fmtCriollo(v) {
 // "cuando suman 1000 mg pasara a gramos, ejemplo 1 gramo"): 1000 → "1 g",
 // 1500 → "1,5 g". Solo en las drogas y solo en mg; los fluidos siguen en
 // ml y las otras unidades (µg, UI) quedan como estan.
-function fmtDosisTotal(n, unidad) {
+// Y SIN DECIMALES (9-oct-2026, "cuando sumás el total de las drogas, sin
+// decimales"): hacia ARRIBA a la media unidad ("1,5 es 1,5, mayor es dos";
+// "2,16 es 2,5"): remifentanilo 2,16 mg → "2,5 mg", midazolam 3,6 → "4";
+// 2,5 y 2 quedan como están. Los gramos, igual ("en gramos no", el
+// decimal suelto): 1260 mg → "1,5 g", 1500 → "1,5 g", 1600 → "2 g". Lo
+// que no llega a 1 mg va en µg (dexmedetomidina 0,07 mg → "70 µg"): en mg
+// quedaría en 0,5 o en 1, un registro falso (revisión 15-sep). Y nunca un
+// 0 que no es 0: lo que redondea a 0 queda como venía, con todos sus
+// decimales. Devuelve { texto, u }: el número ya escrito y la unidad.
+function enteroOMedio(n) {
+  // con dos decimales, como se escribe: 2,004 es 2 y no sube a 2,5
+  const r2 = Math.round(n * 100) / 100;
+  return Math.ceil(r2 * 2 - 1e-9) / 2;
+}
+
+function totalSinDecimales(n, unidad) {
   const u = String(unidad || "").trim();
-  if (u === "mg" && Number.isFinite(n) && n >= 1000) return `${fmtCriollo(n / 1000)} g`;
-  return `${fmtCriollo(n)}${u ? ` ${u}` : ""}`;
+  if (u === "mg" && enteroOMedio(n) >= 1000) {
+    return { texto: fmtCriollo(enteroOMedio(n / 1000)), u: "g" };
+  }
+  if (u === "mg" && n > 0 && n < 1 && enteroOMedio(n * 1000) > 0) {
+    return { texto: fmtCriollo(enteroOMedio(n * 1000)), u: "µg" };
+  }
+  const r = enteroOMedio(n);
+  if (r === 0 && n > 0) return { texto: String(n).replace(".", ","), u };
+  return { texto: fmtCriollo(r), u };
+}
+
+function fmtDosisTotal(v, unidad) {
+  const n = typeof v === "number" ? v : Number(v);
+  const t = Number.isFinite(n) ? totalSinDecimales(n, unidad)
+                               : { texto: fmtCriollo(v), u: String(unidad || "").trim() };
+  return `${t.texto}${t.u ? ` ${t.u}` : ""}`;
 }
 
 function fmtValor(clave, v) {
@@ -490,8 +537,9 @@ function construirGrilla(datos, vitales, eventos) {
       anotarFila(ySup + f * ALTO_FILA, etq, valores, total);
     } else if (etq === "Sev %" && consumoSevo && consumoSevo.dosis != null &&
                consumoSevo.dosis !== "") {
+      // sin decimales, como los Totales de las drogas (9-oct-2026)
       anotarFila(ySup + f * ALTO_FILA, etq, datosSup[etq],
-                 `${fmtCriollo(consumoSevo.dosis)} ml`);
+                 fmtDosisTotal(consumoSevo.dosis, "ml"));
     } else {
       anotarFila(ySup + f * ALTO_FILA, etq, datosSup[etq]);
     }
@@ -807,12 +855,15 @@ function construirGrilla(datos, vitales, eventos) {
         if (Number.isFinite(n)) suma += n; else sumable = false;
       }
       if (alguna && sumable) {
-        // el Total de los bolos va pelado como siempre, salvo que sean
-        // mg y lleguen a 1000: ahi en gramos ("1 g")
-        const enGramos = sumaBolos && sumaBolos.u === "mg" && suma >= 1000;
-        const tt = enGramos ? fmtDosisTotal(suma, "mg") : fmtCriollo(suma);
+        // el Total de los bolos va pelado como siempre, hacia arriba a la
+        // media unidad (9-oct-2026); lleva unidad solo cuando cambia: mg
+        // que llegan a 1000 → "1 g", menos de 1 mg → "500 µg"
+        const uBolos = sumaBolos ? sumaBolos.u : "";
+        const t = totalSinDecimales(suma, uBolos);
+        const cambia = t.u !== uBolos;
+        const tt = cambia ? `${t.texto} ${t.u}` : t.texto;
         txt(xTot + ANCHO_TOT / 2, y + 10, tt,
-            `font-size="${enGramos ? tamTotal(tt) : 7}" font-weight="700" text-anchor="middle"`);
+            `font-size="${cambia ? tamTotal(tt) : 7}" font-weight="700" text-anchor="middle"`);
       }
     }
     lin(0, y + ALTO_DROGA, ancho, y + ALTO_DROGA, 0.35);
@@ -847,6 +898,20 @@ function fechaDelParte(parte, vitales) {
 
 function render(parte, vitales, eventos) {
   DATOS = { ...(parte.datos || {}), fecha: fechaDelParte(parte, vitales) };
+  TIPO = elegirTipo(DATOS);
+  NOMBRE_TIPO = TIPO === "cgs" ? "CGS" : "Anexo V";
+  // Si la ficha eligió los DOS tipos, la barra ofrece ver el otro.
+  const otro = document.getElementById("otro-tipo");
+  if (otro) {
+    const ambos = tiposDelParte(DATOS).includes("anexo_v") && tiposDelParte(DATOS).includes("cgs");
+    otro.hidden = !ambos;
+    if (ambos) {
+      const q = new URLSearchParams(location.search);
+      q.set("tipo", TIPO === "cgs" ? "anexo_v" : "cgs");
+      otro.href = `?${q.toString()}`;
+      otro.textContent = TIPO === "cgs" ? "Ver como Anexo V" : "Ver como CGS";
+    }
+  }
   const inst = window.ESQUEMA_FORMULARIO.institucion;
   // los eventos X/O ya quedan marcados sobre la grilla; drogas y volúmenes
   // viven en sus renglones
@@ -915,15 +980,21 @@ function render(parte, vitales, eventos) {
       </div>
       <div class="der">
         ${linea(campo("fecha", "medio"))}
-        ${linea(campo("hc_dni"))}
+        ${/* Solo "DNI" en los dos partes (9-oct-2026, "en ambos partes dejá
+              solo DNI"); el formulario de la notebook sigue con el rótulo
+              del esquema. */""}
+        ${linea(campo("hc_dni", "", "DNI"))}
       </div>
     </div>
 
     ${linea(campo("nombre"), ops("sexo"), campo("edad", "chico"),
             campo("peso", "chico", "Peso"), '<span class="et">kg</span>')}
-    ${/* En el CGS el ASA va en el recuadro "Pre anestésico" (9-oct-2026). */""}
+    ${/* En el CGS el ASA va en el recuadro "Pre anestésico" (9-oct-2026), y
+          el código de la intervención no va ("en el parte CGS el código por
+          intervención no va", 9-oct-2026). */""}
     ${linea(campo("diagnostico"), campo("operacion_propuesta"),
-            campo("codigo_cirugia", "chico", "Cód."), TIPO === "cgs" ? "" : ops("asa"))}
+            TIPO === "cgs" ? "" : campo("codigo_cirugia", "chico", "Cód."),
+            TIPO === "cgs" ? "" : ops("asa"))}
     ${linea(campo("anestesiologos"), campo("hora_ingreso", "chico"),
             campo("hora_fin", "chico"), campo("quirofano", "chico"))}
 
