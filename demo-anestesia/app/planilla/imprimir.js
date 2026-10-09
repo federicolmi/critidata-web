@@ -8,6 +8,25 @@
 // celular): la planilla del parte MAS RECIENTE de ese DNI, sin conocer el id.
 let ID = parseInt(new URLSearchParams(location.search).get("id"), 10);
 const DNI = new URLSearchParams(location.search).get("dni");
+// El TIPO DE PARTE (9-oct-2026, "sobre la base del parte vamos a diseñar otro
+// que se va a llamar CGS: no va a tener condición al ingreso ni
+// premedicación, y el área destinada a bloqueos va a tener un título (pre
+// anestésico)"): la MISMA planilla con ?tipo=cgs. Sin el parámetro (o con
+// cualquier otro), el Anexo V de siempre, idéntico.
+const TIPO = (new URLSearchParams(location.search).get("tipo") || "").toLowerCase() === "cgs"
+  ? "cgs" : "anexo_v";
+const NOMBRE_TIPO = TIPO === "cgs" ? "CGS" : "Anexo V";
+
+// Los antecedentes y las cirugías anteriores viajan en UN renglón
+// (renglonAntecedentes de la app: "HTA, DBT. Cirugías previas: …", porque el
+// Anexo V no tiene renglón aparte); el recuadro "Pre anestésico" del CGS
+// (9-oct-2026) los imprime separados. Puro.
+function partirAntecedentes(texto) {
+  const t = String(texto || "").trim();
+  const m = t.match(/^([\s\S]*?)(?:\.\s*)?Cirugías previas:\s*([\s\S]*)$/);
+  if (!m) return { antecedentes: t, cirugias: "" };
+  return { antecedentes: m[1].trim(), cirugias: m[2].trim() };
+}
 if (Number.isInteger(ID)) document.getElementById("volver").href = `parte.html?id=${ID}`;
 
 const hoja = document.getElementById("hoja");
@@ -887,7 +906,7 @@ function render(parte, vitales, eventos) {
   const ingresaUti = esArm || extubadoUti || DATOS.pasa_a === "UCI";
 
   hoja.innerHTML = `
-    <div class="anexo-titulo">${esc(inst.titulo)}</div>
+    <div class="anexo-titulo">${esc(TIPO === "cgs" ? "CGS" : inst.titulo)}</div>
 
     <div class="encabezado">
       <div class="izq">
@@ -902,17 +921,20 @@ function render(parte, vitales, eventos) {
 
     ${linea(campo("nombre"), ops("sexo"), campo("edad", "chico"),
             campo("peso", "chico", "Peso"), '<span class="et">kg</span>')}
+    ${/* En el CGS el ASA va en el recuadro "Pre anestésico" (9-oct-2026). */""}
     ${linea(campo("diagnostico"), campo("operacion_propuesta"),
-            campo("codigo_cirugia", "chico", "Cód."), ops("asa"))}
+            campo("codigo_cirugia", "chico", "Cód."), TIPO === "cgs" ? "" : ops("asa"))}
     ${linea(campo("anestesiologos"), campo("hora_ingreso", "chico"),
             campo("hora_fin", "chico"), campo("quirofano", "chico"))}
 
     <div class="fila-marcos">
-      <div class="marco crece">
+      ${/* El CGS no lleva la condición al ingreso (9-oct-2026): las vías
+            ocupan la fila. */""}
+      ${TIPO === "cgs" ? "" : `<div class="marco crece">
         <span class="et tit">Condición al Ingreso:</span>
         <div class="parrafo">${esc(DATOS.condicion_ingreso || "")}</div>
-      </div>
-      <div class="marco">
+      </div>`}
+      <div class="marco${TIPO === "cgs" ? " crece" : ""}">
         <div class="et tit">Vías de Ingreso</div>
         ${linea(checks("vias_ingreso", ""))}
         ${/* Las vias al ingreso son SOLO los casilleros (24-sep, "solo aparece
@@ -923,8 +945,10 @@ function render(parte, vitales, eventos) {
       </div>
     </div>
 
-    ${linea(titulo("Antecedentes Patológicos Condicionantes:"))}
-    <div class="parrafo bajo" style="border-bottom:1px dotted #000">${esc(DATOS.antecedentes || "")}</div>
+    ${/* En el CGS los antecedentes van en el recuadro "Pre anestésico"
+          (9-oct-2026). */""}
+    ${TIPO === "cgs" ? "" : linea(titulo("Antecedentes Patológicos Condicionantes:")) +
+      `<div class="parrafo bajo" style="border-bottom:1px dotted #000">${esc(DATOS.antecedentes || "")}</div>`}
 
     ${/* Las practicas AL INGRESO (22-sep): el renglon Comentarios de
           "Practicas efectuadas", solo si se cargo alguna. */""}
@@ -932,11 +956,17 @@ function render(parte, vitales, eventos) {
     ${linea(chkSiNo("monitoreo_faaaar"), chkSiNo("proteccion_ocular"),
             chkSiNo("proteccion_decubitos"),
             campo("ayuno_hs", "chico"), '<span class="et">hs</span>')}
-    ${linea(titulo("Premedicación:"),
-            `<span class="relleno">${esc(DATOS.premedicacion || "")}</span>`,
-            `<span class="marco-pos">${esc(DATOS.posicion || "")}</span>`)}
-    ${linea(titulo("Inducción:"),
-            `<span class="relleno">${esc(DATOS.induccion || "")}</span>`)}
+    ${/* El CGS no lleva premedicación (9-oct-2026): el recuadro de la
+          posición pasa al renglón de la inducción. */""}
+    ${TIPO === "cgs"
+      ? linea(titulo("Inducción:"),
+              `<span class="relleno">${esc(DATOS.induccion || "")}</span>`,
+              `<span class="marco-pos">${esc(DATOS.posicion || "")}</span>`)
+      : linea(titulo("Premedicación:"),
+              `<span class="relleno">${esc(DATOS.premedicacion || "")}</span>`,
+              `<span class="marco-pos">${esc(DATOS.posicion || "")}</span>`) +
+        linea(titulo("Inducción:"),
+              `<span class="relleno">${esc(DATOS.induccion || "")}</span>`)}
 
     <div class="grilla">${construirGrilla(DATOS, vitales, eventos)}</div>
 
@@ -947,7 +977,17 @@ function render(parte, vitales, eventos) {
       `<span class="relleno chico" style="flex:0 1 auto">${esc(e.descripcion)}</span>`)) : ""}
 
     <div class="pie-2col marco">
-      <div class="col">
+      ${/* En el CGS el área de los bloqueos es el PRE ANESTÉSICO (9-oct-2026,
+            "se cargan los antecedentes patológicos de la carga, cirugías
+            anteriores, ASA, todo se lo reemplaza"): sin los bloqueos. */""}
+      ${TIPO === "cgs" ? `<div class="col">
+        <div class="titulo-area">Pre anestésico</div>
+        ${linea(titulo("Antecedentes patológicos:"))}
+        <div class="parrafo bajo" style="border-bottom:1px dotted #000">${esc(partirAntecedentes(DATOS.antecedentes).antecedentes)}</div>
+        ${linea(titulo("Cirugías anteriores:"))}
+        <div class="parrafo bajo" style="border-bottom:1px dotted #000">${esc(partirAntecedentes(DATOS.antecedentes).cirugias)}</div>
+        ${linea(ops("asa"))}
+      </div>` : `<div class="col">
         ${linea(titulo("Bloqueos:"), checks("bloqueo", ""))}
         ${linea(checks("antiseptico"))}
         ${linea(campo("zona_puncion"), campo("aguja", "chico"))}
@@ -960,7 +1000,7 @@ function render(parte, vitales, eventos) {
                 campo("dosis_total", "chico"))}
         ${linea(campo("reinyecciones"))}
         ${linea(sino("cateter"), sino("dosis_prueba"))}
-      </div>
+      </div>`}
       <div class="col">
         ${linea(titulo("Vía aérea —"), opsCajas("tubo_tipo", "Tubo"),
                 campo("tubo_numero", "chico", "N°"))}
@@ -1040,7 +1080,7 @@ function render(parte, vitales, eventos) {
     <div class="leyenda-final">Conste que una copia fiel de este parte se halla
       archivada en el Servicio.</div>`;
 
-  document.title = `Parte ${ID}${DATOS.nombre ? " — " + DATOS.nombre : ""} — Anexo V`;
+  document.title = `Parte ${ID}${DATOS.nombre ? " — " + DATOS.nombre : ""} — ${NOMBRE_TIPO}`;
 }
 
 (async function arrancar() {
