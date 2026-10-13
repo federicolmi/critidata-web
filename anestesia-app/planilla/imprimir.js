@@ -943,14 +943,20 @@ function render(parte, vitales, eventos) {
   if (DATOS.pasa_a === "UTI") DATOS.pasa_a = "UCI";
   const basalAldrete = vitales.find((v) => v.nibp_sis != null);
   const esArm = window.aldreteNoCalifica(DATOS);
+  // ÓBITO (13-oct-2026, "un chip que sea óbito, eso anula la extubación y
+  // el Aldrete"): el destino dice Óbito y no hay Aldrete que calcular.
+  const esObito = DATOS.pasa_a === "Óbito";
   if (esArm) {
     DATOS.aldrete = window.ALDRETE_NO_CALIFICA;
+  } else if (esObito) {
+    DATOS.aldrete = "";
   } else if (DATOS.aldrete == null || DATOS.aldrete === "") {
     const a = window.calcularAldrete(DATOS, basalAldrete ? basalAldrete.nibp_sis : null);
     if (a != null) DATOS.aldrete = String(a);
   }
   // Los cinco items del Aldrete para el papel; en el ARM, solo el rotulo.
   const aldreteImpreso = () => {
+    if (esObito) return ['<span class="relleno"><b>Óbito</b></span>'];
     if (esArm) {
       return ['<span class="et">Aldrete:</span>',
               `<span class="relleno chico">${esc(window.ALDRETE_NO_CALIFICA)}</span>`];
@@ -1113,7 +1119,10 @@ function render(parte, vitales, eventos) {
     ${linea(titulo("Estado del paciente al finalizar la anestesia:"),
             ...aldreteImpreso())}
     ${/* Sin la hora del pase (23-sep, "pase a las hs sacalo del parte"). */""}
-    ${linea(titulo("Destino:"), opsCajas("pasa_a"), sino("requiere_o2"))}
+    ${esObito
+      ? linea(titulo("Destino:"),
+              '<span class="chk sel"><span class="caja">☑</span> <b>Óbito</b></span>')
+      : linea(titulo("Destino:"), opsCajas("pasa_a"), sino("requiere_o2"))}
 
     ${/* El cuadro de la UCI (21-sep, pedido expreso): SOLO si ingresa a
           UCI, y SOLO la opcion que dicen los datos — "ARM" si va intubado
