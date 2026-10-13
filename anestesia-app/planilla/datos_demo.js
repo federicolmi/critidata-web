@@ -77,9 +77,11 @@
       condicion_ingreso: "Lúcido, hemodinámicamente estable, afebril.",
       vias_ingreso: ["VP"],
       // con "Cirugías previas: …" como lo arma la app: el CGS lo separa en su
-      // renglón del Pre anestésico (9-oct-2026)
+      // renglón de la Evaluación pre anestésica (9-oct-2026)
       antecedentes: "Sin antecedentes patológicos de relevancia. Niega alergias. " +
                     "Cirugías previas: Amigdalectomía en la infancia.",
+      // (13-oct-2026) la observación de la evaluación pre anestésica
+      observacion_preanestesica: "Ayuno de 8 horas. Mallampati II.",
       via_periferica_1: "18G",
       abordaje: "MSI",
       monitoreo_faaaar: "Sí",

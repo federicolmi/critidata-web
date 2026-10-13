@@ -35,7 +35,7 @@ function elegirTipo(datos, pedido = TIPO_PEDIDO) {
 
 // Los antecedentes y las cirugías anteriores viajan en UN renglón
 // (renglonAntecedentes de la app: "HTA, DBT. Cirugías previas: …", porque el
-// Anexo V no tiene renglón aparte); el recuadro "Pre anestésico" del CGS
+// Anexo V no tiene renglón aparte); el recuadro "Evaluación pre anestésica" del CGS
 // (9-oct-2026) los imprime separados. Puro.
 function partirAntecedentes(texto) {
   const t = String(texto || "").trim();
@@ -989,7 +989,7 @@ function render(parte, vitales, eventos) {
 
     ${linea(campo("nombre"), ops("sexo"), campo("edad", "chico"),
             campo("peso", "chico", "Peso"), '<span class="et">kg</span>')}
-    ${/* En el CGS el ASA va en el recuadro "Pre anestésico" (9-oct-2026), y
+    ${/* En el CGS el ASA va en el recuadro "Evaluación pre anestésica" (9-oct-2026), y
           el código de la intervención no va ("en el parte CGS el código por
           intervención no va", 9-oct-2026). */""}
     ${linea(campo("diagnostico"), campo("operacion_propuesta"),
@@ -1016,7 +1016,7 @@ function render(parte, vitales, eventos) {
       </div>
     </div>
 
-    ${/* En el CGS los antecedentes van en el recuadro "Pre anestésico"
+    ${/* En el CGS los antecedentes van en el recuadro "Evaluación pre anestésica"
           (9-oct-2026). */""}
     ${TIPO === "cgs" ? "" : linea(titulo("Antecedentes Patológicos Condicionantes:")) +
       `<div class="parrafo bajo" style="border-bottom:1px dotted #000">${esc(DATOS.antecedentes || "")}</div>`}
@@ -1051,12 +1051,18 @@ function render(parte, vitales, eventos) {
       ${/* En el CGS el área de los bloqueos es el PRE ANESTÉSICO (9-oct-2026,
             "se cargan los antecedentes patológicos de la carga, cirugías
             anteriores, ASA, todo se lo reemplaza"): sin los bloqueos. */""}
+      ${/* (13-oct-2026, "antecedentes patológicos, cirugías anteriores,
+            agregar observación, son todos subtítulos de Evaluación pre
+            anestésica y debe figurar así en el parte CGS") El recuadro se
+            llama así y suma la Observación de la ficha. */""}
       ${TIPO === "cgs" ? `<div class="col">
-        <div class="titulo-area">Pre anestésico</div>
+        <div class="titulo-area">Evaluación pre anestésica</div>
         ${linea(titulo("Antecedentes patológicos:"))}
         <div class="parrafo bajo" style="border-bottom:1px dotted #000">${esc(partirAntecedentes(DATOS.antecedentes).antecedentes)}</div>
         ${linea(titulo("Cirugías anteriores:"))}
         <div class="parrafo bajo" style="border-bottom:1px dotted #000">${esc(partirAntecedentes(DATOS.antecedentes).cirugias)}</div>
+        ${linea(titulo("Observación:"))}
+        <div class="parrafo bajo" style="border-bottom:1px dotted #000">${esc(DATOS.observacion_preanestesica || "")}</div>
         ${linea(ops("asa"))}
       </div>` : `<div class="col">
         ${linea(titulo("Bloqueos:"), checks("bloqueo", ""))}
