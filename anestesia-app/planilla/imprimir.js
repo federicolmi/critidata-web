@@ -722,6 +722,13 @@ function construirGrilla(datos, vitales, eventos) {
   const yD0 = yTope;
   // la letra del Total, por largo: "10" (7), "1.33 mg" (6.4), "0.014 mg" (5.2)
   const tamTotal = (t) => t.length <= 4 ? 7 : t.length <= 7 ? 6.4 : t.length <= 11 ? 5.2 : 4.4;
+  // CADA DOSIS CON SU UNIDAD (17-oct-2026, "cada valor numérico de una
+  // dosis en el parte que vaya con su unidad de medida"): la celda horaria
+  // dice "150 mg" o "0,25 µg/kg/min" (ver el dibujo de las celdas, abajo).
+  const conUnidad = (e) => {
+    const u = String(e.unidad || "").trim();
+    return u ? `${fmtCriollo(e.dosis)} ${u}` : fmtCriollo(e.dosis);
+  };
   for (const [f, clave] of drogas.entries()) {
     const y = yTope + f * ALTO_DROGA;
     const delRenglon = eventos.filter((e) => e.tipo === "droga" && !!e.descripcion &&
@@ -766,17 +773,31 @@ function construirGrilla(datos, vitales, eventos) {
       // del monitor (o el médico) le dé su hora
       if (!conHora(e)) continue;
       const s = slotDe(e.ts);
-      let etq = e.dosis ? fmtCriollo(e.dosis) : "×";
-      if (mixto && esBolo(e) && e.dosis && e.unidad) etq = `${etq} ${String(e.unidad).trim()}`;
+      const etq = e.dosis ? conUnidad(e) : "×";
       porSlot[s] = porSlot[s] ? `${porSlot[s]}+${etq}` : etq;
     }
     for (const e of cortesDelRenglon) {
       const s = slotDe(e.ts);
       porSlot[s] = porSlot[s] ? `${porSlot[s]} corte` : "corte";
     }
-    for (const [s, t] of Object.entries(porSlot)) {
-      txt(xCol(+s) + anchoCol / 2, y + 10, t,
-          'font-size="7" font-weight="700" text-anchor="middle"');
+    // (17-oct-2026) Si entra en su columna, centrada y a letra 7, como
+    // siempre. Si no —"0,25 µg/kg/min" en columnas de 5 min—, arranca en su
+    // columna y se estira a la derecha hasta la próxima celda ocupada del
+    // renglón (en un goteo casi siempre hay varias libres), con la letra
+    // más grande que entre (~0,55 de la letra por carácter), nunca menos
+    // de 4,4: achicada a su columna sola no se leía en el papel.
+    const slots = Object.keys(porSlot).map(Number).sort((a, b) => a - b);
+    for (const [i, s] of slots.entries()) {
+      const t = porSlot[s];
+      if (0.55 * 7 * t.length <= anchoCol * 0.96) {
+        txt(xCol(s) + anchoCol / 2, y + 10, t,
+            'font-size="7" font-weight="700" text-anchor="middle"');
+        continue;
+      }
+      const hasta = i + 1 < slots.length ? slots[i + 1] : nCol;
+      const libre = (hasta - s) * anchoCol - 2;
+      const tam = Math.max(4.4, Math.min(7, libre / (0.55 * t.length)));
+      txt(xCol(s) + 1, y + 10, t, `font-size="${tam.toFixed(1)}" font-weight="700"`);
     }
     // LO QUE CORRE (15-sep, revisión): en el papel una infusión se marca
     // con una línea que va desde que se cuelga hasta que se corta. Sin
@@ -839,6 +860,8 @@ function construirGrilla(datos, vitales, eventos) {
         }
         t = tasas.join("→");
         if (t.length > 15) t = `${tasas[0]}→…→${tasas[tasas.length - 1]}`;
+        // (17-oct-2026) con su unidad
+        if (t && tasa && String(tasa.unidad || "").trim()) t = `${t} ${String(tasa.unidad).trim()}`;
         if (sumaBolos) t = `${fmtDosisTotal(sumaBolos.n, sumaBolos.u)} + ${t}`;
       }
       if (t) {
@@ -858,12 +881,12 @@ function construirGrilla(datos, vitales, eventos) {
         // el Total de los bolos va pelado como siempre, hacia arriba a la
         // media unidad (9-oct-2026); lleva unidad solo cuando cambia: mg
         // que llegan a 1000 → "1 g", menos de 1 mg → "500 µg"
+        // (17-oct-2026) y SIEMPRE con su unidad: "200 mg", "1 g", "500 µg"
         const uBolos = sumaBolos ? sumaBolos.u : "";
         const t = totalSinDecimales(suma, uBolos);
-        const cambia = t.u !== uBolos;
-        const tt = cambia ? `${t.texto} ${t.u}` : t.texto;
+        const tt = t.u ? `${t.texto} ${t.u}` : t.texto;
         txt(xTot + ANCHO_TOT / 2, y + 10, tt,
-            `font-size="${cambia ? tamTotal(tt) : 7}" font-weight="700" text-anchor="middle"`);
+            `font-size="${tamTotal(tt)}" font-weight="700" text-anchor="middle"`);
       }
     }
     lin(0, y + ALTO_DROGA, ancho, y + ALTO_DROGA, 0.35);
@@ -1107,7 +1130,9 @@ function render(parte, vitales, eventos) {
                 `<span class="relleno chico">${medianaGlobal("fr_vent") || esc(DATOS.frec_resp || "")}</span>`,
                 '<span class="et">/min</span>',
                 '<span class="et">PIP:</span>',
-                `<span class="relleno chico">${medianaGlobal("pip") || esc(DATOS.pip_cierre || "")}</span>`)}
+                `<span class="relleno chico">${medianaGlobal("pip") || esc(DATOS.pip_cierre || "")}</span>`,
+                // (17-oct-2026) con su unidad, como el ml y el /min
+                '<span class="et">cmH₂O</span>')}
       </div>
     </div>
 
