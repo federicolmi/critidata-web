@@ -108,6 +108,28 @@ function agenteDelBloqueo(d) {
   };
 }
 
+// Los casilleros de BLOQUEOS se tildan solos con la técnica (17-oct-2026,
+// revisión: el renglón Bloqueos salía con los cuatro vacíos aunque la
+// anestesia fuera una raquídea; la app no manda "bloqueo" pero sí la
+// técnica, "General, Raquídea" o "Raquídea x2"). Raquídea tilda Raquídeo y
+// así con Peridural, Plexual y Periférico, en el orden del esquema y
+// mirando solo el COMIENZO de cada técnica: "Premedicación" no matchea.
+// Si "bloqueo" existe, lo tildó alguien a mano en la ficha de la notebook
+// y manda entero, aun vacío (destildar todo es "ninguno"). Sin
+// tipo_anestesia (un parte viejo), nada.
+const BLOQUEO_POR_TECNICA = [
+  [/^perid/i, "Peridural"], [/^raqu/i, "Raquídeo"],
+  [/^plexu/i, "Plexual"], [/^perif/i, "Periférico"],
+];
+function bloqueoDelParte(d) {
+  if (d.bloqueo != null) return d.bloqueo;
+  const tecnicas = String(d.tipo_anestesia || "").split(",")
+    .map((t) => t.trim()).filter(Boolean);
+  return BLOQUEO_POR_TECNICA
+    .filter(([re]) => tecnicas.some((t) => re.test(t)))
+    .map(([, op]) => op);
+}
+
 // "Etiqueta: Op1 - Op2 - Op3" con la elegida rodeada. El ASA puede
 // traer "3 E" (clase + emergencia, 8-sep): se rodea POR TOKEN con
 // igualdad exacta — jamás substring (la lección de los checks).
@@ -260,6 +282,61 @@ function fmtDosisTotal(v, unidad) {
   const t = Number.isFinite(n) ? totalSinDecimales(n, unidad)
                                : { texto: fmtCriollo(v), u: String(unidad || "").trim() };
   return `${t.texto}${t.u ? ` ${t.u}` : ""}`;
+}
+
+// El Total de un renglón de droga, por FAMILIA de unidad (17-oct-2026,
+// revisión: morfina 100 µg intratecal + 3 mg IV imprimía "103" pelado, y
+// desde el 15-oct la lidocaína del plexo en ml se sumaba a los mg IV:
+// "120"). Es la tabla del consumo mensual (backend anestesia_consumo._canon):
+// las masas se suman entre sí (en mg), las UI entre sí y los ml entre sí;
+// otra unidad, solo con ella misma. Se convierte SOLO si hace falta: si
+// toda la familia vino en una unidad, queda esa ("1.200 µg", "2 g"); si
+// vino en más de una, pasa a la canónica y totalSinDecimales hace lo de
+// siempre (3,1 mg → "3,5 mg", hacia arriba a la media, 9-oct). Cada
+// familia con su unidad, unidas con " + ", en orden fijo: masa, UI, ml y
+// después las demás como aparecieron ("100 mg + 20 ml", nunca "120"). La
+// misma unidad escrita de dos formas (µg y mcg) no es "más de una": queda
+// como vino la primera ("1.200 µg", no 1,2 mg que subiría a "1,5 mg"). Sin
+// unidad en el dato, el número solo: no se inventa. Map y no un objeto,
+// para no tropezar con las claves del prototipo.
+const FAMILIAS_DOSIS = [
+  { u: "mg", factor: new Map([["mg", 1], ["µg", 0.001], ["μg", 0.001], ["ug", 0.001],
+                               ["mcg", 0.001], ["g", 1000], ["gr", 1000]]) },
+  { u: "UI", factor: new Map([["ui", 1], ["u.i.", 1], ["u", 1], ["uds", 1], ["unidades", 1]]) },
+  { u: "ml", factor: new Map([["ml", 1], ["cc", 1], ["cm3", 1]]) },
+];
+
+// items: [{ n, u }] → "3,5 mg", "100 mg + 20 ml", "" si no hay nada
+function totalDeDosis(items) {
+  const grupos = new Map();
+  for (const { n, u } of items) {
+    if (!Number.isFinite(n)) continue;
+    const literal = String(u ?? "").trim();
+    const clave = literal.toLowerCase();
+    const fi = FAMILIAS_DOSIS.findIndex((f) => f.factor.has(clave));
+    const k = fi >= 0 ? `f${fi}` : `o:${clave}`;
+    let g = grupos.get(k);
+    if (!g) {
+      g = { fi, orden: grupos.size, claves: new Set(), factores: new Set(),
+            primera: literal, propia: 0, canon: 0 };
+      grupos.set(k, g);
+    }
+    const f = fi >= 0 ? FAMILIAS_DOSIS[fi].factor.get(clave) : 1;
+    g.claves.add(clave);
+    g.factores.add(f);
+    g.propia += n;
+    g.canon += n * f;
+  }
+  const rango = (g) => (g.fi >= 0 ? g.fi : FAMILIAS_DOSIS.length);
+  // una sola unidad, o la misma escrita distinto (µg y mcg): como vino; con
+  // factor 1 (UI y U, cc y ml) da igual, la canónica
+  const comoVino = (g) => g.claves.size === 1 || (g.factores.size === 1 && !g.factores.has(1));
+  return [...grupos.values()]
+    .sort((a, b) => rango(a) - rango(b) || a.orden - b.orden)
+    .map((g) => (comoVino(g)
+      ? fmtDosisTotal(g.propia, g.primera)
+      : fmtDosisTotal(g.canon, FAMILIAS_DOSIS[g.fi].u)))
+    .join(" + ");
 }
 
 function fmtValor(clave, v) {
@@ -826,27 +903,21 @@ function construirGrilla(datos, vitales, eventos) {
         if (fin < t1) lin(xDe(fin), yL - 2.5, xDe(fin), yL + 1.5, 0.8);
       }
     }
-    // los bolos del renglon, sumados si todos comparten unidad (150 mg +
-    // 50 mg; un µg y un mg no se suman) — para el Total de la fila mixta
+    // los bolos del renglon con su unidad, para el Total de la fila mixta;
+    // se suman por familia de unidad (17-oct-2026, totalDeDosis): un µg con
+    // un mg sí, un ml con un mg no. Si alguno no es un número, los bolos no
+    // entran al Total, como siempre
     const bolos = delRenglon.filter((e) => esBolo(e) && e.dosis != null && e.dosis !== "");
-    const unidadesBolo = [...new Set(bolos.map((e) => String(e.unidad || "").trim()))];
-    const sumaBolos = bolos.length && unidadesBolo.length === 1 &&
-                      bolos.every((e) => Number.isFinite(Number(e.dosis)))
-      ? { n: bolos.reduce((a, e) => a + Number(e.dosis), 0), u: unidadesBolo[0] } : null;
+    const dosisBolos = bolos.every((e) => Number.isFinite(Number(e.dosis)))
+      ? bolos.map((e) => ({ n: Number(e.dosis), u: e.unidad })) : [];
     if (infusion) {
       let t = "";
       if (consumo && consumo.dosis != null && consumo.dosis !== "") {
         // el consumo calculado al cierre (mg, o UI para una infusión en
-        // UI/h); nada de sumar tasas. En la fila mixta, mas los bolos si
-        // van en la misma unidad; si no, los bolos aparte
-        const uC = consumo.unidad || "mg";
-        if (sumaBolos && sumaBolos.u === uC) {
-          t = fmtDosisTotal(sumaBolos.n + Number(consumo.dosis), uC);
-        } else if (sumaBolos) {
-          t = `${fmtDosisTotal(sumaBolos.n, sumaBolos.u)} + ${fmtDosisTotal(Number(consumo.dosis), uC)}`;
-        } else {
-          t = fmtDosisTotal(Number(consumo.dosis), uC);
-        }
+        // UI/h); nada de sumar tasas. En la fila mixta, mas los bolos de su
+        // misma familia (150 mg + 315 mg = "465 mg"; 10 µg + 0,03 mg =
+        // "40 µg"); los de otra, aparte ("150 mg + 20 ml", 17-oct-2026)
+        t = totalDeDosis([...dosisBolos, { n: Number(consumo.dosis), u: consumo.unidad || "mg" }]);
       } else {
         // sin consumo (el parte sigue abierto, un tramo sin hora, un parte
         // cerrado antes del 15-sep, o la app en producción que manda el
@@ -862,7 +933,13 @@ function construirGrilla(datos, vitales, eventos) {
         if (t.length > 15) t = `${tasas[0]}→…→${tasas[tasas.length - 1]}`;
         // (17-oct-2026) con su unidad
         if (t && tasa && String(tasa.unidad || "").trim()) t = `${t} ${String(tasa.unidad).trim()}`;
-        if (sumaBolos) t = `${fmtDosisTotal(sumaBolos.n, sumaBolos.u)} + ${t}`;
+        // los bolos delante, por familia (17-oct-2026: con bolos en dos
+        // unidades desaparecían del Total); sin ninguna tasa con dosis, los
+        // bolos solos, sin un " + " colgando
+        if (dosisBolos.length) {
+          const b = totalDeDosis(dosisBolos);
+          t = t ? `${b} + ${t}` : b;
+        }
       }
       if (t) {
         txt(xTot + ANCHO_TOT / 2, y + 10, t,
@@ -870,21 +947,21 @@ function construirGrilla(datos, vitales, eventos) {
       }
     } else {
       // dosis total en la columna Total, si todas las dosis son numéricas
-      let suma = 0, alguna = false, sumable = true;
+      const dosis = [];
+      let sumable = true;
       for (const e of delRenglon) {
         if (esConsumo(e)) continue;
-        alguna = true;
         const n = e.dosis != null && e.dosis !== "" ? Number(e.dosis) : NaN;
-        if (Number.isFinite(n)) suma += n; else sumable = false;
+        if (Number.isFinite(n)) dosis.push({ n, u: e.unidad }); else sumable = false;
       }
-      if (alguna && sumable) {
-        // el Total de los bolos va pelado como siempre, hacia arriba a la
-        // media unidad (9-oct-2026); lleva unidad solo cuando cambia: mg
-        // que llegan a 1000 → "1 g", menos de 1 mg → "500 µg"
-        // (17-oct-2026) y SIEMPRE con su unidad: "200 mg", "1 g", "500 µg"
-        const uBolos = sumaBolos ? sumaBolos.u : "";
-        const t = totalSinDecimales(suma, uBolos);
-        const tt = t.u ? `${t.texto} ${t.u}` : t.texto;
+      if (dosis.length && sumable) {
+        // hacia arriba a la media unidad (9-oct-2026), mg que llegan a 1000
+        // → "1 g", menos de 1 mg → "500 µg", SIEMPRE con su unidad
+        // (17-oct-2026) y por familia de unidad (17-oct-2026, totalDeDosis):
+        // nunca un µg sumado a un mg sin pasarlo, ni un ml a un mg
+        // (morfina 100 µg + 3 mg → "3,5 mg"; lidocaína 100 mg + 20 ml →
+        // "100 mg + 20 ml")
+        const tt = totalDeDosis(dosis);
         txt(xTot + ANCHO_TOT / 2, y + 10, tt,
             `font-size="${tamTotal(tt)}" font-weight="700" text-anchor="middle"`);
       }
@@ -964,6 +1041,9 @@ function render(parte, vitales, eventos) {
   // calcula con el estado final + TAS basal
   // Los partes de antes del 21-sep guardaron "UTI"; el papel dice UCI.
   if (DATOS.pasa_a === "UTI") DATOS.pasa_a = "UCI";
+  // los Bloqueos, de la técnica si nadie los tildó a mano (17-oct-2026);
+  // DATOS es una copia: lo guardado no cambia
+  DATOS.bloqueo = bloqueoDelParte(DATOS);
   const basalAldrete = vitales.find((v) => v.nibp_sis != null);
   const esArm = window.aldreteNoCalifica(DATOS);
   // ÓBITO (13-oct-2026, "un chip que sea óbito, eso anula la extubación y

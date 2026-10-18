@@ -250,6 +250,31 @@ window.calcularAldrete = function (datos, tasBasal) {
   return window.componentesAldrete(datos, tasBasal).total;
 };
 
+// Los casilleros de BLOQUEOS, de la técnica (17-oct-2026). Acá y no solo en
+// imprimir.js, como el Aldrete, porque la ficha de la notebook (parte.js)
+// tiene que arrancar de lo MISMO que imprime la planilla (revisión: en la
+// ficha se veían los cuatro vacíos con una "General, Raquídea" y tildar
+// Periférico para agregar un TAP guardaba solo ése: el papel perdía el
+// Raquídeo). Raquídea tilda Raquídeo y así con Peridural, Plexual y
+// Periférico, en el orden del esquema y mirando solo el COMIENZO de cada
+// técnica ("Premedicación" no matchea). Si "bloqueo" existe, lo tildó
+// alguien a mano y manda entero, aun vacío. Sin tipo_anestesia, nada.
+// (La tabla queda adentro: imprimir.js declara su propia constante global.)
+window.bloqueoDelParte = (function () {
+  const porTecnica = [
+    [/^perid/i, "Peridural"], [/^raqu/i, "Raquídeo"],
+    [/^plexu/i, "Plexual"], [/^perif/i, "Periférico"],
+  ];
+  return function (d) {
+    if (d.bloqueo != null) return d.bloqueo;
+    const tecnicas = String(d.tipo_anestesia || "").split(",")
+      .map((t) => t.trim()).filter(Boolean);
+    return porTecnica
+      .filter(([re]) => tecnicas.some((t) => re.test(t)))
+      .map(([, op]) => op);
+  };
+})();
+
 // Series del gráfico intraoperatorio (pantalla e impresión).
 // simbolo: como se marca en el parte papel; colorPantalla: solo pantalla.
 window.VITALES_GRAFICO = {
