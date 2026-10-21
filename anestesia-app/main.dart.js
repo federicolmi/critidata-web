@@ -14574,7 +14574,7 @@ if(o){q=Date.now()
 q=A.bSK(a,new A.ai(q,0,!1))
 if(q!=null)r.push(q)}if(o){q=Date.now()
 q=A.bSJ(a,new A.ai(q,0,!1))
-if(q!=null)r.push(q)}if(o&&A.byF(a,"2026-10-20T23:32:25-03:00"))r.push("Desactualizada: "+(a.fy!=null?"se actualiza sola al reiniciarla":u.d))
+if(q!=null)r.push(q)}if(o&&A.byF(a,"2026-10-21T07:39:04-03:00"))r.push("Desactualizada: "+(a.fy!=null?"se actualiza sola al reiniciarla":u.d))
 if(r.length===0)return p
 return new A.nW(p.a,p.b,p.c+"\n"+B.c.aA(r,"\n"))},
 bNT(a){var s=B.e.dL(a.a,1e6)
@@ -70205,7 +70205,7 @@ A.b_5.prototype={
 $0(){return A.US(this.b,this.a.gaE())},
 $S:0}
 A.b_6.prototype={
-$2(a,b){var s=null,r="20261021040232-a268b7f",q=A.a([B.aPe,B.uq,B.aOh,B.aOd,B.aOf,B.aOg,B.aOe,new A.ut(B.mD,"Ver datos online","Signos vitales en vivo del quir\xf3fano",new A.b_0(a),s),B.oC,new A.ut(B.rw,"Pacientes","En espera, en curso y terminados hoy",new A.b_1(a),s),B.oC,new A.ut(B.mB,"Partes anest\xe9sicos","Anexo V: los del mes, la nube y AADOB",new A.b_2(a),s),B.oC,new A.ut(B.a3n,"Consumo de drogas","Del mes y del a\xf1o, en mg y en ampollas",new A.b_3(a),s),B.oC,new A.ut(B.yN,"Riesgo anest\xe9sico","Evaluaci\xf3n prequir\xfargica",new A.b_4(a),s)],t.p)
+$2(a,b){var s=null,r="20261021105109-c57fbad",q=A.a([B.aPe,B.uq,B.aOh,B.aOd,B.aOf,B.aOg,B.aOe,new A.ut(B.mD,"Ver datos online","Signos vitales en vivo del quir\xf3fano",new A.b_0(a),s),B.oC,new A.ut(B.rw,"Pacientes","En espera, en curso y terminados hoy",new A.b_1(a),s),B.oC,new A.ut(B.mB,"Partes anest\xe9sicos","Anexo V: los del mes, la nube y AADOB",new A.b_2(a),s),B.oC,new A.ut(B.a3n,"Consumo de drogas","Del mes y del a\xf1o, en mg y en ampollas",new A.b_3(a),s),B.oC,new A.ut(B.yN,"Riesgo anest\xe9sico","Evaluaci\xf3n prequir\xfargica",new A.b_4(a),s)],t.p)
 if(A.bzs(r).length!==0)q.push(new A.S(B.a0X,A.C(A.bzs(r),B.aKv,s,s,s,s,s,s,s,s,B.aDA,s,s,s,s,s,s),s))
 return A.ea(new A.cs(new A.ae(0,1/0,b.d,1/0),A.cy(new A.cs(B.UJ,new A.S(B.a1H,A.an(q,B.p,s,B.e3,B.O,0,B.k),s),s),s,s),s),s,s,s,s,B.S)},
 $S:295}
@@ -70353,7 +70353,7 @@ A.aMl.prototype={
 $1(a){var s
 if(!a.a){s=a.b
 s=(s==null?1073741824:s)<172800}else s=!0
-return s&&A.byF(a,"2026-10-20T23:32:25-03:00")},
+return s&&A.byF(a,"2026-10-21T07:39:04-03:00")},
 $S:88}
 A.aMm.prototype={
 $0(){return A.bZ(this.a).eN("/online",null,t.X)},
@@ -75822,7 +75822,7 @@ A.bj1.prototype={
 $1(a){return B.b.cL(B.e.k(a),2,"0")},
 $S:26}
 A.bhO.prototype={
-$1(a){return"20261021040232-a268b7f"},
+$1(a){return"20261021105109-c57fbad"},
 $S:398}
 A.beB.prototype={
 $1(a){var s

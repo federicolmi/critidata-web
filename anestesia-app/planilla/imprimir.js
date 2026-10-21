@@ -78,6 +78,23 @@ function campo(id, tam = "", etiqueta = null) {
          `<span class="relleno ${tam}">${esc(Array.isArray(v) ? v.join(", ") : v ?? "")}</span>`;
 }
 
+// El CÓDIGO DE LA CIRUGÍA (21-oct-2026, "el código de la cirugía y el ASA
+// se superponen"): en el casillero fijo de 14 mm, "010101 MB, 040123 EL" se
+// partía en tres renglones y, con la letra más ancha de la nube, se montaba
+// sobre el ASA. Ahora el casillero toma el ancho de lo escrito y cada código
+// queda entero: si no entran todos, corta ENTRE códigos, nunca adentro de
+// uno, y lo que se achica es el diagnóstico o la operación.
+function codigosCirugia(id, etiqueta = null) {
+  const c = buscarCampo(id);
+  const v = crudo(id);
+  const lista = (Array.isArray(v) ? v : String(v ?? "").split(","))
+    .map((s) => String(s).trim()).filter(Boolean);
+  const texto = lista.map((s) => `<span class="un-codigo" style="white-space:nowrap">${esc(s)}</span>`)
+    .join(", ");
+  return `<span class="et">${esc(etiqueta ?? c.etiqueta)}:</span>` +
+         `<span class="relleno codigos" style="flex:0 1 auto;min-width:14mm">${texto}</span>`;
+}
+
 // El AGENTE y la DOSIS del cuadro de BLOQUEOS (27-sep, pedido expreso:
 // "el sevorane figura en el parte en el area de bloqueos"): ese renglon
 // es el anestesico local del bloqueo, no el mantenimiento de la General.
@@ -1102,8 +1119,9 @@ function render(parte, vitales, eventos) {
           el código de la intervención no va ("en el parte CGS el código por
           intervención no va", 9-oct-2026). */""}
     ${linea(campo("diagnostico"), campo("operacion_propuesta"),
-            TIPO === "cgs" ? "" : campo("codigo_cirugia", "chico", "Cód."),
-            TIPO === "cgs" ? "" : ops("asa"))}
+            TIPO === "cgs" ? "" : codigosCirugia("codigo_cirugia", "Cód."),
+            // (21-oct-2026) "ASA:" y sus opciones juntos: si no entran, bajan enteros
+            TIPO === "cgs" ? "" : `<span style="white-space:nowrap">${ops("asa")}</span>`)}
     ${linea(campo("anestesiologos"), campo("hora_ingreso", "chico"),
             campo("hora_fin", "chico"), campo("quirofano", "chico"))}
 
