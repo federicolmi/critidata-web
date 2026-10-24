@@ -240,6 +240,60 @@ function fechaBase(datos, vitales, eventos) {
   return new Date().toISOString().slice(0, 10);
 }
 
+// LOS VITALES DEL HORARIO DEL PARTE (23-oct-2026, "a las anestesias de 30
+// min, ejemplo VEDA, le carga un solo registro"): la VEDA de 10:30 a 11:00
+// —horas a mano, en turnos de media hora— traía 325 filas del cable de 09:21
+// a 10:04 y la grilla las amontonaba en su primera columna (slotDe las lleva
+// al borde): un registro de otra hora. Solo se dibujan los vitales de la hora
+// de ingreso a la de fin (su minuto entero; un fin anterior al ingreso es del
+// día siguiente, y un ingreso más de 12 h posterior al primer vital, del día
+// anterior); sin fin, desde el ingreso; sin ingreso, todos, como antes.
+const minutosDe = (hhmm) => {
+  const m = /^(\d{1,2}):(\d{2})/.exec(String(hhmm ?? "").trim());
+  return m ? Number(m[1]) * 60 + Number(m[2]) : null;
+};
+
+// LOS QUE CUENTAN (23-oct-2026, el médico: "con 'De prueba' prendido mandan
+// los de prueba, aunque el monitor registre dentro del horario del parte"):
+// con alguna fila de prueba —la ficha está en "De prueba"; en Auto la serie
+// se borra— el parte dibuja solo la serie; las del monitor quedan guardadas
+// sin contar. Sin ninguna de prueba, todas. La misma regla que la central
+// (basedatos.cuentan).
+function vitalesQueCuentan(vitales) {
+  const dePrueba = vitales.filter((v) => v.fuente === "prueba");
+  return dePrueba.length ? dePrueba : vitales;
+}
+
+// El momento del INGRESO en ms, o null sin hora de ingreso: la hora sobre la
+// fecha base, del día anterior si queda más de 12 h después del primer vital.
+// (23-oct-2026, "que una anestesia que cruza la medianoche salga con sus
+// vitales de prueba") La grilla también lo toma de acá: con el ingreso a las
+// 23:50 y la captura desde las 00:05, arrancaba a las 23:50 de ESE día y
+// amontonaba todo en su primera columna.
+function ingresoDelParte(datos, vitales, eventos) {
+  const ing = minutosDe(datos && datos.hora_ingreso);
+  if (ing == null) return null;
+  let t0 = aMs(`${fechaBase(datos, vitales, eventos)}T00:00:00`) + ing * 60000;
+  if (!Number.isFinite(t0)) return null;
+  const tiempos = vitales.map((v) => aMs(v.ts)).filter(Number.isFinite);
+  if (tiempos.length && t0 - Math.min(...tiempos) > 12 * 3600000) t0 -= 24 * 3600000;
+  return t0;
+}
+
+function vitalesDelHorario(datos, vitales, eventos) {
+  if (!vitales.length || !vitales.some((v) => Number.isFinite(aMs(v.ts)))) return vitales;
+  const t0 = ingresoDelParte(datos, vitales, eventos);
+  if (t0 == null) return vitales;
+  const ing = minutosDe(datos.hora_ingreso);
+  const fin = minutosDe(datos.hora_fin);
+  const t1 = fin == null ? Infinity
+    : t0 + ((fin - ing + 1440) % 1440) * 60000 + 59999;
+  return vitales.filter((v) => {
+    const t = aMs(v.ts);
+    return !Number.isFinite(t) || (t >= t0 && t <= t1);
+  });
+}
+
 function mediana(valores) {
   if (!valores.length) return null;
   const v = [...valores].sort((a, b) => a - b);
@@ -368,6 +422,7 @@ function fmtValor(clave, v) {
 
 function construirGrilla(datos, vitales, eventos) {
   const cfg = window.VITALES_GRAFICO;
+  vitales = vitalesDelHorario(datos, vitalesQueCuentan(vitales), eventos);   // (23-oct-2026)
   const base = fechaBase(datos, vitales, eventos);
   // Las drogas del celular SIN hora en la grilla (ubicado 0, 11-sep) no
   // definen el eje de tiempo: su ts es de registro, no de administración.
@@ -394,7 +449,7 @@ function construirGrilla(datos, vitales, eventos) {
                   ...eventos.filter(conHora).map((e) => aMs(e.ts))]
     .filter(Number.isFinite);
 
-  let t0 = datos.hora_ingreso ? aMs(`${base}T${datos.hora_ingreso}:00`) : null;
+  let t0 = ingresoDelParte(datos, vitales, eventos);
   let t1 = datos.hora_fin ? aMs(`${base}T${datos.hora_fin}:00`) : null;
   if (t0 == null) t0 = marcas.length ? Math.min(...marcas) : Date.now();
   if (t1 == null || t1 < t0) t1 = marcas.length ? Math.max(...marcas) : t0;
@@ -1015,6 +1070,9 @@ function fechaDelParte(parte, vitales) {
 
 function render(parte, vitales, eventos) {
   DATOS = { ...(parte.datos || {}), fecha: fechaDelParte(parte, vitales) };
+  // (23-oct-2026) los vitales de otra hora no van al parte: ni a la grilla
+  // ni a la ventilación ni a la TA basal del Aldrete
+  vitales = vitalesDelHorario(parte.datos || {}, vitalesQueCuentan(vitales), eventos);
   TIPO = elegirTipo(DATOS);
   NOMBRE_TIPO = TIPO === "cgs" ? "CGS" : "Anexo V";
   // Si la ficha eligió los DOS tipos, la barra ofrece ver el otro.
