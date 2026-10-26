@@ -15192,7 +15192,7 @@ if(o){q=Date.now()
 q=A.bVY(a,new A.ae(q,0,!1))
 if(q!=null)r.push(q)}if(o){q=Date.now()
 q=A.bVX(a,new A.ae(q,0,!1))
-if(q!=null)r.push(q)}if(o&&A.bWq(a,"2026-10-25T12:34:51-03:00"))r.push("Desactualizada: "+(a.fy!=null?"se actualiza sola al reiniciarla sin una anestesia en curso":"hac\xe9 el git pull una vez (despu\xe9s se actualiza sola)"))
+if(q!=null)r.push(q)}if(o&&A.bWq(a,"2026-10-26T20:33:57-03:00"))r.push("Desactualizada: "+(a.fy!=null?"se actualiza sola al reiniciarla sin una anestesia en curso":"hac\xe9 el git pull una vez (despu\xe9s se actualiza sola)"))
 if(r.length===0)return p
 return new A.o7(p.a,p.b,p.c+"\n"+B.c.av(r,"\n"))},
 bQT(a){var s=B.e.dP(a.a,1e6)
@@ -71676,7 +71676,7 @@ A.b0k.prototype={
 $0(){return A.Vz(this.b,this.a.gaA())},
 $S:0}
 A.b0l.prototype={
-$2(a,b){var s=null,r="20261025154214-4437c15",q=A.a([B.aQc,B.uF,B.aPe,B.aPb,B.aPc,B.aPd,new A.uQ(B.mM,"Ver datos online","Signos vitales en vivo del quir\xf3fano",new A.b0f(a),s),B.oS,new A.uQ(B.rM,"Pacientes","En espera, en curso y terminados hoy",new A.b0g(a),s),B.oS,new A.uQ(B.mJ,"Partes anest\xe9sicos","Anexo V: los del mes, la nube y AADOB",new A.b0h(a),s),B.oS,new A.uQ(B.a3Q,"Consumo de drogas","Del mes y del a\xf1o, en mg y en ampollas",new A.b0i(a),s),B.oS,new A.uQ(B.z4,"Riesgo anest\xe9sico","Evaluaci\xf3n prequir\xfargica",new A.b0j(a),s)],t.p)
+$2(a,b){var s=null,r="20261026233709-3a19b81",q=A.a([B.aQc,B.uF,B.aPe,B.aPb,B.aPc,B.aPd,new A.uQ(B.mM,"Ver datos online","Signos vitales en vivo del quir\xf3fano",new A.b0f(a),s),B.oS,new A.uQ(B.rM,"Pacientes","En espera, en curso y terminados hoy",new A.b0g(a),s),B.oS,new A.uQ(B.mJ,"Partes anest\xe9sicos","Anexo V: los del mes, la nube y AADOB",new A.b0h(a),s),B.oS,new A.uQ(B.a3Q,"Consumo de drogas","Del mes y del a\xf1o, en mg y en ampollas",new A.b0i(a),s),B.oS,new A.uQ(B.z4,"Riesgo anest\xe9sico","Evaluaci\xf3n prequir\xfargica",new A.b0j(a),s)],t.p)
 if(A.bCm(r).length!==0)q.push(new A.S(B.a1n,A.A(A.bCm(r),B.aLl,s,s,s,s,s,s,s,s,B.aEl,s,s,s,s,s,s),s))
 return A.ed(new A.cu(new A.ah(0,1/0,b.d,1/0),A.cz(new A.cu(B.V5,new A.S(B.a2a,A.am(q,B.o,s,B.e8,B.P,0,B.k),s),s),s,s),s),s,s,s,s,B.S)},
 $S:339}
@@ -77657,7 +77657,7 @@ A.blt.prototype={
 $1(a){return B.b.cA(B.e.k(a),2,"0")},
 $S:21}
 A.bk7.prototype={
-$1(a){return"20261025154214-4437c15"},
+$1(a){return"20261026233709-3a19b81"},
 $S:419}
 A.bgx.prototype={
 $1(a){var s

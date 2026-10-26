@@ -232,6 +232,34 @@ const titulo = (t) => `<span class="et tit">${esc(t)}</span>`;
 // ---------------------------------------------- tiempo y submuestreo
 
 const aMs = (iso) => new Date(iso).getTime();
+// ms → "AAAA-MM-DDTHH:MM:SS" en hora local (lo que lee aMs)
+const deMs = (ms) => {
+  const d = new Date(ms), p = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T` +
+         `${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+};
+const TOLERANCIA_ACOMODAR_MS = 60000;   // un minuto: las horas van sin segundos
+// el menor y el mayor sin Math.min(...lista): el cable deja decenas de miles
+// de filas en una anestesia larga y el spread tiene tope de argumentos
+const menorDe = (xs) => xs.reduce((a, b) => (b < a ? b : a), Infinity);
+const mayorDe = (xs) => xs.reduce((a, b) => (b > a ? b : a), -Infinity);
+
+// (26-oct-2026) Los vitales REALES acomodados a la ventana [t0, t1] del
+// parte (ms): si desbordan, el primero cae en t0 y el último en t1, los de
+// entre medio en proporción. Si entran, vuelven tal cual. PURA.
+function acomodarAlParte(vitales, t0, t1) {
+  const reales = vitales.filter((v) => v.fuente !== "prueba").map((v) => aMs(v.ts))
+    .filter(Number.isFinite);
+  if (!reales.length || t1 <= t0) return vitales;
+  const v0 = menorDe(reales), v1 = mayorDe(reales);
+  if (v0 >= t0 - TOLERANCIA_ACOMODAR_MS && v1 <= t1 + TOLERANCIA_ACOMODAR_MS) return vitales;
+  const escala = v1 > v0 ? (t1 - t0) / (v1 - v0) : 0;
+  return vitales.map((v) => {
+    const t = aMs(v.ts);
+    if (v.fuente === "prueba" || !Number.isFinite(t)) return v;
+    return { ...v, ts: deMs(t0 + (t - v0) * escala), tsReal: v.ts };
+  });
+}
 
 function fechaBase(datos, vitales, eventos) {
   if (vitales.length) return vitales[0].ts.slice(0, 10);
@@ -240,14 +268,10 @@ function fechaBase(datos, vitales, eventos) {
   return new Date().toISOString().slice(0, 10);
 }
 
-// LOS VITALES DEL HORARIO DEL PARTE (23-oct-2026, "a las anestesias de 30
-// min, ejemplo VEDA, le carga un solo registro"): la VEDA de 10:30 a 11:00
-// —horas a mano, en turnos de media hora— traía 325 filas del cable de 09:21
-// a 10:04 y la grilla las amontonaba en su primera columna (slotDe las lleva
-// al borde): un registro de otra hora. Solo se dibujan los vitales de la hora
-// de ingreso a la de fin (su minuto entero; un fin anterior al ingreso es del
-// día siguiente, y un ingreso más de 12 h posterior al primer vital, del día
-// anterior); sin fin, desde el ingreso; sin ingreso, todos, como antes.
+// LA HORA DE INGRESO EN MINUTOS (23-oct-2026; la VEDA de 10:30 a 11:00 con
+// 325 filas del cable de 09:21 a 10:04 se amontonaba en su primera columna,
+// slotDe las lleva al borde; ese día se dejó de dibujar lo de otra hora y
+// desde el 26-oct el registro se acomoda a las horas: acomodarAlParte).
 const minutosDe = (hhmm) => {
   const m = /^(\d{1,2}):(\d{2})/.exec(String(hhmm ?? "").trim());
   return m ? Number(m[1]) * 60 + Number(m[2]) : null;
@@ -270,35 +294,334 @@ function vitalesQueCuentan(vitales) {
 // vitales de prueba") La grilla también lo toma de acá: con el ingreso a las
 // 23:50 y la captura desde las 00:05, arrancaba a las 23:50 de ESE día y
 // amontonaba todo en su primera columna.
+// (26-oct-2026, revisión en la PC) Y para el otro lado: el ingreso a las 00:10
+// con el monitor desde las 23:58 de la víspera quedaba sobre la fecha del
+// primer vital, 24 h antes; más de 12 h ANTES del primer vital, es del día
+// siguiente.
 function ingresoDelParte(datos, vitales, eventos) {
   const ing = minutosDe(datos && datos.hora_ingreso);
   if (ing == null) return null;
   let t0 = aMs(`${fechaBase(datos, vitales, eventos)}T00:00:00`) + ing * 60000;
   if (!Number.isFinite(t0)) return null;
   const tiempos = vitales.map((v) => aMs(v.ts)).filter(Number.isFinite);
-  if (tiempos.length && t0 - Math.min(...tiempos) > 12 * 3600000) t0 -= 24 * 3600000;
+  if (tiempos.length && t0 - menorDe(tiempos) > 12 * 3600000) t0 -= 24 * 3600000;
+  else if (tiempos.length && menorDe(tiempos) - t0 > 12 * 3600000) t0 += 24 * 3600000;
   return t0;
 }
 
-function vitalesDelHorario(datos, vitales, eventos) {
-  if (!vitales.length || !vitales.some((v) => Number.isFinite(aMs(v.ts)))) return vitales;
+// LA VENTANA DEL PARTE (26-oct-2026, revisión en la PC): el ingreso y el fin
+// en ms, con las mismas reglas para la grilla y para elegir la serie. El fin
+// sigue al ingreso —ya corrido de día si hizo falta—: lo que dura de una
+// hora a la otra, y un fin antes que el ingreso es del día siguiente (el
+// cruce de la medianoche, hasta 12 h; más que eso son horas cargadas al
+// revés). Sobre la fecha del primer vital, el ingreso de anoche pasado al
+// día anterior quedaba con el fin de HOY: una grilla de 25 h, completada.
+// Fin igual al ingreso, o sin una de las dos: t1 null. `manual`: el ingreso
+// lo escribió el médico (en la app o en la central), no la máquina
+// (hora_ingreso_auto "1": el arranque de la captura o los vitales de prueba).
+// En la app las dos horas van en el mismo modo (cierre.dart).
+function ventanaDelParte(datos, vitales, eventos) {
   const t0 = ingresoDelParte(datos, vitales, eventos);
-  if (t0 == null) return vitales;
-  const ing = minutosDe(datos.hora_ingreso);
-  const fin = minutosDe(datos.hora_fin);
-  const t1 = fin == null ? Infinity
-    : t0 + ((fin - ing + 1440) % 1440) * 60000 + 59999;
-  return vitales.filter((v) => {
-    const t = aMs(v.ts);
-    return !Number.isFinite(t) || (t >= t0 && t <= t1);
-  });
+  const ing = minutosDe(datos && datos.hora_ingreso), fin = minutosDe(datos && datos.hora_fin);
+  let t1 = null;
+  if (t0 != null && fin != null) {
+    const min = fin > ing ? fin - ing : fin < ing && fin + 1440 - ing <= 12 * 60 ? fin + 1440 - ing : 0;
+    if (min > 0) t1 = t0 + min * 60000;
+  }
+  const auto = String((datos && datos.hora_ingreso_auto) ?? "").trim() === "1";
+  return { t0, t1, manual: t0 != null && !auto };
 }
+
+// (26-oct-2026) Reemplaza a vitalesDelHorario del 23-oct ("solo se dibujan los
+// vitales de la hora de ingreso a la de fin"; los de afuera no se dibujaban):
+// el médico decidió que el registro SE ACOMODA a las horas del parte
+// (acomodarAlParte), no que se descarte. Lo que sí se descarta es lo que no
+// es de esta anestesia: la PRIMERA SERIE SEGUIDA de vitales reales manda y
+// lo que llega después de un hueco de más de BRECHA_MAX_H horas (una
+// captura que fue a parar a este parte, como en cargas.ultimo_vital_seguido)
+// no se dibuja. Los de prueba siguen tal cual.
+const BRECHA_MAX_H = 6;
+function primeraSerieSeguida(vitales) {
+  const reales = vitales.filter((v) => v.fuente !== "prueba" && Number.isFinite(aMs(v.ts)))
+    .sort((a, b) => aMs(a.ts) - aMs(b.ts));
+  let corte = null;
+  for (let i = 1; i < reales.length; i++) {
+    if (aMs(reales[i].ts) - aMs(reales[i - 1].ts) > BRECHA_MAX_H * 3600000) { corte = aMs(reales[i].ts); break; }
+  }
+  if (corte == null) return vitales;
+  return vitales.filter((v) => v.fuente === "prueba" || !Number.isFinite(aMs(v.ts)) || aMs(v.ts) < corte);
+}
+
+// (26-oct-2026, revisión en la PC) LA SERIE DE ESTA ANESTESIA: la primera
+// serie seguida mandaba aunque no tuviera nada que ver con las horas del
+// parte —una prueba del monitor de 5 min a las 07:30 en el mismo parte que
+// la anestesia de 14:00 a 16:00 tiraba las 2 h reales y se estiraba sobre
+// todo el parte—. Cada serie se mide contra la ventana del parte armada CON
+// ELLA (la regla de las 12 h del ingreso mira su propio primer vital: con
+// todas juntas, la prueba de las 07:30 corría al día anterior una guardia de
+// las 20:00 y volvía a ganar). Con fin, la que más se superpone con su
+// ventana (si ninguna la toca, la más cercana); sin fin, la que contiene el
+// ingreso o la primera que empieza después (no la más larga: la del paciente
+// siguiente en un parte abierto). Sin horas, la primera, como hasta hoy.
+// Devuelve la serie y la ventana con que se eligió.
+function elegirSerie(datos, vitales, eventos) {
+  const tiempos = vitales.filter((v) => v.fuente !== "prueba").map((v) => aMs(v.ts))
+    .filter(Number.isFinite).sort((a, b) => a - b);
+  const series = [];
+  for (const t of tiempos) {
+    const ultima = series[series.length - 1];
+    if (ultima && t - ultima[1] <= BRECHA_MAX_H * 3600000) ultima[1] = t;
+    else series.push([t, t]);
+  }
+  if (series.length < 2) return { vitales, ventana: ventanaDelParte(datos, vitales, eventos) };
+  const candidatas = series.map(([a, b]) => {
+    const vs = vitales.filter((v) => v.fuente === "prueba" || !Number.isFinite(aMs(v.ts)) ||
+                                     (aMs(v.ts) >= a && aMs(v.ts) <= b));
+    return { a, b, vitales: vs, ventana: ventanaDelParte(datos, vs, eventos) };
+  });
+  const puntaje = ({ a, b, ventana: { t0, t1 } }) => {
+    if (t0 == null) return 0;
+    if (t1 != null) return Math.min(b, t1) - Math.max(a, t0);   // negativo: lo que le falta
+    return b < t0 ? -Infinity : -Math.max(0, a - t0);
+  };
+  let elegida = candidatas[0];
+  for (const c of candidatas.slice(1)) if (puntaje(c) > puntaje(elegida)) elegida = c;
+  return { vitales: elegida.vitales, ventana: elegida.ventana };
+}
+
+// LOS VITALES QUE VAN AL PARTE (26-oct-2026, revisión en la PC): los que
+// cuentan (la serie de prueba, si la hay), los de esta anestesia y, cuando
+// el registro NO se acomoda, solo los de su horario, en su hora real —la
+// regla del 23-oct—: en Auto ("si la hora es auto es auto") el fin es la
+// extubación o el Concluir, y la captura sigue hasta que el Concluir llega a
+// la central; comprimirla corría cada vital respecto de sus drogas, y lo que
+// el monitor registró después (hasta el paciente siguiente) entraba al parte.
+// También a mano sin fin (un parte abierto): del ingreso en adelante, nunca
+// amontonado en la primera columna. A mano y con fin, se acomodan en la
+// grilla (acomodarAlParte). La serie de prueba, siempre adentro de su
+// horario (las horas corregidas sin rehacer la serie la dejaban afuera).
+// Sin hora de ingreso, todos. Devuelve también la ventana del parte.
+function anestesiaDelParte(datos, vitales, eventos) {
+  const { vitales: vs, ventana } = elegirSerie(datos, vitalesQueCuentan(vitales), eventos);
+  const { t0, t1, manual } = ventana;
+  if (t0 == null) return { vitales: vs, ventana };
+  const hasta = t1 == null ? Infinity : t1 + 59999;   // el minuto entero del fin
+  const recortarReales = !(manual && t1 != null);
+  return {
+    vitales: vs.filter((v) => {
+      const t = aMs(v.ts);
+      if (!Number.isFinite(t) || (v.fuente !== "prueba" && !recortarReales)) return true;
+      return t >= t0 && t <= hasta;
+    }),
+    ventana,
+  };
+}
+function vitalesDeLaAnestesia(datos, vitales, eventos) {
+  return anestesiaDelParte(datos, vitales, eventos).vitales;
+}
+
+// Lo que trae una fila del monitor (basedatos.COLUMNAS_VITAL): una fila con
+// cualquiera de estos es captura, aunque sea solo el respirador.
+const CAMPOS_DEL_MONITOR = ["hr", "spo2", "rr", "nibp_sis", "nibp_dia", "nibp_pam",
+  "etco2", "fico2", "awrr", "sev_et", "sev_fi", "mac",
+  "peep", "pip", "pmedia", "vt", "mv", "fr_vent"];
+const tieneDato = (v) => CAMPOS_DEL_MONITOR.some((k) => v[k] != null && v[k] !== "");
 
 function mediana(valores) {
   if (!valores.length) return null;
   const v = [...valores].sort((a, b) => a - b);
   const m = v.length >> 1;
   return v.length % 2 ? v[m] : (v[m - 1] + v[m]) / 2;
+}
+
+// (26-oct-2026, con el registro acomodado a las horas del parte; decisión
+// del médico: "si la distribución supera a los 5 minutos de cada registro
+// se toman los más estables") De los vitales que cayeron en UNA columna,
+// los que entran en la cuenta de [key]: si abarcan más de 5 minutos REALES
+// (la compresión metió más de un registro en la columna, o la columna es
+// de 10 min o más), los 5 minutos reales más estables —la ventana de menor
+// amplitud máx−mín de [key]; a igual amplitud, la primera—; si no, todos.
+// La hora real es tsReal (la de antes de acomodar) o, sin acomodar, ts.
+// (26-oct-2026, revisión en la PC) Solo cuentan los TRAMOS ENTEROS de 5 min:
+// las ventanas que arrancaban sobre el final de la columna tenían una o dos
+// lecturas, una lectura sola tiene amplitud 0 y ganaba siempre: la columna
+// salía con su último valor (un pico de 103 entre 70 y 73 quedaba como "lo
+// más estable"). Una ventana entra si los datos siguen hasta su fin (con el
+// paso de la medición de margen: 10 lecturas cada 30 s cubren 5 min), tiene
+// al menos dos lecturas y está CUBIERTA —sus lecturas llegan a sus 5 min—: si
+// no, antes de cada hueco de la columna ganaban las 2 o 3 últimas lecturas
+// (el cable repite el último dato 15 s cuando se corta). Sin ninguna así
+// (una TA cada 6 min), todas. El mínimo y el máximo de la ventana van con
+// dos colas monótonas: un parte del cable de 6 h tardaba 2 s en dibujarse.
+const ESTABLES_MS = 5 * 60000;
+function masEstables(vs, key) {
+  const con = vs.filter((v) => v[key] != null);
+  if (con.length < 2) return con;
+  const filas = con.map((v) => [aMs(v.tsReal || v.ts), v]).sort((a, b) => a[0] - b[0]);
+  const n = filas.length, t = filas.map((f) => f[0]), val = filas.map((f) => f[1][key]);
+  const ultimo = t[n - 1];
+  if (ultimo - t[0] <= ESTABLES_MS) return con;
+  const paso = mediana(t.slice(1).map((x, i) => x - t[i]));
+  const colaMin = [], colaMax = [];   // índices; la cabeza en hMin / hMax
+  let hMin = 0, hMax = 0, hasta = 0;  // ventana deslizante: [i, hasta) entra en 5 min
+  let mejorI = -1, mejorHasta = -1, mejorAmp = Infinity;
+  for (let i = 0; i < n && t[i] + ESTABLES_MS <= ultimo + paso; i++) {
+    while (hasta < n && t[hasta] - t[i] <= ESTABLES_MS) {
+      while (colaMin.length > hMin && val[colaMin[colaMin.length - 1]] >= val[hasta]) colaMin.pop();
+      colaMin.push(hasta);
+      while (colaMax.length > hMax && val[colaMax[colaMax.length - 1]] <= val[hasta]) colaMax.pop();
+      colaMax.push(hasta);
+      hasta++;
+    }
+    while (colaMin[hMin] < i) hMin++;
+    while (colaMax[hMax] < i) hMax++;
+    if (hasta - i < 2 || t[hasta - 1] - t[i] < ESTABLES_MS - paso) continue;
+    const amp = val[colaMax[hMax]] - val[colaMin[hMin]];
+    if (amp < mejorAmp) { mejorAmp = amp; mejorI = i; mejorHasta = hasta; }
+  }
+  return mejorI < 0 ? con : filas.slice(mejorI, mejorHasta).map((f) => f[1]);
+}
+function medianaEstable(vs, key) { return mediana(masEstables(vs, key).map((v) => v[key])); }
+// (26-oct-2026, revisión en la PC) El sevorane Et/Fi de UNA ventana, como la
+// TA: cada gas con su propia ventana armaba una pareja de dos momentos
+// distintos. La elige el espirado (o el inspirado, si no hay espirado).
+function sevEstable(vs) {
+  const w = masEstables(vs, vs.some((v) => v.sev_et != null) ? "sev_et" : "sev_fi");
+  const de = (k) => mediana(w.map((v) => v[k]).filter((x) => x != null)) ?? medianaEstable(vs, k);
+  return { et: de("sev_et"), fi: de("sev_fi") };
+}
+
+// EL REGISTRO COMPLETO (26-oct-2026, el médico: "cuando los datos en vivo
+// capturados son en menor cantidad a los del tiempo de la anestesia,
+// autocompletá con parámetros de monitoreo similares"). El monitor que se
+// conectó tarde, se desconectó un rato o se apagó antes del fin dejaba
+// columnas vacías dentro de las horas del parte. Se completa SOLO EL TIEMPO
+// SIN CAPTURA —las columnas de la anestesia donde el monitor no dejó nada—;
+// adentro de lo capturado queda lo que midió (no se inventa una TA entre dos
+// tomas del NIBP ni un CO2 antes de intubar). Cada parámetro —FC,
+// saturación, CO2 y TA con su PAM— lo toma de sus columnas medidas: entre
+// dos, el que le toca por su lugar entre ellas; antes de la primera o
+// después de la última, el de la más cercana —si se medía en el borde de lo
+// capturado—; al ritmo con que aparece en lo capturado (el cable y la VGA
+// repiten la última TA en cada fila, así que lo capturado la muestra en cada
+// columna y lo completado también; si viniera solo en cada toma, cada tres
+// columnas de 5 con una toma cada 15 min) y con una variación chica y
+// REPETIBLE (la misma columna sale igual en la central, en la nube y en la
+// app). Como los vitales de prueba (cargas.aplicar_vitales_prueba): nunca
+// sobre un evento crítico —ese tramo queda en blanco, para la mano del
+// médico— y en un Óbito nada desde el último evento crítico (sin evento,
+// nada después de lo último medido); nada que el monitor no haya medido
+// nunca (sin una TA medida no hay TA); con la serie de prueba no hace falta,
+// ya cubre el horario. `fin`: el de la anestesia, o sin hora de fin (un
+// parte abierto) lo último medido: nunca hacia horas que no pasaron. Solo al
+// dibujar: en la base quedan los del monitor tal cual. PURA.
+const GRUPOS_COMPLETAR = [
+  { claves: ["hr"], requeridas: ["hr"], varia: { hr: 3 } },
+  { claves: ["spo2"], requeridas: ["spo2"], varia: { spo2: 1 } },
+  { claves: ["etco2"], requeridas: ["etco2"], varia: { etco2: 1 } },
+  { claves: ["nibp_sis", "nibp_dia", "nibp_pam"], requeridas: ["nibp_sis", "nibp_dia"],
+    varia: { nibp_sis: 4, nibp_dia: 3 } },
+];
+const RITMO_MAX_COLUMNAS = 6;   // la TA cada 30 min en columnas de 5, como mucho
+// un número entre 0 y 1 que depende solo del texto (FNV-1a): la variación
+// repetible, sin Math.random
+function azarRepetible(texto) {
+  let h = 2166136261;
+  for (let i = 0; i < texto.length; i++) {
+    h ^= texto.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0) / 4294967296;
+}
+function completarColumnas(vitales, eventos, ini, fin, t0, slotMs, nCol, obito = false) {
+  if (!vitales.length || vitales.some((v) => v.fuente === "prueba")) return vitales;
+  const slotDe = (v) => Math.min(nCol - 1, Math.max(0, Math.floor((aMs(v.ts) - t0) / slotMs)));
+  const conHora = vitales.filter((v) => Number.isFinite(aMs(v.ts)));
+  // captura es cualquier fila con un dato del monitor, aunque sea solo el
+  // respirador; los valores salen de las que traen el parámetro
+  const capturados = conHora.filter(tieneDato);
+  const medidos = conHora.filter((v) => GRUPOS_COMPLETAR.some((g) => g.requeridas.every((k) => v[k] != null)));
+  if (!medidos.length) return vitales;
+  // los eventos críticos, desde su hora hasta su duración (sin ella, hasta el fin)
+  const criticos = eventos.filter((e) => e.tipo === "critico" && Number.isFinite(aMs(e.ts)))
+    .map((e) => [aMs(e.ts), Number(e.duracion) > 0 ? aMs(e.ts) + Number(e.duracion) * 60000
+                                                   : Infinity]);
+  if (obito) {
+    fin = Math.min(fin, criticos.length ? mayorDe(criticos.map((c) => c[0]))
+                                        : mayorDe(capturados.map((v) => aMs(v.ts))));
+  }
+  if (!Number.isFinite(ini) || !Number.isFinite(fin) || fin < ini) return vitales;
+  const capturadas = new Set(capturados.map(slotDe));
+  const ordenCapturadas = [...capturadas].sort((a, b) => a - b);
+  const sinCaptura = [];
+  for (let i = 0; i < nCol; i++) {
+    const desde = t0 + i * slotMs, hasta = desde + slotMs;
+    if (capturadas.has(i) || desde > fin || hasta <= ini) continue;
+    if (criticos.some(([d, h]) => desde < h && hasta > d)) continue;
+    sinCaptura.push(i);
+  }
+  const nuevas = [];
+  for (const { claves, requeridas, varia } of GRUPOS_COMPLETAR) {
+    const porSlot = {};
+    for (const v of medidos) {
+      if (requeridas.some((k) => v[k] == null)) continue;
+      (porSlot[slotDe(v)] ||= []).push(v);
+    }
+    // cada columna medida con el valor que le da la grilla (sus 5 min más estables)
+    const medidas = Object.keys(porSlot).map(Number).sort((a, b) => a - b).map((s) => {
+      const vs = masEstables(porSlot[s], claves[0]);
+      const val = {};
+      for (const k of claves) val[k] = mediana(vs.map((v) => v[k]).filter((x) => x != null));
+      return { s, val };
+    });
+    if (!medidas.length) continue;
+    // el ritmo de la medición, en columnas: lo que va de una medida a la
+    // siguiente adentro de lo capturado (un corte de la captura no cuenta)
+    const pasos = medidas.slice(1).map((m, j) => m.s - medidas[j].s)
+      .filter((d, j) => {
+        for (let c = medidas[j].s + 1; c < medidas[j + 1].s; c++) if (!capturadas.has(c)) return false;
+        return true;
+      });
+    const ritmo = Math.min(RITMO_MAX_COLUMNAS, Math.max(1, Math.round(mediana(pasos) ?? 1)));
+    for (const i of sinCaptura) {
+      // cada lado vale si el parámetro se medía en el BORDE de lo capturado
+      // (a menos de su ritmo): el CO2 que empieza al intubar, a las 08:50 con
+      // el monitor desde las 08:43, no se completa para antes, ni el que
+      // termina al extubar para después
+      const bordeAntes = ordenCapturadas.filter((c) => c < i).pop();
+      const bordeDespues = ordenCapturadas.find((c) => c > i);
+      let antes = medidas.filter((m) => m.s < i).pop();
+      let despues = medidas.find((m) => m.s > i);
+      if (antes && !(bordeAntes - antes.s < ritmo)) antes = undefined;
+      if (despues && !(despues.s - bordeDespues < ritmo)) despues = undefined;
+      if (!antes && !despues) continue;
+      const cerca = !antes ? despues : !despues ? antes
+        : i - antes.s <= despues.s - i ? antes : despues;
+      if (Math.abs(i - cerca.s) % ritmo !== 0) continue;
+      const base = {};
+      for (const k of claves) {
+        const a = antes && antes.val[k], b = despues && despues.val[k];
+        base[k] = a != null && b != null ? a + (b - a) * (i - antes.s) / (despues.s - antes.s)
+          : a != null ? a : b;
+      }
+      const semilla = deMs(t0 + i * slotMs);
+      const delta = {};
+      for (const k of Object.keys(varia)) {
+        delta[k] = Math.round((azarRepetible(`${semilla}:${k}`) * 2 - 1) * varia[k]);
+      }
+      const fila = { ts: deMs(t0 + i * slotMs + slotMs / 2), fuente: "completado" };
+      for (const k of claves) {
+        if (base[k] == null) continue;
+        // la PAM sigue a la sistólica y la diastólica (PAM = D + (S − D) / 3)
+        const d = k === "nibp_pam" ? ((delta.nibp_sis || 0) + 2 * (delta.nibp_dia || 0)) / 3
+          : (delta[k] || 0);
+        fila[k] = Math.round(base[k] + d);
+      }
+      if (fila.spo2 != null) fila.spo2 = Math.min(100, fila.spo2);
+      nuevas.push(fila);
+    }
+  }
+  return nuevas.length ? [...vitales, ...nuevas] : vitales;
 }
 
 // Los numeros como se escriben ACA (21-sep, "¿no se puede poner punto en
@@ -422,7 +745,8 @@ function fmtValor(clave, v) {
 
 function construirGrilla(datos, vitales, eventos) {
   const cfg = window.VITALES_GRAFICO;
-  vitales = vitalesDelHorario(datos, vitalesQueCuentan(vitales), eventos);   // (23-oct-2026)
+  const anestesia = anestesiaDelParte(datos, vitales, eventos);   // (23 y 26-oct-2026)
+  vitales = anestesia.vitales;
   const base = fechaBase(datos, vitales, eventos);
   // Las drogas del celular SIN hora en la grilla (ubicado 0, 11-sep) no
   // definen el eje de tiempo: su ts es de registro, no de administración.
@@ -449,10 +773,40 @@ function construirGrilla(datos, vitales, eventos) {
                   ...eventos.filter(conHora).map((e) => aMs(e.ts))]
     .filter(Number.isFinite);
 
-  let t0 = ingresoDelParte(datos, vitales, eventos);
-  let t1 = datos.hora_fin ? aMs(`${base}T${datos.hora_fin}:00`) : null;
-  if (t0 == null) t0 = marcas.length ? Math.min(...marcas) : Date.now();
-  if (t1 == null || t1 < t0) t1 = marcas.length ? Math.max(...marcas) : t0;
+  // (26-oct-2026, revisión en la PC) La ventana con las reglas de
+  // ventanaDelParte: el fin sigue al ingreso, también pasada la medianoche.
+  const ventana = anestesia.ventana;
+  let t0 = ventana.t0, t1 = ventana.t1;
+  if (t0 == null) {
+    t0 = marcas.length ? menorDe(marcas) : Date.now();
+    // sin ingreso, la hora de fin sobre el día del comienzo (del siguiente si
+    // queda antes, hasta 12 h), no sobre la fecha del primer vital
+    const fin = minutosDe(datos.hora_fin);
+    if (fin != null) {
+      t1 = aMs(`${deMs(t0).slice(0, 10)}T00:00:00`) + fin * 60000;
+      if (t1 < t0) t1 = t1 + 24 * 3600000 - t0 <= 12 * 3600000 ? t1 + 24 * 3600000 : null;
+    }
+  }
+  const conFin = t1 != null && t1 > t0;
+  if (!conFin) t1 = marcas.length ? Math.max(t0, mayorDe(marcas)) : t0;
+  // (26-oct-2026, el parte 67: ficha con 08:00–09:00 cargados a mano y el
+  // monitor registrando de 08:43 a 10:46: la grilla cortaba a las 09:00 y
+  // casi dos horas de registro en vivo no salían en el parte) Decisión del
+  // médico: "si la hora es auto es auto, pero si no, el registro se tiene
+  // que acomodar a la no auto". Con las horas a mano MANDAN las horas y el
+  // registro del monitor se acomoda adentro: si los vitales reales desbordan
+  // la ventana ingreso→fin, se los estira o comprime en proporción (el
+  // primero cae a la hora de ingreso, el último a la de fin). Solo al
+  // dibujar: en la base quedan con su hora real. Los de prueba no se tocan
+  // (salen de la ficha, ya adentro de la ventana). En Auto, o sin fin, no se
+  // acomoda: vitalesDeLaAnestesia ya dejó los de su horario, en su hora.
+  if (ventana.manual && conFin) vitales = acomodarAlParte(vitales, t0, t1);
+  // la anestesia, antes de la grilla mínima; sin hora de fin (un parte
+  // abierto), hasta lo último medido
+  const iniParte = t0;
+  const finParte = conFin ? t1
+    : mayorDe(vitales.filter((v) => v.fuente !== "prueba" && tieneDato(v)).map((v) => aMs(v.ts))
+      .filter(Number.isFinite));
   if (t1 - t0 < 55 * 60000) t1 = t0 + 55 * 60000;   // grilla mínima ~1 h
 
   // columnas de 5 min como el papel; se agrandan solo si el caso es muy largo
@@ -531,6 +885,13 @@ function construirGrilla(datos, vitales, eventos) {
     S.push(`<text x="${x}" y="${y}" ${/fill=/.test(extra) ? "" : `fill="${TINTA}" `}${extra}>${esc(t)}</text>`);
   const xCol = (i) => IZQ + i * anchoCol;
   const slotDe = (ts) => Math.min(nCol - 1, Math.max(0, Math.floor((aMs(ts) - t0) / slotMs)));
+  // (26-oct-2026, revisión en la PC) lo que cae fuera de la grilla no entra
+  // por el borde: slotDe lo amontonaba en la primera o la última columna
+  const finGrilla = t0 + nCol * slotMs + 60000;
+  vitales = vitales.filter((v) => !Number.isFinite(aMs(v.ts)) ||
+                                  (aMs(v.ts) >= t0 && aMs(v.ts) <= finGrilla));
+  vitales = completarColumnas(vitales, eventos.filter(conHora), iniParte, finParte,
+                              t0, slotMs, nCol, datos.pasa_a === "Óbito");   // (26-oct-2026)
 
   lin(0, 0.5, ancho, 0.5, 0.9);   // borde superior (las claves van en el gráfico)
 
@@ -575,10 +936,10 @@ function construirGrilla(datos, vitales, eventos) {
     const porSlot = {};
     for (const v of vitales) {
       if (v[key] == null) continue;
-      (porSlot[slotDe(v.ts)] ||= []).push(v[key]);
+      (porSlot[slotDe(v.ts)] ||= []).push(v);
     }
     const out = {};
-    for (const [s, vals] of Object.entries(porSlot)) out[s] = fmtValor(key, mediana(vals));
+    for (const [s, vs] of Object.entries(porSlot)) out[s] = fmtValor(key, medianaEstable(vs, key));
     return out;
   };
   const valoresSevFila = () => {
@@ -589,8 +950,7 @@ function construirGrilla(datos, vitales, eventos) {
     }
     const out = {};
     for (const [s, vs] of Object.entries(porSlot)) {
-      const et = mediana(vs.map((v) => v.sev_et).filter((x) => x != null));
-      const fi = mediana(vs.map((v) => v.sev_fi).filter((x) => x != null));
+      const { et, fi } = sevEstable(vs);
       const t = [et, fi].filter((x) => x != null).map((x) => fmtValor("sev_et", x)).join("/");
       if (t) out[s] = t;
     }
@@ -747,10 +1107,10 @@ function construirGrilla(datos, vitales, eventos) {
     const porSlot = {};
     for (const v of vitales) {
       if (v[key] == null) continue;
-      (porSlot[slotDe(v.ts)] ||= []).push(v[key]);
+      (porSlot[slotDe(v.ts)] ||= []).push(v);
     }
     const out = {};
-    for (const [s, vals] of Object.entries(porSlot)) out[s] = mediana(vals);
+    for (const [s, vs] of Object.entries(porSlot)) out[s] = medianaEstable(vs, key);
     return out;
   };
   const series = [
@@ -765,7 +1125,8 @@ function construirGrilla(datos, vitales, eventos) {
     if (v.nibp_sis == null || v.nibp_dia == null) continue;
     (velasTA[slotDe(v.ts)] ||= []).push(v);
   }
-  for (const [s, vs] of Object.entries(velasTA)) {
+  for (const [s, vsTodos] of Object.entries(velasTA)) {
+    const vs = masEstables(vsTodos, "nibp_sis");   // la misma ventana para las tres
     const sis = mediana(vs.map((v) => v.nibp_sis));
     const dia = mediana(vs.map((v) => v.nibp_dia));
     const pams = vs.map((v) => v.nibp_pam).filter((x) => x != null);
@@ -823,8 +1184,7 @@ function construirGrilla(datos, vitales, eventos) {
   let sevAnterior = null;
   for (const s of Object.keys(sevPorSlot).map(Number).sort((a, b) => a - b)) {
     const vs = sevPorSlot[s];
-    const et = mediana(vs.map((v) => v.sev_et).filter((x) => x != null));
-    const fi = mediana(vs.map((v) => v.sev_fi).filter((x) => x != null));
+    const { et, fi } = sevEstable(vs);
     const partes = [et, fi].filter((x) => x != null).map((x) => fmtValor("sev_et", x));
     const t = partes.join("/");
     // se anota solo cuando cambia, como en el papel (si no, se pisa entre columnas)
@@ -1070,9 +1430,12 @@ function fechaDelParte(parte, vitales) {
 
 function render(parte, vitales, eventos) {
   DATOS = { ...(parte.datos || {}), fecha: fechaDelParte(parte, vitales) };
-  // (23-oct-2026) los vitales de otra hora no van al parte: ni a la grilla
-  // ni a la ventilación ni a la TA basal del Aldrete
-  vitales = vitalesDelHorario(parte.datos || {}, vitalesQueCuentan(vitales), eventos);
+  // (23-oct-2026) con la serie de prueba cuentan solo los de prueba, y lo
+  // que no es de esta anestesia no va al parte: ni a la grilla ni a la
+  // ventilación ni a la TA basal del Aldrete (26-oct: el registro de la
+  // anestesia, aunque desborde las horas, se acomoda en la grilla; la serie
+  // de esta anestesia y, en Auto, la de su horario: vitalesDeLaAnestesia)
+  vitales = vitalesDeLaAnestesia(parte.datos || {}, vitales, eventos);
   TIPO = elegirTipo(DATOS);
   NOMBRE_TIPO = TIPO === "cgs" ? "CGS" : "Anexo V";
   // Si la ficha eligió los DOS tipos, la barra ofrece ver el otro.
