@@ -9451,7 +9451,7 @@ b=B.b.q(g.b)
 if(b.length===0)continue
 b9=n.h(0,b3)
 if(b9==null||b9.length===0)n.j(0,b3,b)
-else if(B.axz.n(0,b3))n.j(0,b3,b9==="S\xed"||b==="S\xed"?"S\xed":b9)
+else if(B.axA.n(0,b3))n.j(0,b3,b9==="S\xed"||b==="S\xed"?"S\xed":b9)
 else n.j(0,b3,b9+" / "+b)}}for(b1=A.btI(g8),b1=new A.bX(b1,A.n(b1).i("bX<1,2>")).gO(0);b1.p();){g=b1.d
 b2=g.a
 if(!i.n(0,b2))n.j(0,b2,g.b)}n.j(0,"monitoreo_faaaar","S\xed")
@@ -10361,7 +10361,7 @@ p=r}if(p==null)r=""
 else{r=A.GQ(p)
 if(r==null)r=""}return new A.zK(p,r)}r=a.d
 o=A.GQ(r)
-if(o==null)return B.atN
+if(o==null)return B.atO
 n=a.w
 m=A.bC8(n)
 q=m==null?null:B.e.di(g.dT(m).a,h)
@@ -11927,7 +11927,7 @@ if(r&&A.amz(b)){r=A.blK(b,a)
 return"Va en ml: "+(r==null?"ponelo en ml":r)}if(r&&A.aml(b)==null)return"No s\xe9 de cu\xe1ntos ml es esta bolsa: ponelo en ml"
 return null},
 amz(a){var s=A.bsZ(a)
-return B.axA.n(0,s==null?null:s.a)},
+return B.axz.n(0,s==null?null:s.a)},
 bk0(a,b){var s,r
 if(!A.amz(a))return b
 s=A.bjD(b)
@@ -45375,20 +45375,20 @@ return"+549"+q},
 bKF(a,b){return!1},
 c1L(a,b,c,d,e,f){var s,r,q,p,o,n,m,l,k,j=A.a([],t.Ot),i=A.lj(d),h=i!=null
 if(h&&i<0.11506849315068493)j.push(B.avC)
-if(h&&i>=80)j.push(B.at5)
-if(f!=null&&h&&i>=12)if(f>=40)j.push(B.avt)
+if(h&&i>=80)j.push(B.at7)
+if(f!=null&&h&&i>=12)if(f>=40)j.push(B.avu)
 else if(f>=30)j.push(B.asJ)
-switch(b){case"Muerte cerebral":j.push(B.atr)
+switch(b){case"Muerte cerebral":j.push(B.ats)
 break
 case"Coma":case"Estupor":case"Intubado de UTI":case"Inconsciente":case"Intubado":j.push(new A.x(4,"conciencia: "+b.toLowerCase()))
 break
 case"Obnubilaci\xf3n":case"Confusi\xf3n":case"Somnoliento":case"Excitado":j.push(new A.x(3,"conciencia alterada ("+b.toLowerCase()+")"))
-break}if(e==="Inestable")j.push(B.auF)
+break}if(e==="Inestable")j.push(B.auG)
 if(c==="S\xed")j.push(B.asz)
 s=h&&i<16
 for(h=a.length,r=0;r<a.length;a.length===h||(0,A.h)(a),++r){q=B.b.q(a[r])
-if(s&&q==="Diabetes tipo 1"){j.push(B.aub)
-continue}if(s&&q==="V\xeda a\xe9rea dif\xedcil conocida"){j.push(B.atF)
+if(s&&q==="Diabetes tipo 1"){j.push(B.auc)
+continue}if(s&&q==="V\xeda a\xe9rea dif\xedcil conocida"){j.push(B.atG)
 continue}p=B.amh.h(0,q)
 o=p==null?q:q+" ("+p+")"
 if(B.axD.n(0,q))j.push(new A.x(4,o))
@@ -67018,13 +67018,13 @@ if(r!=null)return r
 q=b.a
 A:{j=m
 if(B.yz===q){j=new A.x("Para corregir: "+b.b,B.bV)
-break A}if(c){j=B.atI
+break A}if(c){j=B.atJ
 break A}p=B.mv===q
 if(!p){o=B.dF===q
 n=o}else{o=m
-n=!0}if(n&&d){j=B.av1
+n=!0}if(n&&d){j=B.av2
 break A}if(p){j=B.aso
-break A}if(B.k_===q){j=B.atx
+break A}if(B.k_===q){j=B.aty
 break A}if(o)break A}if(j==null)return B.a_
 return A.B(j.a,new A.C("envio-"+l,t.O),m,m,m,m,m,m,m,m,A.bO(m,m,j.b,m,m,m,m,m,m,m,m,m,m,m,B.a9,m,m,!0,m,m,m,m,m,m,m,m),m,m,m,m,m,m)},
 aHs(a,b){var s,r,q,p,o,n,m,l,k,j,i,h=null
@@ -67072,10 +67072,10 @@ n=n===!0}else n=!0
 else n=!1
 if(n)return A.a([A.B(u.k,new A.C("aadob-"+a.a,t.O),k,k,k,k,k,k,k,k,B.eV,k,k,k,k,k,k)],t.p)
 A:{if("presentado"===s){p=new A.x(B.b.q("Enviado a AADOB "+A.bt7(r)),B.dC)
-break A}if("a_verificar"===s){p=B.av0
-break A}if("pendiente"===s){p=B.auL
+break A}if("a_verificar"===s){p=B.av1
+break A}if("pendiente"===s){p=B.auM
 break A}l=s==null
-if(l&&!p){p=B.au9
+if(l&&!p){p=B.aua
 break A}if(l){p=k
 break A}p=new A.x("AADOB: cargado "+A.bsU(r)+", a confirmar",B.bK)
 break A}return A.a([A.B(p.a,new A.C("aadob-"+a.a,t.O),k,k,k,k,k,k,k,k,A.bO(k,k,p.b,k,k,k,k,k,k,k,k,k,k,k,B.a9,k,k,!0,k,k,k,k,k,k,k,k),k,k,k,k,k,k)],t.p)},
@@ -68908,7 +68908,7 @@ if(s==null)s=B.anW
 s=s.h(0,B.b.cc(b,1))
 return new A.x(B.fo,s==null?B.fn:s)}s=this.gaz().V($.kz(),t.wB).h(0,a)
 r=(s==null?B.bM:s).h(0,b)
-if(r==null)return B.atl
+if(r==null)return B.atm
 return new A.x(A.bjj(r.h(0,"cambios_dosis")),A.bjm(r.h(0,"goteos")))},
 Ol(a,b,c,d){this.D(new A.aQD(this,this.d8.bE(a,new A.aQE()),b,c,d,a))},
 a4x(a,b,c){var s,r,q,p=this.d8.bE(a,new A.aSq()),o=A.aa(t.N)
@@ -69226,14 +69226,14 @@ return g},
 a0y(){var s,r,q,p,o,n,m,l,k,j,i=this,h=i.er.a.a
 if(B.b.q(h).length===0)return B.PW
 s=A.c_B(h)
-if(s==null)return B.asT
+if(s==null)return B.asV
 r=A.lj(i.as.a.a)
-if(r==null)return B.av7
-if(r<18)return B.ata
+if(r==null)return B.av8
+if(r<18)return B.atc
 h=B.b.q(i.ay.a.a)
 q=A.dH(A.a5(h,",","."))
 if(q==null||q<=0)return B.asM
-if(i.dy.length===0)return B.ava
+if(i.dy.length===0)return B.avb
 p=i.ga51()
 h=B.b.q(i.ch.a.a)
 o=A.c0x(p,q,A.dH(A.a5(h,",",".")))
@@ -69450,7 +69450,7 @@ if(n!==0)o.push(B.a4)
 o.push(A.jw(j,f.h(0,"fluidos")))
 p=k.rx
 n=k.gnY()
-p=A.a_(k.a70(k.a_J(i,p),i,'Cristaloides y coloides infundidos, en mililitros o en bolsas ("2 u"; la fisiol\xf3gica, solo en ml): al parte va el total en ml.',p,"fluido",i,i,n),t.l7)
+p=A.a_(k.a70(k.a_J(i,p),i,'Cristaloides y coloides infundidos, en mililitros (los coloides tambi\xe9n en bolsas, "1 u"): al parte va el total en ml.',p,"fluido",i,i,n),t.l7)
 m=k.ry
 B.c.F(p,k.a70(k.a_J(h,m),h,'Unidades transfundidas (sedimento globular, plasma, plaquetas, crioprecipitados, alb\xfamina), en unidades ("2 u") o en mililitros: al parte va el total en ml.',m,"hemoderivado",h,h,n))
 B.c.F(o,p)
@@ -69584,7 +69584,7 @@ return A.kY(s,f,B.aMt,B.a2n,f,f,!1)},
 aH2(a){var s,r,q,p,o,n,m,l,k,j,i=null
 switch(a.f.a){case 0:s=B.avK
 break
-case 1:s=B.at0
+case 1:s=B.at2
 break
 case 2:s=B.avH
 break
@@ -74011,7 +74011,7 @@ A.b1U.prototype={
 $0(){return A.Wi(this.b,this.a.gaz())},
 $S:0}
 A.b1V.prototype={
-$2(a,b){var s=null,r="20261028010653-00898d2",q=A.a([B.aRI,B.uX,B.aQK,B.aQH,B.aQI,B.aQJ,new A.vf(B.mV,"Ver datos online","Signos vitales en vivo del quir\xf3fano",new A.b1P(a),s),B.p4,new A.vf(B.t_,"Pacientes","En espera, en curso y terminados hoy",new A.b1Q(a),s),B.p4,new A.vf(B.mS,"Partes anest\xe9sicos","Anexo V: los del mes, la nube y AADOB",new A.b1R(a),s),B.p4,new A.vf(B.a4t,"Consumo de drogas","Del mes y del a\xf1o, en mg y en ampollas",new A.b1S(a),s),B.p4,new A.vf(B.zr,"Riesgo anest\xe9sico","Evaluaci\xf3n prequir\xfargica",new A.b1T(a),s)],t.p)
+$2(a,b){var s=null,r="20261029215834-54d917e",q=A.a([B.aRI,B.uX,B.aQK,B.aQH,B.aQI,B.aQJ,new A.vf(B.mV,"Ver datos online","Signos vitales en vivo del quir\xf3fano",new A.b1P(a),s),B.p4,new A.vf(B.t_,"Pacientes","En espera, en curso y terminados hoy",new A.b1Q(a),s),B.p4,new A.vf(B.mS,"Partes anest\xe9sicos","Anexo V: los del mes, la nube y AADOB",new A.b1R(a),s),B.p4,new A.vf(B.a4t,"Consumo de drogas","Del mes y del a\xf1o, en mg y en ampollas",new A.b1S(a),s),B.p4,new A.vf(B.zr,"Riesgo anest\xe9sico","Evaluaci\xf3n prequir\xfargica",new A.b1T(a),s)],t.p)
 if(A.bG1(r).length!==0)q.push(new A.S(B.a1M,A.B(A.bG1(r),B.aML,s,s,s,s,s,s,s,s,B.aFq,s,s,s,s,s,s),s))
 return A.e2(new A.cv(new A.ak(0,1/0,b.d,1/0),A.cB(new A.cv(B.Vx,new A.S(B.a2B,A.an(q,B.o,s,B.ee,B.O,0,B.k),s),s),s,s),s),s,s,s,s,B.Q)},
 $S:229}
@@ -79073,12 +79073,12 @@ h=j.a
 if(h==null){o=Date.now()
 n=k?"jpg":"pdf"
 h=A.btv(p.d,new A.ab(o,0,!1),n)}e.a=e.b=null
-A:{if(B.jm===a){o=B.ate
+A:{if(B.jm===a){o=B.atg
 break A}if(B.jn===a){o=B.ass
-break A}if(B.q1===a){o=B.auO
-break A}if(B.lh===a){o=B.atp
-break A}if(B.jo===a){o=B.asY
-break A}if(B.fP===a||B.hU===a){o=B.atn
+break A}if(B.q1===a){o=B.auP
+break A}if(B.lh===a){o=B.atq
+break A}if(B.jo===a){o=B.at_
+break A}if(B.fP===a||B.hU===a){o=B.ato
 break A}o=B.asE
 break A}e.b=o.a
 e.a=o.b
@@ -80504,7 +80504,7 @@ A.bor.prototype={
 $1(a){return B.b.cm(B.e.k(a),2,"0")},
 $S:20}
 A.bmO.prototype={
-$1(a){return"20261028010653-00898d2"},
+$1(a){return"20261029215834-54d917e"},
 $S:448}
 A.biL.prototype={
 $1(a){var s
@@ -93230,7 +93230,7 @@ r.toString
 a.$1(r)}},
 asA(a,b,c){var s,r,q,p,o,n,m,l,k,j,i,h=null,g=this.dO$,f=g.h(0,B.dW)
 A:{if(f instanceof A.H){f=new A.x(c.$2(f,a),b.$2(f,a))
-break A}if(f==null){f=B.atC
+break A}if(f==null){f=B.atD
 break A}f=h}s=f.a
 r=h
 q=f.b
@@ -110097,9 +110097,9 @@ for(q=q.tq(k),m=q.length,i=0;i<q.length;q.length===m||(0,A.h)(q),++i){h=q[i]
 j.push(new A.M(h.a,h.b,h.c,h.d))}A:{if(a0){q=B.asu
 break A}q=l
 g=q
-if(q){q=B.avr
+if(q){q=B.avs
 break A}q=!1===g
-if(q){q=B.au8
+if(q){q=B.au9
 break A}q=a}f=q.a
 e=a
 d=q.b
@@ -117847,7 +117847,7 @@ h8(a){return this.c.$1(a)}}
 A.aox.prototype={
 ae6(a,b,c){return a.AX(b,c)},
 aTT(a,b,c){if(a.AZ(b,c))return new A.x(!0,a.AX(b,c))
-return B.auy}}
+return B.auz}}
 A.vQ.prototype={
 a1(){return new A.Pc(A.aa(t.od),new A.L())}}
 A.aoy.prototype={
@@ -123009,13 +123009,13 @@ A.F6.prototype={}
 A.acp.prototype={}
 A.asu.prototype={
 acK(a,b){var s,r,q={},p=a.gqc().gvK().eE(0),o=q.a=q.b=null
-switch(b.a){case 0:o=B.avo
+switch(b.a){case 0:o=B.avp
 break
-case 2:o=B.avp
+case 2:o=B.avq
 break
-case 3:o=B.aux
+case 3:o=B.auy
 break
-case 1:o=B.auz
+case 1:o=B.auA
 break}s=o.a
 q.b=s
 r=o.b
@@ -131228,13 +131228,13 @@ return!1}return!0},
 C5(){this.fr.C5()
 this.SS()},
 SS(){var s,r,q,p,o,n,m=this,l=m.w
-switch(l.a.c.a){case 0:s=B.av2
+switch(l.a.c.a){case 0:s=B.av3
 break
-case 2:s=B.auD
+case 2:s=B.auE
 break
-case 3:s=B.aus
+case 3:s=B.aut
 break
-case 1:s=B.auj
+case 1:s=B.auk
 break
 default:s=null}r=s.a
 q=null
@@ -154443,11 +154443,11 @@ B.a7n=s(["d, MMMM y, EEEE","d MMMM, y","d MMM, y","dd-MM-yy"],t.s)
 B.a7o=s(["y('e')'ko' MMMM'ren' d('a'), EEEE","y('e')'ko' MMMM'ren' d('a')","y('e')'ko' MMM d('a')","yy/M/d"],t.s)
 B.asj=new A.x(12,2.5)
 B.avJ=new A.x(25,2.6)
-B.asS=new A.x(40,2.1)
-B.avx=new A.x(60,1.7)
+B.asT=new A.x(40,2.1)
+B.avy=new A.x(60,1.7)
 B.asI=new A.x(70,1.5)
-B.asU=new A.x(80,1.4)
-B.Ak=s([B.asj,B.avJ,B.asS,B.avx,B.asI,B.asU],t.UO)
+B.asW=new A.x(80,1.4)
+B.Ak=s([B.asj,B.avJ,B.asT,B.avy,B.asI,B.asW],t.UO)
 B.a7p=s(["\u0c15\u0c4d\u0c30\u0c40\u0c2a\u0c42","\u0c15\u0c4d\u0c30\u0c40\u0c36"],t.s)
 B.a7q=s(["EEEE, d MMMM y\u202f'\u0433'.","d MMMM y\u202f'\u0433'.","d.M.y\u202f'\u0433'.","d.M.yy"],t.s)
 B.Al=s(["\u0906\u0907\u0924","\u0938\u094b\u092e","\u092e\u0919\u094d\u0917\u0932","\u092c\u0941\u0927","\u092c\u093f\u0939\u093f","\u0936\u0941\u0915\u094d\u0930","\u0936\u0928\u093f"],t.s)
@@ -154565,22 +154565,22 @@ B.a8K=s(["\u091c\u0928","\u092b\u0947\u0947\u092c","\u092e\u093e\u0930\u094d\u09
 B.a8N=s(["H:mm:ss, zzzz","H:mm:ss z","H:mm:ss","H:mm"],t.s)
 B.a8O=s([65533],t.t)
 B.AZ=s(["ned","pon","uto","sre","\u010det","pet","sub"],t.s)
-B.av5=new A.x("paciente","Paciente")
-B.auQ=new A.x("ingreso","Ingreso")
-B.atO=new A.x("antecedentes","Evaluaci\xf3n pre anest\xe9sica")
-B.auW=new A.x("laboratorio","Laboratorio")
-B.atc=new A.x("cirugia","Cirug\xeda y ASA")
-B.auU=new A.x("vias","V\xedas y posici\xf3n")
-B.avw=new A.x("via_aerea","V\xeda a\xe9rea")
-B.auN=new A.x("anestesias","Mis anestesias")
+B.av6=new A.x("paciente","Paciente")
+B.auR=new A.x("ingreso","Ingreso")
+B.atP=new A.x("antecedentes","Evaluaci\xf3n pre anest\xe9sica")
+B.auX=new A.x("laboratorio","Laboratorio")
+B.ate=new A.x("cirugia","Cirug\xeda y ASA")
+B.auV=new A.x("vias","V\xedas y posici\xf3n")
+B.avx=new A.x("via_aerea","V\xeda a\xe9rea")
+B.auO=new A.x("anestesias","Mis anestesias")
 B.asB=new A.x("fluidos","Fluidos y hemoderivados")
-B.atH=new A.x("tiempo_real","Tiempo real")
-B.avh=new A.x("durante","Drogas durante")
-B.aug=new A.x("eventos","Pr\xe1cticas y eventos")
-B.aul=new A.x("diuresis","Diuresis")
+B.atI=new A.x("tiempo_real","Tiempo real")
+B.avi=new A.x("durante","Drogas durante")
+B.auh=new A.x("eventos","Pr\xe1cticas y eventos")
+B.aum=new A.x("diuresis","Diuresis")
 B.avA=new A.x("finalizacion","Finalizaci\xf3n")
-B.avf=new A.x("tipo_parte","Tipo de parte")
-B.n8=s([B.av5,B.auQ,B.atO,B.auW,B.atc,B.auU,B.avw,B.auN,B.asB,B.atH,B.avh,B.aug,B.aul,B.avA,B.avf],t.c)
+B.avg=new A.x("tipo_parte","Tipo de parte")
+B.n8=s([B.av6,B.auR,B.atP,B.auX,B.ate,B.auV,B.avx,B.auO,B.asB,B.atI,B.avi,B.auh,B.aum,B.avA,B.avg],t.c)
 B.B_=s(["dom","lun","mar","mer","gio","ven","sab"],t.s)
 B.a8T=s(["\u05e8\u05d1\u05e2\u05d5\u05df 1","\u05e8\u05d1\u05e2\u05d5\u05df 2","\u05e8\u05d1\u05e2\u05d5\u05df 3","\u05e8\u05d1\u05e2\u05d5\u05df 4"],t.s)
 B.B0=s(["1.","2.","3.","4.","5.","6.","7.","8.","9.","10.","11.","12."],t.s)
@@ -155024,101 +155024,101 @@ B.Cb=s(["s\xf8n.","man.","tirs.","ons.","tors.","fre.","l\xf8r."],t.s)
 B.Cc=s(["\u7d00\u5143\u524d","\u897f\u66a6"],t.s)
 B.Cd=s(["\u0a9c\u0abe","\u0aab\u0ac7","\u0aae\u0abe","\u0a8f","\u0aae\u0ac7","\u0a9c\u0ac2","\u0a9c\u0ac1","\u0a91","\u0ab8","\u0a91","\u0aa8","\u0aa1\u0abf"],t.s)
 B.avE=new A.x("hipertension pulmonar","Hipertensi\xf3n pulmonar")
-B.asP=new A.x("htp","Hipertensi\xf3n pulmonar")
-B.auI=new A.x("hipertiroid","Hipertiroidismo")
-B.auJ=new A.x("hipotiroid","Hipotiroidismo")
+B.asQ=new A.x("htp","Hipertensi\xf3n pulmonar")
+B.auJ=new A.x("hipertiroid","Hipertiroidismo")
+B.auK=new A.x("hipotiroid","Hipotiroidismo")
 B.avB=new A.x("hipertermia",u.c)
 B.asy=new A.x("hta","Hipertensi\xf3n arterial")
-B.aum=new A.x("hipertens","Hipertensi\xf3n arterial")
-B.asX=new A.x("diabetes tipo 1","Diabetes tipo 1")
-B.atS=new A.x("dbt1","Diabetes tipo 1")
-B.at4=new A.x("insulinodep","Diabetes tipo 1")
+B.aun=new A.x("hipertens","Hipertensi\xf3n arterial")
+B.asZ=new A.x("diabetes tipo 1","Diabetes tipo 1")
+B.atT=new A.x("dbt1","Diabetes tipo 1")
+B.at6=new A.x("insulinodep","Diabetes tipo 1")
 B.avG=new A.x("diabet","Diabetes tipo 2")
-B.avn=new A.x("dbt","Diabetes tipo 2")
-B.auk=new A.x("dislip","Dislipemia")
-B.aue=new A.x("colesterol","Dislipemia")
-B.at3=new A.x("insuficiencia cardiaca","Insuficiencia card\xedaca")
+B.avo=new A.x("dbt","Diabetes tipo 2")
+B.aul=new A.x("dislip","Dislipemia")
+B.auf=new A.x("colesterol","Dislipemia")
+B.at5=new A.x("insuficiencia cardiaca","Insuficiencia card\xedaca")
 B.asK=new A.x("icc","Insuficiencia card\xedaca")
-B.att=new A.x("fibrilacion","Fibrilaci\xf3n auricular")
-B.au2=new A.x("arritmia","Arritmias")
-B.asV=new A.x("valvul","Valvulopat\xeda")
-B.atU=new A.x("marcapasos","Marcapasos / CDI")
-B.avl=new A.x("cdi","Marcapasos / CDI")
+B.atu=new A.x("fibrilacion","Fibrilaci\xf3n auricular")
+B.au3=new A.x("arritmia","Arritmias")
+B.asX=new A.x("valvul","Valvulopat\xeda")
+B.atV=new A.x("marcapasos","Marcapasos / CDI")
+B.avm=new A.x("cdi","Marcapasos / CDI")
 B.ast=new A.x("coronar","Cardiopat\xeda isqu\xe9mica / angina")
-B.atg=new A.x("angina","Cardiopat\xeda isqu\xe9mica / angina")
-B.ato=new A.x("isquem","Cardiopat\xeda isqu\xe9mica / angina")
-B.auT=new A.x("infarto","Infarto (IAM) hace >3 meses")
+B.ath=new A.x("angina","Cardiopat\xeda isqu\xe9mica / angina")
+B.atp=new A.x("isquem","Cardiopat\xeda isqu\xe9mica / angina")
+B.auU=new A.x("infarto","Infarto (IAM) hace >3 meses")
 B.asG=new A.x("iam","Infarto (IAM) hace >3 meses")
-B.av9=new A.x("acv","ACV/TIA hace >3 meses")
-B.avb=new A.x("tia","ACV/TIA hace >3 meses")
-B.auH=new A.x("tvp","TVP / TEP previo")
-B.auY=new A.x("tep","TVP / TEP previo")
-B.atD=new A.x("trombo","TVP / TEP previo")
-B.auv=new A.x("epoc","EPOC")
-B.au4=new A.x("asma","Asma")
-B.atd=new A.x("apnea","SAHOS (apnea del sue\xf1o)")
-B.auh=new A.x("sahos","SAHOS (apnea del sue\xf1o)")
-B.auA=new A.x("ex tabaq","Ex tabaquista")
-B.ath=new A.x("ex fumador","Ex tabaquista")
-B.avm=new A.x("tabaq","Tabaquismo")
-B.auC=new A.x("fumador","Tabaquismo")
-B.avd=new A.x("dialisis","Di\xe1lisis")
-B.atV=new A.x("renal","Enfermedad renal cr\xf3nica")
-B.atu=new A.x("erc","Enfermedad renal cr\xf3nica")
+B.ava=new A.x("acv","ACV/TIA hace >3 meses")
+B.avc=new A.x("tia","ACV/TIA hace >3 meses")
+B.auI=new A.x("tvp","TVP / TEP previo")
+B.auZ=new A.x("tep","TVP / TEP previo")
+B.atE=new A.x("trombo","TVP / TEP previo")
+B.auw=new A.x("epoc","EPOC")
+B.au5=new A.x("asma","Asma")
+B.atf=new A.x("apnea","SAHOS (apnea del sue\xf1o)")
+B.aui=new A.x("sahos","SAHOS (apnea del sue\xf1o)")
+B.auB=new A.x("ex tabaq","Ex tabaquista")
+B.ati=new A.x("ex fumador","Ex tabaquista")
+B.avn=new A.x("tabaq","Tabaquismo")
+B.auD=new A.x("fumador","Tabaquismo")
+B.ave=new A.x("dialisis","Di\xe1lisis")
+B.atW=new A.x("renal","Enfermedad renal cr\xf3nica")
+B.atv=new A.x("erc","Enfermedad renal cr\xf3nica")
 B.asx=new A.x("irc","Enfermedad renal cr\xf3nica")
-B.auR=new A.x("cirrosis","Hepatopat\xeda / cirrosis")
+B.auS=new A.x("cirrosis","Hepatopat\xeda / cirrosis")
 B.asL=new A.x("hepat","Hepatopat\xeda / cirrosis")
-B.avq=new A.x("reflujo","Reflujo gastroesof\xe1gico")
+B.avr=new A.x("reflujo","Reflujo gastroesof\xe1gico")
 B.asv=new A.x("rge","Reflujo gastroesof\xe1gico")
-B.auG=new A.x("ulcera","\xdalcera / gastritis")
-B.atJ=new A.x("gastritis","\xdalcera / gastritis")
-B.atb=new A.x("epileps","Epilepsia / convulsiones")
+B.auH=new A.x("ulcera","\xdalcera / gastritis")
+B.atK=new A.x("gastritis","\xdalcera / gastritis")
+B.atd=new A.x("epileps","Epilepsia / convulsiones")
 B.asA=new A.x("convuls","Epilepsia / convulsiones")
-B.av6=new A.x("parkinson","Parkinson")
+B.av7=new A.x("parkinson","Parkinson")
 B.avF=new A.x("demencia","Deterioro cognitivo / demencia")
-B.asR=new A.x("alzheimer","Deterioro cognitivo / demencia")
-B.av_=new A.x("cognitiv","Deterioro cognitivo / demencia")
-B.aty=new A.x("depres","Depresi\xf3n / ansiedad")
+B.asS=new A.x("alzheimer","Deterioro cognitivo / demencia")
+B.av0=new A.x("cognitiv","Deterioro cognitivo / demencia")
+B.atz=new A.x("depres","Depresi\xf3n / ansiedad")
 B.asw=new A.x("ansied","Depresi\xf3n / ansiedad")
-B.avc=new A.x("miasten","Miastenia gravis")
-B.au0=new A.x("anticoag","Anticoagulado")
-B.avy=new A.x("warfarina","Anticoagulado")
-B.atX=new A.x("acenocumarol","Anticoagulado")
-B.au1=new A.x("apixab","Anticoagulado")
-B.avg=new A.x("rivaroxab","Anticoagulado")
-B.aui=new A.x("dabigat","Anticoagulado")
-B.auu=new A.x("enoxaparina","Anticoagulado")
-B.au_=new A.x("antiagreg","Antiagregado")
-B.aud=new A.x("clopidogrel","Antiagregado")
-B.au5=new A.x("aspirina","Antiagregado")
-B.atW=new A.x("aas","Antiagregado")
-B.atZ=new A.x("anemia","Anemia")
+B.avd=new A.x("miasten","Miastenia gravis")
+B.au1=new A.x("anticoag","Anticoagulado")
+B.avz=new A.x("warfarina","Anticoagulado")
+B.atY=new A.x("acenocumarol","Anticoagulado")
+B.au2=new A.x("apixab","Anticoagulado")
+B.avh=new A.x("rivaroxab","Anticoagulado")
+B.auj=new A.x("dabigat","Anticoagulado")
+B.auv=new A.x("enoxaparina","Anticoagulado")
+B.au0=new A.x("antiagreg","Antiagregado")
+B.aue=new A.x("clopidogrel","Antiagregado")
+B.au6=new A.x("aspirina","Antiagregado")
+B.atX=new A.x("aas","Antiagregado")
+B.au_=new A.x("anemia","Anemia")
 B.asD=new A.x("quimio","Quimioterapia / inmunosupresi\xf3n")
 B.asN=new A.x("inmunosup","Quimioterapia / inmunosupresi\xf3n")
 B.asi=new A.x("trasplant","Quimioterapia / inmunosupresi\xf3n")
-B.atL=new A.x("oncol","Oncol\xf3gico activo")
-B.atq=new A.x("cancer","Oncol\xf3gico activo")
-B.auK=new A.x("hiv","HIV")
-B.avv=new A.x("vih","HIV")
-B.auc=new A.x("chagas","Chagas")
+B.atM=new A.x("oncol","Oncol\xf3gico activo")
+B.atr=new A.x("cancer","Oncol\xf3gico activo")
+B.auL=new A.x("hiv","HIV")
+B.avw=new A.x("vih","HIV")
+B.aud=new A.x("chagas","Chagas")
 B.ask=new A.x("artritis reum","Artritis reumatoidea")
-B.atB=new A.x("latex","Alergia al l\xe1tex")
-B.avu=new A.x("alergi","Alergias medicamentosas")
-B.atR=new A.x("via aerea dificil","V\xeda a\xe9rea dif\xedcil conocida")
-B.asZ=new A.x("intubacion dificil","V\xeda a\xe9rea dif\xedcil conocida")
-B.at9=new A.x("nausea","N\xe1useas/v\xf3mitos postoperatorios previos")
-B.atk=new A.x("vomito","N\xe1useas/v\xf3mitos postoperatorios previos")
-B.auo=new A.x("nvpo","N\xe1useas/v\xf3mitos postoperatorios previos")
-B.atY=new A.x("alcohol","Alcoholismo")
-B.auw=new A.x("etilis","Alcoholismo")
-B.aup=new A.x("cocaina","Consumo de drogas")
-B.atG=new A.x("marihuana","Consumo de drogas")
+B.atC=new A.x("latex","Alergia al l\xe1tex")
+B.avv=new A.x("alergi","Alergias medicamentosas")
+B.atS=new A.x("via aerea dificil","V\xeda a\xe9rea dif\xedcil conocida")
+B.at0=new A.x("intubacion dificil","V\xeda a\xe9rea dif\xedcil conocida")
+B.atb=new A.x("nausea","N\xe1useas/v\xf3mitos postoperatorios previos")
+B.atl=new A.x("vomito","N\xe1useas/v\xf3mitos postoperatorios previos")
+B.aup=new A.x("nvpo","N\xe1useas/v\xf3mitos postoperatorios previos")
+B.atZ=new A.x("alcohol","Alcoholismo")
+B.aux=new A.x("etilis","Alcoholismo")
+B.auq=new A.x("cocaina","Consumo de drogas")
+B.atH=new A.x("marihuana","Consumo de drogas")
 B.avD=new A.x("cannabis","Consumo de drogas")
-B.aua=new A.x("adicc","Consumo de drogas")
-B.atK=new A.x("drogas","Consumo de drogas")
-B.aut=new A.x("embaraz","Embarazo")
-B.av3=new A.x("obes","Obesidad")
-B.abh=s([B.avE,B.asP,B.auI,B.auJ,B.avB,B.asy,B.aum,B.asX,B.atS,B.at4,B.avG,B.avn,B.auk,B.aue,B.at3,B.asK,B.att,B.au2,B.asV,B.atU,B.avl,B.ast,B.atg,B.ato,B.auT,B.asG,B.av9,B.avb,B.auH,B.auY,B.atD,B.auv,B.au4,B.atd,B.auh,B.auA,B.ath,B.avm,B.auC,B.avd,B.atV,B.atu,B.asx,B.auR,B.asL,B.avq,B.asv,B.auG,B.atJ,B.atb,B.asA,B.av6,B.avF,B.asR,B.av_,B.aty,B.asw,B.avc,B.au0,B.avy,B.atX,B.au1,B.avg,B.aui,B.auu,B.au_,B.aud,B.au5,B.atW,B.atZ,B.asD,B.asN,B.asi,B.atL,B.atq,B.auK,B.avv,B.auc,B.ask,B.atB,B.avu,B.atR,B.asZ,B.at9,B.atk,B.auo,B.atY,B.auw,B.aup,B.atG,B.avD,B.aua,B.atK,B.aut,B.av3],t.c)
+B.aub=new A.x("adicc","Consumo de drogas")
+B.atL=new A.x("drogas","Consumo de drogas")
+B.auu=new A.x("embaraz","Embarazo")
+B.av4=new A.x("obes","Obesidad")
+B.abh=s([B.avE,B.asQ,B.auJ,B.auK,B.avB,B.asy,B.aun,B.asZ,B.atT,B.at6,B.avG,B.avo,B.aul,B.auf,B.at5,B.asK,B.atu,B.au3,B.asX,B.atV,B.avm,B.ast,B.ath,B.atp,B.auU,B.asG,B.ava,B.avc,B.auI,B.auZ,B.atE,B.auw,B.au5,B.atf,B.aui,B.auB,B.ati,B.avn,B.auD,B.ave,B.atW,B.atv,B.asx,B.auS,B.asL,B.avr,B.asv,B.auH,B.atK,B.atd,B.asA,B.av7,B.avF,B.asS,B.av0,B.atz,B.asw,B.avd,B.au1,B.avz,B.atY,B.au2,B.avh,B.auj,B.auv,B.au0,B.aue,B.au6,B.atX,B.au_,B.asD,B.asN,B.asi,B.atM,B.atr,B.auL,B.avw,B.aud,B.ask,B.atC,B.avv,B.atS,B.at0,B.atb,B.atl,B.aup,B.atZ,B.aux,B.auq,B.atH,B.avD,B.aub,B.atL,B.auu,B.av4],t.c)
 B.abj=s(["1e kwartaal","2e kwartaal","3e kwartaal","4e kwartaal"],t.s)
 B.abk=s(["de.","du."],t.s)
 B.abl=s(["i. e.","i. sz."],t.s)
@@ -155275,10 +155275,10 @@ B.CY=s(["dum.","lun.","mar.","mie.","joi","vin.","s\xe2m."],t.s)
 B.acN=s(["\u1325\u12cb\u1275","\u12a8\u1230\u12d3\u1275"],t.s)
 B.acQ=s(["\u0442\u04a3","\u0442\u043a"],t.s)
 B.iy=s(["S","M","D","M","D","F","S"],t.s)
-B.aun=new A.x("droga","Drogas")
-B.auB=new A.x("fluido","Fluidos")
-B.auP=new A.x("hemoderivado","Hemoderivados transfundidos")
-B.CZ=s([B.aun,B.auB,B.auP],t.c)
+B.auo=new A.x("droga","Drogas")
+B.auC=new A.x("fluido","Fluidos")
+B.auQ=new A.x("hemoderivado","Hemoderivados transfundidos")
+B.CZ=s([B.auo,B.auC,B.auQ],t.c)
 B.Vc=new A.Xo(2,"outer")
 B.xg=new A.D(0.09803921568627451,0,0,0,B.h)
 B.j=new A.l(0,0)
@@ -155439,24 +155439,24 @@ B.ae4=s(["tremujori I","tremujori II","tremujori III","tremujori IV"],t.s)
 B.ae5=s(["Su.","M.","Tu.","W.","Th.","F.","Sa."],t.s)
 B.ae6=s(["\u0441\u0442\u0443\u0434\u0437\u0435\u043d\u044c","\u043b\u044e\u0442\u044b","\u0441\u0430\u043a\u0430\u0432\u0456\u043a","\u043a\u0440\u0430\u0441\u0430\u0432\u0456\u043a","\u043c\u0430\u0439","\u0447\u044d\u0440\u0432\u0435\u043d\u044c","\u043b\u0456\u043f\u0435\u043d\u044c","\u0436\u043d\u0456\u0432\u0435\u043d\u044c","\u0432\u0435\u0440\u0430\u0441\u0435\u043d\u044c","\u043a\u0430\u0441\u0442\u0440\u044b\u0447\u043d\u0456\u043a","\u043b\u0456\u0441\u0442\u0430\u043f\u0430\u0434","\u0441\u043d\u0435\u0436\u0430\u043d\u044c"],t.s)
 B.DK=s(["nedelja","ponedeljek","torek","sreda","\u010detrtek","petek","sobota"],t.s)
-B.at1=new A.x("posicion","Posici\xf3n")
-B.auE=new A.x("ayuno_hs","Refiere ayuno")
+B.at3=new A.x("posicion","Posici\xf3n")
+B.auF=new A.x("ayuno_hs","Refiere ayuno")
 B.asq=new A.x("proteccion_ocular","Protecci\xf3n ocular")
 B.asp=new A.x("proteccion_decubitos","Protecci\xf3n de dec\xfabitos")
 B.PY=new A.x("vias_comentario","Comentarios de las v\xedas")
-B.ae7=s([B.at1,B.auE,B.asq,B.asp,B.PY],t.c)
+B.ae7=s([B.at3,B.auF,B.asq,B.asp,B.PY],t.c)
 B.DL=s(["\u092a\u0939\u093f\u0932\u094b \u0924\u094d\u0930\u0948\u092e\u093e\u0938\u093f\u0915","\u0926\u094b\u0938\u094d\u0930\u094b \u0924\u094d\u0930\u0948\u092e\u093e\u0938\u093f\u0915","\u0924\u0947\u0938\u094d\u0930\u094b \u0924\u094d\u0930\u0948\u092e\u093e\u0938\u093f\u0915","\u091a\u094c\u0925\u094b \u0924\u094d\u0930\u0948\u092e\u093e\u0938\u093f\u0915"],t.s)
 B.DM=s(["domingo","segunda","ter\xe7a","quarta","quinta","sexta","s\xe1bado"],t.s)
 B.ae8=s(["1er trimestre","2.\xba trimestre","3.\xba trimestre","4.\xba trimestre"],t.s)
 B.ae9=s(["pr. Kr.","po. Kr."],t.s)
 B.aea=s(["Sul","Llun","Maw","Mer","Iau","Gwen","Sad"],t.s)
 B.iA=s(["1\uc6d4","2\uc6d4","3\uc6d4","4\uc6d4","5\uc6d4","6\uc6d4","7\uc6d4","8\uc6d4","9\uc6d4","10\uc6d4","11\uc6d4","12\uc6d4"],t.s)
-B.at8=new A.x("moviliza_msup","Moviliza miembros superiores")
+B.ata=new A.x("moviliza_msup","Moviliza miembros superiores")
 B.asO=new A.x("moviliza_minf","Moviliza miembros inferiores")
-B.atv=new A.x("depresion_respiratoria","Depresi\xf3n respiratoria")
-B.auV=new A.x("obedece_ordenes","Obedece \xf3rdenes")
+B.atw=new A.x("depresion_respiratoria","Depresi\xf3n respiratoria")
+B.auW=new A.x("obedece_ordenes","Obedece \xf3rdenes")
 B.avI=new A.x("estimulos_dolorosos","Responde a est\xedmulos dolorosos")
-B.DN=s([B.at8,B.asO,B.atv,B.auV,B.avI],t.c)
+B.DN=s([B.ata,B.asO,B.atw,B.auW,B.avI],t.c)
 B.aef=s(["\u0441","\u043b","\u0431","\u043a","\u0442","\u0447","\u043b","\u0441","\u0432","\u0436","\u043b","\u0433"],t.s)
 B.nv=s(["D","S","T","Q","Q","S","S"],t.s)
 B.aeg=s(["a. C.","d. C."],t.s)
@@ -155976,23 +155976,23 @@ B.aiO=s(["\u099c\u09be\u09a8\u09c1","\u09ab\u09c7\u09ac","\u09ae\u09be\u09b0\u09
 B.aiP=s(["quirofano","qfn","q"],t.s)
 B.aiS=s([45,95,45,20,45,90,45,45,45],t.n)
 B.aiT=s(["y MMMM d, EEEE","y MMMM d","y MMM d","y-MM-dd"],t.s)
-B.au7=new A.x("nombre","Apellido y nombre")
-B.aur=new A.x("edad","Edad")
-B.avi=new A.x("sexo","Sexo")
-B.au6=new A.x("peso","Peso (kg)")
-B.atm=new A.x("diagnostico","Diagn\xf3stico")
-B.ave=new A.x("operacion_propuesta","Operaci\xf3n propuesta")
-B.avk=new A.x("codigo_cirugia","C\xf3digo de cirug\xeda")
-B.auX=new A.x("anestesiologos","Anestesi\xf3logo")
-B.au3=new A.x("asa","ASA")
-B.atM=new A.x("antecedentes","Antecedentes y cirug\xedas anteriores")
-B.auZ=new A.x("observacion_preanestesica","Observaci\xf3n")
-B.ats=new A.x("tipo_intervencion","Tipo de intervenci\xf3n")
-B.at7=new A.x("hora_ingreso","Hora de ingreso")
-B.av4=new A.x("hora_fin","Hora de fin")
+B.au8=new A.x("nombre","Apellido y nombre")
+B.aus=new A.x("edad","Edad")
+B.avj=new A.x("sexo","Sexo")
+B.au7=new A.x("peso","Peso (kg)")
+B.atn=new A.x("diagnostico","Diagn\xf3stico")
+B.avf=new A.x("operacion_propuesta","Operaci\xf3n propuesta")
+B.avl=new A.x("codigo_cirugia","C\xf3digo de cirug\xeda")
+B.auY=new A.x("anestesiologos","Anestesi\xf3logo")
+B.au4=new A.x("asa","ASA")
+B.atN=new A.x("antecedentes","Antecedentes y cirug\xedas anteriores")
+B.av_=new A.x("observacion_preanestesica","Observaci\xf3n")
+B.att=new A.x("tipo_intervencion","Tipo de intervenci\xf3n")
+B.at9=new A.x("hora_ingreso","Hora de ingreso")
+B.av5=new A.x("hora_fin","Hora de fin")
 B.asF=new A.x("pasa_a","Pasa a")
-B.auf=new A.x("comentarios","Comentarios")
-B.FU=s([B.au7,B.aur,B.avi,B.au6,B.atm,B.ave,B.avk,B.auX,B.au3,B.atM,B.auZ,B.ats,B.at7,B.av4,B.asF,B.PY,B.auf],t.c)
+B.aug=new A.x("comentarios","Comentarios")
+B.FU=s([B.au8,B.aus,B.avj,B.au7,B.atn,B.avf,B.avl,B.auY,B.au4,B.atN,B.av_,B.att,B.at9,B.av5,B.asF,B.PY,B.aug],t.c)
 B.FV=s(["led","\xfano","b\u0159e","dub","kv\u011b","\u010dvn","\u010dvc","srp","z\xe1\u0159","\u0159\xedj","lis","pro"],t.s)
 B.aiU=s([120,120,20,45,20,15,20,120,120],t.n)
 B.FW=s(["antes de Cristo","depois de Cristo"],t.s)
@@ -156160,20 +156160,20 @@ B.akk=s(["\u043f\u0440\u0435 \u043d\u043e\u0432\u0435 \u0435\u0440\u0435","\u043
 B.akl=s(["\u043f\u0440. \u043d. \u0435.","\u043d. \u0435."],t.s)
 B.akm=s([0.015176349177441876,0.045529047532325624,0.07588174588720938,0.10623444424209313,0.13658714259697685,0.16693984095186062,0.19729253930674434,0.2276452376616281,0.2579979360165119,0.28835063437139563,0.3188300904430532,0.350925934958123,0.3848314933096426,0.42057480301049466,0.458183274052838,0.4976837250274023,0.5391024159806381,0.5824650784040898,0.6277969426914107,0.6751227633498623,0.7244668422128921,0.775853049866786,0.829304845476233,0.8848452951698498,0.942497089126609,1.0022825574869039,1.0642236851973577,1.1283421258858297,1.1946592148522128,1.2631959812511864,1.3339731595349034,1.407011200216447,1.4823302800086415,1.5599503113873272,1.6398909516233677,1.7221716113234105,1.8068114625156377,1.8938294463134073,1.9832442801866852,2.075074464868551,2.1693382909216234,2.2660538449872063,2.36523901573795,2.4669114995532007,2.5710888059345764,2.6777882626779785,2.7870270208169257,2.898822059350997,3.0131901897720907,3.1301480604002863,3.2497121605402226,3.3718988244681087,3.4967242352587946,3.624204428461639,3.754355295633311,3.887192587735158,4.022731918402185,4.160988767090289,4.301978482107941,4.445716283538092,4.592217266055746,4.741496401646282,4.893568542229298,5.048448422192488,5.20615066083972,5.3666897647573375,5.5300801301023865,5.696336044816294,5.865471690767354,6.037501145825082,6.212438385869475,6.390297286737924,6.571091626112461,6.7548350853498045,6.941541251256611,7.131223617812143,7.323895587840543,7.5195704746346665,7.7182615035334345,7.919981813454504,8.124744458384042,8.332562408825165,8.543448553206703,8.757415699253682,8.974476575321063,9.194643831691977,9.417930041841839,9.644347703669503,9.873909240696694,10.106627003236781,10.342513269534024,10.58158024687427,10.8238400726681,11.069304815507364,11.317986476196008,11.569896988756009,11.825048221409341,12.083451977536606,12.345119996613247,12.610063955123938,12.878295467455942,13.149826086772048,13.42466730586372,13.702830557985108,13.984327217668513,14.269168601521828,14.55736596900856,14.848930523210871,15.143873411576273,15.44220572664832,15.743938506781891,16.04908273684337,16.35764934889634,16.66964922287304,16.985093187232053,17.30399201960269,17.62635644741625,17.95219714852476,18.281524751807332,18.614349837764564,18.95068293910138,19.290534541298456,19.633915083172692,19.98083495742689,20.331304511189067,20.685334046541502,21.042933821039977,21.404114048223256,21.76888489811322,22.137256497705877,22.50923893145328,22.884842241736916,23.264076429332462,23.6469514538663,24.033477234264016,24.42366364919083,24.817520537484558,25.21505769858089,25.61628489293138,26.021211842414342,26.429848230738664,26.842203703840827,27.258287870275353,27.678110301598522,28.10168053274597,28.529008062403893,28.96010235337422,29.39497283293396,29.83362889318845,30.276079891419332,30.722335150426627,31.172403958865512,31.62629557157785,32.08401920991837,32.54558406207592,33.010999283389665,33.4802739966603,33.953417292456834,34.430438229418264,34.911345834551085,35.39614910352207,35.88485700094671,36.37747846067349,36.87402238606382,37.37449765026789,37.87891309649659,38.38727753828926,38.89959975977785,39.41588851594697,39.93615253289054,40.460400508064545,40.98864111053629,41.520882981230194,42.05713473317016,42.597404951718396,43.141702194811224,43.6900349931913,44.24241185063697,44.798841244188324,45.35933162437017,45.92389141541209,46.49252901546552,47.065252796817916,47.64207110610409,48.22299226451468,48.808024568002054,49.3971762874833,49.9904556690408,50.587870934119984,51.189430279724725,51.79514187861014,52.40501387947288,53.0190544071392,53.637271562750364,54.259673423945976,54.88626804504493,55.517063457223934,56.15206766869424,56.79128866487574,57.43473440856916,58.08241284012621,58.734331877617365,59.39049941699807,60.05092333227251,60.715611475655585,61.38457167773311,62.057811747619894,62.7353394731159,63.417162620860914,64.10328893648692,64.79372614476921,65.48848194977529,66.18756403501224,66.89098006357258,67.59873767827808,68.31084450182222,69.02730813691093,69.74813616640164,70.47333615344107,71.20291564160104,71.93688215501312,72.67524319850172,73.41800625771542,74.16517879925733,74.9167682708136,75.67278210128072,76.43322770089146,77.1981124613393,77.96744375590167,78.74122893956174,79.51947534912904,80.30219030335869,81.08938110306934,81.88105503125999,82.67721935322541,83.4778813166706,84.28304815182372,85.09272707154808,85.90692527145302,86.72564993000343,87.54890820862819,88.3767072518277,89.2090541872801,90.04595612594655,90.88742016217518,91.73345337380438,92.58406282226491,93.43925555268066,94.29903859396902,95.16341895893969,96.03240364439274,96.9059996312159,97.78421388448044,98.6670533535366,99.55452497210776],t.n)
 B.GA=s(["Domh","Luan","M\xe1irt","C\xe9ad","D\xe9ar","Aoine","Sath"],t.s)
-B.auq=new A.x(0.7078,8.3194)
-B.at6=new A.x(0.7895,2.4523)
-B.avs=new A.x(0.8379,1.8528)
+B.aur=new A.x(0.7078,8.3194)
+B.at8=new A.x(0.7895,2.4523)
+B.avt=new A.x(0.8379,1.8528)
 B.asC=new A.x(0.8701,1.6891)
-B.atP=new A.x(0.8932,1.5806)
-B.asQ=new A.x(0.9107,1.5043)
-B.at2=new A.x(0.9244,1.447)
-B.asW=new A.x(0.9355,1.4037)
-B.atQ=new A.x(0.9448,1.3701)
+B.atQ=new A.x(0.8932,1.5806)
+B.asR=new A.x(0.9107,1.5043)
+B.at4=new A.x(0.9244,1.447)
+B.asY=new A.x(0.9355,1.4037)
+B.atR=new A.x(0.9448,1.3701)
 B.asr=new A.x(0.9526,1.3431)
-B.atw=new A.x(0.9594,1.3212)
-B.atT=new A.x(0.9653,1.3032)
-B.auS=new A.x(0.9705,1.288)
-B.GB=s([B.auq,B.at6,B.avs,B.asC,B.atP,B.asQ,B.at2,B.asW,B.atQ,B.asr,B.atw,B.atT,B.auS],t.UO)
+B.atx=new A.x(0.9594,1.3212)
+B.atU=new A.x(0.9653,1.3032)
+B.auT=new A.x(0.9705,1.288)
+B.GB=s([B.aur,B.at8,B.avt,B.asC,B.atQ,B.asR,B.at4,B.asY,B.atR,B.asr,B.atx,B.atU,B.auT],t.UO)
 B.ako=s(["\u09aa\u09cd\u09f0\u09a5\u09ae \u09a4\u09bf\u09a8\u09bf\u09ae\u09be\u09b9","\u09a6\u09cd\u09ac\u09bf\u09a4\u09c0\u09af\u09bc \u09a4\u09bf\u09a8\u09bf\u09ae\u09be\u09b9","\u09a4\u09c3\u09a4\u09c0\u09af\u09bc \u09a4\u09bf\u09a8\u09bf\u09ae\u09be\u09b9","\u099a\u09a4\u09c1\u09f0\u09cd\u09a5 \u09a4\u09bf\u09a8\u09bf\u09ae\u09be\u09b9"],t.s)
 B.GC=s(["sk","pr","an","tr","kt","pn","\u0161t"],t.s)
 B.GD=s(["januar","februar","marec","april","maj","junij","julij","avgust","september","oktober","november","december"],t.s)
@@ -156825,8 +156825,8 @@ B.amc=new A.dA([B.kK,B.qc],t.Fp)
 B.ays=new A.aT(B.cU,!0,!1,!1,!1,B.K)
 B.ayt=new A.aT(B.cT,!0,!1,!1,!1,B.K)
 B.o9=new A.dA([B.ays,B.wE,B.ayt,B.wF],t.Fp)
-B.apg={Vasoactivos:0,Antihipertensivos:1}
-B.amd=new A.a8(B.apg,["hipotension","hipertension"],t.w)
+B.aph={Vasoactivos:0,Antihipertensivos:1}
+B.amd=new A.a8(B.aph,["hipotension","hipertension"],t.w)
 B.ayJ=new A.aT(B.cj,!1,!1,!1,!1,B.K)
 B.ayd=new A.aT(B.cj,!1,!0,!1,!1,B.K)
 B.QG=new A.aT(B.ck,!1,!1,!1,!1,B.K)
@@ -157013,7 +157013,7 @@ B.abB=s(["amiodar","adenos","metoprol","propranol","diltiaz","verapam"],t.s)
 B.anR=new A.a8(B.apF,[B.act,B.aeK,B.adf,B.abB],t.VJ)
 B.apD={"iso_8859-1:1987":0,"iso-ir-100":1,"iso_8859-1":2,"iso-8859-1":3,latin1:4,l1:5,ibm819:6,cp819:7,csisolatin1:8,"iso-ir-6":9,"ansi_x3.4-1968":10,"ansi_x3.4-1986":11,"iso_646.irv:1991":12,"iso646-us":13,"us-ascii":14,us:15,ibm367:16,cp367:17,csascii:18,ascii:19,csutf8:20,"utf-8":21}
 B.anS=new A.a8(B.apD,[B.dA,B.dA,B.dA,B.dA,B.dA,B.dA,B.dA,B.dA,B.dA,B.de,B.de,B.de,B.de,B.de,B.de,B.de,B.de,B.de,B.de,B.de,B.ag,B.ag],A.ax("a8<c,ti>"))
-B.aph={addressCity:0,addressCityAndState:1,addressState:2,birthday:3,birthdayDay:4,birthdayMonth:5,birthdayYear:6,countryCode:7,countryName:8,creditCardExpirationDate:9,creditCardExpirationDay:10,creditCardExpirationMonth:11,creditCardExpirationYear:12,creditCardFamilyName:13,creditCardGivenName:14,creditCardMiddleName:15,creditCardName:16,creditCardNumber:17,creditCardSecurityCode:18,creditCardType:19,email:20,familyName:21,fullStreetAddress:22,gender:23,givenName:24,impp:25,jobTitle:26,language:27,location:28,middleInitial:29,middleName:30,name:31,namePrefix:32,nameSuffix:33,newPassword:34,newUsername:35,nickname:36,oneTimeCode:37,organizationName:38,password:39,photo:40,postalAddress:41,postalAddressExtended:42,postalAddressExtendedPostalCode:43,postalCode:44,streetAddressLevel1:45,streetAddressLevel2:46,streetAddressLevel3:47,streetAddressLevel4:48,streetAddressLine1:49,streetAddressLine2:50,streetAddressLine3:51,sublocality:52,telephoneNumber:53,telephoneNumberAreaCode:54,telephoneNumberCountryCode:55,telephoneNumberDevice:56,telephoneNumberExtension:57,telephoneNumberLocal:58,telephoneNumberLocalPrefix:59,telephoneNumberLocalSuffix:60,telephoneNumberNational:61,transactionAmount:62,transactionCurrency:63,url:64,username:65}
+B.api={addressCity:0,addressCityAndState:1,addressState:2,birthday:3,birthdayDay:4,birthdayMonth:5,birthdayYear:6,countryCode:7,countryName:8,creditCardExpirationDate:9,creditCardExpirationDay:10,creditCardExpirationMonth:11,creditCardExpirationYear:12,creditCardFamilyName:13,creditCardGivenName:14,creditCardMiddleName:15,creditCardName:16,creditCardNumber:17,creditCardSecurityCode:18,creditCardType:19,email:20,familyName:21,fullStreetAddress:22,gender:23,givenName:24,impp:25,jobTitle:26,language:27,location:28,middleInitial:29,middleName:30,name:31,namePrefix:32,nameSuffix:33,newPassword:34,newUsername:35,nickname:36,oneTimeCode:37,organizationName:38,password:39,photo:40,postalAddress:41,postalAddressExtended:42,postalAddressExtendedPostalCode:43,postalCode:44,streetAddressLevel1:45,streetAddressLevel2:46,streetAddressLevel3:47,streetAddressLevel4:48,streetAddressLine1:49,streetAddressLine2:50,streetAddressLine3:51,sublocality:52,telephoneNumber:53,telephoneNumberAreaCode:54,telephoneNumberCountryCode:55,telephoneNumberDevice:56,telephoneNumberExtension:57,telephoneNumberLocal:58,telephoneNumberLocalPrefix:59,telephoneNumberLocalSuffix:60,telephoneNumberNational:61,transactionAmount:62,transactionCurrency:63,url:64,username:65}
 B.cG=new A.j4(9,null,null)
 B.da=new A.j4(4,null,null)
 B.bP=new A.j4(2,!1,!1)
@@ -157023,7 +157023,7 @@ B.kX=new A.j4(5,null,null)
 B.v8=new A.j4(6,null,null)
 B.d9=new A.j4(3,null,null)
 B.kW=new A.j4(2,!1,!0)
-B.anT=new A.a8(B.aph,[B.cG,B.cG,B.cG,B.da,B.da,B.da,B.da,B.bP,B.cd,B.da,B.da,B.da,B.da,B.dT,B.dT,B.dT,B.dT,B.bP,B.bP,B.cd,B.kX,B.dT,B.cG,B.cd,B.dT,B.v8,B.cd,B.cd,B.cG,B.dT,B.dT,B.dT,B.dT,B.dT,B.cd,B.cd,B.cd,B.cd,B.cd,B.cd,B.cd,B.cG,B.cG,B.bP,B.bP,B.cG,B.cG,B.cG,B.cG,B.cG,B.cG,B.cG,B.cG,B.d9,B.d9,B.d9,B.d9,B.d9,B.d9,B.d9,B.d9,B.d9,B.kW,B.cd,B.v8,B.cd],A.ax("a8<c,j4>"))
+B.anT=new A.a8(B.api,[B.cG,B.cG,B.cG,B.da,B.da,B.da,B.da,B.bP,B.cd,B.da,B.da,B.da,B.da,B.dT,B.dT,B.dT,B.dT,B.bP,B.bP,B.cd,B.kX,B.dT,B.cG,B.cd,B.dT,B.v8,B.cd,B.cd,B.cG,B.dT,B.dT,B.dT,B.dT,B.dT,B.cd,B.cd,B.cd,B.cd,B.cd,B.cd,B.cd,B.cG,B.cG,B.bP,B.bP,B.cG,B.cG,B.cG,B.cG,B.cG,B.cG,B.cG,B.cG,B.d9,B.d9,B.d9,B.d9,B.d9,B.d9,B.d9,B.d9,B.d9,B.kW,B.cd,B.v8,B.cd],A.ax("a8<c,j4>"))
 B.apK={type:0}
 B.anU=new A.a8(B.apK,["line"],t.w)
 B.anY=new A.a8(B.bc,[],A.ax("a8<mu,R>"))
@@ -157120,23 +157120,23 @@ B.apn={"\xe1":0,"\xe0":1,"\xe4":2,"\xe2":3,"\xe9":4,"\xe8":5,"\xeb":6,"\xea":7,"
 B.ao1=new A.a8(B.apn,["a","a","a","a","e","e","e","e","i","i","i","i","o","o","o","o","u","u","u","u","n~","c","a","o","a","o","y","y","ae"],t.w)
 B.aoU={"Drogas durante la anestesia":0,Fluidos:1,Hemoderivados:2}
 B.apt={"Antiemesis y AINE":0,"Profilaxis antibi\xf3tica":1,"Ces\xe1rea":2,"Reversi\xf3n con neostigmina":3,"Reversi\xf3n con sugammadex":4,"Analgesia posoperatoria":5}
-B.atE=new A.x("Dexametasona / Ondansetr\xf3n / Ketorolac","8 mg / 4 mg / 30 mg")
-B.atA=new A.x("Cefazolina","2 g")
-B.avj=new A.x("Oxitocina / Cefazolina","3 UI / 2 g")
-B.atj=new A.x("Neostigmina / Atropina","0,04 mg/kg / 0,02 mg/kg")
+B.atF=new A.x("Dexametasona / Ondansetr\xf3n / Ketorolac","8 mg / 4 mg / 30 mg")
+B.atB=new A.x("Cefazolina","2 g")
+B.avk=new A.x("Oxitocina / Cefazolina","3 UI / 2 g")
+B.atk=new A.x("Neostigmina / Atropina","0,04 mg/kg / 0,02 mg/kg")
 B.asl=new A.x("Sugammadex","2 mg/kg")
-B.ati=new A.x("Tramadol / Dipirona","100 mg / 1 g")
-B.aoc=new A.a8(B.apt,[B.atE,B.atA,B.avj,B.atj,B.asl,B.ati],t.dM)
+B.atj=new A.x("Tramadol / Dipirona","100 mg / 1 g")
+B.aoc=new A.a8(B.apt,[B.atF,B.atB,B.avk,B.atk,B.asl,B.atj],t.dM)
 B.apS={"Mantenimiento con ringer":0,"Mantenimiento con fisiol\xf3gica":1,"Expansi\xf3n":2}
-B.atf=new A.x("Ringer lactato","2 u")
-B.auM=new A.x("Soluci\xf3n fisiol\xf3gica","1000 ml")
-B.avz=new A.x("Ringer lactato / Coloides (expansores)","2 u / 1 u")
-B.ao3=new A.a8(B.apS,[B.atf,B.auM,B.avz],t.dM)
+B.asU=new A.x("Ringer lactato","1000 ml")
+B.auN=new A.x("Soluci\xf3n fisiol\xf3gica","1000 ml")
+B.asP=new A.x("Ringer lactato / Coloides (expansores)","1000 ml / 1 u")
+B.ao3=new A.a8(B.apS,[B.asU,B.auN,B.asP],t.dM)
 B.apo={"Gl\xf3bulos rojos":0,"Transfusi\xf3n masiva 1:1:1":1,"Coagulopat\xeda":2}
-B.at_=new A.x("Sedimento globular","2 u")
-B.av8=new A.x("Sedimento globular / Plasma fresco congelado / Plaquetas","4 u / 4 u / 4 u")
-B.atz=new A.x("Plasma fresco congelado / Crioprecipitados","2 u / 10 u")
-B.ama=new A.a8(B.apo,[B.at_,B.av8,B.atz],t.dM)
+B.at1=new A.x("Sedimento globular","2 u")
+B.av9=new A.x("Sedimento globular / Plasma fresco congelado / Plaquetas","4 u / 4 u / 4 u")
+B.atA=new A.x("Plasma fresco congelado / Crioprecipitados","2 u / 10 u")
+B.ama=new A.a8(B.apo,[B.at1,B.av9,B.atA],t.dM)
 B.oh=new A.a8(B.aoU,[B.aoc,B.ao3,B.ama],A.ax("a8<c,aj<c,+(c,c)>>"))
 B.aoP={hr:0,spo2:1,rr:2,nibp_sis:3,nibp_dia:4,nibp_pam:5,etco2:6,fico2:7,awrr:8,sev_et:9,sev_fi:10,mac:11,peep:12,pip:13,pmedia:14,vt:15,mv:16,fr_vent:17}
 B.ao2=new A.a8(B.aoP,["FC","SpO2","FR","TA","TA","TA","CO2","FiCO2","FR","Sevo","Sevo","MAC","PEEP","PIP","Pmedia","VT","MV","FR"],t.w)
@@ -157733,51 +157733,51 @@ B.asE=new A.x("Compartir",B.hc)
 B.asH=new A.Sr("1",B.u)
 B.asJ=new A.x(2,"obesidad (IMC \u226530)")
 B.asM=new A.x(null,"Falta el peso para el clearance")
-B.asT=new A.x(null,"En mg/dL (normal \u2248 0,6\u20131,2)")
-B.asY=new A.x("Guardar",B.hd)
-B.at0=new A.x("cortada",B.e4)
-B.at5=new A.x(2,"edad \u226580")
-B.ata=new A.x(null,"En menores de 18 no se calcula (Schwartz)")
-B.ate=new A.x("Ver",B.t0)
-B.atl=new A.x(B.fo,B.fn)
+B.asV=new A.x(null,"En mg/dL (normal \u2248 0,6\u20131,2)")
+B.at_=new A.x("Guardar",B.hd)
+B.at2=new A.x("cortada",B.e4)
+B.at7=new A.x(2,"edad \u226580")
+B.atc=new A.x(null,"En menores de 18 no se calcula (Schwartz)")
+B.atg=new A.x("Ver",B.t0)
+B.atm=new A.x(B.fo,B.fn)
 B.uh=new A.x("","")
-B.atn=new A.x("Mandar por WhatsApp",B.rR)
-B.atp=new A.x("Guardar en la PC",B.hd)
-B.atr=new A.x(5,"muerte cerebral \u2014 formalmente ASA 6 (donante)")
-B.atx=new A.x("Cambi\xf3 desde el env\xedo: para reenviar",B.bK)
-B.atC=new A.x(B.a0,0)
-B.atF=new A.x(3,"v\xeda a\xe9rea dif\xedcil (ejemplo ASA III pedi\xe1trico)")
-B.atI=new A.x("Anestesia en curso",B.c5)
-B.atN=new A.zK(null,"")
+B.ato=new A.x("Mandar por WhatsApp",B.rR)
+B.atq=new A.x("Guardar en la PC",B.hd)
+B.ats=new A.x(5,"muerte cerebral \u2014 formalmente ASA 6 (donante)")
+B.aty=new A.x("Cambi\xf3 desde el env\xedo: para reenviar",B.bK)
+B.atD=new A.x(B.a0,0)
+B.atG=new A.x(3,"v\xeda a\xe9rea dif\xedcil (ejemplo ASA III pedi\xe1trico)")
+B.atJ=new A.x("Anestesia en curso",B.c5)
+B.atO=new A.zK(null,"")
 B.pa=new A.Ou(0,"left")
 B.pb=new A.Ou(1,"right")
-B.au8=new A.x(B.pa,B.pb)
-B.au9=new A.x("Sin enviar a AADOB",B.al)
-B.aub=new A.x(3,"Diabetes tipo 1 (insulinodependiente: ejemplo ASA III pedi\xe1trico)")
+B.au9=new A.x(B.pa,B.pb)
+B.aua=new A.x("Sin enviar a AADOB",B.al)
+B.auc=new A.x(3,"Diabetes tipo 1 (insulinodependiente: ejemplo ASA III pedi\xe1trico)")
 B.oQ=new A.ei(4,"scrollLeft")
 B.oR=new A.ei(8,"scrollRight")
-B.auj=new A.x(B.oQ,B.oR)
+B.auk=new A.x(B.oQ,B.oR)
 B.PW=new A.x(null,"")
-B.aus=new A.x(B.oR,B.oQ)
-B.aux=new A.x(!1,!1)
-B.auy=new A.x(!1,null)
-B.auz=new A.x(!1,!0)
+B.aut=new A.x(B.oR,B.oQ)
+B.auy=new A.x(!1,!1)
+B.auz=new A.x(!1,null)
+B.auA=new A.x(!1,!0)
 B.oN=new A.ei(16,"scrollUp")
 B.oO=new A.ei(32,"scrollDown")
-B.auD=new A.x(B.oN,B.oO)
-B.auF=new A.x(4,"hemodinamia inestable")
-B.auL=new A.x("Pendiente de enviar a AADOB (anotado en la nube)",B.al)
-B.auO=new A.x("Imprimir",B.t1)
-B.av0=new A.x(u.y,B.bK)
-B.av1=new A.x("En espera",B.dC)
+B.auE=new A.x(B.oN,B.oO)
+B.auG=new A.x(4,"hemodinamia inestable")
+B.auM=new A.x("Pendiente de enviar a AADOB (anotado en la nube)",B.al)
+B.auP=new A.x("Imprimir",B.t1)
+B.av1=new A.x(u.y,B.bK)
+B.av2=new A.x("En espera",B.dC)
 B.PX=new A.x(null,"Todos")
-B.av2=new A.x(B.oO,B.oN)
-B.av7=new A.x(null,"Falta la edad para el clearance")
-B.ava=new A.x(null,"Falta el sexo para el clearance")
-B.avo=new A.x(!0,!1)
-B.avp=new A.x(!0,!0)
-B.avr=new A.x(B.pb,B.pa)
-B.avt=new A.x(3,"obesidad m\xf3rbida (IMC \u226540)")
+B.av3=new A.x(B.oO,B.oN)
+B.av8=new A.x(null,"Falta la edad para el clearance")
+B.avb=new A.x(null,"Falta el sexo para el clearance")
+B.avp=new A.x(!0,!1)
+B.avq=new A.x(!0,!0)
+B.avs=new A.x(B.pb,B.pa)
+B.avu=new A.x(3,"obesidad m\xf3rbida (IMC \u226540)")
 B.avC=new A.x(3,"menor de 6 semanas (ejemplo ASA III)")
 B.avH=new A.x("bolo",B.al)
 B.avK=new A.x("corre",B.i5)
@@ -157960,10 +157960,10 @@ B.axx=new A.dw(B.apa,3,t.Q)
 B.aoX={de:0,del:1,la:2,las:3,el:4,los:5,en:6,con:7,y:8,o:9,a:10,al:11,por:12,para:13,que:14,un:15,una:16,muy:17,se:18,sin:19,mas:20,poco:21,alto:22,alta:23,altos:24,altas:25,bajo:26,baja:27,bajos:28,bajas:29,aumento:30,aumenta:31,sube:32,cae:33,caida:34,subida:35,tengo:36,tiene:37,paciente:38,hay:39,esta:40,durante:41,anestesia:42,cirugia:43,mucho:44,mucha:45,le:46,lo:47,me:48,mi:49,es:50,pero:51,tras:52,despues:53,antes:54,via:55,uno:56,dos:57,son:58,fue:59,ser:60,les:61,nos:62,min:63,hoy:64,ahi:65,ese:66,esa:67}
 B.axy=new A.dw(B.aoX,68,t.Q)
 B.uC=new A.fE([B.dR,B.oo,B.u5],A.ax("fE<qc>"))
+B.apg={"Soluci\xf3n fisiol\xf3gica":0,"Ringer lactato":1}
+B.axz=new A.dw(B.apg,2,t.Q)
 B.apw={cateter:0,dosis_prueba:1,dificultad:2,monitoreo_faaaar:3,proteccion_ocular:4,proteccion_decubitos:5}
-B.axz=new A.dw(B.apw,6,t.Q)
-B.api={"Soluci\xf3n fisiol\xf3gica":0}
-B.axA=new A.dw(B.api,1,t.Q)
+B.axA=new A.dw(B.apw,6,t.Q)
 B.apE={fgf:0,peep_cierre:1,fio2_cierre:2,tubo_numero:3,frec_resp:4,pip_cierre:5}
 B.Qv=new A.dw(B.apE,6,t.Q)
 B.apj={min:0,h:1,hs:2,hr:3,hora:4}
