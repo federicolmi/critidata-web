@@ -897,12 +897,17 @@ function construirGrilla(datos, vitales, eventos) {
     /\(consumo\)/i.test(e.descripcion || "");
   const consumoSevo = eventos.find(esConsumoSevo);
   const conHora = (e) => !esConsumo(e) && e.ubicado !== 0 && e.ubicado !== false;
-  // Unidad de TASA de infusión ("µg/kg/min", "mg/h"; "ml/h" es volumen,
-  // no droga): en ese renglón el Total NO suma las tasas de los tramos
-  // (0,25 + 0,1 no significa nada) sino que muestra el consumo en mg.
+  // Unidad de TASA de infusión ("µg/kg/min", "mg/h"): en ese renglón el
+  // Total NO suma las tasas de los tramos (0,25 + 0,1 no significa nada)
+  // sino que muestra el consumo en mg. (28-oct-2026, "una droga puede ser en
+  // monodosis o en goteo") También "ml/h": el propofol en bomba a 10 ml/h es
+  // un goteo con su barra, y su consumo va en ml ("15 ml"); hasta hoy se
+  // tomaba por volumen. Los fluidos no pasan por acá (son eventos
+  // "volumen"). Lo que no empieza con una letra no es tasa ("%/2L/min"),
+  // como es_unidad_tasa del cierre y esUnidadTasa de la app.
   const esUnidadTasa = (u) => {
     const t = String(u ?? "").trim().toLowerCase();
-    return !t.startsWith("ml") && (t.includes("/min") || t.includes("/h"));
+    return /^[a-zµμγ]/.test(t) && (t.includes("/min") || t.includes("/h"));
   };
   const marcas = [...vitales.map((v) => aMs(v.ts)),
                   ...eventos.filter(conHora).map((e) => aMs(e.ts))]
@@ -1501,15 +1506,30 @@ function construirGrilla(datos, vitales, eventos) {
         // mantenimiento sin hora): la/s tasa/s tal cual, como siempre —
         // nunca un Total vacío ni una suma de tasas
         const tasas = [];
+        const unidades = [];
         // solo las TASAS (21-sep): en la fila unica el bolo ya va aparte
         for (const e of delRenglon.filter((e) => !esConsumo(e) && esUnidadTasa(e.unidad))) {
           const d = e.dosis != null && e.dosis !== "" ? fmtCriollo(e.dosis) : "";
-          if (d && !tasas.includes(d)) tasas.push(d);
+          const u = String(e.unidad || "").trim();
+          if (d && !tasas.some((x, i) => x === d && unidades[i] === u)) {
+            tasas.push(d);
+            unidades.push(u);
+          }
         }
-        t = tasas.join("→");
-        if (t.length > 15) t = `${tasas[0]}→…→${tasas[tasas.length - 1]}`;
-        // (17-oct-2026) con su unidad
-        if (t && tasa && String(tasa.unidad || "").trim()) t = `${t} ${String(tasa.unidad).trim()}`;
+        if (new Set(unidades).size > 1) {
+          // (revisión 28-oct-2026) un goteo que pasó de µg/kg/min a ml/h:
+          // cada tasa con SU unidad ("100 µg/kg/min→12 ml/h"); con la de la
+          // fila sola, el 12 quedaba rotulado en µg/kg/min
+          const conUnidad = tasas.map((d, i) => (unidades[i] ? `${d} ${unidades[i]}` : d));
+          t = conUnidad.length > 2
+            ? `${conUnidad[0]}→…→${conUnidad[conUnidad.length - 1]}`
+            : conUnidad.join("→");
+        } else {
+          t = tasas.join("→");
+          if (t.length > 15) t = `${tasas[0]}→…→${tasas[tasas.length - 1]}`;
+          // (17-oct-2026) con su unidad
+          if (t && tasa && String(tasa.unidad || "").trim()) t = `${t} ${String(tasa.unidad).trim()}`;
+        }
         // los bolos delante, por familia (17-oct-2026: con bolos en dos
         // unidades desaparecían del Total); sin ninguna tasa con dosis, los
         // bolos solos, sin un " + " colgando
