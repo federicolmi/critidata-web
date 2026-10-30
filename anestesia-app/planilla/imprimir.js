@@ -1231,6 +1231,38 @@ function construirGrilla(datos, vitales, eventos) {
       }
     }
   }
+  // LA FRANJA de cada PRÁCTICA y cada EVENTO CRÍTICO (30-oct-2026, "probemos
+  // cómo se vería un evento crítico en rojo o una práctica durante la
+  // anestesia superpuesta a los signos vitales" — "se ve bien, hacelo"):
+  // translúcida sobre el gráfico, de la hora de comienzo al fin (raya llena
+  // al comienzo, punteada al fin; sin duración, solo la raya), con su texto
+  // arriba. Va DEBAJO de las curvas: los signos vitales se siguen leyendo.
+  // El texto entero sigue al pie del parte.
+  for (const e of eventos) {
+    if (e.tipo !== "practica" && e.tipo !== "critico") continue;
+    if (!e.ts) continue;
+    const critico = e.tipo === "critico";
+    const color = critico ? COLORES.nibp_sis : "#1d5fc4";
+    const xHora = (ms) => IZQ + Math.min(nCol, Math.max(0, (ms - t0) / slotMs)) * anchoCol;
+    const xI = xHora(aMs(e.ts));
+    const dur = Number(e.duracion) || 0;
+    const xF = dur > 0 ? xHora(aMs(e.ts) + dur * 60000) : xI;
+    if (xF - xI > 0.5) {
+      S.push(`<rect x="${xI.toFixed(2)}" y="${yG0.toFixed(2)}" ` +
+             `width="${(xF - xI).toFixed(2)}" height="${(yG1 - yG0).toFixed(2)}" ` +
+             `fill="${color}" fill-opacity="${critico ? 0.16 : 0.12}"/>`);
+      S.push(`<line x1="${xF.toFixed(2)}" y1="${yG0.toFixed(2)}" x2="${xF.toFixed(2)}" ` +
+             `y2="${yG1.toFixed(2)}" stroke="${color}" stroke-width="0.8" ` +
+             `stroke-dasharray="2 1.5"/>`);
+    }
+    S.push(`<line x1="${xI.toFixed(2)}" y1="${yG0.toFixed(2)}" x2="${xI.toFixed(2)}" ` +
+           `y2="${yG1.toFixed(2)}" stroke="${color}" stroke-width="1"/>`);
+    const texto = String(e.descripcion || "").trim();
+    if (texto) {
+      txt(xI + 1.5, yG0 + 30, `✱ ${texto.length > 28 ? texto.slice(0, 27) + "…" : texto}`,
+          `font-size="5.6" font-weight="700" fill="${color}"`);
+    }
+  }
   // claves apiladas en la primera columna del gráfico (única celda alta:
   // acá reemplazan a la vieja fila "Claves:" de la cabecera)
   const claves = [
@@ -1355,7 +1387,9 @@ function construirGrilla(datos, vitales, eventos) {
   }
   // Las PRACTICAS y los EVENTOS CRITICOS (22-sep, pedido expreso): un
   // asterisco grande en la columna de su hora — azul la practica, rojo el
-  // evento critico — y el texto de cada uno listado al pie del parte.
+  // evento critico — y el texto de cada uno listado al pie del parte. Lo que
+  // duró lo muestra su FRANJA sobre el gráfico (30-oct-2026; antes, una raya
+  // corta debajo del asterisco).
   for (const e of eventos) {
     if (e.tipo !== "practica" && e.tipo !== "critico") continue;
     if (!e.ts) continue;
@@ -1363,15 +1397,6 @@ function construirGrilla(datos, vitales, eventos) {
     const color = e.tipo === "critico" ? COLORES.nibp_sis : "#1d5fc4";
     txt(xM, yG0 + 22, "✱",
         `font-size="13" font-weight="700" text-anchor="middle" fill="${color}"`);
-    // el evento critico con fin: una raya roja desde el comienzo hasta el
-    // fin ("hora de comienzo y finalizacion, ubicada en relacion al parte")
-    const dur = Number(e.duracion) || 0;
-    if (dur > 0) {
-      const xF = IZQ + Math.min(nCol, Math.max(0, (aMs(e.ts) + dur * 60000 - t0) / slotMs)) * anchoCol;
-      S.push(`<line x1="${xM.toFixed(2)}" y1="${(yG0 + 24).toFixed(2)}" ` +
-                  `x2="${xF.toFixed(2)}" y2="${(yG0 + 24).toFixed(2)}" ` +
-                  `stroke="${color}" stroke-width="1.4"/>`);
-    }
   }
   yTope = yG1;
   lin(0, yTope, ancho, yTope, 0.9);

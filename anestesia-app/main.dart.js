@@ -16428,7 +16428,7 @@ if(o){q=Date.now()
 q=A.c1e(a,new A.ab(q,0,!1))
 if(q!=null)r.push(q)}if(o){q=Date.now()
 q=A.c1d(a,new A.ab(q,0,!1))
-if(q!=null)r.push(q)}if(o&&A.c1L(a,"2026-10-29T21:09:25-03:00"))r.push("Desactualizada: "+(a.fy!=null?"se actualiza sola al reiniciarla sin una anestesia en curso":"hac\xe9 el git pull una vez (despu\xe9s se actualiza sola)"))
+if(q!=null)r.push(q)}if(o&&A.c1L(a,"2026-10-30T12:33:19-03:00"))r.push("Desactualizada: "+(a.fy!=null?"se actualiza sola al reiniciarla sin una anestesia en curso":"hac\xe9 el git pull una vez (despu\xe9s se actualiza sola)"))
 if(r.length===0)return p
 return new A.oD(p.a,p.b,p.c+"\n"+B.c.aq(r,"\n"))},
 bWr(a){var s=B.e.da(a.a,1e6)
@@ -75405,7 +75405,7 @@ A.b2A.prototype={
 $0(){return A.WH(this.b,this.a.gau())},
 $S:0}
 A.b2B.prototype={
-$2(a,b){var s=null,r="20261030150828-c80d43a",q=A.a([B.aSk,B.v1,B.aRm,B.aRj,B.aRk,B.aRl,new A.vo(B.n_,"Ver datos online","Signos vitales en vivo del quir\xf3fano",new A.b2v(a),s),B.p8,new A.vo(B.t3,"Pacientes","En espera, en curso y terminados hoy",new A.b2w(a),s),B.p8,new A.vo(B.mX,"Partes anest\xe9sicos","Anexo V: los del mes, la nube y AADOB",new A.b2x(a),s),B.p8,new A.vo(B.zC,"Consumo de drogas","Del mes y del a\xf1o, en mg y en ampollas",new A.b2y(a),s),B.p8,new A.vo(B.zy,"Riesgo anest\xe9sico","Evaluaci\xf3n prequir\xfargica",new A.b2z(a),s)],t.p)
+$2(a,b){var s=null,r="20261030153552-cf2fe0d",q=A.a([B.aSk,B.v1,B.aRm,B.aRj,B.aRk,B.aRl,new A.vo(B.n_,"Ver datos online","Signos vitales en vivo del quir\xf3fano",new A.b2v(a),s),B.p8,new A.vo(B.t3,"Pacientes","En espera, en curso y terminados hoy",new A.b2w(a),s),B.p8,new A.vo(B.mX,"Partes anest\xe9sicos","Anexo V: los del mes, la nube y AADOB",new A.b2x(a),s),B.p8,new A.vo(B.zC,"Consumo de drogas","Del mes y del a\xf1o, en mg y en ampollas",new A.b2y(a),s),B.p8,new A.vo(B.zy,"Riesgo anest\xe9sico","Evaluaci\xf3n prequir\xfargica",new A.b2z(a),s)],t.p)
 if(A.bHv(r).length!==0)q.push(new A.S(B.a21,A.A(A.bHv(r),B.aNn,s,s,s,s,s,s,s,s,B.aFT,s,s,s,s,s,s),s))
 return A.e5(new A.cw(new A.ak(0,1/0,b.d,1/0),A.cD(new A.cw(B.VL,new A.S(B.a2U,A.ao(q,B.o,s,B.eh,B.P,0,B.k),s),s),s,s),s),s,s,s,s,B.R)},
 $S:240}
@@ -81898,7 +81898,7 @@ A.bpH.prototype={
 $1(a){return B.b.ce(B.e.k(a),2,"0")},
 $S:20}
 A.bo2.prototype={
-$1(a){return"20261030150828-c80d43a"},
+$1(a){return"20261030153552-cf2fe0d"},
 $S:468}
 A.bjY.prototype={
 $1(a){var s
