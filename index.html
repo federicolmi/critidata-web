@@ -726,11 +726,12 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1565c0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                             <input id="g-login-email" type="email" placeholder="Correo" autocomplete="email">
                         </div>
-                        <div class="gm-field" style="margin-bottom:24px;">
+                        <div class="gm-field" style="margin-bottom:16px;">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1565c0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                             <input id="g-login-pass" type="password" placeholder="Contraseña" autocomplete="current-password">
                             <button type="button" class="gm-eye" onclick="togglePass('g-login-pass', this, event)"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1565c0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
                         </div>
+                        <a href="#" class="forgot" style="margin-top:0;" onclick="abrirOlvide(event, 'gastroenterologia', 'g-login-email')">¿Olvidaste tu contraseña?</a>
                         <button type="submit" class="gm-btn" id="btn-gastro-login">Entrar</button>
                         <p id="g-login-error" style="display:none;color:#dc2626;font-size:13px;text-align:center;margin-top:10px;"></p>
                     </form>
@@ -979,13 +980,14 @@
                     <label>Correo</label>
                     <input id="cd-email" type="email" placeholder="info@critidata.com" autocomplete="email">
                 </div>
-                <div class="field" style="margin-bottom:22px;">
+                <div class="field">
                     <label>Contraseña</label>
                     <div class="password-wrap">
                         <input id="cd-password" type="password" autocomplete="current-password">
                         <button type="button" class="toggle-pass" onclick="togglePass('cd-password', this, event)"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
                     </div>
                 </div>
+                <a href="#" class="forgot" onclick="abrirOlvide(event, 'nefrologia', 'cd-email')">¿Olvidaste tu contraseña?</a>
                 <div id="cd-error" style="display:none;color:#c62828;font-size:13px;margin-bottom:12px;"></div>
                 <button class="btn-navy" id="cd-btn" onclick="loginCritiData()">Ingresar</button>
                 <button class="dl-back" onclick="volverLoginSelector()" style="margin-top:12px;display:block;">← Volver</button>
@@ -1970,14 +1972,30 @@
             btn.textContent = 'Ingresar'
         }
 
+        // (1-nov-2026, "tenemos que gestionar una visible, como la de nefro")
+        // El cuadro de recuperar la contraseña estaba armado pero nada lo
+        // abría: el administrador no tenía cómo pedir el link. Cada ingreso
+        // lo abre con SU producto (el mismo email puede tener una cuenta de
+        // nefro —donde viven los administradores— y otra de gastro).
+        let productoOlvide = 'nefrologia'
+
+        function abrirOlvide(event, producto, campoEmail) {
+            event.preventDefault()
+            productoOlvide = producto
+            document.getElementById('forgot-email').value =
+                document.getElementById(campoEmail).value.trim()
+            document.getElementById('modal-forgot').classList.add('open')
+            document.getElementById('forgot-email').focus()
+        }
+
         async function enviarReset() {
-            const email = document.getElementById('forgot-email').value
+            const email = document.getElementById('forgot-email').value.trim()
             if (!email) return
             const btn = document.getElementById('btn-send-reset')
             btn.disabled = true
             btn.textContent = 'Enviando...'
             try {
-                await fetch(`${API}/auth/forgot-password`, {
+                await fetch(`${API}/auth/forgot-password?producto=${encodeURIComponent(productoOlvide)}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password: '' })
