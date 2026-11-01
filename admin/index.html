@@ -135,22 +135,25 @@
         <!-- (1-nov-2026, "tenemos que hacer la copia del railway"; "vive en la red
              y la hacés desde cualquier dispositivo") Railway no guarda copias
              de la base: se baja acá, con la contraseña otra vez, y se guarda
-             en el disco externo. -->
+             en el disco externo. Desde esa noche ("agreguemos gastro"), las
+             DOS bases: la principal y la de gastro. -->
         <div class="section">
             <div class="section-header">
                 <span class="section-title">Copia de la base para el disco externo</span>
                 <span class="section-count" id="copia-ultima"></span>
             </div>
             <p class="copia-texto">
-                Railway no guarda copias de la base. Bajala acá y guardala en el disco externo:
-                trae la base entera (las cuentas, anestesia y nefro). Lo cifrado sigue cifrado
-                adentro; para abrirlo hace falta LAB_CREDS_KEY, la que tenés guardada aparte.
+                Railway no guarda copias de las bases. Bajalas acá y guardalas en el disco externo
+                (Mi_Proyecto\respaldos\nube): la principal (las cuentas, anestesia y nefro) y la
+                de gastro (su historia clínica, con los PDF). Lo cifrado sigue cifrado adentro; para
+                abrirlo hace falta LAB_CREDS_KEY, la que tenés guardada aparte. Traen datos de
+                pacientes: el disco, siempre guardado.
             </p>
             <div class="copia-fila">
                 <input type="password" id="copia-clave" placeholder="Tu contraseña"
                        autocomplete="current-password"
                        onkeydown="if (event.key === 'Enter') bajarCopia()">
-                <button class="btn-copia" id="btn-copia" onclick="bajarCopia()">Bajar la copia</button>
+                <button class="btn-copia" id="btn-copia" onclick="bajarCopia()">Bajar las copias</button>
                 <button class="btn-copia guardar" id="btn-guardar-copia" style="display:none"
                         onclick="guardarCopia()">Guardar en el disco externo</button>
             </div>
@@ -257,17 +260,30 @@
     }
 
     // ── La copia de la base (1-nov-2026) ────────────────────────────────────
-    // Dos toques: "Bajar la copia" la arma en la nube y la trae; "Guardar en
-    // el disco externo" abre el "Guardar como" (Chrome y Edge de escritorio)
-    // para elegir el disco. El cuadro necesita un toque reciente: después de
-    // esperar la copia el navegador ya no lo abre. Donde no existe (el
-    // teléfono), se descarga.
-    let copiaLista = null
+    // Dos toques: "Bajar las copias" arma en la nube las DOS bases (la
+    // principal y, desde esa noche, "agreguemos gastro", la de gastro) y las
+    // trae; "Guardar en el disco externo" pide la carpeta del disco (Chrome y
+    // Edge de escritorio) y escribe las dos ahí. El cuadro necesita un toque
+    // reciente: después de esperar las copias el navegador ya no lo abre.
+    // Donde no existe (el teléfono), se descargan.
+    let copiasListas = []
+    const BASES = [
+        { base: 'principal', prefijo: 'critidata-copia', dice: 'principal' },
+        { base: 'gastro', prefijo: 'critidata-gastro-copia', dice: 'gastro' },
+    ]
 
     function avisoCopia(texto, clase) {
         const el = document.getElementById('copia-msg')
         el.textContent = texto
         el.className = 'copia-msg' + (clase ? ' ' + clase : '')
+    }
+
+    function cuandoFue(ultima) {
+        if (!ultima) return { texto: 'nunca', dias: Infinity }
+        const fecha = new Date(ultima.fecha)
+        const dias = Math.floor((Date.now() - fecha) / 86400000)
+        const cuando = dias <= 0 ? 'hoy' : dias === 1 ? 'ayer' : `hace ${dias} días`
+        return { texto: `${fecha.toLocaleDateString('es-AR')} (${cuando})`, dias }
     }
 
     async function cargarUltimaCopia() {
@@ -278,25 +294,20 @@
                 headers: { 'Authorization': `Bearer ${token}` }
             })
             if (!res.ok) throw new Error()
-            const { ultima } = await res.json()
-            if (!ultima) {
-                el.textContent = 'Nunca se bajó una'
-                el.style.color = '#b45309'
-                return
-            }
-            const fecha = new Date(ultima.fecha)
-            const dias = Math.floor((Date.now() - fecha) / 86400000)
-            const cuando = dias <= 0 ? 'hoy' : dias === 1 ? 'ayer' : `hace ${dias} días`
-            el.textContent = `Última: ${fecha.toLocaleDateString('es-AR')} (${cuando})`
-            // una semana sin copia: en ámbar
-            el.style.color = dias >= 7 ? '#b45309' : '#94a3b8'
+            const datos = await res.json()
+            const principal = cuandoFue(datos.ultima)
+            const gastro = datos.gastro ? cuandoFue(datos.ultima_gastro)
+                                        : { texto: 'sin conectar', dias: Infinity }
+            el.textContent = `Última: ${principal.texto} · gastro: ${gastro.texto}`
+            // una semana sin copia (de cualquiera de las dos): en ámbar
+            el.style.color = Math.max(principal.dias, gastro.dias) >= 7 ? '#b45309' : '#94a3b8'
         } catch { el.textContent = '' }
     }
 
-    function nombreCopia() {
+    function nombreCopia(prefijo) {
         const d = new Date()
         const dos = n => String(n).padStart(2, '0')
-        return `critidata-copia-${d.getFullYear()}-${dos(d.getMonth() + 1)}-${dos(d.getDate())}` +
+        return `${prefijo}-${d.getFullYear()}-${dos(d.getMonth() + 1)}-${dos(d.getDate())}` +
                `-${dos(d.getHours())}${dos(d.getMinutes())}.jsonl.gz`
     }
 
@@ -306,29 +317,44 @@
         if (!campo.value) { avisoCopia('Poné tu contraseña.', 'err'); campo.focus(); return }
         const token = sessionStorage.getItem('cd_token')
         btn.disabled = true
-        copiaLista = null
+        copiasListas = []
         document.getElementById('btn-guardar-copia').style.display = 'none'
-        avisoCopia('Armando la copia en la nube… puede tardar un minuto.')
+        const clave = campo.value
+        const dichas = []
+        let faltaAlguna = false
         try {
-            const res = await fetch(`${API}/auth/admin/copia-base`, {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ password: campo.value })
-            })
-            if (!res.ok) {
-                const data = await res.json().catch(() => ({}))
-                avisoCopia(data.detail || 'No se pudo bajar la copia.', 'err')
-                return
+            for (const b of BASES) {
+                avisoCopia(`Armando la copia ${b.dice === 'gastro' ? 'de gastro' : 'principal'} ` +
+                           'en la nube… puede tardar un minuto.')
+                const res = await fetch(`${API}/auth/admin/copia-base`, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: clave, base: b.base })
+                })
+                if (!res.ok) {
+                    const data = await res.json().catch(() => ({}))
+                    // la principal manda (la contraseña mala, sobre todo); si
+                    // falla la de gastro, la principal igual se guarda
+                    if (b.base === 'principal') {
+                        avisoCopia(data.detail || 'No se pudo bajar la copia.', 'err')
+                        return
+                    }
+                    dichas.push(`gastro NO: ${data.detail || 'no se pudo bajar'}`)
+                    faltaAlguna = true
+                    continue
+                }
+                const blob = await res.blob()
+                const filas = Number(res.headers.get('X-Copia-Filas') || 0)
+                const tablas = Number(res.headers.get('X-Copia-Tablas') || 0)
+                const mb = (blob.size / 1048576).toLocaleString('es-AR', { maximumFractionDigits: 1 })
+                copiasListas.push({ blob, nombre: nombreCopia(b.prefijo) })
+                dichas.push(`${b.dice}: ${tablas} tablas, ${filas.toLocaleString('es-AR')} filas, ${mb} MB`)
             }
-            const blob = await res.blob()
             campo.value = ''
-            const filas = Number(res.headers.get('X-Copia-Filas') || 0)
-            const tablas = Number(res.headers.get('X-Copia-Tablas') || 0)
-            const mb = (blob.size / 1048576).toLocaleString('es-AR', { maximumFractionDigits: 1 })
-            copiaLista = { blob, nombre: nombreCopia() }
             document.getElementById('btn-guardar-copia').style.display = ''
-            avisoCopia(`Copia lista: ${tablas} tablas, ${filas.toLocaleString('es-AR')} filas, ${mb} MB. ` +
-                       'Enchufá el disco externo y tocá «Guardar en el disco externo».', 'ok')
+            avisoCopia(`Copias listas — ${dichas.join(' · ')}. ` +
+                       'Enchufá el disco externo y tocá «Guardar en el disco externo».',
+                       faltaAlguna ? 'err' : 'ok')
             cargarUltimaCopia()
         } catch {
             avisoCopia('Error de conexión: no se pudo bajar la copia.', 'err')
@@ -338,33 +364,37 @@
     }
 
     async function guardarCopia() {
-        if (!copiaLista) return
-        const { blob, nombre } = copiaLista
-        if (window.showSaveFilePicker) {
+        if (!copiasListas.length) return
+        const nombres = copiasListas.map(c => c.nombre).join(' y ')
+        if (window.showDirectoryPicker) {
             try {
-                const archivo = await window.showSaveFilePicker({
-                    suggestedName: nombre,
-                    types: [{ description: 'Copia de la base', accept: { 'application/gzip': ['.gz'] } }]
-                })
-                const escritura = await archivo.createWritable()
-                await escritura.write(blob)
-                await escritura.close()
-                avisoCopia(`Guardada: ${archivo.name}. Si la pusiste en el disco externo, listo.`, 'ok')
+                // una carpeta, las dos copias adentro (id: vuelve a abrir ahí)
+                const carpeta = await window.showDirectoryPicker({ id: 'copias-base', mode: 'readwrite' })
+                for (const { blob, nombre } of copiasListas) {
+                    const archivo = await carpeta.getFileHandle(nombre, { create: true })
+                    const escritura = await archivo.createWritable()
+                    await escritura.write(blob)
+                    await escritura.close()
+                }
+                avisoCopia(`Guardadas en «${carpeta.name}»: ${nombres}. ` +
+                           'Si es la carpeta del disco externo, listo.', 'ok')
                 return
             } catch (e) {
                 if (e && e.name === 'AbortError') return   // cerró el cuadro sin guardar
                 // cualquier otro tropiezo: la descarga
             }
         }
-        const url = URL.createObjectURL(blob)
-        const enlace = document.createElement('a')
-        enlace.href = url
-        enlace.download = nombre
-        document.body.appendChild(enlace)
-        enlace.click()
-        enlace.remove()
-        setTimeout(() => URL.revokeObjectURL(url), 60000)
-        avisoCopia(`Se descargó ${nombre}: pasala de Descargas al disco externo.`, 'ok')
+        for (const { blob, nombre } of copiasListas) {
+            const url = URL.createObjectURL(blob)
+            const enlace = document.createElement('a')
+            enlace.href = url
+            enlace.download = nombre
+            document.body.appendChild(enlace)
+            enlace.click()
+            enlace.remove()
+            setTimeout(() => URL.revokeObjectURL(url), 60000)
+        }
+        avisoCopia(`Se descargaron ${nombres}: pasalas de Descargas al disco externo.`, 'ok')
     }
 
     function updateMaintenanceBtn() {
