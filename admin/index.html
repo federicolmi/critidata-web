@@ -65,6 +65,22 @@
         .btn-maintenance.off:hover { background: rgba(255,255,255,0.2); color: #fff; }
         .btn-maintenance.on  { background: #ef4444; color: #fff; }
         .btn-maintenance.on:hover { background: #dc2626; }
+        .copia-texto { font-size: 13px; color: #475569; line-height: 1.5; margin-bottom: 14px; }
+        .copia-fila { display: flex; gap: 10px; flex-wrap: wrap; }
+        .copia-fila input {
+            flex: 1; min-width: 180px; padding: 9px 12px; border: 1.5px solid #e2e8f0;
+            border-radius: 8px; font-size: 14px; outline: none;
+        }
+        .copia-fila input:focus { border-color: #0d1b3e; }
+        .btn-copia {
+            padding: 9px 18px; border-radius: 8px; border: none; font-size: 14px; font-weight: 600;
+            background: #0d1b3e; color: #fff; cursor: pointer;
+        }
+        .btn-copia:disabled { opacity: .5; cursor: not-allowed; }
+        .btn-copia.guardar { background: #166534; }
+        .copia-msg { font-size: 13px; margin-top: 10px; min-height: 18px; color: #475569; }
+        .copia-msg.ok  { color: #166534; }
+        .copia-msg.err { color: #c62828; }
     </style>
 </head>
 <body>
@@ -114,6 +130,31 @@
                 <div class="stat-value" id="s-inactivos">—</div>
                 <div class="stat-sub">sin activar</div>
             </div>
+        </div>
+
+        <!-- (1-nov-2026, "tenemos que hacer la copia del railway"; "vive en la red
+             y la hacés desde cualquier dispositivo") Railway no guarda copias
+             de la base: se baja acá, con la contraseña otra vez, y se guarda
+             en el disco externo. -->
+        <div class="section">
+            <div class="section-header">
+                <span class="section-title">Copia de la base para el disco externo</span>
+                <span class="section-count" id="copia-ultima"></span>
+            </div>
+            <p class="copia-texto">
+                Railway no guarda copias de la base. Bajala acá y guardala en el disco externo:
+                trae la base entera (las cuentas, anestesia y nefro). Lo cifrado sigue cifrado
+                adentro; para abrirlo hace falta LAB_CREDS_KEY, la que tenés guardada aparte.
+            </p>
+            <div class="copia-fila">
+                <input type="password" id="copia-clave" placeholder="Tu contraseña"
+                       autocomplete="current-password"
+                       onkeydown="if (event.key === 'Enter') bajarCopia()">
+                <button class="btn-copia" id="btn-copia" onclick="bajarCopia()">Bajar la copia</button>
+                <button class="btn-copia guardar" id="btn-guardar-copia" style="display:none"
+                        onclick="guardarCopia()">Guardar en el disco externo</button>
+            </div>
+            <p class="copia-msg" id="copia-msg"></p>
         </div>
 
         <!-- Tabs -->
@@ -211,7 +252,119 @@
             document.getElementById('admin-email').textContent = sessionStorage.getItem('cd_email') || 'admin'
             document.getElementById('content').style.display = 'block'
             renderAll()
+            cargarUltimaCopia()
         } catch { showError() }
+    }
+
+    // ── La copia de la base (1-nov-2026) ────────────────────────────────────
+    // Dos toques: "Bajar la copia" la arma en la nube y la trae; "Guardar en
+    // el disco externo" abre el "Guardar como" (Chrome y Edge de escritorio)
+    // para elegir el disco. El cuadro necesita un toque reciente: después de
+    // esperar la copia el navegador ya no lo abre. Donde no existe (el
+    // teléfono), se descarga.
+    let copiaLista = null
+
+    function avisoCopia(texto, clase) {
+        const el = document.getElementById('copia-msg')
+        el.textContent = texto
+        el.className = 'copia-msg' + (clase ? ' ' + clase : '')
+    }
+
+    async function cargarUltimaCopia() {
+        const token = sessionStorage.getItem('cd_token')
+        const el = document.getElementById('copia-ultima')
+        try {
+            const res = await fetch(`${API}/auth/admin/copia-base`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+            if (!res.ok) throw new Error()
+            const { ultima } = await res.json()
+            if (!ultima) {
+                el.textContent = 'Nunca se bajó una'
+                el.style.color = '#b45309'
+                return
+            }
+            const fecha = new Date(ultima.fecha)
+            const dias = Math.floor((Date.now() - fecha) / 86400000)
+            const cuando = dias <= 0 ? 'hoy' : dias === 1 ? 'ayer' : `hace ${dias} días`
+            el.textContent = `Última: ${fecha.toLocaleDateString('es-AR')} (${cuando})`
+            // una semana sin copia: en ámbar
+            el.style.color = dias >= 7 ? '#b45309' : '#94a3b8'
+        } catch { el.textContent = '' }
+    }
+
+    function nombreCopia() {
+        const d = new Date()
+        const dos = n => String(n).padStart(2, '0')
+        return `critidata-copia-${d.getFullYear()}-${dos(d.getMonth() + 1)}-${dos(d.getDate())}` +
+               `-${dos(d.getHours())}${dos(d.getMinutes())}.jsonl.gz`
+    }
+
+    async function bajarCopia() {
+        const campo = document.getElementById('copia-clave')
+        const btn = document.getElementById('btn-copia')
+        if (!campo.value) { avisoCopia('Poné tu contraseña.', 'err'); campo.focus(); return }
+        const token = sessionStorage.getItem('cd_token')
+        btn.disabled = true
+        copiaLista = null
+        document.getElementById('btn-guardar-copia').style.display = 'none'
+        avisoCopia('Armando la copia en la nube… puede tardar un minuto.')
+        try {
+            const res = await fetch(`${API}/auth/admin/copia-base`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: campo.value })
+            })
+            if (!res.ok) {
+                const data = await res.json().catch(() => ({}))
+                avisoCopia(data.detail || 'No se pudo bajar la copia.', 'err')
+                return
+            }
+            const blob = await res.blob()
+            campo.value = ''
+            const filas = Number(res.headers.get('X-Copia-Filas') || 0)
+            const tablas = Number(res.headers.get('X-Copia-Tablas') || 0)
+            const mb = (blob.size / 1048576).toLocaleString('es-AR', { maximumFractionDigits: 1 })
+            copiaLista = { blob, nombre: nombreCopia() }
+            document.getElementById('btn-guardar-copia').style.display = ''
+            avisoCopia(`Copia lista: ${tablas} tablas, ${filas.toLocaleString('es-AR')} filas, ${mb} MB. ` +
+                       'Enchufá el disco externo y tocá «Guardar en el disco externo».', 'ok')
+            cargarUltimaCopia()
+        } catch {
+            avisoCopia('Error de conexión: no se pudo bajar la copia.', 'err')
+        } finally {
+            btn.disabled = false
+        }
+    }
+
+    async function guardarCopia() {
+        if (!copiaLista) return
+        const { blob, nombre } = copiaLista
+        if (window.showSaveFilePicker) {
+            try {
+                const archivo = await window.showSaveFilePicker({
+                    suggestedName: nombre,
+                    types: [{ description: 'Copia de la base', accept: { 'application/gzip': ['.gz'] } }]
+                })
+                const escritura = await archivo.createWritable()
+                await escritura.write(blob)
+                await escritura.close()
+                avisoCopia(`Guardada: ${archivo.name}. Si la pusiste en el disco externo, listo.`, 'ok')
+                return
+            } catch (e) {
+                if (e && e.name === 'AbortError') return   // cerró el cuadro sin guardar
+                // cualquier otro tropiezo: la descarga
+            }
+        }
+        const url = URL.createObjectURL(blob)
+        const enlace = document.createElement('a')
+        enlace.href = url
+        enlace.download = nombre
+        document.body.appendChild(enlace)
+        enlace.click()
+        enlace.remove()
+        setTimeout(() => URL.revokeObjectURL(url), 60000)
+        avisoCopia(`Se descargó ${nombre}: pasala de Descargas al disco externo.`, 'ok')
     }
 
     function updateMaintenanceBtn() {
