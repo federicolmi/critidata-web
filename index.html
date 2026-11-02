@@ -125,11 +125,14 @@
         .card {
             width: 100%;
             max-width: 460px;
-            background: #ffffff;
+            background: rgba(8,16,36,0.42);
+            -webkit-backdrop-filter: blur(18px) saturate(150%);
+            backdrop-filter: blur(18px) saturate(150%);
+            border: 1px solid rgba(255,255,255,0.18);
             border-radius: 18px;
             box-shadow:
-                0 24px 60px rgba(0,0,0,0.32),
-                0 2px 6px rgba(0,0,0,0.10);
+                0 24px 60px rgba(0,0,0,0.35),
+                inset 0 1px 0 rgba(255,255,255,0.14);
             overflow: hidden;
             max-height: 0;
             opacity: 0;
@@ -576,6 +579,66 @@
         .dl-mobile-msg .dl-mobile-icon { font-size:2.8rem; margin-bottom:12px; }
         .dl-mobile-msg .btn-secondary { width:100%; padding:12px; border:1.5px solid #cbd5e1; border-radius:9px; background:#fff; color:#0f172a; font-size:14.5px; font-weight:700; cursor:pointer; margin-top:10px; transition:background .2s; }
         .dl-mobile-msg .btn-secondary:hover { background:#f1f5f9; }
+
+        /* ── Vidrio oscuro ── */
+        .plan-card {
+            display:flex; align-items:center; gap:12px; padding:14px 16px; cursor:pointer;
+            border:1.5px solid rgba(255,255,255,0.16); border-radius:12px; background:rgba(255,255,255,0.07);
+            transition:border-color .2s, background .2s;
+        }
+        .plan-card:hover { border-color:rgba(140,200,255,0.65); background:rgba(255,255,255,0.14); }
+        .plan-card.descarga { gap:14px; padding:14px 18px; text-decoration:none; }
+        .card .form-title, .card .dl-name, .modal-box h3,
+        .card .wz-step h3, .card .wz-success h2, .card .wz-os-label,
+        .card [style*="color:#0f172a"], .card [style*="color:#1e293b"], .card [style*="color:#0d1b2a"],
+        .card [style*="color:#1a3a6b"], .modal-box [style*="color:#0f172a"] { color:#f1f5f9 !important; }
+        .card .form-subtitle, .card .field label, .card .dl-note p, .card .wz-step p, .card .wz-success p,
+        .card .contact-chip, .modal-box p,
+        .card [style*="color:#475569"], .card [style*="color:#64748b"], .card [style*="color:#444"],
+        .card [style*="color:#555"] { color:rgba(226,232,240,0.80) !important; }
+        .card .dl-sub, .card .dl-back, .card .footer-note, .card .dl-platform-tag, .card .wz-step-lbl,
+        .card .wz-btn-back, .card .wz-restart, .card .pass-hints,
+        .card [style*="color:#94a3b8"], .card [style*="color:#aaa"] { color:rgba(203,213,225,0.66) !important; }
+        .card .dl-back:hover, .card .wz-btn-back:hover { color:#fff !important; }
+        .card .forgot, .card .footer-note a, .card [style*="color:#1565c0"] { color:#8cc8ff !important; }
+        .card [style*="color:#dc2626"], .card [style*="color:#c62828"], .card [style*="color:#c0392b"],
+        .card .wz-code, .card .dl-note code { color:#fca5a5 !important; }
+        .card [style*="color:#15803d"], .card [style*="color:#166534"], .card [style*="color:#2e7d32"] { color:#86efac !important; }
+        .card [style*="background:#f0fdf4"] { background:rgba(34,197,94,0.14) !important; border-color:rgba(134,239,172,0.35) !important; }
+        .card [style*="background:#f8fafc"], .card [style*="background:#fafafa"], .card [style*="background:#fff;"],
+        .card [style*="background:#f0f4f8"], .card [style*="background:#f0f7ff"] { background:rgba(255,255,255,0.07) !important; }
+        .card [style*="#e2e8f0"] { border-color:rgba(255,255,255,0.16) !important; }
+        .card .btn-close { color:rgba(255,255,255,0.7); }
+        .card .btn-close:hover { background:rgba(255,255,255,0.12); color:#fff; }
+        .card .btn-navy { background:linear-gradient(135deg, #1a3a6b, #2d5ba8); border:1px solid rgba(255,255,255,0.22); }
+        .card .field input, .card .field textarea, .modal-box input {
+            background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.18); color:#fff;
+        }
+        .card .field input:focus, .card .field textarea:focus, .modal-box input:focus {
+            background:rgba(255,255,255,0.12); border-color:#8cc8ff; box-shadow:0 0 0 3px rgba(140,200,255,0.18);
+        }
+        .card .field input::placeholder, .card .field textarea::placeholder, .card .gm-field input::placeholder,
+        .modal-box input::placeholder { color:rgba(226,232,240,0.5); }
+        .card .gm-field { border-bottom-color:rgba(255,255,255,0.25); }
+        .card .gm-field:focus-within { border-bottom-color:#8cc8ff; }
+        .card .gm-field input { color:#fff; }
+        .card .dl-card { background:rgba(255,255,255,0.07); border-color:rgba(255,255,255,0.16); }
+        .card .dl-card:hover { background:rgba(255,255,255,0.14); border-color:rgba(140,200,255,0.65); }
+        .card .dl-disabled:hover { background:rgba(255,255,255,0.07) !important; border-color:rgba(255,255,255,0.16) !important; }
+        .card .dl-note, .card .wz-os-card { background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.14); }
+        .card .wz-os-card:hover { background:rgba(255,255,255,0.12); border-color:rgba(140,200,255,0.65); }
+        .card .dl-note code, .card .wz-code { background:rgba(0,0,0,0.3); }
+        .card .dl-context-note { background:rgba(21,101,192,0.18); color:#cfe6ff; }
+        .card .wz-callout { background:rgba(224,123,42,0.16); color:#ffd7a8; }
+        .card .wz-info { background:rgba(74,127,212,0.18); color:#cfe6ff; }
+        .card .contact-chip { background:rgba(255,255,255,0.08); }
+        .card .dl-mobile-msg .btn-secondary, .modal-box .btn-cancel {
+            background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.22); color:#f1f5f9;
+        }
+        .modal-box {
+            background:rgba(8,16,36,0.55) !important; border:1px solid rgba(255,255,255,0.18);
+            -webkit-backdrop-filter:blur(18px) saturate(150%); backdrop-filter:blur(18px) saturate(150%);
+        }
     </style>
 </head>
 <body>
@@ -678,7 +741,7 @@
                     </div>
 
                     <p style="font-size:.72rem;font-weight:700;color:#64748b;letter-spacing:.6px;text-transform:uppercase;margin-bottom:8px;">Mensual</p>
-                    <div style="border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s,background .2s;margin-bottom:8px;" onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'" onclick="gastroElegirPlan('mensual_unico')">
+                    <div class="plan-card" style="margin-bottom:8px;" onclick="gastroElegirPlan('mensual_unico')">
                         <div style="flex:1;">
                             <div style="font-size:.85rem;font-weight:700;color:#0f172a;">Pago único</div>
                             <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;"><span class="js-precio-gastro-mensual">USD 50</span></div>
@@ -686,7 +749,7 @@
                         </div>
                         <span style="color:#94a3b8;font-size:.9rem;">→</span>
                     </div>
-                    <div style="border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s,background .2s;margin-bottom:18px;" onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'" onclick="gastroElegirPlan('mensual_debito')">
+                    <div class="plan-card" style="margin-bottom:18px;" onclick="gastroElegirPlan('mensual_debito')">
                         <div style="flex:1;">
                             <div style="font-size:.85rem;font-weight:700;color:#0f172a;">Débito automático</div>
                             <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;"><span class="js-precio-gastro-debito-mensual">USD 47,50</span> <span style="font-size:.8rem;font-weight:400;">/mes</span></div>
@@ -696,7 +759,7 @@
                     </div>
 
                     <p style="font-size:.72rem;font-weight:700;color:#64748b;letter-spacing:.6px;text-transform:uppercase;margin-bottom:8px;">Anual</p>
-                    <div style="border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s,background .2s;margin-bottom:8px;" onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'" onclick="gastroElegirPlan('anual_unico')">
+                    <div class="plan-card" style="margin-bottom:8px;" onclick="gastroElegirPlan('anual_unico')">
                         <div style="flex:1;">
                             <div style="font-size:.85rem;font-weight:700;color:#0f172a;">Pago único</div>
                             <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;"><span class="js-precio-gastro-anual">USD 570</span></div>
@@ -1053,7 +1116,7 @@
 
                     <p style="font-size:.72rem;font-weight:700;color:#64748b;letter-spacing:.6px;text-transform:uppercase;margin-bottom:8px;">Mensual</p>
                     <a href="/app/#/register" style="text-decoration:none;display:block;margin-bottom:8px;">
-                        <div style="border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s,background .2s;" onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'">
+                        <div class="plan-card">
                             <div style="flex:1;">
                                 <div style="font-size:.85rem;font-weight:700;color:#0f172a;">Pago único</div>
                                 <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;"><span class="js-precio-mensual">USD 40</span></div>
@@ -1063,7 +1126,7 @@
                         </div>
                     </a>
                     <a href="/app/#/register" style="text-decoration:none;display:block;margin-bottom:18px;">
-                        <div style="border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s,background .2s;" onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'">
+                        <div class="plan-card">
                             <div style="flex:1;">
                                 <div style="font-size:.85rem;font-weight:700;color:#0f172a;">Débito automático</div>
                                 <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;"><span class="js-precio-debito-mensual">USD 38</span> <span style="font-size:.8rem;font-weight:400;">/mes</span></div>
@@ -1075,7 +1138,7 @@
 
                     <p style="font-size:.72rem;font-weight:700;color:#64748b;letter-spacing:.6px;text-transform:uppercase;margin-bottom:8px;">Anual</p>
                     <a href="/app/#/register" style="text-decoration:none;display:block;margin-bottom:8px;">
-                        <div style="border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 16px;background:#f8fafc;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s,background .2s;" onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'">
+                        <div class="plan-card">
                             <div style="flex:1;">
                                 <div style="font-size:.85rem;font-weight:700;color:#0f172a;">Pago único</div>
                                 <div style="font-size:1.1rem;font-weight:700;color:#0f172a;margin-top:2px;"><span class="js-precio-anual">USD 456</span></div>
@@ -1230,9 +1293,7 @@
                     <!-- Desktop: Windows + macOS -->
                     <div class="platform-desktop" style="display:flex;flex-direction:column;gap:10px;">
                         <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia_Setup.exe"
-                           style="text-decoration:none;display:flex;align-items:center;gap:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 18px;transition:border-color .2s,background .2s;"
-                           onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'"
-                           onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'">
+                           class="plan-card descarga">
                             <span style="font-size:1.8rem;">🪟</span>
                             <div>
                                 <div style="font-size:.72rem;color:#94a3b8;letter-spacing:.5px;margin-bottom:2px;">INSTALADOR</div>
@@ -1241,9 +1302,7 @@
                             <span style="margin-left:auto;font-size:.82rem;font-weight:700;color:#1565c0;">⬇ Descargar</span>
                         </a>
                         <a href="https://github.com/federicolmi/critidata-web/releases/latest/download/CritiData_Nefrologia.dmg"
-                           style="text-decoration:none;display:flex;align-items:center;gap:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 18px;transition:border-color .2s,background .2s;"
-                           onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'"
-                           onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'">
+                           class="plan-card descarga">
                             <span style="font-size:1.8rem;"></span>
                             <div>
                                 <div style="font-size:.72rem;color:#94a3b8;letter-spacing:.5px;margin-bottom:2px;">INSTALADOR</div>
@@ -1256,9 +1315,7 @@
                     <!-- Mobile: Play Store + App Store -->
                     <div class="platform-mobile" style="display:flex;flex-direction:column;gap:10px;">
                         <a href="https://play.google.com/store/apps/details?id=com.critidata.nephrology"
-                           style="text-decoration:none;display:flex;align-items:center;gap:14px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:14px 18px;transition:border-color .2s,background .2s;"
-                           onmouseover="this.style.borderColor='#1565c0';this.style.background='#f0f4ff'"
-                           onmouseout="this.style.borderColor='#e2e8f0';this.style.background='#f8fafc'">
+                           class="plan-card descarga">
                             <span style="font-size:1.8rem;">🤖</span>
                             <div>
                                 <div style="font-size:.72rem;color:#94a3b8;letter-spacing:.5px;margin-bottom:2px;">DISPONIBLE EN</div>
