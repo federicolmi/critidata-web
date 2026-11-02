@@ -446,25 +446,55 @@
         .hamburger.open span:nth-child(2) { opacity: 0; }
         .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
+        /* El menú del teléfono (1-nov-2026): antes una cortina azul casi
+           opaca que tapaba los Pilares; ahora un velo liviano y las opciones
+           en una ventana de vidrio, como la tarjeta. El velo NO lleva
+           backdrop-filter: si lo tuviera, el vidrio de adentro esmerilaría
+           el velo y no la foto. */
         .mobile-menu {
             display: none;
             position: fixed;
             inset: 0;
             z-index: 150;
-            background: rgba(5,15,35,0.92);
-            backdrop-filter: blur(8px);
-            flex-direction: column;
+            background: rgba(5,15,35,0.40);
             justify-content: center;
             align-items: center;
-            gap: 28px;
+            padding: 24px 16px;
         }
         .mobile-menu.open { display: flex; }
-        .mobile-menu .nav-btn {
-            font-size: 20px;
-            color: rgba(255,255,255,0.85);
-            letter-spacing: 0.5px;
+        .mobile-menu-ventana {
+            width: 100%;
+            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 22px 18px;
+            background: rgba(8,16,36,0.42);
+            -webkit-backdrop-filter: blur(18px) saturate(150%);
+            backdrop-filter: blur(18px) saturate(150%);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 18px;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.14);
         }
-        .mobile-menu .nav-btn:hover { color: #fff; }
+        .mobile-menu .nav-btn {
+            display: block;
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 17px;
+            text-align: center;
+            color: #f1f5f9;
+            letter-spacing: 0.5px;
+            background: rgba(255,255,255,0.07);
+            border: 1.5px solid rgba(255,255,255,0.16);
+            border-radius: 12px;
+            transition: border-color .2s, background .2s;
+        }
+        .mobile-menu .nav-btn::after { display: none; }
+        .mobile-menu .nav-btn:hover, .mobile-menu .nav-btn:active {
+            color: #fff;
+            background: rgba(255,255,255,0.14);
+            border-color: rgba(140,200,255,0.65);
+        }
 
         /* ── Responsive ── */
         .nav-download-wrap { display: none; }
@@ -649,12 +679,14 @@
     </button>
 
     <!-- Menú mobile overlay -->
-    <div class="mobile-menu" id="mobile-menu">
-        <button class="nav-btn" onclick="switchTabMobile('login')">Iniciar sesión</button>
-        <button class="nav-btn" onclick="switchTabMobile('register')">Registrarse</button>
-        <button class="nav-btn" onclick="switchTabMobile('contact')">Contáctenos</button>
-        <button class="nav-btn" onclick="switchTabMobile('download')">⬇ Descargar App</button>
-        <a class="nav-btn" href="/demo.html" style="color:rgba(255,255,255,.85);text-decoration:none;">▶ Ver demo</a>
+    <div class="mobile-menu" id="mobile-menu" onclick="if (event.target === this) toggleMenu()">
+        <div class="mobile-menu-ventana">
+            <button class="nav-btn" onclick="switchTabMobile('login')">Iniciar sesión</button>
+            <button class="nav-btn" onclick="switchTabMobile('register')">Registrarse</button>
+            <button class="nav-btn" onclick="switchTabMobile('contact')">Contáctenos</button>
+            <button class="nav-btn" onclick="switchTabMobile('download')">⬇ Descargar App</button>
+            <a class="nav-btn" href="/demo.html" style="text-decoration:none;">▶ Ver demo</a>
+        </div>
     </div>
 
     <!-- Navegación superior derecha -->

@@ -12,13 +12,16 @@
   --bg:#f0f0f0;--surface:#fff;--border:#e8e8e8;
   --text:#1a1a1a;--muted:#9e9e9e;--icon-bg:#eeeeee;
 }
-body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#e0e0e0;min-height:100vh;}
-.banner{background:#0D1B3E;color:#fff;padding:9px 16px;display:flex;align-items:center;justify-content:space-between;}
+/* El fondo y el vidrio de critidata.com (1-nov-2026): la demo es parte
+   del sitio, así que el salto desde «Ver demo» no se nota. Solo el
+   selector; las demos de cada especialidad son la app y quedan claras. */
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;min-height:100vh;background-color:#050f23;background-image:radial-gradient(ellipse at 70% 30%,rgba(255,200,80,0.18) 0%,rgba(255,120,20,0.07) 20%,transparent 45%),linear-gradient(rgba(5,15,35,0.42),rgba(5,15,35,0.42)),url('https://images.unsplash.com/photo-1708112292872-fd5612affa79?w=1920');background-size:cover;background-position:center;background-repeat:no-repeat;background-attachment:fixed;}
+.banner{background:rgba(8,16,36,0.55);-webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%);border-bottom:1px solid rgba(255,255,255,0.12);color:#fff;padding:9px 16px;display:flex;align-items:center;justify-content:space-between;}
 .brand{font-size:14px;font-weight:300;letter-spacing:1px;display:flex;align-items:center;gap:8px;}
 .badge{background:rgba(252,211,77,.15);color:#fcd34d;border:1px solid rgba(252,211,77,.3);padding:1px 8px;border-radius:12px;font-size:10px;font-weight:700;}
-.cta{background:#1565c0;color:#fff;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;text-decoration:none;}
-.shell{max-width:440px;margin:0 auto;min-height:calc(100vh - 38px);background:var(--bg);position:relative;overflow:hidden;}
-.scr{display:none;flex-direction:column;min-height:calc(100vh - 38px);}
+.cta{background:linear-gradient(135deg,#1a3a6b,#2d5ba8);border:1px solid rgba(255,255,255,0.22);color:#fff;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:700;text-decoration:none;}
+.shell{max-width:440px;margin:0 auto;min-height:calc(100vh - 38px);position:relative;}
+.scr{display:none;flex-direction:column;min-height:calc(100vh - 38px);background:var(--bg);}
 .scr.on{display:flex;}
 .hdr{background:var(--surface);padding:14px 16px;display:flex;align-items:center;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;flex-shrink:0;}
 .hdr-back{width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;border-radius:50%;color:var(--text);flex-shrink:0;}
@@ -28,19 +31,27 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#e0e0e
 .body{flex:1;overflow-y:auto;padding:10px 0;}
 
 /* ── SELECTOR ── */
+#s-selector{min-height:0;margin:20px 12px 24px;padding-bottom:14px;background:rgba(8,16,36,0.42);-webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%);border:1px solid rgba(255,255,255,0.18);border-radius:18px;box-shadow:0 24px 60px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.14);}
 .sel-hdr{padding:28px 20px 16px;text-align:center;}
-.sel-hdr-title{font-size:24px;font-weight:800;color:var(--text);letter-spacing:-.5px;}
-.sel-hdr-sub{font-size:14px;color:var(--muted);margin-top:5px;}
-.sel-card{background:var(--surface);margin:0 14px 10px;border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;border:1.5px solid transparent;transition:box-shadow .15s;}
-.sel-card:hover:not(.coming){box-shadow:0 2px 14px rgba(0,0,0,.12);}
-.sel-card.coming{opacity:.5;cursor:default;}
-.sel-ico{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.sel-name{font-size:16px;font-weight:700;color:var(--text);}
-.sel-sub{font-size:12px;color:var(--muted);margin-top:3px;}
+.sel-hdr-title{font-size:24px;font-weight:800;color:#f1f5f9;letter-spacing:-.5px;}
+.sel-hdr-sub{font-size:14px;color:rgba(226,232,240,0.80);margin-top:5px;}
+.sel-card{background:rgba(255,255,255,0.07);margin:0 14px 10px;border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer;border:1.5px solid rgba(255,255,255,0.16);transition:border-color .2s,background .2s;}
+.sel-card:hover:not(.coming){background:rgba(255,255,255,0.14);border-color:rgba(140,200,255,0.65);}
+.sel-card.coming{opacity:.6;cursor:default;}
+.sel-ico{width:52px;height:52px;border-radius:14px;border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sel-name{font-size:16px;font-weight:700;color:#f1f5f9;}
+.sel-sub{font-size:12px;color:rgba(226,232,240,0.80);margin-top:3px;}
 .sel-right{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;}
+.sel-right svg{stroke:rgba(255,255,255,0.5);}
+/* En un celular angosto, la tarjeta del ancho que tenía sin el vidrio:
+   con 320 px, «Próximamente» se salía de la ventana. */
+@media (max-width:380px){#s-selector{margin:14px 6px 20px;}.sel-card{margin:0 8px 8px;}.sel-name{hyphens:auto;overflow-wrap:anywhere;}}
+/* Más angosto que cualquier teléfono (la ventana lateral, 278 px): la
+   insignia baja a su renglón en vez de salirse de la tarjeta. */
+@media (max-width:319px){.sel-card{flex-wrap:wrap;}.sel-card>div:nth-child(2){flex:1 1 0;min-width:0;}.sel-right{flex-basis:100%;flex-direction:row;justify-content:flex-end;align-items:center;margin-top:-6px;}.sel-ico{width:44px;height:44px;}.sel-name{font-size:15px;}}
 .sbadge{font-size:9px;font-weight:800;padding:3px 9px;border-radius:20px;white-space:nowrap;text-transform:uppercase;letter-spacing:.5px;}
-.sbadge-demo{background:#e8f5e9;color:#2e7d32;}
-.sbadge-prox{background:#f5f5f5;color:#9e9e9e;}
+.sbadge-demo{background:rgba(34,197,94,0.14);color:#86efac;border:1px solid rgba(134,239,172,0.35);}
+.sbadge-prox{background:rgba(255,255,255,0.08);color:rgba(203,213,225,0.80);border:1px solid rgba(255,255,255,0.14);}
 
 /* ── HOME menu cards ── */
 .menu-card{background:var(--surface);margin:0 12px 8px;border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:background .12s;}
@@ -148,7 +159,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#e0e0e
 <div class="banner">
   <div class="brand">CritiData <span class="badge">DEMO</span></div>
   <div style="display:flex;align-items:center;gap:12px;">
-    <a href="/" style="color:rgba(255,255,255,.5);font-size:12px;text-decoration:none;">← Inicio</a>
+    <a href="/" style="color:rgba(255,255,255,.75);font-size:12px;text-decoration:none;">← Inicio</a>
     <a href="/#contacto" class="cta">Empezar gratis →</a>
   </div>
 </div>
@@ -163,8 +174,8 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#e0e0e
   </div>
   <div>
     <div class="sel-card" onclick="location.href='/demo-nefro/'">
-      <div class="sel-ico" style="background:#e3f2fd;">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1565c0" stroke-width="1.8"><path d="M12 2C8 2 5 5.5 5 9c0 3 1.5 5 3 7l1 5h6l1-5c1.5-2 3-4 3-7 0-3.5-3-7-7-7z"/><path d="M9 12c0 1.7 1.3 3 3 3s3-1.3 3-3"/></svg>
+      <div class="sel-ico" style="background:rgba(21,101,192,0.28);">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#90caf9" stroke-width="1.8"><path d="M12 2C8 2 5 5.5 5 9c0 3 1.5 5 3 7l1 5h6l1-5c1.5-2 3-4 3-7 0-3.5-3-7-7-7z"/><path d="M9 12c0 1.7 1.3 3 3 3s3-1.3 3-3"/></svg>
       </div>
       <div>
         <div class="sel-name">Nefrología</div>
@@ -177,8 +188,8 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#e0e0e
     </div>
 
     <div class="sel-card" onclick="location.href='/demo-gastro/'">
-      <div class="sel-ico" style="background:#fff3e0;">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ef6c00" stroke-width="1.8"><path d="M10 2v5a7 7 0 0 1 7 7 4 4 0 0 1 0 8h-3a8 8 0 0 1-8-8v-2"/></svg>
+      <div class="sel-ico" style="background:rgba(239,108,0,0.24);">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ffb74d" stroke-width="1.8"><path d="M10 2v5a7 7 0 0 1 7 7 4 4 0 0 1 0 8h-3a8 8 0 0 1-8-8v-2"/></svg>
       </div>
       <div>
         <div class="sel-name">Gastroenterología</div>
@@ -191,8 +202,8 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#e0e0e
     </div>
 
     <div class="sel-card" onclick="location.href='/demo-laboratorio/'">
-      <div class="sel-ico" style="background:#e0f2f1;">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#00695c" stroke-width="1.8"><path d="M10 2v6L4.5 18.5a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 8V2"/><line x1="8" y1="2" x2="16" y2="2"/><line x1="7.5" y1="13" x2="16.5" y2="13"/></svg>
+      <div class="sel-ico" style="background:rgba(0,137,123,0.28);">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#80cbc4" stroke-width="1.8"><path d="M10 2v6L4.5 18.5a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L14 8V2"/><line x1="8" y1="2" x2="16" y2="2"/><line x1="7.5" y1="13" x2="16.5" y2="13"/></svg>
       </div>
       <div>
         <div class="sel-name">Laboratorio</div>
@@ -205,8 +216,8 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#e0e0e
     </div>
 
     <div class="sel-card" onclick="location.href='/demo-patologia/'">
-      <div class="sel-ico" style="background:#fce4ec;">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ad1457" stroke-width="1.8"><path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/></svg>
+      <div class="sel-ico" style="background:rgba(173,20,87,0.28);">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f48fb1" stroke-width="1.8"><path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/></svg>
       </div>
       <div>
         <div class="sel-name">Patología</div>
@@ -221,8 +232,8 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#e0e0e
     <!-- Anestesia en pausa desde el 9-oct-2026: vuelve con demo/armar_demo.py
          (critidata_anestesia) y esta tarjeta como estaba en 2bb4419. -->
     <div class="sel-card coming">
-      <div class="sel-ico" style="background:#ede7f6;">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5e35b1" stroke-width="1.8"><rect x="2" y="4" width="20" height="14" rx="2"/><polyline points="5 12 8 12 10 8 13 15 15 11 19 11"/><path d="M8 21h8"/></svg>
+      <div class="sel-ico" style="background:rgba(94,53,177,0.30);">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#b39ddb" stroke-width="1.8"><rect x="2" y="4" width="20" height="14" rx="2"/><polyline points="5 12 8 12 10 8 13 15 15 11 19 11"/><path d="M8 21h8"/></svg>
       </div>
       <div>
         <div class="sel-name">Anestesia</div>
@@ -232,8 +243,8 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#e0e0e
     </div>
 
     <div class="sel-card coming">
-      <div class="sel-ico" style="background:#ffebee;">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="#c62828" stroke="#c62828" stroke-width="1.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <div class="sel-ico" style="background:rgba(198,40,40,0.26);">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="#ef9a9a" stroke="#ef9a9a" stroke-width="1.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
       </div>
       <div>
         <div class="sel-name">Cardiología</div>
@@ -243,8 +254,8 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#e0e0e
     </div>
 
     <div class="sel-card coming">
-      <div class="sel-ico" style="background:#f3e5f5;">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#7b1fa2" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><line x1="7" y1="8" x2="7" y2="8.01"/><line x1="12" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="12" y2="12"/><line x1="14" y1="12" x2="17" y2="12"/></svg>
+      <div class="sel-ico" style="background:rgba(123,31,162,0.30);">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ce93d8" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><line x1="7" y1="8" x2="7" y2="8.01"/><line x1="12" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="12" y2="12"/><line x1="14" y1="12" x2="17" y2="12"/></svg>
       </div>
       <div>
         <div class="sel-name">UTI</div>
@@ -254,8 +265,8 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#e0e0e
     </div>
 
     <div class="sel-card coming">
-      <div class="sel-ico" style="background:#e8f5e9;">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.24h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      <div class="sel-ico" style="background:rgba(46,125,50,0.28);">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#a5d6a7" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.24h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6.29 6.29l.96-.96a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
       </div>
       <div>
         <div class="sel-name">Clínica Médica</div>
@@ -264,7 +275,7 @@ body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#e0e0e
       <div class="sel-right"><span class="sbadge sbadge-prox">Próximamente</span></div>
     </div>
 
-    <div style="padding:16px 20px 4px;text-align:center;font-size:12px;color:var(--muted);">
+    <div style="padding:16px 20px 4px;text-align:center;font-size:12px;color:rgba(203,213,225,0.66);">
       Datos de ejemplo · No contiene información real de pacientes
     </div>
   </div>
