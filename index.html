@@ -648,7 +648,7 @@
                         <p class="form-subtitle" style="margin-bottom:0;">Endoscopía: imágenes, informes y agenda</p>
                     </div>
                     <div class="dl-cards">
-                        <div class="dl-card" onclick="accesoIrA('gastro-login')">
+                        <div class="dl-card" onclick="location.href = '/gastro-app/'">
                             <span class="dl-name">Iniciar sesión</span>
                             <span class="dl-sub">Ya tengo cuenta</span>
                         </div>
@@ -958,14 +958,17 @@
                     </div>
                     <span style="margin-left:auto;color:#94a3b8;font-size:.9rem;">→</span>
                 </a>
-                <div class="dl-card" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;cursor:pointer;" onclick="irAGastro('gastro-login')">
+                <!-- (1-nov-2026, "la idea es que en el diseño sean iguales") Gastro
+                     entra por SU app, como Nefrología por /app/: el formulario de
+                     gastro-login de acá abajo queda sin uso. -->
+                <a href="/gastro-app/" class="dl-card" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;text-decoration:none;">
                     <span style="font-size:1.5rem;margin-right:14px;">🔬</span>
                     <div>
                         <div style="font-size:1rem;font-weight:700;color:#0f172a;">Gastroenterología</div>
                         <div style="font-size:.78rem;color:#94a3b8;margin-top:2px;">Endoscopía · Imágenes · Informes · Agenda</div>
                     </div>
                     <span style="margin-left:auto;color:#94a3b8;font-size:.9rem;">→</span>
-                </div>
+                </a>
                 <div class="dl-card dl-disabled" style="flex-direction:row;align-items:center;max-width:none;padding:16px 18px;">
                     <span style="font-size:1.5rem;margin-right:14px;">➕</span>
                     <div>
@@ -1463,9 +1466,13 @@
         // El plan elegido viaja con el registro. El cobro real usa los mismos
         // endpoints de Mercado Pago que nefro (/auth/create-payment y
         // /auth/create-subscription): se dispara al iniciar sesión, con token.
+        // (1-nov-2026) El plan abre «Crear cuenta» de la app de gastro, como
+        // los planes de nefro abren /app/#/register: mismo diseño en las dos.
+        // El backend no guarda el plan (UserCreate no lo tiene): no se pierde
+        // nada. El formulario gastro-register de acá queda sin uso.
         function gastroElegirPlan(plan) {
             gastroPlan = plan
-            accesoIrA('gastro-register')
+            window.location.href = '/gastro-app/#/registro'
         }
 
         async function gastroLogin() {
