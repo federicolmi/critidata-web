@@ -61,24 +61,30 @@
     /* SPLASH de carga: el motor tarda ~15s en arrancar y una pantalla en
        blanco parece tildada. Se saca al primer frame de Flutter (y por un
        fallback de 30s, por si el evento no llegara jamás). pointer-events
-       none: aunque quedara colgado, nunca bloquea un click. */
+       none: aunque quedara colgado, nunca bloquea un click.
+       Desde el 2-nov-2026 igual al de nefro y anestesia ("que queden
+       iguales"): azul noche, el aro blanco y el nombre abajo, sin logo. */
     #cargando {
       position: fixed; inset: 0; z-index: 1; pointer-events: none;
-      display: flex; flex-direction: column; gap: 12px;
+      display: flex; flex-direction: column; gap: 28px;
       align-items: center; justify-content: center;
-      background: #F8F7F7; color: #64748B;
-      font-family: system-ui, sans-serif; font-size: 14px;
+      background: #0D1B3E; color: rgba(255,255,255,0.5);
+      font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px;
+      letter-spacing: 1px;
+      transition: opacity 0.4s ease;
     }
+    #cargando.oculto { opacity: 0; }
     #cargando .aro {
-      width: 34px; height: 34px; border-radius: 50%;
-      border: 3px solid #E2E8F0; border-top-color: #0F4C81;
-      animation: girar 1s linear infinite;
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 2.5px solid rgba(255,255,255,0.15);
+      border-top-color: rgba(255,255,255,0.7);
+      animation: girar 0.8s linear infinite;
     }
     @keyframes girar { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
-  <div id="cargando"><div class="aro"></div><div>Cargando CritiData Gastro…</div></div>
+  <div id="cargando"><div class="aro"></div><div>CritiData Gastroenterología</div></div>
   <div id="inset-abajo"></div>
 
   <script>
@@ -94,7 +100,9 @@
 
       function sacarSplash() {
         var s = document.getElementById('cargando');
-        if (s) s.remove();
+        if (!s) return;
+        s.classList.add('oculto'); // se desvanece como el de nefro
+        setTimeout(function () { s.remove(); }, 400);
       }
 
       // El motor instala SU meta viewport (pisa al del <head>) y no trae
