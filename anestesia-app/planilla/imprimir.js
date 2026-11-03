@@ -518,6 +518,75 @@ function sevEstable(vs) {
   return { et: de("sev_et"), fi: de("sev_fi") };
 }
 
+// EL SEVORANE DE LA FICHA (3-nov-2026, el médico: "la línea amarilla en el
+// parte no aparece"): la línea salía solo del Et % del monitor, y el Vista
+// mide el sevorane solo con la línea de muestreo conectada al módulo de
+// gases; sin eso no había línea. Sin el Et del monitor la dibuja el % de la
+// ficha con sus momentos (agentes_tiempo: desde cuándo, Subir / Bajar,
+// Interrumpir / Reiniciar), leídos como los lee el consumo en ml del cierre
+// (cargas._minuto_del_momento): 'inicio' es el ingreso, 'min' N min
+// después, 'fin' N min antes del fin, 'hora' la del reloj. Los tramos
+// [{desde, hasta, pct}] en minutos desde el ingreso, en orden; [] sin
+// sevorane o sin un % que se entienda ("1L/min" solo no dice el %).
+function tramosSevDeLaFicha(datos, totalMin) {
+  const agentes = String(datos.agente_anestesico || "").split(" / ");
+  const dosis = String(datos.dosis_agente || "").split(" / ");
+  const i = agentes.findIndex((a) => /sevo/i.test(a));
+  if (i < 0 || !(totalMin > 0)) return [];
+  const pctDe = (x) => {
+    const m = /^\s*(\d+(?:[.,]\d+)?)\s*(?:%|$)/.exec(String(x ?? ""));
+    return m ? Number(m[1].replace(",", ".")) : null;
+  };
+  let lista;
+  try { lista = JSON.parse(datos.agentes_tiempo || "[]"); } catch (_) { lista = []; }
+  if (!Array.isArray(lista)) lista = [];
+  const agente = agentes[i].trim().toLowerCase();
+  const ing = minutosDe(datos.hora_ingreso);
+  const minutoDe = (t) => {
+    const momento = String(t.momento || "").trim().toLowerCase();
+    const n = /^\s*(\d+(?:[.,]\d+)?)/.exec(String(t.valor ?? ""));
+    const num = n ? Math.round(Number(n[1].replace(",", "."))) : null;
+    if (momento === "inicio") return 0;
+    if (momento === "min") return num;
+    if (momento === "fin") return totalMin - (num || 0);
+    if (momento === "hora") {
+      const h = minutosDe(t.valor);
+      return h == null || ing == null ? null : (h - ing + 1440) % 1440;
+    }
+    return null;
+  };
+  const corta = (t) => String(t.accion || "").trim().toLowerCase() === "cortar" ||
+    ["1", "true", "si", "sí"].includes(String(t.cortar || "").trim().toLowerCase());
+  const momentos = lista
+    .filter((t) => t && typeof t === "object" &&
+                   String(t.agente || "").trim().toLowerCase() === agente)
+    .map((t) => ({ m: minutoDe(t), corte: corta(t), pct: "dosis" in t ? pctDe(t.dosis) : null }))
+    .filter((p) => p.m != null)
+    .sort((a, b) => a.m - b.m);
+  // sin momentos, el % de la ficha corre la anestesia entera
+  if (!momentos.length) momentos.push({ m: 0, corte: false, pct: null });
+  const tramos = [];
+  let pct = pctDe(dosis[i]), desde = null;
+  const cerrar = (hasta) => {
+    const d = Math.max(0, desde), h = Math.min(totalMin, hasta);
+    if (pct != null && h > d) tramos.push({ desde: d, hasta: h, pct });
+  };
+  for (const p of momentos) {
+    if (p.corte) {
+      if (desde != null) cerrar(p.m);
+      desde = null;
+      continue;
+    }
+    // un momento sin % (reiniciar a secas) sigue con el que venía
+    const nuevo = p.pct ?? pct;
+    if (desde != null && nuevo !== pct) cerrar(p.m);
+    if (desde == null || nuevo !== pct) desde = p.m;
+    pct = nuevo;
+  }
+  if (desde != null) cerrar(totalMin);
+  return tramos;
+}
+
 // EL REGISTRO COMPLETO (26-oct-2026, el médico: "cuando los datos en vivo
 // capturados son en menor cantidad a los del tiempo de la anestesia,
 // autocompletá con parámetros de monitoreo similares"). El monitor que se
@@ -1273,8 +1342,31 @@ function construirGrilla(datos, vitales, eventos) {
   // de más de una columna corta la línea; una columna sola es una rayita.
   // Va antes de las curvas: los símbolos quedan encima.
   const SEV_POR_UNIDAD = 6;
+  const ySev = (pct) => yDe(Math.min(8, Math.max(0, pct)) * SEV_POR_UNIDAD);
+  // Sin el Et del MONITOR, la del % de la ficha (tramosSevDeLaFicha): en
+  // escalones, de su hora a su hora, cortada en un Interrumpir. Con "De
+  // prueba" también: la serie lleva un solo % y la ficha sabe los cambios.
+  const sevDelMonitor = vitales.some((v) => v.sev_et != null && v.fuente !== "prueba");
+  const tramosFicha = sevDelMonitor || !Number.isFinite(finParte) ? []
+    : tramosSevDeLaFicha(datos, (finParte - iniParte) / 60000);
+  const xDeMinuto = (m) =>
+    Math.min(xTot, Math.max(IZQ, IZQ + (iniParte + m * 60000 - t0) / slotMs * anchoCol));
+  let escalones = [];
+  const cerrarEscalones = () => {
+    if (escalones.length >= 2) {
+      S.push(`<polyline points="${escalones.map((p) => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(" ")}" ` +
+             `fill="none" stroke="${COLORES.sev_linea}" stroke-width="1.3" stroke-linejoin="round"/>`);
+    }
+    escalones = [];
+  };
+  for (const [i, tr] of tramosFicha.entries()) {
+    if (i > 0 && tr.desde > tramosFicha[i - 1].hasta) cerrarEscalones();
+    const y = ySev(tr.pct);
+    escalones.push({ x: xDeMinuto(tr.desde), y }, { x: xDeMinuto(tr.hasta), y });
+  }
+  cerrarEscalones();
   const sevLinea = {};
-  for (const v of vitales) {
+  for (const v of tramosFicha.length ? [] : vitales) {
     if (v.sev_et == null) continue;
     (sevLinea[slotDe(v.ts)] ||= []).push(v);
   }
@@ -1296,8 +1388,7 @@ function construirGrilla(datos, vitales, eventos) {
     if (i > 0 && s - slotsSev[i - 1] > 1) cerrarTramoSev();
     const { et } = sevEstable(sevLinea[s]);
     if (et == null) continue;
-    tramoSev.push({ s, x: xCol(s) + anchoCol / 2,
-                    y: yDe(Math.min(8, Math.max(0, et)) * SEV_POR_UNIDAD) });
+    tramoSev.push({ s, x: xCol(s) + anchoCol / 2, y: ySev(et) });
   }
   cerrarTramoSev();
   // claves apiladas en la primera columna del gráfico (única celda alta:
@@ -1312,7 +1403,7 @@ function construirGrilla(datos, vitales, eventos) {
     ["○ SpO2", COLORES.spo2],
     ["◆ etCO2", COLORES.etco2],
     ["Sev% Et/Fi al pie", COLORES.sev],
-    ...(slotsSev.length ? [["— Sev % (línea)", COLORES.sev_linea]] : []),
+    ...(slotsSev.length || tramosFicha.length ? [["— Sev % (línea)", COLORES.sev_linea]] : []),
     // las marcas (22-sep), en la columna de referencias como el resto de
     // los simbolos — cada una solo si el parte la tiene
     ...(eventos.some((e) => e.tipo === "practica") ? [["✱ Práctica", "#1d5fc4"]] : []),
