@@ -224,6 +224,7 @@ const COLORES = {
   spo2: "#0091ea",       // SpO2 celeste vivo (resaltada)
   etco2: "#8e44ad",      // etCO2 violeta
   sev: "#a8770b",        // Sev ámbar
+  sev_linea: "#e8c000",  // la línea del Sev % (3-nov-2026): amarilla
 };
 
 const linea = (...partes) => `<div class="linea">${partes.join("")}</div>`;
@@ -1263,6 +1264,42 @@ function construirGrilla(datos, vitales, eventos) {
           `font-size="5.6" font-weight="700" fill="${color}"`);
     }
   }
+  // LA LÍNEA DEL SEVORANE (3-nov-2026, el médico: "el sevorane que se vea
+  // como una línea amarilla en el parte, debajo del registro de los signos
+  // vitales"): el Et % del monitor, columna por columna, como una línea
+  // amarilla al pie del gráfico, en su propia escala (1 % = 6 del eje: el
+  // 2 % habitual queda en 12, bien abajo de la FC, la saturación y el CO2;
+  // tope 8 %). Los números al pie siguen diciendo el Et/Fi exacto. Un hueco
+  // de más de una columna corta la línea; una columna sola es una rayita.
+  // Va antes de las curvas: los símbolos quedan encima.
+  const SEV_POR_UNIDAD = 6;
+  const sevLinea = {};
+  for (const v of vitales) {
+    if (v.sev_et == null) continue;
+    (sevLinea[slotDe(v.ts)] ||= []).push(v);
+  }
+  const slotsSev = Object.keys(sevLinea).map(Number).sort((a, b) => a - b);
+  let tramoSev = [];
+  const cerrarTramoSev = () => {
+    if (tramoSev.length >= 2) {
+      S.push(`<polyline points="${tramoSev.map((p) => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(" ")}" ` +
+             `fill="none" stroke="${COLORES.sev_linea}" stroke-width="1.3" stroke-linejoin="round"/>`);
+    } else if (tramoSev.length === 1) {
+      const [p] = tramoSev;
+      S.push(`<line x1="${(xCol(p.s) + 1).toFixed(2)}" y1="${p.y.toFixed(2)}" ` +
+             `x2="${(xCol(p.s + 1) - 1).toFixed(2)}" y2="${p.y.toFixed(2)}" ` +
+             `stroke="${COLORES.sev_linea}" stroke-width="1.3"/>`);
+    }
+    tramoSev = [];
+  };
+  for (const [i, s] of slotsSev.entries()) {
+    if (i > 0 && s - slotsSev[i - 1] > 1) cerrarTramoSev();
+    const { et } = sevEstable(sevLinea[s]);
+    if (et == null) continue;
+    tramoSev.push({ s, x: xCol(s) + anchoCol / 2,
+                    y: yDe(Math.min(8, Math.max(0, et)) * SEV_POR_UNIDAD) });
+  }
+  cerrarTramoSev();
   // claves apiladas en la primera columna del gráfico (única celda alta:
   // acá reemplazan a la vieja fila "Claves:" de la cabecera)
   const claves = [
@@ -1275,6 +1312,7 @@ function construirGrilla(datos, vitales, eventos) {
     ["○ SpO2", COLORES.spo2],
     ["◆ etCO2", COLORES.etco2],
     ["Sev% Et/Fi al pie", COLORES.sev],
+    ...(slotsSev.length ? [["— Sev % (línea)", COLORES.sev_linea]] : []),
     // las marcas (22-sep), en la columna de referencias como el resto de
     // los simbolos — cada una solo si el parte la tiene
     ...(eventos.some((e) => e.tipo === "practica") ? [["✱ Práctica", "#1d5fc4"]] : []),
