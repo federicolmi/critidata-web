@@ -587,6 +587,28 @@ function tramosSevDeLaFicha(datos, totalMin) {
   return tramos;
 }
 
+// (3-nov-2026, el médico, viendo el ejemplo con un broncoespasmo en "De
+// prueba": "Sí, cortala", y enseguida: "este corte de todo solo se da si
+// hay un paro cardiorrespiratorio en modo prueba") La línea de la ficha se
+// corta en cada PARO, como la serie de prueba (cargas.ventanas_criticas):
+// con duración, ese tramo; sin ella, hasta el fin. El evento crítico es
+// texto libre: el paro se reconoce por sus palabras, las mismas que
+// cargas._RE_PARO ("reanimación" sola no: también es la de volumen). Las
+// ventanas [desde, hasta] en minutos desde el ingreso, como los tramos.
+const RE_PARO = /\b(paros?|pcr|rcp|asistolia|sin pulso|aesp|fv|fibrilaci[oó]n ventricular|reanimaci[oó]n cardio\w*)\b/i;
+function esParo(texto) { return RE_PARO.test(String(texto ?? "")); }
+function tramosFueraDeLosCriticos(tramos, ventanas) {
+  let quedan = tramos;
+  for (const [d, h] of ventanas) {
+    quedan = quedan.flatMap((t) => {
+      if (h <= t.desde || d >= t.hasta) return [t];
+      return [...(d > t.desde ? [{ ...t, hasta: d }] : []),
+              ...(h < t.hasta ? [{ ...t, desde: h }] : [])];
+    });
+  }
+  return quedan;
+}
+
 // EL REGISTRO COMPLETO (26-oct-2026, el médico: "cuando los datos en vivo
 // capturados son en menor cantidad a los del tiempo de la anestesia,
 // autocompletá con parámetros de monitoreo similares"). El monitor que se
@@ -1346,9 +1368,18 @@ function construirGrilla(datos, vitales, eventos) {
   // Sin el Et del MONITOR, la del % de la ficha (tramosSevDeLaFicha): en
   // escalones, de su hora a su hora, cortada en un Interrumpir. Con "De
   // prueba" también: la serie lleva un solo % y la ficha sabe los cambios.
+  // Cortada en un paro; la del monitor no: lo medido es real.
   const sevDelMonitor = vitales.some((v) => v.sev_et != null && v.fuente !== "prueba");
-  const tramosFicha = sevDelMonitor || !Number.isFinite(finParte) ? []
+  const tramosDeLaFicha = sevDelMonitor || !Number.isFinite(finParte) ? []
     : tramosSevDeLaFicha(datos, (finParte - iniParte) / 60000);
+  const ventanasDeParo = eventos
+    .filter((e) => e.tipo === "critico" && esParo(e.descripcion) && conHora(e) &&
+                   Number.isFinite(aMs(e.ts)))
+    .map((e) => {
+      const d = (aMs(e.ts) - iniParte) / 60000, dur = Number(e.duracion) || 0;
+      return [d, dur > 0 ? d + dur : Infinity];
+    });
+  const tramosFicha = tramosFueraDeLosCriticos(tramosDeLaFicha, ventanasDeParo);
   const xDeMinuto = (m) =>
     Math.min(xTot, Math.max(IZQ, IZQ + (iniParte + m * 60000 - t0) / slotMs * anchoCol));
   let escalones = [];
@@ -1366,7 +1397,7 @@ function construirGrilla(datos, vitales, eventos) {
   }
   cerrarEscalones();
   const sevLinea = {};
-  for (const v of tramosFicha.length ? [] : vitales) {
+  for (const v of tramosDeLaFicha.length ? [] : vitales) {
     if (v.sev_et == null) continue;
     (sevLinea[slotDe(v.ts)] ||= []).push(v);
   }
