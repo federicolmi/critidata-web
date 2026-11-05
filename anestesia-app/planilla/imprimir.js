@@ -213,9 +213,74 @@ const marcaGrilla = (desc) =>
 // poner una letra menos negra?"): un gris muy oscuro en vez del negro puro,
 // en la hoja (imprimir.html: body) y en la grilla. Con Arial Narrow no hay
 // grosor intermedio entre normal y negrita, así que la negrita de los
-// valores queda y lo que se aclara es el tono. Las líneas y los recuadros
+// valores quedó y lo que se aclaró fue el tono (desde el 4-nov-2026,
+// finos y en TINTA_DATO). Las líneas y los recuadros
 // del formulario siguen en negro; los colores de las series, como estaban.
 const TINTA = "#333";
+// La TINTA DEL DATO (4-nov-2026, el médico, al ver la hoja de enfermería:
+// "me gustó la letra azul, cambialo al parte de anestesia"): lo CARGADO
+// —los valores, las drogas y los fluidos con sus dosis, los totales, las
+// horas de la grilla y las marcas X/O— en azul de birome, como si la mano
+// lo hubiera escrito sobre el formulario; lo IMPRESO (rótulos, escala,
+// claves, títulos) sigue en TINTA y las líneas en negro. Es el azul de la
+// hoja de enfermería; en imprimir.html, el de .relleno, .parrafo,
+// .marco-pos, .op.sel y la caja tildada. Y SIN NEGRITA (4-nov-2026, "bien
+// finitas la letra del parte"): el trazo fino de la birome; la negrita
+// queda para los títulos y los rótulos impresos de la grilla.
+//
+// LA LETRA QUE ELIGE EL MÉDICO (4-nov-2026, "hagamos grosor y color"): en
+// la app (Partes → La letra del parte) elige el color y el grosor de lo
+// cargado y queda en su cuenta (/anestesia/datos/letra_parte). La nube la
+// manda en la consulta al dibujar (?tinta=&grosor=), la app en la planilla
+// de demostración, y la central la pregunta a su servidor
+// (/api/letra_parte, que la recibe en el latido). Viajan CLAVES: lo que no
+// está en estas tablas no entra, ni al CSS ni al SVG. Sin elección, la de
+// siempre: azul y fina.
+const COLORES_DE_LETRA = {
+  azul: "#1747A6",          // la birome, como la hoja de enfermería
+  azul_oscuro: "#0B2E6F",
+  negro: "#111111",
+  gris: "#333333",          // como hasta el 4-nov: igual que lo impreso
+};
+const GROSORES_DE_LETRA = { fina: 400, negrita: 700 };
+
+/// {color, grosor} con claves de las tablas → {color, grosor, tinta,
+/// peso}; lo que no se conoce, la de siempre (azul, fina). Puro.
+function letraDelParte(pedido) {
+  const p = pedido && typeof pedido === "object" ? pedido : {};
+  const tiene = (tabla, clave) =>
+    typeof clave === "string" && Object.prototype.hasOwnProperty.call(tabla, clave);
+  const color = tiene(COLORES_DE_LETRA, p.color) ? p.color : "azul";
+  const grosor = tiene(GROSORES_DE_LETRA, p.grosor) ? p.grosor : "fina";
+  return { color, grosor, tinta: COLORES_DE_LETRA[color], peso: GROSORES_DE_LETRA[grosor] };
+}
+
+/// La que trae la consulta (?tinta=&grosor=), o null si no trae. Puro.
+function letraDeLaConsulta(consulta) {
+  const q = new URLSearchParams(consulta || "");
+  if (!q.has("tinta") && !q.has("grosor")) return null;
+  return letraDelParte({ color: q.get("tinta"), grosor: q.get("grosor") });
+}
+
+let LETRA = letraDelParte(null);
+let TINTA_DATO = LETRA.tinta;
+
+/// Los atributos de un dato de la grilla: su tinta y, en negrita, su peso.
+function tintaDato() {
+  return `fill="${TINTA_DATO}"` + (LETRA.peso >= 700 ? ' font-weight="700"' : "");
+}
+
+/// La letra, a la grilla (TINTA_DATO, tintaDato) y a la hoja (las variables
+/// --tinta-dato y --peso-dato del CSS de imprimir.html).
+function usarLetra(letra) {
+  LETRA = letra;
+  TINTA_DATO = letra.tinta;
+  const raiz = typeof document !== "undefined" ? document.documentElement : null;
+  if (raiz && raiz.style && typeof raiz.style.setProperty === "function") {
+    raiz.style.setProperty("--tinta-dato", letra.tinta);
+    raiz.style.setProperty("--peso-dato", String(letra.peso));
+  }
+}
 
 const COLORES = {
   nibp_sis: "#c62828",   // TAS roja
@@ -1144,7 +1209,8 @@ function construirGrilla(datos, vitales, eventos) {
   for (let i = 0; i < nCol; i += 1) {
     if (i % cadaCuantas === 0) {
       txt(xCol(i) + 1.2, 10.5,
-          new Date(t0 + i * slotMs).toTimeString().slice(0, 5), 'font-size="6.4"');
+          new Date(t0 + i * slotMs).toTimeString().slice(0, 5),
+          `${tintaDato()} font-size="6.4"`);
     }
   }
   txt(xTot + ANCHO_TOT / 2, 10.5, "Total",
@@ -1153,20 +1219,24 @@ function construirGrilla(datos, vitales, eventos) {
 
   // ---- tabla 1: valores de gases/sat y aportes ----
   const anotarFila = (y, etiqueta, valores, total = null) => {
-    txt(2, y + 9, etiqueta, 'font-size="6.4" font-weight="700"');
+    // el nombre de un fluido lo escribió el médico (azul); "Diuresis",
+    // "Total ingresos", "Balance", "Sev %"… vienen impresos (4-nov-2026)
+    txt(2, y + 9, etiqueta, volumenes.includes(etiqueta)
+      ? `font-size="6.4" ${tintaDato()}`
+      : `font-size="6.4" font-weight="700" fill="${TINTA}"`);
     for (let i = 0; i <= nCol; i++) lin(xCol(i), y, xCol(i), y + ALTO_FILA, 0.15);
     for (const [s, t] of Object.entries(valores || {})) {
       const cx = xCol(+s) + anchoCol / 2, cy = y + 9;
       if (anchoCol < 21 && t.length > 2) {
-        txt(cx, cy, t, `font-size="${t.length > 4 ? 4.6 : 5.4}" ` +
+        txt(cx, cy, t, `font-size="${t.length > 4 ? 4.6 : 5.4}" ${tintaDato()} ` +
             `text-anchor="middle" transform="rotate(-90 ${cx} ${cy})"`);
       } else {
-        txt(cx, cy, t, `font-size="${t.length > 5 ? 5 : 6}" text-anchor="middle"`);
+        txt(cx, cy, t, `font-size="${t.length > 5 ? 5 : 6}" ${tintaDato()} text-anchor="middle"`);
       }
     }
     if (total != null) {
       txt(xTot + ANCHO_TOT / 2, y + 9, String(total),
-          'font-size="6" font-weight="700" text-anchor="middle"');
+          `font-size="6" ${tintaDato()} text-anchor="middle"`);
     }
     // TODAS las filas cierran su celda Total (27-sep, pedido expreso: "los
     // espacios en blanco en la columna del total donde se ubican sev, sat,
@@ -1542,7 +1612,7 @@ function construirGrilla(datos, vitales, eventos) {
     const m = marcaGrilla(e.descripcion);
     if (m) {
       txt(xCol(slotDe(e.ts)) + anchoCol / 2, yG0 + 9, m,
-          'font-size="9" font-weight="700" text-anchor="middle"');
+          `font-size="9" ${tintaDato()} text-anchor="middle"`);
     }
   }
   // Las PRACTICAS y los EVENTOS CRITICOS (22-sep, pedido expreso): un
@@ -1608,7 +1678,7 @@ function construirGrilla(datos, vitales, eventos) {
     const esBolo = (e) => !esConsumo(e) && !esUnidadTasa(e.unidad);
     const mixto = infusion && delRenglon.some(esBolo);
     txt(14, y + 10, rotulo.length > 19 ? rotulo.slice(0, 18) + "…" : rotulo,
-        'font-size="6.8" font-weight="700"');
+        `font-size="6.8" ${tintaDato()}`);
     for (let i = 0; i <= nCol; i++) lin(xCol(i), y, xCol(i), y + ALTO_DROGA, 0.18);
     const porSlot = {};
     for (const e of delRenglon) {
@@ -1635,13 +1705,14 @@ function construirGrilla(datos, vitales, eventos) {
       const t = porSlot[s];
       if (0.55 * 7 * t.length <= anchoCol * 0.96) {
         txt(xCol(s) + anchoCol / 2, y + 10, t,
-            'font-size="7" font-weight="700" text-anchor="middle"');
+            `font-size="7" ${tintaDato()} text-anchor="middle"`);
         continue;
       }
       const hasta = i + 1 < slots.length ? slots[i + 1] : nCol;
       const libre = (hasta - s) * anchoCol - 2;
       const tam = Math.max(4.4, Math.min(7, libre / (0.55 * t.length)));
-      txt(xCol(s) + 1, y + 10, t, `font-size="${tam.toFixed(1)}" font-weight="700"`);
+      txt(xCol(s) + 1, y + 10, t,
+          `font-size="${tam.toFixed(1)}" ${tintaDato()}`);
     }
     // LO QUE CORRE (15-sep, revisión): en el papel una infusión se marca
     // con una línea que va desde que se cuelga hasta que se corta. Sin
@@ -1725,7 +1796,7 @@ function construirGrilla(datos, vitales, eventos) {
       }
       if (t) {
         txt(xTot + ANCHO_TOT / 2, y + 10, t,
-            `font-size="${tamTotal(t)}" font-weight="700" text-anchor="middle"`);
+            `font-size="${tamTotal(t)}" ${tintaDato()} text-anchor="middle"`);
       }
     } else {
       // dosis total en la columna Total, si todas las dosis son numéricas
@@ -1745,7 +1816,7 @@ function construirGrilla(datos, vitales, eventos) {
         // "100 mg + 20 ml")
         const tt = totalDeDosis(dosis);
         txt(xTot + ANCHO_TOT / 2, y + 10, tt,
-            `font-size="${tamTotal(tt)}" font-weight="700" text-anchor="middle"`);
+            `font-size="${tamTotal(tt)}" ${tintaDato()} text-anchor="middle"`);
       }
     }
     lin(0, y + ALTO_DROGA, ancho, y + ALTO_DROGA, 0.35);
@@ -1811,12 +1882,14 @@ function render(parte, vitales, eventos) {
                                e.tipo !== "corte" && !marcaGrilla(e.descripcion));
   // Practicas y eventos criticos (22-sep): "HH:MM — texto", cada lista
   // bajo su titulo y SOLO si hubo alguno; si no, no se ven en el parte.
+  // La hora, como la de "Eventos:", en el azul del dato (4-nov-2026): la
+  // escribió el médico, igual que el texto.
   const listaMarcas = (tipo, titulo_) => {
     const de = eventos.filter((e) => e.tipo === tipo)
                       .sort((a, b) => String(a.ts).localeCompare(String(b.ts)));
     if (!de.length) return "";
     return linea(titulo(titulo_), ...de.map((e) =>
-      `<span class="et">${esc(e.ts ? e.ts.slice(11, 16) : "")}</span>` +
+      `<span class="et dato">${esc(e.ts ? e.ts.slice(11, 16) : "")}</span>` +
       `<span class="relleno chico" style="flex:0 1 auto">${esc(e.descripcion)}</span>`));
   };
   // valor representativo de la captura para los casilleros de ventilación
@@ -1942,7 +2015,7 @@ function render(parte, vitales, eventos) {
     ${listaMarcas("practica", "Prácticas durante la anestesia:")}
     ${listaMarcas("critico", "Eventos críticos:")}
     ${otros.length ? linea(titulo("Eventos:"), ...otros.map((e) =>
-      `<span class="et">${esc(e.ts.slice(11, 16))}</span>` +
+      `<span class="et dato">${esc(e.ts.slice(11, 16))}</span>` +
       `<span class="relleno chico" style="flex:0 1 auto">${esc(e.descripcion)}</span>`)) : ""}
 
     <div class="pie-2col marco">
@@ -2088,6 +2161,16 @@ function render(parte, vitales, eventos) {
     hoja.innerHTML = '<div class="sin-datos">Falta ?id= en la URL</div>';
     return;
   }
+  // LA LETRA (4-nov-2026): la de la consulta o, sin ella, la del servidor
+  // (la central la tiene del latido); si no contesta, la de siempre.
+  let letra = letraDeLaConsulta(location.search);
+  if (!letra) {
+    letra = await fetch("/api/letra_parte")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => (j && typeof j === "object" ? letraDelParte(j) : null))
+      .catch(() => null);
+  }
+  usarLetra(letra || letraDelParte(null));
   try {
     const [parte, vitales, eventos] = await Promise.all([
       fetch(`/api/partes/${ID}`).then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); }),

@@ -93,11 +93,22 @@ body {
   flex-wrap: wrap;
 }
 .et { white-space: nowrap; }
+/* la hora de un evento la escribió el médico (4-nov-2026) */
+.dato { color: var(--tinta-dato, #1747A6); font-weight: var(--peso-dato, 400); }
 .et.tit { font-weight: 700; }
 .relleno {
   flex: 1 1 auto;
   border-bottom: 1px dotted #000;
-  font-weight: 700;
+  /* (4-nov-2026, "me gustó la letra azul, cambialo al parte de anestesia")
+     lo CARGADO va en azul de birome, como en la hoja de enfermería
+     (TINTA_DATO en imprimir.js, el mismo azul para la grilla); lo impreso
+     sigue en #333 y las líneas y los recuadros en negro. */
+  color: var(--tinta-dato, #1747A6);
+  /* (4-nov-2026, "bien finitas la letra del parte") el dato sin
+     negrita, el trazo fino de la birome; la negrita queda en los títulos.
+     (4-nov-2026, "hagamos grosor y color") El color y el grosor los elige
+     el médico: imprimir.js pone --tinta-dato y --peso-dato (usarLetra). */
+  font-weight: var(--peso-dato, 400);
   padding: 0 1mm;
   min-width: 12mm;
   min-height: 1.25em;
@@ -110,8 +121,9 @@ body {
 .ops { white-space: nowrap; }
 .op { padding: 0 .6mm; }
 .op.sel {
-  font-weight: 700;
-  border: 1.1px solid #000;
+  font-weight: var(--peso-dato, 400);
+  color: var(--tinta-dato, #1747A6);
+  border: 1.1px solid var(--tinta-dato, #1747A6);
   border-radius: 45%;
   padding: 0 1.3mm;
 }
@@ -119,7 +131,8 @@ body {
 
 .chk { white-space: nowrap; }
 .chk .caja { font-size: 9.5pt; vertical-align: -1px; }
-.chk.sel { font-weight: 700; }
+.chk.sel .caja { color: var(--tinta-dato, #1747A6); }
+.chk.sel { font-weight: var(--peso-dato, 400); }
 
 /* ---------- recuadros ---------- */
 .fila-marcos { display: flex; gap: 1.6mm; align-items: stretch; }
@@ -127,17 +140,19 @@ body {
 .marco.crece { flex: 1 1 auto; }
 .marco-pos {
   border: 1.1px solid #000;
+  color: var(--tinta-dato, #1747A6);
   padding: 0 2mm;
-  font-weight: 700;
+  font-weight: var(--peso-dato, 400);
   min-width: 16mm;
   min-height: 1.3em;
   display: inline-block;
 }
 .parrafo {
+  color: var(--tinta-dato, #1747A6);
   min-height: 6mm;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-  font-weight: 700;
+  font-weight: var(--peso-dato, 400);
 }
 .parrafo.bajo { min-height: 3.5mm; }
 
