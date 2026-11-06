@@ -1268,8 +1268,48 @@ function construirGrilla(datos, vitales, eventos) {
     }
     return out;
   };
+  // EL SEVORANE DE LA FICHA (3-nov-2026; acá desde el 5-nov-2026, para el
+  // renglón Sev %). Sin el Et del MONITOR, la línea es la del % de la ficha
+  // (tramosSevDeLaFicha): en escalones, de su hora a su hora, cortada en un Interrumpir. Con "De
+  // prueba" también: la serie lleva un solo % y la ficha sabe los cambios.
+  // Cortada en un paro; la del monitor no: lo medido es real.
+  const sevDelMonitor = vitales.some((v) => v.sev_et != null && v.fuente !== "prueba");
+  const tramosDelMedico = !Number.isFinite(finParte) ? []
+    : tramosSevDeLaFicha(datos, (finParte - iniParte) / 60000);
+  const tramosDeLaFicha = sevDelMonitor ? [] : tramosDelMedico;
+  const ventanasDeParo = eventos
+    .filter((e) => e.tipo === "critico" && esParo(e.descripcion) && conHora(e) &&
+                   Number.isFinite(aMs(e.ts)))
+    .map((e) => {
+      const d = (aMs(e.ts) - iniParte) / 60000, dur = Number(e.duracion) || 0;
+      return [d, dur > 0 ? d + dur : Infinity];
+    });
+  const tramosFicha = tramosFueraDeLosCriticos(tramosDeLaFicha, ventanasDeParo);
+  // (5-nov-2026, el médico: "el sevorane no tiene valor numérico") Con la
+  // línea de la ficha, el renglón Sev % quedaba vacío: lleva el % de la
+  // ficha en cada columna —el del tramo que más la ocupa—.
+  // (5-nov-2026, "la idea es que si yo armo la anestesia con sevorane con un
+  // valor, que figure ese valor, no que vos corrijas") Aunque el monitor
+  // mande el Et: el renglón dice lo que puso el médico (el vaporizador); lo
+  // medido va al pie como Et/Fi y en la línea. Sin un % en la ficha, el del
+  // monitor, como antes.
+  const tramosDelRenglon = tramosFueraDeLosCriticos(tramosDelMedico, ventanasDeParo);
+  const valoresSevDeLaFicha = () => {
+    const out = {};
+    for (let s = 0; s < nCol; s++) {
+      const a = t0 + s * slotMs, b = a + slotMs;
+      let mejor = null, ocupa = 0;
+      for (const tr of tramosDelRenglon) {
+        const d = Math.max(a, iniParte + tr.desde * 60000);
+        const h = Math.min(b, iniParte + tr.hasta * 60000);
+        if (h - d > ocupa) { ocupa = h - d; mejor = tr; }
+      }
+      if (mejor) out[s] = fmtValor("sev_et", mejor.pct);
+    }
+    return out;
+  };
   const datosSup = {
-    "Sev %": valoresSevFila(),
+    "Sev %": tramosDelRenglon.length ? valoresSevDeLaFicha() : valoresSevFila(),
     "pCO2": valoresDe("etco2"),
     "Sat %": valoresDe("spo2"),
   };
@@ -1435,21 +1475,6 @@ function construirGrilla(datos, vitales, eventos) {
   // Va antes de las curvas: los símbolos quedan encima.
   const SEV_POR_UNIDAD = 6;
   const ySev = (pct) => yDe(Math.min(8, Math.max(0, pct)) * SEV_POR_UNIDAD);
-  // Sin el Et del MONITOR, la del % de la ficha (tramosSevDeLaFicha): en
-  // escalones, de su hora a su hora, cortada en un Interrumpir. Con "De
-  // prueba" también: la serie lleva un solo % y la ficha sabe los cambios.
-  // Cortada en un paro; la del monitor no: lo medido es real.
-  const sevDelMonitor = vitales.some((v) => v.sev_et != null && v.fuente !== "prueba");
-  const tramosDeLaFicha = sevDelMonitor || !Number.isFinite(finParte) ? []
-    : tramosSevDeLaFicha(datos, (finParte - iniParte) / 60000);
-  const ventanasDeParo = eventos
-    .filter((e) => e.tipo === "critico" && esParo(e.descripcion) && conHora(e) &&
-                   Number.isFinite(aMs(e.ts)))
-    .map((e) => {
-      const d = (aMs(e.ts) - iniParte) / 60000, dur = Number(e.duracion) || 0;
-      return [d, dur > 0 ? d + dur : Infinity];
-    });
-  const tramosFicha = tramosFueraDeLosCriticos(tramosDeLaFicha, ventanasDeParo);
   const xDeMinuto = (m) =>
     Math.min(xTot, Math.max(IZQ, IZQ + (iniParte + m * 60000 - t0) / slotMs * anchoCol));
   let escalones = [];
@@ -1588,8 +1613,23 @@ function construirGrilla(datos, vitales, eventos) {
   }
   // Sev % (Et/Fi): anotado como número al pie del cuadro, en su columna
   // (a escala del eje 0–220 quedaría aplastado contra el cero)
+  // (5-nov-2026, "el sevorane no tiene valor numérico") Con la línea de la
+  // ficha, su % al pie donde arranca cada tramo que cambia o que sigue a un
+  // corte: el mismo número que el renglón Sev %.
+  let antesFicha = null;
+  for (const [i, tr] of tramosFicha.entries()) {
+    const t = fmtValor("sev_et", tr.pct);
+    const sigueCorte = i > 0 && tr.desde > tramosFicha[i - 1].hasta;
+    if (t !== antesFicha || sigueCorte) {
+      const s = Math.min(nCol - 1, Math.max(0,
+        Math.floor((iniParte + tr.desde * 60000 - t0) / slotMs)));
+      txt(xCol(s) + anchoCol / 2, yG1 - 3, t,
+          `font-size="4.8" text-anchor="middle" fill="${COLORES.sev}" font-weight="700"`);
+      antesFicha = t;
+    }
+  }
   const sevPorSlot = {};
-  for (const v of vitales) {
+  for (const v of tramosDeLaFicha.length ? [] : vitales) {
     if (v.sev_et == null && v.sev_fi == null) continue;
     (sevPorSlot[slotDe(v.ts)] ||= []).push(v);
   }

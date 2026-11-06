@@ -17023,7 +17023,7 @@ if(o){q=Date.now()
 q=A.c3J(a,new A.a7(q,0,!1))
 if(q!=null)r.push(q)}if(o){q=Date.now()
 q=A.c3I(a,new A.a7(q,0,!1))
-if(q!=null)r.push(q)}if(o&&A.c4j(a,"2026-11-05T22:02:40-03:00"))r.push("Desactualizada: "+(a.fy!=null?"se actualiza sola al reiniciarla sin una anestesia en curso":"hac\xe9 el git pull una vez (despu\xe9s se actualiza sola)"))
+if(q!=null)r.push(q)}if(o&&A.c4j(a,"2026-11-05T22:21:59-03:00"))r.push("Desactualizada: "+(a.fy!=null?"se actualiza sola al reiniciarla sin una anestesia en curso":"hac\xe9 el git pull una vez (despu\xe9s se actualiza sola)"))
 if(r.length===0)return p
 return new A.oX(p.a,p.b,p.c+"\n"+B.c.aq(r,"\n"))},
 bYM(a){var s=B.e.cL(a.a,1e6)
@@ -77180,7 +77180,7 @@ A.b43.prototype={
 $0(){return A.Xl(this.b,this.a.gai())},
 $S:0}
 A.b44.prototype={
-$2(a,b){var s=null,r="20261106010517-09c136a",q=A.a([B.aUh,B.vo,B.aTk,B.aTg,B.aTi,B.aTj,B.aTh,new A.rE(B.kq,"Ver datos online","Signos vitales en vivo del quir\xf3fano",new A.b3Y(a),s),B.lb,new A.rE(B.to,"Pacientes","En espera, en curso y terminados hoy",new A.b3Z(a),s),B.lb,new A.rE(B.na,"Partes anest\xe9sicos","Anexo V: los del mes, la nube y AADOB",new A.b4_(a),s),B.lb,new A.rE(B.A_,"Consumo de drogas","Del mes y del a\xf1o, en mg y en ampollas",new A.b40(a),s),B.lb,new A.rE(B.zV,"Riesgo anest\xe9sico","Evaluaci\xf3n prequir\xfargica",new A.b41(a),s),B.lb,new A.rE(B.zZ,"Guardia hospitales de provincia","Pr\xf3ximamente",new A.b42(a),s)],t.p)
+$2(a,b){var s=null,r="20261106012504-18069d2",q=A.a([B.aUh,B.vo,B.aTk,B.aTg,B.aTi,B.aTj,B.aTh,new A.rE(B.kq,"Ver datos online","Signos vitales en vivo del quir\xf3fano",new A.b3Y(a),s),B.lb,new A.rE(B.to,"Pacientes","En espera, en curso y terminados hoy",new A.b3Z(a),s),B.lb,new A.rE(B.na,"Partes anest\xe9sicos","Anexo V: los del mes, la nube y AADOB",new A.b4_(a),s),B.lb,new A.rE(B.A_,"Consumo de drogas","Del mes y del a\xf1o, en mg y en ampollas",new A.b40(a),s),B.lb,new A.rE(B.zV,"Riesgo anest\xe9sico","Evaluaci\xf3n prequir\xfargica",new A.b41(a),s),B.lb,new A.rE(B.zZ,"Guardia hospitales de provincia","Pr\xf3ximamente",new A.b42(a),s)],t.p)
 if(A.bJO(r).length!==0)q.push(new A.Q(B.a2N,A.z(A.bJO(r),B.aP9,s,s,s,s,s,s,s,s,B.aHb,s,s,s,s,s,s),s))
 return A.dy(new A.cv(new A.al(0,1/0,b.d,1/0),A.cC(new A.cv(B.Wk,new A.Q(B.a3G,A.ak(q,B.o,s,B.dW,B.M,0,B.j),s),s),s,s),s),s,s,s,s,B.P)},
 $S:246}
@@ -84030,7 +84030,7 @@ A.brK.prototype={
 $1(a){return B.b.ce(B.e.k(a),2,"0")},
 $S:23}
 A.bq4.prototype={
-$1(a){return"20261106010517-09c136a"},
+$1(a){return"20261106012504-18069d2"},
 $S:482}
 A.blE.prototype={
 $1(a){var s
