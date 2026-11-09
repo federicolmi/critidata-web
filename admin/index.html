@@ -72,6 +72,17 @@
             border-radius: 8px; font-size: 14px; outline: none;
         }
         .copia-fila input:focus { border-color: #0d1b3e; }
+        /* (8-nov-2026, "el ojito para que las contraseñas se puedan leer") */
+        .clave-caja { position: relative; flex: 1; min-width: 180px; display: flex; }
+        .clave-caja input { width: 100%; padding-right: 42px; }
+        .btn-ojo {
+            position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
+            width: 34px; height: 34px; border: none; background: none; border-radius: 6px;
+            color: #64748b; cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+        .btn-ojo:hover { color: #0d1b3e; background: #f1f5f9; }
+        .btn-ojo:focus-visible { outline: 2px solid #0d1b3e; outline-offset: 1px; }
+        .btn-ojo svg { width: 20px; height: 20px; }
         .btn-copia {
             padding: 9px 18px; border-radius: 8px; border: none; font-size: 14px; font-weight: 600;
             background: #0d1b3e; color: #fff; cursor: pointer;
@@ -150,9 +161,22 @@
                 pacientes: el disco, siempre guardado.
             </p>
             <div class="copia-fila">
-                <input type="password" id="copia-clave" placeholder="Tu contraseña"
-                       autocomplete="current-password"
-                       onkeydown="if (event.key === 'Enter') bajarCopia()">
+                <span class="clave-caja">
+                    <input type="password" id="copia-clave" placeholder="Tu contraseña"
+                           autocomplete="current-password"
+                           onkeydown="if (event.key === 'Enter') bajarCopia()">
+                    <button type="button" class="btn-ojo" id="btn-ojo-copia"
+                            aria-label="Mostrar la contraseña" aria-pressed="false"
+                            title="Mostrar la contraseña"
+                            onclick="verClave('copia-clave', this)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                            <line class="tachado" x1="3" y1="3" x2="21" y2="21" style="display:none"/>
+                        </svg>
+                    </button>
+                </span>
                 <button class="btn-copia" id="btn-copia" onclick="bajarCopia()">Bajar las copias</button>
                 <button class="btn-copia guardar" id="btn-guardar-copia" style="display:none"
                         onclick="guardarCopia()">Guardar en el disco externo</button>
@@ -272,6 +296,20 @@
         { base: 'gastro', prefijo: 'critidata-gastro-copia', dice: 'gastro' },
     ]
 
+    // EL OJITO (8-nov-2026, "el ojito para que las contraseñas se puedan
+    // leer"): muestra u oculta lo escrito; tachado mientras se ve. Al
+    // terminar la copia se vacía y vuelve a ocultarse.
+    function verClave(id, btn, mostrar) {
+        const campo = document.getElementById(id)
+        const ver = mostrar ?? campo.type === 'password'
+        campo.type = ver ? 'text' : 'password'
+        const dice = ver ? 'Ocultar la contraseña' : 'Mostrar la contraseña'
+        btn.setAttribute('aria-label', dice)
+        btn.setAttribute('aria-pressed', String(ver))
+        btn.title = dice
+        btn.querySelector('.tachado').style.display = ver ? '' : 'none'
+    }
+
     function avisoCopia(texto, clase) {
         const el = document.getElementById('copia-msg')
         el.textContent = texto
@@ -351,6 +389,7 @@
                 dichas.push(`${b.dice}: ${tablas} tablas, ${filas.toLocaleString('es-AR')} filas, ${mb} MB`)
             }
             campo.value = ''
+            verClave('copia-clave', document.getElementById('btn-ojo-copia'), false)
             document.getElementById('btn-guardar-copia').style.display = ''
             avisoCopia(`Copias listas — ${dichas.join(' · ')}. ` +
                        'Enchufá el disco externo y tocá «Guardar en el disco externo».',
