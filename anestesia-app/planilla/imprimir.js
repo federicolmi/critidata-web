@@ -1884,6 +1884,17 @@ function fechaDelParte(parte, vitales) {
   return parte.creado ? String(parte.creado).slice(0, 10) : "";
 }
 
+// EL VOLUMEN CORRIENTE (9-nov-2026, el médico: "en volumen corriente en el
+// parte que figure 7 ml/kg, no el total"): escrito en ml/kg va así, con su
+// unidad, también con monitoreo (la mediana del monitor es el total); si
+// no, como siempre: la mediana del monitor o lo cargado, en ml.
+// { valor, unidad }.
+function volumenCorrienteDelParte(cargado, delMonitor) {
+  const m = /^\s*(\d+(?:[.,]\d+)?)\s*ml\s*\/\s*kg\s*$/i.exec(String(cargado ?? ""));
+  if (m) return { valor: m[1].replace(".", ","), unidad: "ml/kg" };
+  return { valor: delMonitor || esc(cargado || ""), unidad: "ml" };
+}
+
 function render(parte, vitales, eventos) {
   DATOS = { ...(parte.datos || {}), fecha: fechaDelParte(parte, vitales) };
   // (23-oct-2026) con la serie de prueba cuentan solo los de prueba, y lo
@@ -2099,10 +2110,11 @@ function render(parte, vitales, eventos) {
               hubo monitoreo (la mediana de la captura); si no, lo cargado
               en la anestesia General de la app (vol_corriente / frec_resp).
               La PIP igual (29-sep): sin monitor, la de la vía aérea de la
-              carga (pip_cierre). */""}
+              carga (pip_cierre). El volumen corriente en ml/kg, así
+              (9-nov-2026, volumenCorrienteDelParte). */""}
         ${linea('<span class="et">Vol. Corriente:</span>',
-                `<span class="relleno chico">${medianaGlobal("vt") || esc(DATOS.vol_corriente || "")}</span>`,
-                '<span class="et">ml</span>',
+                `<span class="relleno chico">${volumenCorrienteDelParte(DATOS.vol_corriente, medianaGlobal("vt")).valor}</span>`,
+                `<span class="et">${volumenCorrienteDelParte(DATOS.vol_corriente, "").unidad}</span>`,
                 '<span class="et">Frec. Resp.:</span>',
                 `<span class="relleno chico">${medianaGlobal("fr_vent") || esc(DATOS.frec_resp || "")}</span>`,
                 '<span class="et">/min</span>',

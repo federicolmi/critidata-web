@@ -131,7 +131,7 @@ window.ESQUEMA_FORMULARIO = {
         // 22-sep ("falta vol corriente, fc respiratoria"): en el papel manda
         // el monitor si hubo monitoreo; sin monitor, lo cargado en la
         // anestesia General de la app.
-        { id: "vol_corriente", etiqueta: "Vol. Corriente (ml)", tipo: "numero", ancho: "chico" },
+        { id: "vol_corriente", etiqueta: "Vol. Corriente (ml o ml/kg)", tipo: "texto", ancho: "chico" },
         { id: "frec_resp", etiqueta: "Frec. Resp. (/min)", tipo: "numero", ancho: "chico" },
         // 29-sep ("faltan ítems que están en el parte"): la PIP; en el papel
         // manda el monitor, sin monitor la cargada.
