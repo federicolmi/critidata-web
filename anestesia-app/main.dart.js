@@ -16012,13 +16012,14 @@ if(o==null)o=0
 n=a.h(0,"ultima_fecha")
 n=B.b.p(A.f(n==null?"":n))
 return new A.a22(s,r,p,n,q==null?"":A.f(q),o)},
-c6X(a){var s,r,q,p="habilitadas",o="cargadas",n=t.f.b(a),m=n?a:B.bh,l=t.j,k=l.b(m.h(0,p))?l.a(m.h(0,p)):B.aL,j=l.b(m.h(0,o))?l.a(m.h(0,o)):B.aL
-n=n&&J.d(a.h(0,"administra"),!0)
-l=A.a([],t.u3)
-for(s=J.T(k);s.q();){r=A.bXo(s.gu())
-if(r!=null)l.push(r)}s=A.a([],t.Tk)
-for(r=J.T(j);r.q();){q=A.bXn(r.gu())
-if(q!=null)s.push(q)}return new A.m1(n,l,s)},
+c6X(a){var s,r,q,p,o="habilitadas",n="cargadas",m=t.f.b(a),l=m?a:B.bh,k=t.j,j=k.b(l.h(0,o))?k.a(l.h(0,o)):B.aL,i=k.b(l.h(0,n))?k.a(l.h(0,n)):B.aL
+m=m&&J.d(a.h(0,"administra"),!0)
+k=J.d(l.h(0,"todas"),!0)
+s=A.a([],t.u3)
+for(r=J.T(j);r.q();){q=A.bXo(r.gu())
+if(q!=null)s.push(q)}r=A.a([],t.Tk)
+for(q=J.T(i);q.q();){p=A.bXn(q.gu())
+if(p!=null)r.push(p)}return new A.m1(m,k,s,r)},
 fv:function fv(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o){var _=this
 _.a=a
 _.c=b
@@ -16067,9 +16068,11 @@ _.c=c
 _.d=d
 _.e=e
 _.f=f},
-m1:function m1(a,b,c){this.a=a
-this.b=b
-this.c=c},
+m1:function m1(a,b,c,d){var _=this
+_.a=a
+_.b=b
+_.c=c
+_.d=d},
 dR(a){var s,r,q,p,o,n
 for(s=a.split(""),r=s.length,q=0,p="";q<r;++q){o=s[q]
 n=B.b.fi("\xe1\xe0\xe4\xe2\xe3\xe9\xe8\xeb\xea\xed\xec\xef\xee\xf3\xf2\xf6\xf4\xf5\xfa\xf9\xfc\xfb\xf1\xe7\xc1\xc0\xc4\xc2\xc3\xc9\xc8\xcb\xca\xcd\xcc\xcf\xce\xd3\xd2\xd6\xd4\xd5\xda\xd9\xdc\xdb\xd1\xc7",o)
@@ -77979,7 +77982,7 @@ A.a22.prototype={
 gD4(){return new A.B2(this.b,this.a)}}
 A.m1.prototype={
 gG8(){var s,r,q,p,o=A.a([],t.Tk)
-for(s=this.c,r=s.length,q=0;q<s.length;s.length===r||(0,A.h)(s),++q){p=s[q]
+for(s=this.d,r=s.length,q=0;q<s.length;s.length===r||(0,A.h)(s),++q){p=s[q]
 if(p.e.length===0)o.push(p)}return o}}
 A.qo.prototype={
 Lt(a){var s=A.bNR(this.c),r=A.bNR(a.c)
@@ -79006,11 +79009,12 @@ A.aB9.prototype={
 $1(a2){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a,a0=this,a1=null
 if(!a2.a)return B.a_q
 s=a2.gG8()
-r=a0.b.ok
-q=r.Q
-r=r.w
-p=A.a([A.o("Los m\xe9dicos escriben el hospital y la enfermera en la ficha y ac\xe1 aparecen. Habilitala con su email: le llega un enlace para elegir su clave, y al entrar ve solo los registros de los pacientes en que la nombraron.",a1,a1,a1,a1,a1,a1,a1,a1,a1,q,a1,a1,a1,a1,a1,a1),B.fb,A.o("Escritas por los m\xe9dicos, sin habilitar",a1,a1,a1,a1,a1,a1,a1,a1,a1,r,a1,a1,a1,a1,a1,a1),B.bk],t.p)
-if(s.length===0)p.push(A.o("Ninguna: cuando un m\xe9dico escriba una enfermera nueva en la ficha, aparece ac\xe1.",a1,a1,a1,a1,a1,a1,a1,a1,a1,q,a1,a1,a1,a1,a1,a1))
+r=a2.b?"Los m\xe9dicos escriben el hospital y la enfermera en la ficha y ac\xe1 aparecen todas. Habilitala con su email: le llega un enlace para elegir su clave, y al entrar ve solo los registros de los pacientes en que la nombraron.":"Ac\xe1 est\xe1n las enfermeras que escribiste en tus partes y las que habilitaste vos (el administrador ve todas). Habilitala con su email: le llega un enlace para elegir su clave, y al entrar ve solo los registros de los pacientes en que la nombraron."
+q=a0.b.ok
+p=q.Q
+q=q.w
+r=A.a([A.o(r,a1,a1,a1,a1,a1,a1,a1,a1,a1,p,a1,a1,a1,a1,a1,a1),B.fb,A.o("Escritas por los m\xe9dicos, sin habilitar",a1,a1,a1,a1,a1,a1,a1,a1,a1,q,a1,a1,a1,a1,a1,a1),B.bk],t.p)
+if(s.length===0)r.push(A.o("Ninguna: cuando un m\xe9dico escriba una enfermera nueva en la ficha, aparece ac\xe1.",a1,a1,a1,a1,a1,a1,a1,a1,a1,p,a1,a1,a1,a1,a1,a1))
 for(o=s.length,n=t.O,m=a0.a,l=a0.c,k=a0.d,j=t.s,i=0;i<s.length;s.length===o||(0,A.h)(s),++i){h=s[i]
 g=h.a
 f=A.dR(g)
@@ -79026,13 +79030,13 @@ g=h.f
 a.push(g===1?"1 parte":""+g+" partes")
 g=h.d
 if(g.length!==0)a.push("el \xfaltimo "+A.bYo(g))
-p.push(new A.C7(a1,a1,a1,a1,a1,a1,a1,A.eG(!1,a1,a1,a1,!0,a1,a1,a1,!0,a1,a1,B.AL,a1,a1,a1,a1,a1,a1,!1,a1,a1,a1,a1,a1,new A.z(B.c.ab(a," \xb7 "),a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1),a1,new A.z(c,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1),a1,A.bzw(B.aMs,new A.w("habilitar-"+A.dR(e),n),new A.aB8(m,l,k,h,a2),a1),a1),new A.w("cargada-"+f+"|"+d,n)))}p.push(B.lE)
-p.push(A.o("Habilitadas",a1,a1,a1,a1,a1,a1,a1,a1,a1,r,a1,a1,a1,a1,a1,a1))
-p.push(B.bk)
-r=a2.b
-if(r.length===0)p.push(A.o("Todav\xeda ninguna.",a1,a1,a1,a1,a1,a1,a1,a1,a1,q,a1,a1,a1,a1,a1,a1))
-for(q=r.length,i=0;i<r.length;r.length===q||(0,A.h)(r),++i)p.push(m.azL(l,k,r[i],a2))
-return A.cu(new A.cn(B.XG,A.jg(p,a1,a1,B.zm,a1,a1,!1),a1),a1,a1)},
+r.push(new A.C7(a1,a1,a1,a1,a1,a1,a1,A.eG(!1,a1,a1,a1,!0,a1,a1,a1,!0,a1,a1,B.AL,a1,a1,a1,a1,a1,a1,!1,a1,a1,a1,a1,a1,new A.z(B.c.ab(a," \xb7 "),a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1),a1,new A.z(c,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1,a1),a1,A.bzw(B.aMs,new A.w("habilitar-"+A.dR(e),n),new A.aB8(m,l,k,h,a2),a1),a1),new A.w("cargada-"+f+"|"+d,n)))}r.push(B.lE)
+r.push(A.o("Habilitadas",a1,a1,a1,a1,a1,a1,a1,a1,a1,q,a1,a1,a1,a1,a1,a1))
+r.push(B.bk)
+q=a2.c
+if(q.length===0)r.push(A.o("Todav\xeda ninguna.",a1,a1,a1,a1,a1,a1,a1,a1,a1,p,a1,a1,a1,a1,a1,a1))
+for(p=q.length,i=0;i<q.length;q.length===p||(0,A.h)(q),++i)r.push(m.azL(l,k,q[i],a2))
+return A.cu(new A.cn(B.XG,A.jg(r,a1,a1,B.zm,a1,a1,!1),a1),a1,a1)},
 $S:398}
 A.aB8.prototype={
 $0(){var s=this
@@ -81550,7 +81554,7 @@ A.b7w.prototype={
 $0(){return A.Yh(this.b,this.a.ga7())},
 $S:0}
 A.b7x.prototype={
-$2(a,b){var s=null,r="20261110135341-1d9f0f1",q=A.a([B.aYx,B.lE,B.aXA,B.aXw,B.aXy,B.aXz,B.aXx,new A.pJ(B.kQ,"Ver datos online","Signos vitales en vivo del quir\xf3fano",new A.b7p(a),s),B.jw,new A.pJ(B.tR,"Pacientes","En espera, en curso y terminados hoy",new A.b7q(a),s),B.jw,new A.pJ(B.kP,"Partes anest\xe9sicos","Anexo V: los del mes, la nube y AADOB",new A.b7r(a),s),B.jw,new A.pJ(B.Ao,"Registro de enfermer\xeda","Por fecha y enfermera, lleno con el Anexo V",new A.b7s(a),s),B.jw,new A.pJ(B.Aw,"Consumo de drogas","Del mes y del a\xf1o, en mg y en ampollas",new A.b7t(a),s),B.jw,new A.pJ(B.As,"Riesgo anest\xe9sico","Evaluaci\xf3n prequir\xfargica",new A.b7u(a),s),B.jw,new A.pJ(B.Av,"Guardia hospitales de provincia","Pr\xf3ximamente",new A.b7v(a),s)],t.p)
+$2(a,b){var s=null,r="20261110143910-62ab8ba",q=A.a([B.aYx,B.lE,B.aXA,B.aXw,B.aXy,B.aXz,B.aXx,new A.pJ(B.kQ,"Ver datos online","Signos vitales en vivo del quir\xf3fano",new A.b7p(a),s),B.jw,new A.pJ(B.tR,"Pacientes","En espera, en curso y terminados hoy",new A.b7q(a),s),B.jw,new A.pJ(B.kP,"Partes anest\xe9sicos","Anexo V: los del mes, la nube y AADOB",new A.b7r(a),s),B.jw,new A.pJ(B.Ao,"Registro de enfermer\xeda","Por fecha y enfermera, lleno con el Anexo V",new A.b7s(a),s),B.jw,new A.pJ(B.Aw,"Consumo de drogas","Del mes y del a\xf1o, en mg y en ampollas",new A.b7t(a),s),B.jw,new A.pJ(B.As,"Riesgo anest\xe9sico","Evaluaci\xf3n prequir\xfargica",new A.b7u(a),s),B.jw,new A.pJ(B.Av,"Guardia hospitales de provincia","Pr\xf3ximamente",new A.b7v(a),s)],t.p)
 if(A.bQd(r).length!==0)q.push(new A.H(B.a4b,A.o(A.bQd(r),B.aT_,s,s,s,s,s,s,s,s,B.aJS,s,s,s,s,s,s),s))
 return A.dc(new A.cn(new A.am(0,1/0,b.d,1/0),A.cu(new A.cn(B.Xp,new A.H(B.a5c,A.ac(q,B.l,s,B.d2,B.M,0,B.j),s),s),s,s),s),s,s,s,s,B.P)},
 $S:387}
@@ -88554,7 +88558,7 @@ A.bxY.prototype={
 $1(a){return B.b.bI(B.e.k(a),2,"0")},
 $S:24}
 A.bvS.prototype={
-$1(a){return"20261110135341-1d9f0f1"},
+$1(a){return"20261110143910-62ab8ba"},
 $S:532}
 A.bqC.prototype={
 $1(a){var s
@@ -161339,7 +161343,7 @@ B.x9=new A.mX(3,"imprimir")
 B.xa=new A.mX(4,"descargar")
 B.ajl=s([],t.u3)
 B.ajm=s([],t.Tk)
-B.UR=new A.m1(!1,B.ajl,B.ajm)
+B.UR=new A.m1(!1,!1,B.ajl,B.ajm)
 B.qO=new A.IU(0,"concluir")
 B.qP=new A.IU(1,"soloDetener")
 B.Vk=new A.ij(0,1)
