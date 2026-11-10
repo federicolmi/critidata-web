@@ -92,6 +92,10 @@
         .copia-msg { font-size: 13px; margin-top: 10px; min-height: 18px; color: #475569; }
         .copia-msg.ok  { color: #166534; }
         .copia-msg.err { color: #c62828; }
+        /* (10-nov-2026) las enfermeras de CritiData Enfermería */
+        .b-espera { background: #ffedd5; color: #9a3412; }
+        .enf-sin { font-size: 13px; color: #475569; margin-top: 14px; line-height: 1.6; }
+        .enf-sin strong { color: #0d1b3e; }
     </style>
 </head>
 <body>
@@ -182,6 +186,34 @@
                         onclick="guardarCopia()">Guardar en el disco externo</button>
             </div>
             <p class="copia-msg" id="copia-msg"></p>
+        </div>
+
+        <!-- (10-nov-2026, el médico, mirando esta página: "lo de las enfermeras
+             sería bueno verlo acá") Las enfermeras de CritiData Enfermería: las
+             habilitadas, con su hospital, su email y si ya eligieron la clave;
+             y las que los médicos escribieron en sus partes y nadie habilitó
+             todavía. Se habilitan desde la app de anestesia (hace falta su
+             email); acá se ven, se les manda otro enlace y se desactivan. La
+             misma ruta de la nube que usa la app: el administrador ve a todas. -->
+        <div class="section" id="sec-enfermeras" style="display:none">
+            <div class="section-header">
+                <span class="section-title">Enfermeras (CritiData Enfermería)</span>
+                <span class="section-count" id="enf-count"></span>
+            </div>
+            <p class="copia-texto">
+                Las que los anestesiólogos escribieron en sus partes y ya tienen usuario. Se habilitan
+                desde la app de anestesia (Enfermería → el ícono de personas), con su email y su
+                matrícula; acá se les manda otro enlace para la clave o se las desactiva.
+            </p>
+            <table>
+                <thead><tr>
+                    <th>Nombre</th><th>Matrícula</th><th>Hospital</th><th>Email</th>
+                    <th>Estado</th><th>Último ingreso</th><th>Acciones</th>
+                </tr></thead>
+                <tbody id="tbody-enfermeras"></tbody>
+            </table>
+            <div id="empty-enfermeras" class="empty" style="display:none;">Todavía no hay enfermeras habilitadas.</div>
+            <div id="enf-sin-habilitar" class="enf-sin"></div>
         </div>
 
         <!-- Tabs -->
@@ -280,7 +312,119 @@
             document.getElementById('content').style.display = 'block'
             renderAll()
             cargarUltimaCopia()
+            cargarEnfermeras()
         } catch { showError() }
+    }
+
+    // ── Las enfermeras (10-nov-2026) ─────────────────────────────────────────
+    // GET /anestesia/enfermeria/hospitales con el token del administrador:
+    // {habilitadas, cargadas}. Una nube vieja (403/404) deja la sección
+    // escondida. Los nombres vienen de lo que escribieron los médicos: se
+    // escapan antes de pintarlos.
+    let enfermeras = []
+
+    function esc(s) {
+        return String(s ?? '').replace(/[&<>"']/g, c => (
+            { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]))
+    }
+
+    async function cargarEnfermeras() {
+        const token = sessionStorage.getItem('cd_token')
+        try {
+            const res = await fetch(`${API}/anestesia/enfermeria/hospitales`,
+                                    { headers: { 'Authorization': `Bearer ${token}` } })
+            if (!res.ok) return
+            const datos = await res.json()
+            if (!datos.administra) return
+            enfermeras = datos.habilitadas || []
+            renderEnfermeras(datos.cargadas || [])
+            document.getElementById('sec-enfermeras').style.display = 'block'
+        } catch { /* sin la nube, sin la sección */ }
+    }
+
+    function estadoEnfermera(e) {
+        if (!e.activa) return '<span class="badge b-inactive">Desactivada</span>'
+        if (e.estado === 'activa') return '<span class="badge b-active">Activa</span>'
+        const vence = e.enlace_vence ? ` · el enlace vence ${fmtFechaHora(e.enlace_vence)}` : ''
+        return `<span class="badge b-espera">Esperando su clave</span><span style="font-size:11px;color:#64748b">${esc(vence)}</span>`
+    }
+
+    // Las fechas de la nube vienen en UTC sin zona (fechas-del-backend-utc).
+    function fmtFechaHora(iso) {
+        if (!iso) return '—'
+        const d = new Date(/Z$|[+-]\d\d:\d\d$/.test(iso) ? iso : iso + 'Z')
+        return d.toLocaleString('es-AR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+    }
+
+    function renderEnfermeras(cargadas) {
+        const tbody = document.getElementById('tbody-enfermeras')
+        tbody.innerHTML = ''
+        document.getElementById('enf-count').textContent =
+            `${enfermeras.length} enfermera${enfermeras.length !== 1 ? 's' : ''}`
+        document.getElementById('empty-enfermeras').style.display = enfermeras.length ? 'none' : 'block'
+        enfermeras.forEach(e => {
+            const tr = document.createElement('tr')
+            const toggleTxt = e.activa ? 'Desactivar' : 'Activar'
+            const toggleCls = e.activa ? 'btn-toggle-on' : 'btn-toggle-off'
+            tr.innerHTML = `
+                <td><strong>${esc(e.nombre)}</strong></td>
+                <td>${esc(e.mp || '—')}</td>
+                <td style="color:#475569">${esc(e.hospital || '—')}</td>
+                <td style="color:#475569">${esc(e.email)}</td>
+                <td>${estadoEnfermera(e)}</td>
+                <td style="color:#64748b;font-size:12px;">${e.ultimo_ingreso ? fmtFechaHora(e.ultimo_ingreso) : '—'}</td>
+                <td>
+                    ${e.activa ? `<button class="btn-sm btn-sub" onclick="otroEnlace(${e.id})">${e.estado === 'activa' ? 'Enlace para otra clave' : 'Otro enlace'}</button>` : ''}
+                    <button class="btn-sm ${toggleCls}" onclick="toggleEnfermera(${e.id})">${toggleTxt}</button>
+                </td>
+            `
+            tbody.appendChild(tr)
+        })
+        const sin = (cargadas || []).filter(c => c.enfermera_id == null)
+        const el = document.getElementById('enf-sin-habilitar')
+        el.innerHTML = sin.length
+            ? '<strong>Escritas por los médicos, sin habilitar:</strong> ' + sin.map(c =>
+                `${esc(c.enfermero)}${c.mp ? ' · M.P. ' + esc(c.mp) : ''}${c.hospital ? ' (' + esc(c.hospital) + ')' : ''}` +
+                ` · ${c.partes} parte${c.partes !== 1 ? 's' : ''}`).join(' — ') +
+              '. Se habilitan desde la app, con su email.'
+            : ''
+    }
+
+    async function otroEnlace(id) {
+        const e = enfermeras.find(x => x.id === id)
+        if (!e) return
+        if (!confirm(`¿Mandarle a ${e.nombre} otro enlace para elegir su clave? El anterior deja de valer.`)) return
+        const token = sessionStorage.getItem('cd_token')
+        try {
+            const res = await fetch(`${API}/anestesia/enfermeria/enfermeras/${id}/enlace`, {
+                method: 'POST', headers: { 'Authorization': `Bearer ${token}` }
+            })
+            if (!res.ok) throw new Error()
+            const datos = await res.json()
+            let copiado = false
+            if (datos.enlace && navigator.clipboard) {
+                try { await navigator.clipboard.writeText(datos.enlace); copiado = true } catch {}
+            }
+            toast(`Enlace mandado a ${e.email}${copiado ? ' y copiado, por si se lo pasás por WhatsApp' : ''}`)
+            await cargarEnfermeras()
+        } catch { toast('No se pudo mandar el enlace') }
+    }
+
+    async function toggleEnfermera(id) {
+        const e = enfermeras.find(x => x.id === id)
+        if (!e) return
+        if (e.activa && !confirm(`¿Desactivar a ${e.nombre}? Deja de entrar hasta que la actives de nuevo.`)) return
+        const token = sessionStorage.getItem('cd_token')
+        try {
+            const res = await fetch(`${API}/anestesia/enfermeria/enfermeras/${id}`, {
+                method: 'PATCH',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ activa: !e.activa })
+            })
+            if (!res.ok) throw new Error()
+            toast(e.activa ? `${e.nombre} quedó desactivada` : `${e.nombre} quedó activa`)
+            await cargarEnfermeras()
+        } catch { toast('No se pudo cambiar') }
     }
 
     // ── La copia de la base (1-nov-2026) ────────────────────────────────────
