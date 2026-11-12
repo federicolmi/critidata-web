@@ -78942,7 +78942,7 @@ s=1
 break}p=B.b.p(d)
 o=p.length===0?"":" ("+p+")"
 s=3
-return A.j(A.cs(null,null,!0,null,new A.aB7(n,"Hola, "+B.b.p(e)+": te habilitamos en CritiData Enfermer\xeda"+o+" para completar el registro de enfermer\xeda de tus pacientes. Entr\xe1 ac\xe1 y eleg\xed tu clave: "+c+"\nTu usuario es "+B.b.p(n)+". El enlace sirve una sola vez y vence en un d\xeda."),a,null,!0,t.H),$async$C_)
+return A.j(A.cs(null,null,!0,null,new A.aB7(n,"Hola, "+B.b.p(e)+": te habilitamos en CritiData Enfermer\xeda"+o+" para completar el registro de enfermer\xeda de tus pacientes. Entr\xe1 ac\xe1 y eleg\xed tu clave: "+c+"\nTu usuario es "+B.b.p(n)+". El enlace sirve una sola vez y vence en un d\xeda.\nLas pr\xf3ximas veces entr\xe1 por critidata.com \u2192 Iniciar sesi\xf3n \u2192 Anestesiolog\xeda \u2192 \xabSoy de enfermer\xeda\xbb, con tu email y tu clave."),a,null,!0,t.H),$async$C_)
 case 3:case 1:return A.r(q,r)}})
 return A.t($async$C_,r)},
 xf(a,b,c,d){return this.azM(a,b,c,d)},
@@ -81554,7 +81554,7 @@ A.b7w.prototype={
 $0(){return A.Yh(this.b,this.a.ga7())},
 $S:0}
 A.b7x.prototype={
-$2(a,b){var s=null,r="20261110143910-62ab8ba",q=A.a([B.aYx,B.lE,B.aXA,B.aXw,B.aXy,B.aXz,B.aXx,new A.pJ(B.kQ,"Ver datos online","Signos vitales en vivo del quir\xf3fano",new A.b7p(a),s),B.jw,new A.pJ(B.tR,"Pacientes","En espera, en curso y terminados hoy",new A.b7q(a),s),B.jw,new A.pJ(B.kP,"Partes anest\xe9sicos","Anexo V: los del mes, la nube y AADOB",new A.b7r(a),s),B.jw,new A.pJ(B.Ao,"Registro de enfermer\xeda","Por fecha y enfermera, lleno con el Anexo V",new A.b7s(a),s),B.jw,new A.pJ(B.Aw,"Consumo de drogas","Del mes y del a\xf1o, en mg y en ampollas",new A.b7t(a),s),B.jw,new A.pJ(B.As,"Riesgo anest\xe9sico","Evaluaci\xf3n prequir\xfargica",new A.b7u(a),s),B.jw,new A.pJ(B.Av,"Guardia hospitales de provincia","Pr\xf3ximamente",new A.b7v(a),s)],t.p)
+$2(a,b){var s=null,r="20261112001902-e21990d",q=A.a([B.aYx,B.lE,B.aXA,B.aXw,B.aXy,B.aXz,B.aXx,new A.pJ(B.kQ,"Ver datos online","Signos vitales en vivo del quir\xf3fano",new A.b7p(a),s),B.jw,new A.pJ(B.tR,"Pacientes","En espera, en curso y terminados hoy",new A.b7q(a),s),B.jw,new A.pJ(B.kP,"Partes anest\xe9sicos","Anexo V: los del mes, la nube y AADOB",new A.b7r(a),s),B.jw,new A.pJ(B.Ao,"Registro de enfermer\xeda","Por fecha y enfermera, lleno con el Anexo V",new A.b7s(a),s),B.jw,new A.pJ(B.Aw,"Consumo de drogas","Del mes y del a\xf1o, en mg y en ampollas",new A.b7t(a),s),B.jw,new A.pJ(B.As,"Riesgo anest\xe9sico","Evaluaci\xf3n prequir\xfargica",new A.b7u(a),s),B.jw,new A.pJ(B.Av,"Guardia hospitales de provincia","Pr\xf3ximamente",new A.b7v(a),s)],t.p)
 if(A.bQd(r).length!==0)q.push(new A.H(B.a4b,A.o(A.bQd(r),B.aT_,s,s,s,s,s,s,s,s,B.aJS,s,s,s,s,s,s),s))
 return A.dc(new A.cn(new A.am(0,1/0,b.d,1/0),A.cu(new A.cn(B.Xp,new A.H(B.a5c,A.ac(q,B.l,s,B.d2,B.M,0,B.j),s),s),s,s),s),s,s,s,s,B.P)},
 $S:387}
@@ -88558,7 +88558,7 @@ A.bxY.prototype={
 $1(a){return B.b.bI(B.e.k(a),2,"0")},
 $S:24}
 A.bvS.prototype={
-$1(a){return"20261110143910-62ab8ba"},
+$1(a){return"20261112001902-e21990d"},
 $S:532}
 A.bqC.prototype={
 $1(a){var s
