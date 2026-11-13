@@ -375,9 +375,18 @@ const minutosDe = (hhmm) => {
 // se borra— el parte dibuja solo la serie; las del monitor quedan guardadas
 // sin contar. Sin ninguna de prueba, todas. La misma regla que la central
 // (basedatos.cuentan).
+// (13-nov-2026, el médico: "un botón más que diga Solo CO2, que se agregaría
+// cuando hay registro de signos vitales en Auto sin CO2") La fila de prueba
+// que trae SOLO el CO2 no es la serie: cuenta JUNTO con lo que cuente (el
+// monitor, o la serie entera), en orden de tiempo. Como basedatos._solo_co2.
+const soloCo2 = (v) => v.fuente === "prueba" && v.etco2 != null &&
+  ["hr", "spo2", "nibp_sis", "nibp_dia", "nibp_pam"].every((k) => v[k] == null);
 function vitalesQueCuentan(vitales) {
-  const dePrueba = vitales.filter((v) => v.fuente === "prueba");
-  return dePrueba.length ? dePrueba : vitales;
+  const serie = vitales.filter((v) => v.fuente === "prueba" && !soloCo2(v));
+  const sueltas = vitales.filter(soloCo2);
+  const base = serie.length ? serie : vitales.filter((v) => !soloCo2(v));
+  if (!sueltas.length) return base;
+  return [...base, ...sueltas].sort((a, b) => String(a.ts).localeCompare(String(b.ts)));
 }
 
 // El momento del INGRESO en ms, o null sin hora de ingreso: la hora sobre la
