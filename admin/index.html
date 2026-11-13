@@ -374,6 +374,7 @@
                 <td>${estadoEnfermera(e)}</td>
                 <td style="color:#64748b;font-size:12px;">${e.ultimo_ingreso ? fmtFechaHora(e.ultimo_ingreso) : '—'}</td>
                 <td>
+                    <button class="btn-sm btn-sub" onclick="editarEnfermera(${e.id})">Editar</button>
                     ${e.activa ? `<button class="btn-sm btn-sub" onclick="otroEnlace(${e.id})">${e.estado === 'activa' ? 'Enlace para otra clave' : 'Otro enlace'}</button>` : ''}
                     <button class="btn-sm ${toggleCls}" onclick="toggleEnfermera(${e.id})">${toggleTxt}</button>
                 </td>
@@ -408,6 +409,40 @@
             toast(`Enlace mandado a ${e.email}${copiado ? ' y copiado, por si se lo pasás por WhatsApp' : ''}`)
             await cargarEnfermeras()
         } catch { toast('No se pudo mandar el enlace') }
+    }
+
+    // (13-nov-2026, "armá el Editar de la enfermera") El nombre, la matrícula
+    // y el hospital, uno por uno; el email no (es su usuario). La nube dice si
+    // la matrícula choca con otra enfermera.
+    async function editarEnfermera(id) {
+        const e = enfermeras.find(x => x.id === id)
+        if (!e) return
+        const nombre = prompt('Apellido y nombre:', e.nombre)
+        if (nombre === null) return
+        const mp = prompt('Matrícula (obligatoria, es lo que la identifica):', e.mp || '')
+        if (mp === null) return
+        const hospital = prompt('Hospital:', e.hospital || '')
+        if (hospital === null) return
+        const cambios = {}
+        if (nombre.trim() && nombre.trim() !== e.nombre) cambios.nombre = nombre.trim()
+        if (mp.trim() && mp.trim() !== (e.mp || '')) cambios.mp = mp.trim()
+        if (hospital.trim() && hospital.trim() !== (e.hospital || '')) cambios.hospital = hospital.trim()
+        if (!Object.keys(cambios).length) { toast('Sin cambios'); return }
+        const token = sessionStorage.getItem('cd_token')
+        try {
+            const res = await fetch(`${API}/anestesia/enfermeria/enfermeras/${id}`, {
+                method: 'PATCH',
+                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify(cambios)
+            })
+            if (!res.ok) {
+                const data = await res.json().catch(() => ({}))
+                toast(typeof data.detail === 'string' ? data.detail : 'No se pudo cambiar')
+                return
+            }
+            toast(`Datos de ${cambios.nombre || e.nombre} corregidos`)
+            await cargarEnfermeras()
+        } catch { toast('No se pudo cambiar') }
     }
 
     async function toggleEnfermera(id) {
