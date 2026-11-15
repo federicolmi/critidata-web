@@ -10406,7 +10406,9 @@ if(q!=null&&!s.ii(q))return p
 return A.bNA(s)},
 bNA(a){return B.b.bG(B.e.k(A.dM(a)),2,"0")+":"+B.b.bG(B.e.k(A.fp(a)),2,"0")},
 bPO(a){var s
-if(a.at)return!1
+if(a.at)s=a.ax||a.ay
+else s=!1
+if(s)return!1
 s=a.as.h(0,"pip_cierre")
 if(B.b.m(s==null?"":s).length!==0)return!1
 s=!0
@@ -71186,7 +71188,7 @@ if(i!==(a.aD==null)){o=i?"la de ingreso":"la de fin"
 n=i?"la de fin":"la de ingreso"
 j.push("Las horas van las dos en Auto o las dos a mano: "+o+" est\xe1 en Auto y "+n+", a mano.")}m=a.a5.h(0,"_modo")
 if(!B.c.n(B.EC,B.b.m(m==null?"":m)))j.push("Falta la finalizaci\xf3n: Extubaci\xf3n/Recuperaci\xf3n, Intubaci\xf3n ARM con el pase a UTI, u \xd3bito.")
-if(A.bPO(a))j.push("Falta la PIP: el paciente tiene tubo y, en Auto, el monitor no la registra. Cargala a mano en V\xeda a\xe9rea, PIP (cm H2O).")
+if(A.bPO(a))j.push("Falta la PIP: el paciente tiene tubo y "+(a.at?"los signos vitales De prueba Sin CO2 no la traen":"en Auto, el monitor no la registra")+". Cargala a mano en V\xeda a\xe9rea, PIP (cm H2O).")
 if(b&&!a.at)j.push("Faltan los signos vitales: sin la central de datos, en Auto el parte sale sin ninguno. Eleg\xed Signos vitales: De prueba (Con CO2 o Sin CO2).")
 if(k!=null)j.push(k)
 if(j.length===0){q=!0
@@ -82947,7 +82949,7 @@ A.b8d.prototype={
 $0(){return A.Ym(this.b,this.a.ga2())},
 $S:0}
 A.b8e.prototype={
-$2(a,b){var s=null,r="20261114211618-43f5765",q=A.a([B.aZE,B.lI,B.aYH,B.aYD,B.aYF,B.aYG,B.aYE,new A.pP(B.kV,"Ver datos online","Signos vitales en vivo del quir\xf3fano",new A.b86(a),s),B.jB,new A.pP(B.u6,"Pacientes","En espera, en curso y terminados hoy",new A.b87(a),s),B.jB,new A.pP(B.kU,"Partes anest\xe9sicos","Anexo V: los del mes, la nube y AADOB",new A.b88(a),s),B.jB,new A.pP(B.AG,"Parte de enfermer\xeda","Por fecha y enfermera, lleno con el Anexo V",new A.b89(a),s),B.jB,new A.pP(B.AM,"Consumo de drogas","Del mes y del a\xf1o, en mg y en ampollas",new A.b8a(a),s),B.jB,new A.pP(B.AI,"Riesgo anest\xe9sico","Evaluaci\xf3n prequir\xfargica",new A.b8b(a),s),B.jB,new A.pP(B.AL,"Guardia hospitales de provincia","Pr\xf3ximamente",new A.b8c(a),s)],t.p)
+$2(a,b){var s=null,r="20261115000711-08ae0a2",q=A.a([B.aZE,B.lI,B.aYH,B.aYD,B.aYF,B.aYG,B.aYE,new A.pP(B.kV,"Ver datos online","Signos vitales en vivo del quir\xf3fano",new A.b86(a),s),B.jB,new A.pP(B.u6,"Pacientes","En espera, en curso y terminados hoy",new A.b87(a),s),B.jB,new A.pP(B.kU,"Partes anest\xe9sicos","Anexo V: los del mes, la nube y AADOB",new A.b88(a),s),B.jB,new A.pP(B.AG,"Parte de enfermer\xeda","Por fecha y enfermera, lleno con el Anexo V",new A.b89(a),s),B.jB,new A.pP(B.AM,"Consumo de drogas","Del mes y del a\xf1o, en mg y en ampollas",new A.b8a(a),s),B.jB,new A.pP(B.AI,"Riesgo anest\xe9sico","Evaluaci\xf3n prequir\xfargica",new A.b8b(a),s),B.jB,new A.pP(B.AL,"Guardia hospitales de provincia","Pr\xf3ximamente",new A.b8c(a),s)],t.p)
 if(A.bRu(r).length!==0)q.push(new A.G(B.a4o,A.p(A.bRu(r),B.aTR,s,s,s,s,s,s,s,s,B.aKr,s,s,s,s,s,s),s))
 return A.dn(new A.cv(new A.an(0,1/0,b.d,1/0),A.cu(new A.cv(B.XF,new A.G(B.a5p,A.ac(q,B.l,s,B.d5,B.M,0,B.j),s),s),s,s),s),s,s,s,s,B.U)},
 $S:268}
@@ -89951,7 +89953,7 @@ A.bz9.prototype={
 $1(a){return B.b.bG(B.e.k(a),2,"0")},
 $S:20}
 A.bx0.prototype={
-$1(a){return"20261114211618-43f5765"},
+$1(a){return"20261115000711-08ae0a2"},
 $S:540}
 A.brB.prototype={
 $1(a){var s
