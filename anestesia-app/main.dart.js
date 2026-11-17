@@ -19023,7 +19023,7 @@ if(o){q=Date.now()
 q=A.cbZ(a,new A.a1(q,0,!1))
 if(q!=null)r.push(q)}if(o){q=Date.now()
 q=A.cbY(a,new A.a1(q,0,!1))
-if(q!=null)r.push(q)}if(o&&A.ccF(a,"2026-11-16T23:22:31-03:00"))r.push("Desactualizada: "+(a.fy!=null?"se actualiza sola al reiniciarla sin una anestesia en curso":"hac\xe9 el git pull una vez (despu\xe9s se actualiza sola)"))
+if(q!=null)r.push(q)}if(o&&A.ccF(a,"2026-11-16T23:49:48-03:00"))r.push("Desactualizada: "+(a.fy!=null?"se actualiza sola al reiniciarla sin una anestesia en curso":"hac\xe9 el git pull una vez (despu\xe9s se actualiza sola)"))
 if(r.length===0)return p
 return new A.pm(p.a,p.b,p.c+"\n"+B.c.a9(r,"\n"))},
 c5M(a){var s=B.e.cJ(a.a,1e6)
@@ -82962,7 +82962,7 @@ A.b8d.prototype={
 $0(){return A.Ym(this.b,this.a.ga2())},
 $S:0}
 A.b8e.prototype={
-$2(a,b){var s=null,r="20261117022541-6c78b03",q=A.a([B.aZE,B.lI,B.aYH,B.aYD,B.aYF,B.aYG,B.aYE,new A.pP(B.kV,"Ver datos online","Signos vitales en vivo del quir\xf3fano",new A.b86(a),s),B.jB,new A.pP(B.u6,"Pacientes","En espera, en curso y terminados hoy",new A.b87(a),s),B.jB,new A.pP(B.kU,"Partes anest\xe9sicos","Anexo V: los del mes, la nube y AADOB",new A.b88(a),s),B.jB,new A.pP(B.AG,"Parte de enfermer\xeda","Por fecha y enfermera, lleno con el Anexo V",new A.b89(a),s),B.jB,new A.pP(B.AM,"Consumo de drogas","Del mes y del a\xf1o, en mg y en ampollas",new A.b8a(a),s),B.jB,new A.pP(B.AI,"Riesgo anest\xe9sico","Evaluaci\xf3n prequir\xfargica",new A.b8b(a),s),B.jB,new A.pP(B.AL,"Guardia hospitales de provincia","Pr\xf3ximamente",new A.b8c(a),s)],t.p)
+$2(a,b){var s=null,r="20261117025330-c0ead16",q=A.a([B.aZE,B.lI,B.aYH,B.aYD,B.aYF,B.aYG,B.aYE,new A.pP(B.kV,"Ver datos online","Signos vitales en vivo del quir\xf3fano",new A.b86(a),s),B.jB,new A.pP(B.u6,"Pacientes","En espera, en curso y terminados hoy",new A.b87(a),s),B.jB,new A.pP(B.kU,"Partes anest\xe9sicos","Anexo V: los del mes, la nube y AADOB",new A.b88(a),s),B.jB,new A.pP(B.AG,"Parte de enfermer\xeda","Por fecha y enfermera, lleno con el Anexo V",new A.b89(a),s),B.jB,new A.pP(B.AM,"Consumo de drogas","Del mes y del a\xf1o, en mg y en ampollas",new A.b8a(a),s),B.jB,new A.pP(B.AI,"Riesgo anest\xe9sico","Evaluaci\xf3n prequir\xfargica",new A.b8b(a),s),B.jB,new A.pP(B.AL,"Guardia hospitales de provincia","Pr\xf3ximamente",new A.b8c(a),s)],t.p)
 if(A.bRu(r).length!==0)q.push(new A.G(B.a4p,A.p(A.bRu(r),B.aTR,s,s,s,s,s,s,s,s,B.aKr,s,s,s,s,s,s),s))
 return A.dn(new A.cv(new A.an(0,1/0,b.d,1/0),A.cu(new A.cv(B.XF,new A.G(B.a5q,A.ac(q,B.l,s,B.d5,B.M,0,B.j),s),s),s,s),s),s,s,s,s,B.U)},
 $S:268}
@@ -89966,7 +89966,7 @@ A.bz9.prototype={
 $1(a){return B.b.bG(B.e.k(a),2,"0")},
 $S:20}
 A.bx0.prototype={
-$1(a){return"20261117022541-6c78b03"},
+$1(a){return"20261117025330-c0ead16"},
 $S:540}
 A.brB.prototype={
 $1(a){var s
