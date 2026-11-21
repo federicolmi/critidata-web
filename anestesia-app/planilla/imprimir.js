@@ -1034,6 +1034,22 @@ function totalDeDosis(items) {
     .join(" + ");
 }
 
+// EL ANCHO DE UN NÚMERO (20-nov-2026): cuánto ocupa [t] escrito con letra de
+// 1 (los dígitos, ~0,56; la coma, el punto y la barra, ~0,28; lo demás,
+// ~0,6), para saber qué letra entra acostada en una columna.
+function anchoDeTexto(t) {
+  let a = 0;
+  for (const c of String(t)) a += /[0-9]/.test(c) ? 0.56 : /[.,/:]/.test(c) ? 0.28 : 0.6;
+  return a;
+}
+// La letra más grande con la que [t] entra en [ancho]; y la más chica con
+// que se lo sigue leyendo acostado (con menos, se gira, como antes).
+function letraQueEntra(t, ancho) {
+  const a = anchoDeTexto(t);
+  return a > 0 ? Math.floor((ancho / a) * 10) / 10 : 6;
+}
+const LETRA_MINIMA_ACOSTADA = 3.6;
+
 function fmtValor(clave, v) {
   if (v == null) return "";
   if (["sev_et", "sev_fi", "mv", "mac"].includes(clave)) {
@@ -1236,11 +1252,18 @@ function construirGrilla(datos, vitales, eventos) {
     for (let i = 0; i <= nCol; i++) lin(xCol(i), y, xCol(i), y + ALTO_FILA, 0.15);
     for (const [s, t] of Object.entries(valores || {})) {
       const cx = xCol(+s) + anchoCol / 2, cy = y + 9;
-      if (anchoCol < 21 && t.length > 2) {
+      // (20-nov-2026, el médico, con la foto: "en el sevorane 1.5 mirá cómo
+      // se puso" y "lo mismo le pasó a los números de coloides y
+      // cristaloides") En las columnas angostas (una anestesia larga) los
+      // valores de más de dos caracteres —«1,5», «100», «500»— salían
+      // GIRADOS: ahora van acostados con la letra un poco más chica, la que
+      // entre en la columna; girado solo si ni con la más chica entra.
+      const letra = Math.min(t.length > 5 ? 5 : 6, letraQueEntra(t, anchoCol - 1.5));
+      if (letra < LETRA_MINIMA_ACOSTADA) {
         txt(cx, cy, t, `font-size="${t.length > 4 ? 4.6 : 5.4}" ${tintaDato()} ` +
             `text-anchor="middle" transform="rotate(-90 ${cx} ${cy})"`);
       } else {
-        txt(cx, cy, t, `font-size="${t.length > 5 ? 5 : 6}" ${tintaDato()} text-anchor="middle"`);
+        txt(cx, cy, t, `font-size="${letra.toFixed(1)}" ${tintaDato()} text-anchor="middle"`);
       }
     }
     if (total != null) {
@@ -1443,9 +1466,16 @@ function construirGrilla(datos, vitales, eventos) {
   // al comienzo, punteada al fin; sin duración, solo la raya), con su texto
   // arriba. Va DEBAJO de las curvas: los signos vitales se siguen leyendo.
   // El texto entero sigue al pie del parte.
-  for (const e of eventos) {
-    if (e.tipo !== "practica" && e.tipo !== "critico") continue;
-    if (!e.ts) continue;
+  // (20-nov-2026, el médico, con la foto de Giuseppone: "fijate que en
+  // prácticas durante la anestesia hubo superposición") Todos los textos iban
+  // en el MISMO renglón: dos prácticas cercanas se escribían una encima de la
+  // otra. En orden de hora, cada uno va al primer renglón libre (de 7 en 7
+  // hacia abajo) donde no pisa al anterior.
+  const finDelRenglon = [];   // por renglón, dónde termina lo último escrito
+  const conFranja = eventos
+    .filter((e) => (e.tipo === "practica" || e.tipo === "critico") && e.ts)
+    .sort((a, b) => (aMs(a.ts) || 0) - (aMs(b.ts) || 0));
+  for (const e of conFranja) {
     const critico = e.tipo === "critico";
     const color = critico ? COLORES.nibp_sis : "#1d5fc4";
     const xHora = (ms) => IZQ + Math.min(nCol, Math.max(0, (ms - t0) / slotMs)) * anchoCol;
@@ -1464,7 +1494,15 @@ function construirGrilla(datos, vitales, eventos) {
            `y2="${yG1.toFixed(2)}" stroke="${color}" stroke-width="1"/>`);
     const texto = String(e.descripcion || "").trim();
     if (texto) {
-      txt(xI + 1.5, yG0 + 30, `✱ ${texto.length > 28 ? texto.slice(0, 27) + "…" : texto}`,
+      const etiqueta = `✱ ${texto.length > 28 ? texto.slice(0, 27) + "…" : texto}`;
+      let r = finDelRenglon.findIndex((fin) => fin <= xI);
+      if (r < 0) {
+        r = finDelRenglon.length;
+        finDelRenglon.push(0);
+      }
+      // la negrita de 5,6 es algo más ancha que la cuenta de los números
+      finDelRenglon[r] = xI + 1.5 + anchoDeTexto(etiqueta) * 5.6 * 1.08 + 2;
+      txt(xI + 1.5, yG0 + 30 + r * 7, etiqueta,
           `font-size="5.6" font-weight="700" fill="${color}"`);
     }
   }
@@ -2046,6 +2084,14 @@ function render(parte, vitales, eventos) {
           (9-oct-2026). */""}
     ${TIPO === "cgs" ? "" : linea(titulo("Antecedentes Patológicos Condicionantes:")) +
       `<div class="parrafo bajo" style="border-bottom:1px dotted #000">${esc(DATOS.antecedentes || "")}</div>`}
+    ${/* (20-nov-2026, el médico: "cuando cargó los datos en el cuadro de
+          observaciones, no se reflejó en el parte anestésico") La Observación
+          de la ficha solo salía en el CGS (13-oct-2026): en el Anexo V va
+          debajo de los antecedentes, solo si se escribió algo. */""}
+    ${TIPO !== "cgs" && (DATOS.observacion_preanestesica || "").trim()
+      ? linea(titulo("Observación:")) +
+        `<div class="parrafo bajo" style="border-bottom:1px dotted #000">${esc(DATOS.observacion_preanestesica)}</div>`
+      : ""}
 
     ${/* Las practicas AL INGRESO (22-sep): el renglon Comentarios de
           "Practicas efectuadas", solo si se cargo alguna. */""}

@@ -162,10 +162,12 @@ body {
 .sin-datos { padding: 4mm; text-align: center; color: #555; font-style: italic; }
 
 /* ---------- pie ---------- */
-/* dos columnas divididas por línea vertical, como el papel */
-.pie-2col { display: flex; padding: 0; }
-.pie-2col .col { flex: 1 1 50%; padding: .8mm 1.6mm; min-width: 0; }
-.pie-2col .col + .col { border-left: 1px solid #000; }
+/* (20-nov-2026, el médico: "los encuadres de texto podemos separarlos
+   mínimamente, como condición al ingreso y vías de ingreso; esto va para
+   bloqueos y vía aérea") Dos recuadros separados por el mismo espacio que la
+   fila de arriba (.fila-marcos); hasta hoy, uno solo partido por una raya. */
+.pie-2col.marco { display: flex; gap: 1.6mm; align-items: stretch; padding: 0; border: none; }
+.pie-2col .col { flex: 1 1 50%; padding: .8mm 1.6mm; min-width: 0; border: 1.1px solid #000; }
 
 .firma {
   display: flex;
