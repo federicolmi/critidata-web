@@ -94,8 +94,31 @@
             document.getElementById("error").textContent = "Link de invitación inválido"
         }
 
+        // El NOMBRE, capitalizado (22-nov-2026, "que el nombre se capitalice…
+        // sí, en todas"): la regla de las apps y del servidor (backend
+        // app/nombres.py). "lami feder" → "Lami Feder", "juana de la cruz" →
+        // "Juana de la Cruz". En vivo solo si el largo no cambia, así el
+        // cursor queda donde estaba; los espacios de más los arregla el envío.
+        const PARTICULAS = new Set(["de", "del", "la", "las", "los", "y", "e", "van", "von", "di", "da"])
+        function capitalizarNombre(nombre) {
+            return nombre.trim().split(/\s+/).filter(p => p).map((p, i) => {
+                const baja = p.toLowerCase()
+                if (i > 0 && PARTICULAS.has(baja.replace(/,/g, ""))) return baja
+                return baja.replace(/[^-']+/g, t => t[0].toUpperCase() + t.slice(1))
+            }).join(" ")
+        }
+        const campoNombre = document.getElementById("nombre")
+        campoNombre.addEventListener("input", () => {
+            const v = campoNombre.value, nuevo = capitalizarNombre(v)
+            if (nuevo !== v && nuevo.length === v.length) {
+                const a = campoNombre.selectionStart, b = campoNombre.selectionEnd
+                campoNombre.value = nuevo
+                campoNombre.setSelectionRange(a, b)
+            }
+        })
+
         async function registrar() {
-            const nombre = document.getElementById("nombre").value
+            const nombre = capitalizarNombre(document.getElementById("nombre").value)
             const password = document.getElementById("password").value
 
             // Hace el pedido al backend con el token de invitación
