@@ -1058,6 +1058,33 @@ function fmtValor(clave, v) {
   return Math.round(v).toString();
 }
 
+// LAS FOTOS DEL PARTE (26-nov-2026, el médico: "piden foto y debería subir
+// en el parte a AADOB"; la etiqueta del catéter o la imagen de la
+// ecografía). Van en la primera columna del gráfico, debajo de las claves,
+// sin hora ni fecha ("eso ya está en el parte"): hasta dos, en el orden en
+// que se sacaron. Llegan como lista o como el texto JSON que manda la app;
+// cada una con su JPEG en base64 (sin "data:") y, si se sabe, su ancho y su
+// alto para encuadrarla sin deformarla. Lo que no es base64 limpio no se
+// dibuja: va adentro de un atributo del SVG, como el trazo de la firma.
+// PURA.
+const MAX_FOTOS_PARTE = 2;
+function fotosDelParte(datos) {
+  let crudas = datos?.fotos;
+  if (typeof crudas === "string") {
+    try { crudas = JSON.parse(crudas); } catch (_) { crudas = null; }
+  }
+  if (!Array.isArray(crudas)) return [];
+  const fotos = [];
+  for (const f of crudas) {
+    const jpeg = String(f?.jpeg ?? "").trim();
+    if (!jpeg || !/^[A-Za-z0-9+/=]+$/.test(jpeg)) continue;
+    const ancho = Number(f.ancho), alto = Number(f.alto);
+    fotos.push({ jpeg, ancho: ancho > 0 ? ancho : null, alto: alto > 0 ? alto : null });
+    if (fotos.length === MAX_FOTOS_PARTE) break;
+  }
+  return fotos;
+}
+
 // ---------------------------------------------- grilla central (SVG)
 
 function construirGrilla(datos, vitales, eventos) {
@@ -1142,9 +1169,18 @@ function construirGrilla(datos, vitales, eventos) {
   t0 = Math.floor(t0 / slotMs) * slotMs;
   const nCol = Math.ceil((t1 - t0) / slotMs);
 
-  const IZQ = 86, DER = 3;
-  const ANCHO_UCIL = 650;              // ancho interno fijo: la letra no cambia
   const ANCHO_TOT = 30;                // columna Total: volumen acumulado a mano
+  // (26-nov-2026) Con fotos, la columna de las claves gana el ancho de la
+  // columna Total, que en la banda de los signos vitales está vacía
+  // ("tomamos espacio sacando la última columna en la fila de los signos
+  // vitales"), y las horas se angostan eso mismo EN TODAS LAS FILAS:
+  // sacarla solo en esa banda correría las horas de los vitales respecto de
+  // las de líquidos y drogas. El ancho total no cambia (la letra tampoco);
+  // sin fotos, la grilla de siempre.
+  const fotos = fotosDelParte(datos);
+  const EXTRA_FOTOS = fotos.length ? ANCHO_TOT : 0;
+  const IZQ = 86 + EXTRA_FOTOS, DER = 3;
+  const ANCHO_UCIL = 650 - EXTRA_FOTOS;   // ancho interno fijo: la letra no cambia
   const anchoCol = (ANCHO_UCIL - ANCHO_TOT) / nCol;
   const ancho = IZQ + ANCHO_UCIL + DER;
   const xTot = IZQ + ANCHO_UCIL - ANCHO_TOT;
@@ -1578,6 +1614,28 @@ function construirGrilla(datos, vitales, eventos) {
   ];
   for (const [f, [t, color]] of claves.entries()) {
     txt(3, yG0 + 12 + f * 10.5, t, `font-size="6.2" font-weight="700" fill="${color}"`);
+  }
+  // LAS FOTOS (26-nov-2026), debajo de las claves y a la izquierda de los
+  // números del eje (terminan en IZQ - 3): una sola usa todo el lugar; dos
+  // van una arriba de la otra. Cada una encuadrada con su proporción (4:3 si
+  // no se sabe), con un filete fino para que se vea el borde en el papel.
+  if (fotos.length) {
+    const x0 = 3, x1 = IZQ - 16;
+    const y0 = yG0 + 12 + (claves.length - 1) * 10.5 + 5, y1 = yG1 - 3;
+    const SEP = 4;
+    const anchoCaja = x1 - x0;
+    const altoCaja = (y1 - y0 - SEP * (fotos.length - 1)) / fotos.length;
+    const n = (v) => v.toFixed(1);
+    fotos.forEach((foto, i) => {
+      const prop = foto.ancho && foto.alto ? foto.ancho / foto.alto : 4 / 3;
+      let w = anchoCaja, h = w / prop;
+      if (h > altoCaja) { h = altoCaja; w = h * prop; }
+      const x = x0, y = y0 + i * (altoCaja + SEP);
+      S.push(`<image class="foto-parte" x="${n(x)}" y="${n(y)}" width="${n(w)}" height="${n(h)}" ` +
+             `preserveAspectRatio="xMidYMid meet" href="data:image/jpeg;base64,${foto.jpeg}"/>`);
+      S.push(`<rect x="${n(x)}" y="${n(y)}" width="${n(w)}" height="${n(h)}" ` +
+             `fill="none" stroke="#000" stroke-width="0.3"/>`);
+    });
   }
   // series puntuales, agregadas por slot (también sirven para que la etiqueta
   // de la PAM sepa qué alturas están ocupadas)
