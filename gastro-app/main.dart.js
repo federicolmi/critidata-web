@@ -10061,7 +10061,7 @@ break
 case 1:return A.w(q,r)}})
 return A.x($async$b9V,r)},
 bM9(a,b,c,d){var s=A.IM(b),r=d.c,q=d.d
-return A.mu(a,!1,new A.bbn(b,d,c),"Le comparto la hoja de su dieta en PDF (CritiData Gastro).","dieta_"+b.b.toLowerCase()+"_"+A.Af(r+"-"+q)+".pdf","Dieta "+s+" \u2014 "+(r+", "+q))},
+return A.mu(a,!0,new A.bbn(b,d,c),"Le comparto la hoja de su dieta (CritiData Gastro).","dieta_"+b.b.toLowerCase()+"_"+A.Af(r+"-"+q)+".pdf","Dieta "+s+" \u2014 "+(r+", "+q))},
 b9W:function b9W(a,b,c){this.a=a
 this.b=b
 this.c=c},
@@ -10082,7 +10082,7 @@ break
 case 1:return A.w(q,r)}})
 return A.x($async$ba6,r)},
 bri(a,b,c,d){var s=c.c,r=c.d
-return A.mu(a,!1,new A.bbx(c,d,b),"Le comparto un resumen de historia cl\xednica en PDF (CritiData Gastro).","resumen_"+A.Af(s+"-"+r)+"_"+A.fE(b)+".pdf","Resumen en PDF \u2014 "+(s+", "+r))},
+return A.mu(a,!0,new A.bbx(c,d,b),"Le comparto un resumen de historia cl\xednica (CritiData Gastro).","resumen_"+A.Af(s+"-"+r)+"_"+A.fE(b)+".pdf","Resumen \u2014 "+(s+", "+r))},
 ba8:function ba8(){},
 ba7:function ba7(a,b,c,d){var _=this
 _.a=a
@@ -11755,7 +11755,7 @@ bb6:function bb6(){},
 bb7:function bb7(){},
 Cw:function Cw(a){this.a=a},
 bqB(a,b,c,d){var s=c.c
-return A.mu(a,!1,new A.b8u(c,d,b.a8($.dJ(),t.u).$0()),"Le comparto un resultado de laboratorio en PDF (CritiData Gastro).","laboratorio_"+A.Af(d.c+"-"+d.d)+"_"+A.Af(s)+"_l"+c.a+".pdf","Laboratorio en PDF \u2014 "+s)},
+return A.mu(a,!0,new A.b8u(c,d,b.a8($.dJ(),t.u).$0()),"Le comparto un resultado de laboratorio (CritiData Gastro).","laboratorio_"+A.Af(d.c+"-"+d.d)+"_"+A.Af(s)+"_l"+c.a+".pdf","Laboratorio \u2014 "+s)},
 ba_(a,b,c){var s=0,r=A.y(t.D),q,p,o
 var $async$ba_=A.u(function(d,e){if(d===1)return A.v(e,r)
 for(;;)switch(s){case 0:o=A
@@ -12450,13 +12450,13 @@ QW:function QW(a){var _=this
 _.d=$
 _.c=_.a=null
 _.$ti=a},
-mu(a,b,c,d,e,f){return A.bMc(a,b,c,d,e,f)},
+mu(a,b,c,d,e,f){return A.bMc(a,!0,c,d,e,f)},
 bMc(a,b,c,d,e,f){var s=0,r=A.y(t.H),q,p=2,o=[],n,m,l,k,j,i
 var $async$mu=A.u(function(g,h){if(g===1){o.push(h)
 s=p}for(;;)switch(s){case 0:j={}
 j.a=!1
 s=3
-return A.q(A.e4(null,null,!0,null,new A.bbG(j,f,b),a,null,!0,t.zh),$async$mu)
+return A.q(A.e4(null,null,!0,null,new A.bbG(j,f,!0),a,null,!0,t.zh),$async$mu)
 case 3:n=h
 if(n==null||a.e==null){s=1
 break}p=5
@@ -67426,12 +67426,12 @@ A.bbG.prototype={
 $1(a){return new A.yV(new A.bbF(this.a,this.b,this.c),null)},
 $S:326}
 A.bbF.prototype={
-$2(a,b){var s,r=this,q=null,p=A.D(r.b,q,q,q,q,q,B.bp4,q,q,q),o=t.p,n=A.b([],o)
-if(r.c){s=r.a
-n.push(new A.a0(B.a95,A.b_(A.b([A.bi(A.bpB("PDF",B.lg,new A.bbA(s,b),!s.a),1),B.fb,A.bi(A.bpB("JPEG",B.aax,new A.bbB(s,b),s.a),1)],o),B.P,q,B.A,B.G,0,q),q))}n.push(A.bfn(A.lQ(!1,B.aL,!0,q,!0,q,!0,q,B.abI,q,q,q,!1,q,q,q,q,q,q,A.D(r.a.a?"Descargar JPEG":"Descargar PDF",q,q,q,q,q,q,q,q,q),q,q,q),new A.bbC(a)))
-n.push(A.bfn(B.acZ,new A.bbD(a)))
-n.push(A.bfn(B.acY,new A.bbE(a)))
-return new A.E5(p,n,q)},
+$2(a,b){var s=null,r=A.D(this.b,s,s,s,s,s,B.bp4,s,s,s),q=t.p,p=A.b([],q),o=this.a
+p.push(new A.a0(B.a95,A.b_(A.b([A.bi(A.bpB("PDF",B.lg,new A.bbA(o,b),!o.a),1),B.fb,A.bi(A.bpB("JPEG",B.aax,new A.bbB(o,b),o.a),1)],q),B.P,s,B.A,B.G,0,s),s))
+p.push(A.bfn(A.lQ(!1,B.aL,!0,s,!0,s,!0,s,B.abI,s,s,s,!1,s,s,s,s,s,s,A.D(o.a?"Descargar JPEG":"Descargar PDF",s,s,s,s,s,s,s,s,s),s,s,s),new A.bbC(a)))
+p.push(A.bfn(B.acZ,new A.bbD(a)))
+p.push(A.bfn(B.acY,new A.bbE(a)))
+return new A.E5(r,p,s)},
 $S:327}
 A.bbA.prototype={
 $0(){return this.b.$1(new A.bbz(this.a))},
