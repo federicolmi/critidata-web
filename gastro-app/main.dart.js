@@ -10566,7 +10566,7 @@ case 2:s="veda-vcc"
 break
 default:s=null}return"informe_"+s+"_"+A.Ad(b.c+"-"+b.d)+"_"+A.Ad(a.d)+".pdf"},
 bgu(a,b,c,d){var s=b.ab($.dU(),t.u).$0(),r=A.OB(c.c)
-return A.mt(a,!1,new A.b8p(c,d,s),"Le comparto un informe de estudio en PDF (CritiData Gastro).",A.bM4(c,d),"Informe en PDF \u2014 "+r+" del "+c.d)},
+return A.mt(a,!0,new A.b8p(c,d,s),"Le comparto un informe de estudio (CritiData Gastro).",A.bM4(c,d),"Informe de estudio \u2014 "+r+" del "+c.d)},
 b9S(a,b,c){var s=0,r=A.y(t.D),q,p,o,n
 var $async$b9S=A.u(function(d,e){if(d===1)return A.v(e,r)
 for(;;)switch(s){case 0:p=A.bqh(a.c)
